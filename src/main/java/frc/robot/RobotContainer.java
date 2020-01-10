@@ -8,8 +8,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -20,9 +23,11 @@ import edu.wpi.first.wpilibj2.command.Command;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private static Joystick joy;
+  private final DriveWithJoystick driveWithJoystick;
+  private final DriveSystem driveSystem;
 
+  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
 
@@ -31,8 +36,23 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    joy = new Joystick(Constants.driver_joystick);
+    driveSystem = Factory.getDrive();
+    driveWithJoystick = new DriveWithJoystick();
+    
     // Configure the button bindings
     configureButtonBindings();
+  }
+  public static Joystick getJoy(){
+    return joy;
+  }
+
+  public static double driverAxis(){
+    return joy.getRawAxis(Constants.driveYAxis);
+  }
+
+  public Command getDrive(){
+    return driveWithJoystick;
   }
 
   /**
