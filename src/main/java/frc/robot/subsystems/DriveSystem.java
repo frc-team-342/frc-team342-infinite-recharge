@@ -33,6 +33,16 @@ public class DriveSystem extends SubsystemBase {
     motorLeft1 = motor3;
     motorLeft2 = motor4;
 
+    motorRight1.setSmartCurrentLimit(50);
+    motorRight2.setSmartCurrentLimit(50);
+    motorLeft1.setSmartCurrentLimit(50);
+    motorLeft2.setSmartCurrentLimit(50);
+
+    motorRight1.enableVoltageCompensation(12.0);
+    motorRight2.enableVoltageCompensation(12.0);
+    motorLeft1.enableVoltageCompensation(12.0);
+    motorLeft2.enableVoltageCompensation(12.0);
+
     mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
 
     NavX = new AHRS();
