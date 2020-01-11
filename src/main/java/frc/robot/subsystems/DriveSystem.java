@@ -18,7 +18,7 @@ import frc.robot.Constants;
 public class DriveSystem extends SubsystemBase {
   private CANSparkMax motorRight1;
   private CANSparkMax motorRight2;
-  private CANSparkMax motorLeft1;
+  private CANSparkMax motorLeft1; 
   private CANSparkMax motorLeft2;
 
   private AHRS NavX;
