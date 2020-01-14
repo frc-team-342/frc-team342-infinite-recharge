@@ -10,6 +10,7 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+<<<<<<< HEAD
     // all of the names assigned are random. Find reall numbers latter
    
     //motors
@@ -23,5 +24,14 @@ public final class Constants {
    
 
 
+=======
+    public static final int motorR1 = 1;
+    public static final int motorR2 = 1;
+    public static final int motorL1 = 1;
+    public static final int motorL2 = 1;
+
+    public static final int driver_joystick = 1;
+    public static final int driveYAxis = 1;
+>>>>>>> 330657ca25a097be0148a3694a1b57a83e5c7e9c
 
 }
