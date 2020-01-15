@@ -10,11 +10,17 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.IntakeWithButton;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.IntakeSystem;
+
+import static edu.wpi.first.wpilibj.XboxController.Button;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -22,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.Command;
  * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
  * (including subsystems, commands, and button mappings) should be declared here.
  */
+
 public class RobotContainer {
   private static Joystick joy;
   private final DriveWithJoystick driveWithJoystick;
@@ -29,12 +36,13 @@ public class RobotContainer {
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
-
+  
+  XboxController m_driverController = new XboxController(Constants.driver_joystick);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
+
   public RobotContainer() {
     joy = new Joystick(Constants.driver_joystick);
     driveSystem = Factory.getDrive();
@@ -62,6 +70,9 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    new JoystickButton(m_driverController, Button.kA.value)
+      .whenPressed(new IntakeWithButton()); 
+
   }
 
 
