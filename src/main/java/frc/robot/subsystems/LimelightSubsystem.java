@@ -35,10 +35,10 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
   public double getDistance() {
-    return (34.5 - 20) / Math.tan(yOffsetAngle * (Math.PI / 180));
+    return (34.5 - 20) / Math.tan(yOffsetAngle * Math.PI / 180);
   }
 
   public double getXOffset() {
-    return (getDistance() * Math.tan(xOffsetAngle)) * (Math.PI / 180);
+    return getDistance() * (Math.tan(xOffsetAngle * Math.PI / 180));
   }
 }
