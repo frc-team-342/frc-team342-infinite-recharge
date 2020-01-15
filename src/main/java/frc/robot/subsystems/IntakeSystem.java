@@ -25,7 +25,7 @@ public class IntakeSystem  extends SubsystemBase {
   }
 
   public void intake(){
-    intakeFollow.follow(intakeMaster); 
+    //intakeFollow.follow(intakeMaster); 
 
     intakeMaster.set(ControlMode.PercentOutput, speed); 
   }
@@ -33,5 +33,9 @@ public class IntakeSystem  extends SubsystemBase {
   @Override
   public void periodic() {
     
+  }
+
+  public void stop(){
+    intakeMaster.set(ControlMode.PercentOutput, 0.0); 
   }
 }

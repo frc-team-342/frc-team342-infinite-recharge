@@ -13,17 +13,18 @@ public final class Constants {
     // all of the names assigned are random. Find reall numbers latter
    
     //motors
-    public static final int INTAKE1 = 0;
+    public static final int INTAKE1 = 9;
     public static final int INTAKE2 = 1;
     public static final int LAUNCH = 2; 
 
-    //buttons
-    public static final int LEFTBUMPER = 3; 
+    //buttons (NOTE: starts at 1 not 0)
+    public static final int LEFTBUMPER = 5; 
 
-    public static final int motorR1 = 1;
-    public static final int motorR2 = 1;
-    public static final int motorL1 = 1;
-    public static final int motorL2 = 1;
+    //other motors 
+    public static final int motorR1 = 3;
+    public static final int motorR2 = 4;
+    public static final int motorL1 = 5;
+    public static final int motorL2 = 6;
 
     public static final int driver_joystick = 1;
     public static final int driveYAxis = 1;

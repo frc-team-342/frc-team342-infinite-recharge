@@ -13,10 +13,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeWithButton;
-import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSystem;
 
@@ -30,24 +28,26 @@ import static edu.wpi.first.wpilibj.XboxController.Button;
  */
 
 public class RobotContainer {
+  //remote controlls 
+  XboxController m_driverController = new XboxController(Constants.driver_joystick);
   private static Joystick joy;
-  private final DriveWithJoystick driveWithJoystick;
-  private final DriveSystem driveSystem;
+  private static JoystickButton leftBumper; 
 
+  //subsystems and commands
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-  
-  XboxController m_driverController = new XboxController(Constants.driver_joystick);
+  private final IntakeWithButton m_intakeWithButton = new IntakeWithButton();
+
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
 
   public RobotContainer() {
+    //establishes joysticks and buttons
     joy = new Joystick(Constants.driver_joystick);
-    driveSystem = Factory.getDrive();
-    driveWithJoystick = new DriveWithJoystick();
-    
+    leftBumper = new JoystickButton(joy, 5); 
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -59,9 +59,6 @@ public class RobotContainer {
     return joy.getRawAxis(Constants.driveYAxis);
   }
 
-  public Command getDrive(){
-    return driveWithJoystick;
-  }
 
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by
@@ -70,9 +67,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kA.value)
-      .whenPressed(new IntakeWithButton()); 
-
+    leftBumper.whileHeld(m_intakeWithButton);
   }
 
 
