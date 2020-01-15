@@ -15,8 +15,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimelightSubsystem extends SubsystemBase {
   private NetworkTable table;
-  private NetworkTableEntry ty;  
-  private double yOffset;
+  private NetworkTableEntry ty, tx;
+  private double yOffsetAngle, xOffsetAngle;
 
   /**
    * Creates a new LimelightSubsystem.
@@ -24,15 +24,21 @@ public class LimelightSubsystem extends SubsystemBase {
   public LimelightSubsystem() {
     table = NetworkTableInstance.getDefault().getTable("limelight");
     ty = table.getEntry("ty");
+    tx = table.getEntry("tx");
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    yOffset = ty.getDouble(0.0);
+    yOffsetAngle = ty.getDouble(0.0);
+    xOffsetAngle = tx.getDouble(0.0);
   }
 
-  public double getDistance(double hoc) {
-    return (34.5 - 20) / Math.tan(yOffset * (Math.PI / 180));
+  public double getDistance() {
+    return (34.5 - 20) / Math.tan(yOffsetAngle * (Math.PI / 180));
+  }
+
+  public double getXOffset() {
+    return (getDistance() * Math.tan(xOffsetAngle)) * (Math.PI / 180);
   }
 }
