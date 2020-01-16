@@ -33,7 +33,7 @@ public class IntakeWithButton extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    intakeSystem.stop();
+    intakeSystem.intakeStop();
   }
 
   @Override

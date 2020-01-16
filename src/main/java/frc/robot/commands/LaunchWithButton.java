@@ -37,7 +37,7 @@ public class LaunchWithButton extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    launchSubsystem.stop(); 
+    launchSubsystem.launchStop(); 
   }
 
   @Override

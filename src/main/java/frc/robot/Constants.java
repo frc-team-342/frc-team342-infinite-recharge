@@ -15,11 +15,20 @@ public final class Constants {
     //motors
     public static final int INTAKE1 = 9;
     public static final int INTAKE2 = 1;
-    public static final int LAUNCH = 2; 
+    public static final int LAUNCHMASTER = 2;
+    public static final int LAUNCHFOLLOW1 = 3;
+    public static final int LAUNCHFOLLOW2 = 4; 
 
     //buttons (NOTE: starts at 1 not 0)
     public static final int LEFTBUMPER = 5; 
     public static final int RIGHTBUMPER = 6; 
+
+    //sensors
+    public static final int INTAKESENSOR1 = 0; 
+    public static final int INTAKESENSOR2 = 0; 
+    public static final int INTAKESENSOR3 = 0; 
+    public static final int INTAKESENSOR4 = 0; 
+    public static final int LAUNCHSENSOR = 0;
 
     //other motors 
     public static final int motorR1 = 3;
