@@ -15,25 +15,24 @@ public class LaunchSubsystem extends SubsystemBase {
    * TODO: add a sensor
    */
 
-   private TalonSRX launchMaster; 
-   private TalonSRX launchFollow1;
-   private TalonSRX launchFollow2;
+   private TalonSRX load; 
+   private TalonSRX loadFollow;
+   private TalonSRX launch;
 
-   private final double speed = 0.75; 
+   private final double loadSpeed = 0.75; 
 
 
   public LaunchSubsystem() {
-    launchMaster = new TalonSRX(Constants.LAUNCHMASTER);
-    launchFollow1 = new TalonSRX(Constants.LAUNCHFOLLOW1);
-    launchFollow2 = new TalonSRX(Constants.LAUNCHFOLLOW2); 
+    load = new TalonSRX(Constants.LOAD);
+    loadFollow = new TalonSRX(Constants.LOADFOLLOW);
+    launch = new TalonSRX(Constants.LAUNCH); 
 
   }
 
   public void launch(){
-    launchFollow1.follow(launchMaster); 
-    launchFollow2.follow(launchMaster); 
+    loadFollow.follow(load); 
 
-    launchMaster.set(ControlMode.PercentOutput, speed);
+    load.set(ControlMode.PercentOutput, loadSpeed);
   }
 
   @Override
@@ -41,6 +40,11 @@ public class LaunchSubsystem extends SubsystemBase {
   }
 
   public void launchStop(){
-    launchMaster.set(ControlMode.PercentOutput, 0.0); 
+    load.set(ControlMode.PercentOutput, 0.0); 
+  }
+
+  public void setLaunchSpeed(double speed){
+    //speed is latter going to be determined by a PID loop
+    launch.set(ControlMode.PercentOutput, speed); 
   }
 }

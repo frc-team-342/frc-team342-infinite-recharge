@@ -15,9 +15,9 @@ public final class Constants {
     //motors
     public static final int INTAKE1 = 9;
     public static final int INTAKE2 = 1;
-    public static final int LAUNCHMASTER = 2;
-    public static final int LAUNCHFOLLOW1 = 3;
-    public static final int LAUNCHFOLLOW2 = 4; 
+    public static final int LAUNCH= 2;
+    public static final int LOAD = 3;
+    public static final int LOADFOLLOW = 4; 
 
     //buttons (NOTE: starts at 1 not 0)
     public static final int LEFTBUMPER = 5; 
