@@ -15,8 +15,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeWithButton;
+import frc.robot.commands.LaunchWithButton;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSystem;
+import frc.robot.subsystems.LaunchSubsystem;
+
 
 import static edu.wpi.first.wpilibj.XboxController.Button;
 
@@ -32,11 +35,13 @@ public class RobotContainer {
   XboxController m_driverController = new XboxController(Constants.driver_joystick);
   private static Joystick joy;
   private static JoystickButton leftBumper; 
+  private static JoystickButton rightBumper; 
 
   //subsystems and commands
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final IntakeWithButton m_intakeWithButton = new IntakeWithButton();
+  private final LaunchWithButton m_launchWithButton = new LaunchWithButton(); 
 
 
   /**
@@ -46,7 +51,8 @@ public class RobotContainer {
   public RobotContainer() {
     //establishes joysticks and buttons
     joy = new Joystick(Constants.driver_joystick);
-    leftBumper = new JoystickButton(joy, 5); 
+    leftBumper = new JoystickButton(joy, Constants.LEFTBUMPER); 
+    rightBumper = new JoystickButton(joy, Constants.RIGHTBUMPER); 
 
     // Configure the button bindings
     configureButtonBindings();
@@ -68,6 +74,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     leftBumper.whileHeld(m_intakeWithButton);
+    rightBumper.whileHeld(m_launchWithButton); 
   }
 
 

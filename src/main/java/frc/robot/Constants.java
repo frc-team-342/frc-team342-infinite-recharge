@@ -19,6 +19,7 @@ public final class Constants {
 
     //buttons (NOTE: starts at 1 not 0)
     public static final int LEFTBUMPER = 5; 
+    public static final int RIGHTBUMPER = 6; 
 
     //other motors 
     public static final int motorR1 = 3;

@@ -1,11 +1,15 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.Constants;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class IntakeSystem  extends SubsystemBase {
@@ -15,12 +19,16 @@ public class IntakeSystem  extends SubsystemBase {
   
   private TalonSRX intakeMaster; 
   private TalonSRX intakeFollow;
+  
+  private DigitalInput sensor;
 
   private final double speed = 0.75; 
 
   public IntakeSystem() {
     intakeMaster = new TalonSRX(Constants.INTAKE1);
     intakeFollow = new TalonSRX(Constants.INTAKE2);
+
+    sensor = new DigitalInput(0);
 
   }
 
@@ -32,6 +40,11 @@ public class IntakeSystem  extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if(!sensor.get()){
+      SmartDashboard.putBoolean("Sensor 1: ", true);
+    } else {
+      SmartDashboard.putBoolean("Sensor 1: ", false); 
+    }
     
   }
 
