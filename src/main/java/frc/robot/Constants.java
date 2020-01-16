@@ -22,6 +22,10 @@ public final class Constants {
     //buttons (NOTE: starts at 1 not 0)
     public static final int LEFTBUMPER = 5; 
     public static final int RIGHTBUMPER = 6; 
+    //controller stuff
+    public static final int driver_joystick = 1;
+    public static final int driveYAxis = 1;
+
 
     //sensors
     public static final int INTAKESENSOR1 = 0; 
@@ -30,14 +34,6 @@ public final class Constants {
     public static final int INTAKESENSOR4 = 0; 
     public static final int INTAKESENSOR5 = 0;
 
-    //other motors 
-    public static final int motorR1 = 3;
-    public static final int motorR2 = 4;
-    public static final int motorL1 = 5;
-    public static final int motorL2 = 6;
-
-    public static final int driver_joystick = 1;
-    public static final int driveYAxis = 1;
 
 
 }
