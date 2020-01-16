@@ -21,14 +21,12 @@ public class LaunchSubsystem extends SubsystemBase {
 
    private final double speed = 0.75; 
 
-    private DigitalInput sensor; 
 
   public LaunchSubsystem() {
     launchMaster = new TalonSRX(Constants.LAUNCHMASTER);
     launchFollow1 = new TalonSRX(Constants.LAUNCHFOLLOW1);
     launchFollow2 = new TalonSRX(Constants.LAUNCHFOLLOW2); 
 
-    sensor = new DigitalInput(Constants.LAUNCHSENSOR); 
   }
 
   public void launch(){
@@ -40,14 +38,6 @@ public class LaunchSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if(sensor.get() == true){
-      SmartDashboard.putBoolean("Launch Sensor: ", true);
-      launchStop(); 
-    } else {
-      SmartDashboard.putBoolean("Launch Sensor: ", false); 
-    }
-
-
   }
 
   public void launchStop(){

@@ -13,10 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeSystem  extends SubsystemBase {
   /**
-   * Controls the three motors in charge of the intake System.
-   * 
-   * TODO: include four total sensor1s in this class
-   * 
+   * Controls the three motors in charge of the intake System. 
    */
   
   private TalonSRX intakeMaster; 
@@ -26,6 +23,7 @@ public class IntakeSystem  extends SubsystemBase {
   private DigitalInput sensor2;
   private DigitalInput sensor3;
   private DigitalInput sensor4; 
+  private DigitalInput sensor5; 
 
   private final double speed = 0.75; 
 
@@ -37,6 +35,7 @@ public class IntakeSystem  extends SubsystemBase {
     sensor2 = new DigitalInput(Constants.INTAKESENSOR2);
     sensor3 = new DigitalInput(Constants.INTAKESENSOR3);
     sensor4 = new DigitalInput(Constants.INTAKESENSOR4);
+    sensor5 = new DigitalInput(Constants.INTAKESENSOR5); 
   }
 
   public void intake(){
@@ -47,13 +46,16 @@ public class IntakeSystem  extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if(sensor1.get() == true && sensor2.get() == true && sensor3.get() == true && sensor3.get() == true)
+    //sensor.get() will return 1 or 0, make sure Java will accept that as "true" and "false"
+
+    if(sensor1.get() == true && sensor2.get() == true && sensor3.get() == true && sensor4.get() == true && sensor5.get() == true)
       intakeStop(); 
     
     SmartDashboard.putBoolean("Intake Sensor1: ", sensor1.get()); 
     SmartDashboard.putBoolean("Intake Sensor2: ", sensor2.get()); 
     SmartDashboard.putBoolean("Intake Sensor3: ", sensor3.get()); 
     SmartDashboard.putBoolean("Intake Sensor4: ", sensor4.get()); 
+    SmartDashboard.putBoolean("Intake Sensor5: ", sensor5.get()); 
 
   }
 

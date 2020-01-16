@@ -28,7 +28,7 @@ public final class Constants {
     public static final int INTAKESENSOR2 = 0; 
     public static final int INTAKESENSOR3 = 0; 
     public static final int INTAKESENSOR4 = 0; 
-    public static final int LAUNCHSENSOR = 0;
+    public static final int INTAKESENSOR5 = 0;
 
     //other motors 
     public static final int motorR1 = 3;
