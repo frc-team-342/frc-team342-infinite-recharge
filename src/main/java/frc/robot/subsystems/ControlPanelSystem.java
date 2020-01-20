@@ -7,6 +7,9 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
@@ -18,6 +21,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ControlPanelSystem extends SubsystemBase {
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
+
+  private TalonSRX spinMotor;
+  private TalonSRX moveElevator;
 
   private final Color red;
   private final Color green;
@@ -33,7 +39,10 @@ public class ControlPanelSystem extends SubsystemBase {
   /**
    * Creates a new ControlPanelSystem.
    */
-  public ControlPanelSystem() {
+  public ControlPanelSystem(TalonSRX wheelSpinner, TalonSRX elevator) {
+    spinMotor = wheelSpinner;
+    moveElevator = elevator;
+
     // Sensor and Matcher
     colorSensor = new ColorSensorV3(i2cPort);
     colorMatcher = new ColorMatch();
@@ -51,6 +60,14 @@ public class ControlPanelSystem extends SubsystemBase {
     colorMatcher.addColorMatch(yellow);
 
 
+  }
+
+  public void liftElevator(double position){
+    moveElevator.set(ControlMode.Position, position);
+  }
+
+  public void spinPanel(double position){
+    spinMotor.set(ControlMode.Position, position);
   }
 
   @Override

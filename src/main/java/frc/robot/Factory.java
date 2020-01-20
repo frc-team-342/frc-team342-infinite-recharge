@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -33,7 +34,7 @@ public class Factory {
 
     public static ControlPanelSystem getCPS(){
         if(controlPanel == null)
-            controlPanel = new ControlPanelSystem();
+            controlPanel = new ControlPanelSystem(new TalonSRX(Constants.spinner), new TalonSRX(Constants.elevator));
         return controlPanel;
     }
 
