@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
@@ -42,6 +43,28 @@ public class ControlPanelSystem extends SubsystemBase {
   public ControlPanelSystem(TalonSRX wheelSpinner, TalonSRX elevator) {
     spinMotor = wheelSpinner;
     moveElevator = elevator;
+
+    // setting allowable error for the encoders
+    spinMotor.configAllowableClosedloopError(0, 0, 1);
+    moveElevator.configAllowableClosedloopError(0, 0, 1);
+
+    // setting PID slots and feedback sensor
+    spinMotor.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition);
+    moveElevator.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition);
+
+    // setting phase and inversion
+    spinMotor.setSensorPhase(true);
+    moveElevator.setSensorPhase(true);
+    spinMotor.setInverted(true);
+    moveElevator.setInverted(true);
+
+    // setting PID values for the controller
+    spinMotor.config_kP(0, 0.0);
+    spinMotor.config_kI(0, 0.0);
+    spinMotor.config_kD(0, 0.0);
+    moveElevator.config_kP(0, 0.0);
+    moveElevator.config_kI(0, 0.0);
+    moveElevator.config_kD(0, 0.0);
 
     // Sensor and Matcher
     colorSensor = new ColorSensorV3(i2cPort);

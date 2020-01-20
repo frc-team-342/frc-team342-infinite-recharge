@@ -43,10 +43,11 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
   }
+  // Method for getting the joystick
   public static Joystick getJoy(){
     return joy;
   }
-
+  // gets the raw axis of joystick
   public static double driverAxis(){
     return joy.getRawAxis(Constants.driveYAxis);
   }
