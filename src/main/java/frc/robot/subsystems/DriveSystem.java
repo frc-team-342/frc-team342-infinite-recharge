@@ -33,11 +33,13 @@ public class DriveSystem extends SubsystemBase {
     motorLeft1 = motor3;
     motorLeft2 = motor4;
 
+    // Setting current limits for NEOS
     motorRight1.setSmartCurrentLimit(50);
     motorRight2.setSmartCurrentLimit(50);
     motorLeft1.setSmartCurrentLimit(50);
     motorLeft2.setSmartCurrentLimit(50);
 
+    // Setting compensation for NEOS
     motorRight1.enableVoltageCompensation(12.0);
     motorRight2.enableVoltageCompensation(12.0);
     motorLeft1.enableVoltageCompensation(12.0);
@@ -47,6 +49,7 @@ public class DriveSystem extends SubsystemBase {
 
     NavX = new AHRS();
   }
+  // Mecanum Drive method
   public void Drive(double ySpeed, double xSpeed, double zRotation) {
     mecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation, NavX.getAngle());
   }
