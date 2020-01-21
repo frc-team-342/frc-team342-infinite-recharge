@@ -32,7 +32,7 @@ public final class Constants {
     public static final int RIGHTBUMPER = 6; 
     //controller stuff
     public static final int driver_joystick = 1;
-      public static final int LOGITECH = 3; 
+    public static final int LOGITECH = 3; 
     public static final int driveYAxis = 1;
 
 
@@ -42,8 +42,6 @@ public final class Constants {
     public static final int INTAKESENSOR3 = 0; 
     public static final int INTAKESENSOR4 = 0; 
     public static final int INTAKESENSOR5 = 0;
-    //controllers 
-    public static final int LOGITECH = 3; 
 
 
 }
