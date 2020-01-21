@@ -34,6 +34,10 @@ public final class Constants {
     public static final int INTAKESENSOR4 = 0; 
     public static final int INTAKESENSOR5 = 0;
 
-
+    // drive motors
+    public static final int motorR1 = 1;
+    public static final int motorR2 = 1;
+    public static final int motorL1 = 1;
+    public static final int motorL2 = 1;
 
 }
