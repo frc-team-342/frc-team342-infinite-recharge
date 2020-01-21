@@ -10,18 +10,20 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeWithButton;
 import frc.robot.commands.LaunchWithButton;
+import frc.robot.commands.DriveWithJoystick;
+
+import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSystem;
 import frc.robot.subsystems.LaunchSubsystem;
-
-
-import static edu.wpi.first.wpilibj.XboxController.Button;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -31,13 +33,17 @@ import static edu.wpi.first.wpilibj.XboxController.Button;
  */
 
 public class RobotContainer {
-  //remote controlls 
+
+  //remote controls 
   XboxController m_driverController = new XboxController(Constants.driver_joystick);
   private static Joystick joy;
   private static JoystickButton leftBumper; 
   private static JoystickButton rightBumper; 
 
   //subsystems and commands
+  private final DriveWithJoystick driveWithJoystick;
+  private final DriveSystem driveSystem;
+
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final IntakeWithButton m_intakeWithButton = new IntakeWithButton();
@@ -49,10 +55,13 @@ public class RobotContainer {
    */
 
   public RobotContainer() {
+
     //establishes joysticks and buttons
-    joy = new Joystick(Constants.driver_joystick);
     leftBumper = new JoystickButton(joy, Constants.LEFTBUMPER); 
     rightBumper = new JoystickButton(joy, Constants.RIGHTBUMPER); 
+    driveSystem = Factory.getDrive();
+    driveWithJoystick = new DriveWithJoystick();
+    
 
     // Configure the button bindings
     configureButtonBindings();
@@ -65,6 +74,9 @@ public class RobotContainer {
     return joy.getRawAxis(Constants.driveYAxis);
   }
 
+  public Command getDrive(){
+    return driveWithJoystick;
+  }
 
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by
