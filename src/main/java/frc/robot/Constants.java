@@ -42,8 +42,6 @@ public final class Constants {
     public static final int INTAKESENSOR3 = 0; 
     public static final int INTAKESENSOR4 = 0; 
     public static final int INTAKESENSOR5 = 0;
-    //controllers 
-    public static final int LOGITECH = 3; 
 
 
 }
