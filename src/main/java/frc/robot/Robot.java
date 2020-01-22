@@ -20,10 +20,12 @@ import frc.robot.subsystems.DriveSystem;
  * project.
  */
 public class Robot extends TimedRobot {
+  
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
   private Command driveWithJoy;
+
   private static DriveSystem driveSystem = Factory.getDrive();
 
   /**
@@ -31,8 +33,10 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   @Override
-  public void robotInit() {
+  public void robotInit() {   
+
     driveWithJoy = new DriveWithJoystick();
+
     m_robotContainer = new RobotContainer();
 
   }
@@ -86,7 +90,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+
     driveWithJoy.schedule();
+
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

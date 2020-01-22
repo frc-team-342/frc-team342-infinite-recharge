@@ -1,9 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
 
 package frc.robot;
 
@@ -15,13 +9,39 @@ package frc.robot;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
+
+
+ //lol motr like constantly annoyed
 public final class Constants {
-    public static final int motorR1 = 1;
+    // all of the names assigned are random. Find reall numbers latter
+   
+    //motors
+    public static final int INTAKE1 = 9;
+    public static final int INTAKE2 = 1;
+    public static final int LAUNCH= 2;
+    public static final int LOAD = 3;
+    public static final int LOADFOLLOW = 4; 
+    //drive motors
+    public static final int motorR1 = 5;
     public static final int motorR2 = 1;
     public static final int motorL1 = 1;
     public static final int motorL2 = 1;
-
+  
+    //buttons (NOTE: starts at 1 not 0)
+    public static final int LEFTBUMPER = 5; 
+    public static final int RIGHTBUMPER = 6; 
+    //controller stuff
     public static final int driver_joystick = 1;
+      public static final int LOGITECH = 3; 
     public static final int driveYAxis = 1;
+
+
+    //sensors
+    public static final int INTAKESENSOR1 = 0; 
+    public static final int INTAKESENSOR2 = 0; 
+    public static final int INTAKESENSOR3 = 0; 
+    public static final int INTAKESENSOR4 = 0; 
+    public static final int INTAKESENSOR5 = 0;
+
 
 }

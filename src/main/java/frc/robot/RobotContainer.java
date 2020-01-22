@@ -10,11 +10,20 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.DriveWithJoystick;
+import edu.wpi.first.wpilibj.XboxController.Button;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.IntakeWithButton;
+import frc.robot.commands.LaunchWithButton;
+import frc.robot.commands.DriveWithJoystick;
+
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.IntakeSystem;
+import frc.robot.subsystems.LaunchSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -22,24 +31,38 @@ import edu.wpi.first.wpilibj2.command.Command;
  * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
  * (including subsystems, commands, and button mappings) should be declared here.
  */
+
 public class RobotContainer {
+
+  //remote controls 
+  XboxController m_driverController = new XboxController(Constants.driver_joystick);
   private static Joystick joy;
+  private static JoystickButton leftBumper; 
+  private static JoystickButton rightBumper; 
+
+  //subsystems and commands
   private final DriveWithJoystick driveWithJoystick;
   private final DriveSystem driveSystem;
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
+  private final IntakeWithButton m_intakeWithButton = new IntakeWithButton();
+  private final LaunchWithButton m_launchWithButton = new LaunchWithButton(); 
 
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
+
   public RobotContainer() {
-    joy = new Joystick(Constants.driver_joystick);
+
+    //establishes joysticks and buttons
+    leftBumper = new JoystickButton(joy, Constants.LEFTBUMPER); 
+    rightBumper = new JoystickButton(joy, Constants.RIGHTBUMPER); 
     driveSystem = Factory.getDrive();
     driveWithJoystick = new DriveWithJoystick();
     
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -62,6 +85,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    leftBumper.whileHeld(m_intakeWithButton);
+    rightBumper.whileHeld(m_launchWithButton); 
   }
 
 

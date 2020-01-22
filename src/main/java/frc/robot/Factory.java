@@ -1,38 +1,62 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
 
 package frc.robot;
+
+import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.IntakeSystem;
+import frc.robot.subsystems.LaunchSubsystem;
+import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.LimelightSubsystem;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.DriveSystem;
-import frc.robot.subsystems.ExampleSubsystem;
 
 /**
- * Add your docs here.
+ * Factories are being used in place of singletons.
  */
+
 public class Factory {
+    private static ExampleSubsystem example = null; 
+    private static IntakeSystem intake = null;
+    private static LaunchSubsystem launch = null; 
     private static DriveSystem driveSystem = null;
-    private static ExampleSubsystem exampleSS = null;
-
-
-    public static DriveSystem getDrive(){
-
-        if(driveSystem == null)
-            driveSystem = new DriveSystem(new CANSparkMax(Constants.motorL1, MotorType.kBrushless), new CANSparkMax(Constants.motorL2, MotorType.kBrushless),
-            new CANSparkMax(Constants.motorR1, MotorType.kBrushless), new CANSparkMax(Constants.motorR2, MotorType.kBrushless));
-        return driveSystem;
-    }
+    private static LimelightSubsystem limelightSystem = null;
 
     public static ExampleSubsystem getExample(){
-        if(exampleSS == null)
-            exampleSS = new ExampleSubsystem();
-        return exampleSS;
+        if (example == null){
+            example = new ExampleSubsystem();
+        }
+        return example; 
     }
+    
+    public static IntakeSystem getIntake(){
+        if (intake == null){
+            intake = new IntakeSystem();
+        }
+        return intake;
+    }
+
+    public static LaunchSubsystem getLaunch(){
+        if(launch == null){
+            launch = new LaunchSubsystem();
+        }
+        return launch; 
+    }
+    
+    public static DriveSystem getDrive(){
+        if(driveSystem == null){
+            driveSystem = new DriveSystem(new CANSparkMax(Constants.motorL1, MotorType.kBrushless), new CANSparkMax(Constants.motorL2, MotorType.kBrushless),
+            new CANSparkMax(Constants.motorR1, MotorType.kBrushless), new CANSparkMax(Constants.motorR2, MotorType.kBrushless));
+        }
+        return driveSystem;
+    }
+    
+    public static LimelightSubsystem getLimelight() {
+        if(limelightSystem == null) {
+            limelightSystem = new LimelightSubsystem();
+        }
+        return limelightSystem;
+    }
+
 }
