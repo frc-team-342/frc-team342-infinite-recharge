@@ -46,8 +46,12 @@ public class Factory {
     
     public static DriveSystem getDrive(){
         if(driveSystem == null){
-            driveSystem = new DriveSystem(new CANSparkMax(Constants.motorL1, MotorType.kBrushless), new CANSparkMax(Constants.motorL2, MotorType.kBrushless),
-            new CANSparkMax(Constants.motorR1, MotorType.kBrushless), new CANSparkMax(Constants.motorR2, MotorType.kBrushless));
+            driveSystem = new DriveSystem(
+                new CANSparkMax(Constants.motorL1, MotorType.kBrushless), 
+                new CANSparkMax(Constants.motorL2, MotorType.kBrushless),
+                new CANSparkMax(Constants.motorR1, MotorType.kBrushless), 
+                new CANSparkMax(Constants.motorR2, MotorType.kBrushless)
+            );
         }
         return driveSystem;
     }

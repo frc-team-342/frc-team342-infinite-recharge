@@ -15,9 +15,9 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimelightSubsystem extends SubsystemBase {
   private NetworkTable table;
-  private NetworkTableEntry ty, tx, camMode;
+  private NetworkTableEntry ty, tx, camMode, ledMode;
   private double yOffsetAngle, xOffsetAngle;
-  private int cameraMode;
+  private int cameraMode, lightMode;
 
   /**
    * Creates a new LimelightSubsystem.
@@ -27,6 +27,7 @@ public class LimelightSubsystem extends SubsystemBase {
     ty = table.getEntry("ty");
     tx = table.getEntry("tx");
     camMode = table.getEntry("camMode");
+    ledMode = table.getEntry("ledMode");
   }
 
   @Override
@@ -35,6 +36,7 @@ public class LimelightSubsystem extends SubsystemBase {
     yOffsetAngle = ty.getDouble(0.0);
     xOffsetAngle = tx.getDouble(0.0);
     cameraMode = camMode.getNumber(0).intValue();
+    lightMode = ledMode.getNumber(0).intValue();
   }
 
   public double getDistance() {
@@ -47,5 +49,6 @@ public class LimelightSubsystem extends SubsystemBase {
 
   public void switchCamMode() {
     camMode.setNumber((cameraMode == 0) ? 1 : 0);
+    ledMode.setNumber((cameraMode == 0) ? 1: 3);
   }
 }
