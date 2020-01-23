@@ -18,19 +18,23 @@ public class JetsonSubsystem extends SubsystemBase {
    * Creates a new JetsonSubsystem.
    */
   private NetworkTable table;
-  private NetworkTableEntry colour;
+  private NetworkTableEntry colour, cpColor;
   private String colors;
+  private String cpColors;
   
 
   public JetsonSubsystem() {
     table = NetworkTableInstance.getDefault().getTable("SmartDashboard");
     colour = table.getEntry("color");
+    cpColor = table.getEntry("cpColor");
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     colors = colour.getString("null");
+    cpColors = cpColor.getString("null");
+
   }
   public String getColor() {
     return colors;

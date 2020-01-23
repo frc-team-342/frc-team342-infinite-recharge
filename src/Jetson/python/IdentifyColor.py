@@ -74,6 +74,8 @@ while True:
 
     #Creates a dictionary that represents the color's values
     colors = {"yellow" : (0.4959, 0.8670),"red" : (0.9940, -0.1054), "green" : (-0.9977, 0.010), "blue" : (-0.8497, -0.5268)}
+    reverseColors = ["blue", "green", "red", "yellow"]
+    colorList = ["yellow", "red", "green", "blue"]
 
     #Finds the distances between the picture's value and the colors' values
     distances = []
@@ -89,8 +91,28 @@ while True:
     least = 2
     for i in distances:
         if i < least:
-            least = i      
+            least = i     
+    
+    #The color that is seen by the camera
     print(list(colors)[distances.index(least)])
+    
+    #Finding the fms color
+    fmsColor = distances.index(least) - 2
+    print(fmsColor)
+    if fmsColor < 0:
+        leftover = fmsColor
+        fmsColor = 0 + (abs(leftover) - 1)
+        
+    #Printing the sensor color
+        print(reverseColors[fmsColor])
+        table.putString("controlPanelColor", reverseColors[fmsColor])
+
+    else:
+        print(colorList[fmsColor])
+        table.putString("controlPanelColor", colorList[fmsColor])
+    print(fmsColor)
+    
+    print("----")
     
     #Puts the value in a Network Table
     table.putString("color", list(colors)[distances.index(least)])
