@@ -41,7 +41,10 @@ public class DriveSystem extends SubsystemBase {
 
     NavX = new AHRS();
 
-
+    setPID(motorRight1);
+    setPID(motorRight2);
+    setPID(motorLeft1);
+    setPID(motorLeft2);
   }
 
   public void Drive(double ySpeed, double xSpeed, double zRotation) {
@@ -59,7 +62,10 @@ public class DriveSystem extends SubsystemBase {
     speeds[2] = -input.x + input.y + zRotation;
     speeds[3] = input.x + input.y - zRotation;
 
-
+    motorRight1.set(speeds[0]);
+    motorRight2.set(speeds[1]);
+    motorLeft1.set(speeds[2]);
+    motorLeft2.set(speeds[3]);
 
   }
 
