@@ -16,14 +16,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.IntakeWithButton;
-import frc.robot.commands.LaunchWithButton;
+//import frc.robot.commands.IntakeWithButton;
+//import frc.robot.commands.LaunchWithButton;
 import frc.robot.commands.DriveWithJoystick;
 
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.IntakeSystem;
-import frc.robot.subsystems.LaunchSubsystem;
+//import frc.robot.subsystems.IntakeSystem;
+//import frc.robot.subsystems.LaunchSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -46,8 +46,8 @@ public class RobotContainer {
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-  private final IntakeWithButton m_intakeWithButton = new IntakeWithButton();
-  private final LaunchWithButton m_launchWithButton = new LaunchWithButton(); 
+  //private final IntakeWithButton m_intakeWithButton = new IntakeWithButton();
+  //private final LaunchWithButton m_launchWithButton = new LaunchWithButton(); 
 
 
   /**
@@ -57,8 +57,9 @@ public class RobotContainer {
   public RobotContainer() {
 
     //establishes joysticks and buttons
-    leftBumper = new JoystickButton(joy, Constants.LEFTBUMPER); 
-    rightBumper = new JoystickButton(joy, Constants.RIGHTBUMPER); 
+    joy = new Joystick(0);
+    //leftBumper = new JoystickButton(joy, Constants.LEFTBUMPER); 
+    //rightBumper = new JoystickButton(joy, Constants.RIGHTBUMPER); 
     driveSystem = Factory.getDrive();
     driveWithJoystick = new DriveWithJoystick();
     
@@ -85,8 +86,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    leftBumper.whileHeld(m_intakeWithButton);
-    rightBumper.whileHeld(m_launchWithButton); 
+    //leftBumper.whileHeld(m_intakeWithButton);
+    //rightBumper.whileHeld(m_launchWithButton); 
   }
 
 

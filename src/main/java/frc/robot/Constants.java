@@ -22,17 +22,17 @@ public final class Constants {
     public static final int LOAD = 3;
     public static final int LOADFOLLOW = 4; 
     //drive motors
-    public static final int motorR1 = 5;
+    public static final int motorR1 = 3;
     public static final int motorR2 = 1;
-    public static final int motorL1 = 1;
-    public static final int motorL2 = 1;
+    public static final int motorL1 = 4;
+    public static final int motorL2 = 2;
   
     //buttons (NOTE: starts at 1 not 0)
     public static final int LEFTBUMPER = 5; 
     public static final int RIGHTBUMPER = 6; 
     //controller stuff
-    public static final int driver_joystick = 1;
-      public static final int LOGITECH = 3; 
+    public static final int driver_joystick = 0;
+    //  public static final int LOGITECH = 3; 
     public static final int driveYAxis = 1;
 
 

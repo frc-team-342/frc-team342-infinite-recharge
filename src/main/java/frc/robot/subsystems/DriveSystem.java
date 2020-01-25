@@ -45,11 +45,17 @@ public class DriveSystem extends SubsystemBase {
     setPID(motorRight2);
     setPID(motorLeft1);
     setPID(motorLeft2);
+
+    motorLeft1.setInverted(true);
+    motorLeft2.setInverted(true);
   }
 
   public void Drive(double ySpeed, double xSpeed, double zRotation) {
-    //mecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation, NavX.getAngle());
+    mecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation, NavX.getAngle());
+  }
 
+  public void DriveMecanum(double ySpeed, double xSpeed, double zRotation) {
+    
     MathUtil.clamp(xSpeed, -1.0, 1.0);
     MathUtil.clamp(ySpeed, -1.0, 1.0);
 
@@ -77,8 +83,15 @@ public class DriveSystem extends SubsystemBase {
   public void setPID(CANSparkMax motor) {
     CANPIDController pid = motor.getPIDController();
     pid.setP(0.0);
-    pid.setI(0.001);
+    pid.setI(0.0);
     pid.setD(0.0);
     pid.setFF(0.0);
+
+    motor.setSmartCurrentLimit(50);
+    motor.enableVoltageCompensation(12.0);
+  }
+
+  public void testPrint () {
+    System.out.println("hello");
   }
 }
