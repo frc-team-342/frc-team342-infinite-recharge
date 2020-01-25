@@ -34,7 +34,9 @@ public class DriveSystem extends SubsystemBase {
     motorLeft2 = motor2;
 
     motorLeft1.setInverted(true);
-    motorRight2.setInverted(true);
+    motorLeft2.setInverted(true);
+    motorRight1.setInverted(false);
+    motorRight2.setInverted(false);
 
     motorLeft1.setSmartCurrentLimit(50);
     motorLeft2.setSmartCurrentLimit(50);
@@ -57,6 +59,13 @@ public class DriveSystem extends SubsystemBase {
   }
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
     mecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation/*, NavX.getAngle()*/);
+  }
+
+  public void PercentOut(double yAxis){
+    motorLeft1.set(yAxis);
+    motorLeft2.set(yAxis);
+    motorRight1.set(yAxis);
+    motorRight2.set(yAxis);
   }
 
   @Override

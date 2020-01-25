@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveWithJoystick;
+import frc.robot.commands.DriveWithPercent;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -25,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   private static Joystick joy;
   private final DriveWithJoystick driveWithJoystick;
+  private final DriveWithPercent driveWithPercent;
   private final DriveSystem driveSystem;
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
@@ -39,6 +41,7 @@ public class RobotContainer {
     joy = new Joystick(Constants.driver_joystick);
     driveSystem = Factory.getDrive();
     driveWithJoystick = new DriveWithJoystick();
+    driveWithPercent = new DriveWithPercent();
     
     // Configure the button bindings
     configureButtonBindings();
@@ -53,6 +56,10 @@ public class RobotContainer {
 
   public Command getDrive(){
     return driveWithJoystick;
+  }
+
+  public Command getPercent(){
+    return driveWithPercent;
   }
 
   /**

@@ -24,6 +24,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
   private Command driveWithJoy;
+  private Command driveWithPercent;
   private static DriveSystem driveSystem;
 
   /**
@@ -35,6 +36,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     driveSystem = Factory.getDrive();
     driveWithJoy = m_robotContainer.getDrive();
+    driveWithPercent = m_robotContainer.getPercent();
     
 
   }
@@ -104,6 +106,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     driveWithJoy.schedule();
+    //driveWithPercent.schedule();
   }
 
   @Override
