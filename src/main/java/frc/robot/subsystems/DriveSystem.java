@@ -37,7 +37,7 @@ public class DriveSystem extends SubsystemBase {
     motorLeft1 = motor3;
     motorLeft2 = motor4;
 
-    //mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
+    mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
 
     NavX = new AHRS();
 
@@ -60,7 +60,7 @@ public class DriveSystem extends SubsystemBase {
     MathUtil.clamp(ySpeed, -1.0, 1.0);
 
     Vector2d input = new Vector2d(xSpeed, ySpeed);
-    input.rotate(NavX.getAngle());
+    input.rotate(-NavX.getAngle());
 
     double[] speeds = new double[4];
     speeds[0] = input.x + input.y + zRotation;

@@ -45,8 +45,10 @@ public class DriveWithJoystick extends CommandBase {
     if (Math.abs(Y) < 0.4) {
       Y = 0.0;
     }
-    if (m)
-    driveSystem.DriveMecanum(joy.getY(), joy.getX(), joy.getZ());
+    if (Math.abs(Z) < 0.4) {
+      Z = 0.0;
+    }
+    driveSystem.DriveMecanum(-X, Y, -Z);
   }
 
   // Called once the command ends or is interrupted.

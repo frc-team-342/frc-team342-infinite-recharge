@@ -41,7 +41,7 @@ public class RobotContainer {
   private static JoystickButton rightBumper; 
 
   //subsystems and commands
-  private final DriveWithJoystick driveWithJoystick;
+  
   private final DriveSystem driveSystem;
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
@@ -61,7 +61,7 @@ public class RobotContainer {
     //leftBumper = new JoystickButton(joy, Constants.LEFTBUMPER); 
     //rightBumper = new JoystickButton(joy, Constants.RIGHTBUMPER); 
     driveSystem = Factory.getDrive();
-    driveWithJoystick = new DriveWithJoystick();
+    
     
 
     // Configure the button bindings
@@ -75,9 +75,7 @@ public class RobotContainer {
     return joy.getRawAxis(Constants.driveYAxis);
   }
 
-  public Command getDrive(){
-    return driveWithJoystick;
-  }
+  
 
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by
