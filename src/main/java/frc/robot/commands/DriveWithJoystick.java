@@ -68,7 +68,7 @@ public class DriveWithJoystick extends CommandBase {
     else
       SmartDashboard.putString("Z Deadzone", "Z is not in deadzone!");
 
-    driveSystem.Drive(X, Y, Z);
+    driveSystem.Drive(X, -Y, Z);
   }
 
   // Called once the command ends or is interrupted.

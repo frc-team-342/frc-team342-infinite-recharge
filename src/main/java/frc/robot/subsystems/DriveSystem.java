@@ -33,8 +33,8 @@ public class DriveSystem extends SubsystemBase {
     motorLeft1 = motor4;
     motorLeft2 = motor2;
 
-    motorLeft1.setInverted(true);
-    motorLeft2.setInverted(true);
+    motorLeft1.setInverted(false);
+    motorLeft2.setInverted(false);
     motorRight1.setInverted(false);
     motorRight2.setInverted(false);
 
@@ -58,7 +58,7 @@ public class DriveSystem extends SubsystemBase {
     NavX = new AHRS();
   }
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
-    mecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation/*, NavX.getAngle()*/);
+    mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation/*, NavX.getAngle()*/);
   }
 
   public void PercentOut(double yAxis){
