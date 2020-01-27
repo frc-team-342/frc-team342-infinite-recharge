@@ -51,4 +51,12 @@ public class LimelightSubsystem extends SubsystemBase {
     camMode.setNumber((cameraMode == 0) ? 1 : 0);
     ledMode.setNumber((cameraMode == 0) ? 1: 3);
   }
+
+  /*
+   * Returns angle of target offset from crosshair
+   * 
+   */
+  public double getXOffsetAngle() {
+    return xOffsetAngle;
+  }
 }
