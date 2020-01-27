@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
@@ -57,6 +58,22 @@ public class DriveSystem extends SubsystemBase {
 
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+//TODO: go over these two methods with neal.
+  public double getGyro(boolean backwards){
+    double angle; 
+
+    if(backwards){
+      angle = (((((NavX.getAngle() + 180)) % 360) + 360) % 360);
+    } else {
+      angle = ((((NavX.getAngle()) % 360) + 360) % 360);
+    }
+    return angle;
+  }
+
+  public void resetGyro(){
+    NavX.reset(); 
   }
 
   public void stopDrive(){
