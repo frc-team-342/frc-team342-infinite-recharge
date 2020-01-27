@@ -9,7 +9,10 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.kauailabs.navx.frc.AHRS;
+
 import com.revrobotics.CANPIDController;
+
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -17,6 +20,7 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 import edu.wpi.first.wpiutil.math.MathUtil;
 
@@ -25,6 +29,11 @@ public class DriveSystem extends SubsystemBase {
   private CANSparkMax motorRight2;
   private CANSparkMax motorLeft1;
   private CANSparkMax motorLeft2;
+
+  public CANEncoder encoderL1;
+  public CANEncoder encoderL2;
+  public CANEncoder encoderR1;
+  public CANEncoder encoderR2;
 
   private AHRS NavX;
 
@@ -38,9 +47,15 @@ public class DriveSystem extends SubsystemBase {
     motorLeft1 = motor3;
     motorLeft2 = motor4;
 
+    encoderL1 = new CANEncoder(motorLeft1);
+    encoderL2 = new CANEncoder(motorLeft2);
+    encoderR1 = new CANEncoder(motorRight1);
+    encoderR2 = new CANEncoder(motorRight2); 
+
     mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
 
     NavX = new AHRS();
+
 
     setPID(motorRight1);
     setPID(motorRight2);
@@ -49,6 +64,7 @@ public class DriveSystem extends SubsystemBase {
 
     motorLeft1.setInverted(true);
     motorLeft2.setInverted(true);
+
   }
 
   public void Drive(double ySpeed, double xSpeed, double zRotation) {
