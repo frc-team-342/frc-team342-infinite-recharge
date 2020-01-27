@@ -1,6 +1,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants.  This class should not be used for any other purpose.  All constants should be
@@ -26,13 +28,15 @@ public final class Constants {
     public static final int motorR2 = 1;
     public static final int motorL1 = 1;
     public static final int motorL2 = 1;
+
+
   
     //buttons (NOTE: starts at 1 not 0)
     public static final int LEFTBUMPER = 5; 
     public static final int RIGHTBUMPER = 6; 
     //controller stuff
     public static final int driver_joystick = 1;
-      public static final int LOGITECH = 3; 
+    public static final int LOGITECH = 3; 
     public static final int driveYAxis = 1;
 
 
