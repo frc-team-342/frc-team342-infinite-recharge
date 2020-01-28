@@ -18,7 +18,7 @@ import frc.robot.Constants;
 public class DriveSystem extends SubsystemBase {
   private CANSparkMax motorRight1;
   private CANSparkMax motorRight2;
-  private CANSparkMax motorLeft1;
+  private CANSparkMax motorLeft1; 
   private CANSparkMax motorLeft2;
 
   private AHRS NavX;
@@ -27,18 +27,45 @@ public class DriveSystem extends SubsystemBase {
   /**
    * Creates a new DriveSystem.
    */
-  public DriveSystem(CANSparkMax motor1, CANSparkMax motor2, CANSparkMax motor3, CANSparkMax motor4) {
-    motorRight1 = motor1;
-    motorRight2 = motor2;
-    motorLeft1 = motor3;
-    motorLeft2 = motor4;
+  public DriveSystem(CANSparkMax motor4, CANSparkMax motor2, CANSparkMax motor3, CANSparkMax motor1) {
+    motorRight1 = motor3;
+    motorRight2 = motor1;
+    motorLeft1 = motor4;
+    motorLeft2 = motor2;
+
+    motorLeft1.setInverted(false);
+    motorLeft2.setInverted(false);
+    motorRight1.setInverted(false);
+    motorRight2.setInverted(false);
+
+    motorLeft1.setSmartCurrentLimit(50);
+    motorLeft2.setSmartCurrentLimit(50);
+    motorRight1.setSmartCurrentLimit(50);
+    motorRight2.setSmartCurrentLimit(50);
+
+    motorLeft1.enableVoltageCompensation(12.0);
+    motorLeft2.enableVoltageCompensation(12.0);
+    motorRight1.enableVoltageCompensation(12.0);
+    motorRight2.enableVoltageCompensation(12.0);
+
+
+
+   // motorRight1.setInverted(true);
+   // motorRight2.setInverted(true);
 
     mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
 
     NavX = new AHRS();
   }
-  public void Drive(double ySpeed, double xSpeed, double zRotation) {
-    mecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation, NavX.getAngle());
+  public void Drive(double xSpeed, double ySpeed, double zRotation) {
+    mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation/*, NavX.getAngle()*/);
+  }
+
+  public void PercentOut(double yAxis){
+    motorLeft1.set(yAxis);
+    motorLeft2.set(yAxis);
+    motorRight1.set(yAxis);
+    motorRight2.set(yAxis);
   }
 
   @Override
