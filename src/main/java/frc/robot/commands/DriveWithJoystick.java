@@ -16,6 +16,7 @@ import frc.robot.subsystems.DriveSystem;
 public class DriveWithJoystick extends CommandBase {
   private final DriveSystem driveSystem;
   private final Joystick joy;
+  private double X, Y, Z;
   /**
    * Creates a new DriveWithJoystick.
    */
@@ -34,12 +35,26 @@ public class DriveWithJoystick extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveSystem.Drive(joy.getY(), joy.getX(), joy.getZ());
+    X = joy.getX();
+    Y = joy.getY();
+    Z = joy.getZ();
+
+    if (Math.abs(X) < 0.4) {
+      X = 0.0;
+    }
+    if (Math.abs(Y) < 0.4) {
+      Y = 0.0;
+    }
+    if (Math.abs(Z) < 0.4) {
+      Z = 0.0;
+    }
+    driveSystem.DriveMecanum(-X, Y, -Z);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    driveSystem.DriveMecanum(0.0, 0.0, 0.0);
   }
 
   // Returns true when the command should end.

@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.Factory; 
 
 public class RotateToAngle extends CommandBase {
@@ -17,6 +18,7 @@ public class RotateToAngle extends CommandBase {
    */
   
   private final DriveSystem driveSystem; 
+  private final LimelightSubsystem limeLight; 
 
   private double angle;
   private double gyro_angle; 
@@ -29,10 +31,11 @@ public class RotateToAngle extends CommandBase {
 	private static final double slowmargin=45;
 	private static final double SPEED = 0.7;
 
-  public RotateToAngle(int angle) {
+  public RotateToAngle(double angle) {
     driveSystem = Factory.getDrive(); 
+    limeLight = Factory.getLimelight(); 
 
-    this.angle = angle; 
+    this.angle = limeLight.getXOffsetAngle(); 
   }
 
   @Override
@@ -49,7 +52,7 @@ public class RotateToAngle extends CommandBase {
     gyro_angle = driveSystem.getGyro(false); 
 
     double diff = angle - gyro_angle; 
-    if(diff<0){
+    if(diff<0) {
       diff = diff + 360;
     } else if (diff > 180){
       TurnRight = false;
