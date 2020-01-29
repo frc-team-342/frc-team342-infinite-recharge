@@ -70,7 +70,7 @@ public class DriveSystem extends SubsystemBase {
 
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
     if(isFieldOriented == true)
-      mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation, (NavX.getAngle()+360.0)%360);
+      mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation, -NavX.getAngle());
     else
       mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation);
   }
