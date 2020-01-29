@@ -21,6 +21,8 @@ public class DriveSystem extends SubsystemBase {
   private CANSparkMax motorLeft1; 
   private CANSparkMax motorLeft2;
 
+  private boolean isFieldOriented;
+
   private AHRS NavX;
 
   private MecanumDrive mecanumDrive;
@@ -57,9 +59,27 @@ public class DriveSystem extends SubsystemBase {
 
     NavX = new AHRS();
   }
-  public void Drive(double xSpeed, double ySpeed, double zRotation) {
-    mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation/*, NavX.getAngle()*/);
+
+  public void setFieldOriented(boolean bool){
+    isFieldOriented = bool;
   }
+
+  public boolean getFieldOriented(){
+    return isFieldOriented;
+  }
+
+  public void Drive(double xSpeed, double ySpeed, double zRotation) {
+    if(isFieldOriented == true)
+      mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation, (NavX.getAngle()+360.0)%360);
+    else
+      mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation);
+  }
+
+  public void zeroGyro(){
+    NavX.zeroYaw();
+  }
+
+  
 
   public void PercentOut(double yAxis){
     motorLeft1.set(yAxis);

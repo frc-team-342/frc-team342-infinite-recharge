@@ -23,5 +23,7 @@ public final class Constants {
 
     public static final int driver_joystick = 1;
     public static final int driveYAxis = 1;
+    public static final int zeroGyro = 4;
+    public static final int fieldToggler = 3;
 
 }

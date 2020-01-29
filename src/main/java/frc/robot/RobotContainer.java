@@ -13,9 +13,12 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithPercent;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ToggleFieldOriented;
+import frc.robot.commands.ZeroGyro;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -24,13 +27,17 @@ import edu.wpi.first.wpilibj2.command.Command;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  private static JoystickButton gyrozeroer;
   private static Joystick joy;
+  private static JoystickButton fieldtoggle;
   private final DriveWithJoystick driveWithJoystick;
   private final DriveWithPercent driveWithPercent;
   private final DriveSystem driveSystem;
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  private final ZeroGyro zero = new ZeroGyro();
+  private final ToggleFieldOriented togglefield = new ToggleFieldOriented();
 
 
 
@@ -38,10 +45,14 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    joy = new Joystick(Constants.driver_joystick);
     driveSystem = Factory.getDrive();
+    joy = new Joystick(Constants.driver_joystick);
     driveWithJoystick = new DriveWithJoystick();
     driveWithPercent = new DriveWithPercent();
+    
+    gyrozeroer = new JoystickButton(joy, Constants.zeroGyro);
+    fieldtoggle = new JoystickButton(joy, Constants.fieldToggler);
+    
     
     // Configure the button bindings
     configureButtonBindings();
@@ -69,6 +80,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    gyrozeroer.whenPressed(zero);
+    fieldtoggle.whenPressed(togglefield);
   }
 
 
