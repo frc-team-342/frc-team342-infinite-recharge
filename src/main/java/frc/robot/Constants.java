@@ -25,5 +25,6 @@ public final class Constants {
     public static final int driveYAxis = 1;
     public static final int zeroGyro = 4;
     public static final int fieldToggler = 3;
+    public static final int pidToggler = 2;
 
 }
