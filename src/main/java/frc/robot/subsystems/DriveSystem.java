@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
@@ -27,6 +28,7 @@ public class DriveSystem extends SubsystemBase {
 
   private boolean isFieldOriented;
   private boolean isPID;
+  public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
 
   private AHRS NavX;
 
@@ -55,14 +57,14 @@ public class DriveSystem extends SubsystemBase {
     motorRight1.enableVoltageCompensation(12.0);
     motorRight2.enableVoltageCompensation(12.0);
 
-    setPID(motorLeft1, 1.0, 0.0, 0.0, 0.0);
-    setPID(motorLeft2, 1.0, 0.0, 0.0, 0.0);
-    setPID(motorRight1, -1.0, 0.0, 0.0, 0.0);
-    setPID(motorRight2, -1.0, 0.0, 0.0, 0.0);
-
-
-   // motorRight1.setInverted(true);
-   // motorRight2.setInverted(true);
+    kP = 5e-5; 
+    kI = 1e-6;
+    kD = 0; 
+    kIz = 0; 
+    kFF = 0.000156; 
+    kMaxOutput = 1; 
+    kMinOutput = -1;
+    maxRPM = 5700;
 
     mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
 
@@ -88,10 +90,10 @@ public class DriveSystem extends SubsystemBase {
     if(isFieldOriented == true)
       mecanumDrive.driveCartesian(xSpeed, ySpeed, (zRotation)/2, -NavX.getAngle());
     else if(isPID == true){
-      xSpeed = MathUtil.clamp(xSpeed, -1.0, 1.0);
+      MathUtil.clamp(xSpeed, -1.0, 1.0);
       //xSpeed = applyDeadband(xSpeed, 0);
 
-      ySpeed = MathUtil.clamp(ySpeed, -1.0, 1.0);
+      MathUtil.clamp(ySpeed, -1.0, 1.0);
       //ySpeed = applyDeadband(ySpeed, 0);
 
       Vector2d input = new Vector2d(xSpeed, ySpeed);
@@ -103,11 +105,17 @@ public class DriveSystem extends SubsystemBase {
       speeds[2] = -input.x + input.y + zRotation;
       speeds[3] = input.x + input.y - zRotation;
 
+      //normalize(speeds);
+
       motorLeft1.set(speeds[0]);
       motorRight1.set(speeds[1]*-1.0);
       motorLeft2.set(speeds[2]);
       motorRight2.set(speeds[3]*-1.0);
 
+      setPID(motorLeft1);
+      setPID(motorLeft2);
+      setPID(motorRight1);
+      setPID(motorRight2);
     }
 
     else
@@ -119,12 +127,17 @@ public class DriveSystem extends SubsystemBase {
     NavX.zeroYaw();
   }
 
-  public void setPID(CANSparkMax motor, double p, double i, double d, double ff) {
+  public void setPID(CANSparkMax motor) {
     pid = motor.getPIDController();
-    pid.setP(p);
-    pid.setI(i);
-    pid.setD(d);
-    pid.setFF(ff);
+    
+    pid.setP(kP);
+    pid.setI(kI);
+    pid.setD(kD);
+    pid.setIZone(kIz);
+    pid.setFF(kFF);
+    pid.setOutputRange(kMinOutput, kMaxOutput);
+
+    pid.setReference(500.0, ControlType.kVelocity);
 
     motor.setSmartCurrentLimit(50);
     motor.enableVoltageCompensation(12.0);

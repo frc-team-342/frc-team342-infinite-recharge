@@ -87,7 +87,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     gyrozeroer.whenPressed(zero);
     fieldtoggle.whenPressed(togglefield);
-    pidtoggle.whenPressed(pid);
+    pidtoggle.whileHeld(pid);
   }
 
 
