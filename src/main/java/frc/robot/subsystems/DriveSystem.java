@@ -26,12 +26,18 @@ public class DriveSystem extends SubsystemBase {
   private CANSparkMax motorLeft2;
   private CANPIDController pid;
 
-  private boolean isFieldOriented;
-  private boolean isPID;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
 
-  private AHRS NavX;
+  private boolean isFieldOriented = false;
+  private boolean isPID = false;
+  private boolean isSlowMode = false;
+  private boolean isTurbo = false;
+  
+  private static final double ramp_rate = 0.2;
+  private static final double voltage_comp = 12.0;
+  private static final int current_limit = 50;
 
+  private AHRS NavX;
   private MecanumDrive mecanumDrive;
   /**
    * Creates a new DriveSystem.
@@ -47,15 +53,20 @@ public class DriveSystem extends SubsystemBase {
     motorRight1.setInverted(false);
     motorRight2.setInverted(false);
 
-    motorLeft1.setSmartCurrentLimit(50);
-    motorLeft2.setSmartCurrentLimit(50);
-    motorRight1.setSmartCurrentLimit(50);
-    motorRight2.setSmartCurrentLimit(50);
+    motorLeft1.setSmartCurrentLimit(current_limit);
+    motorLeft2.setSmartCurrentLimit(current_limit);
+    motorRight1.setSmartCurrentLimit(current_limit);
+    motorRight2.setSmartCurrentLimit(current_limit);
 
-    motorLeft1.enableVoltageCompensation(12.0);
-    motorLeft2.enableVoltageCompensation(12.0);
-    motorRight1.enableVoltageCompensation(12.0);
-    motorRight2.enableVoltageCompensation(12.0);
+    motorLeft1.enableVoltageCompensation(voltage_comp);
+    motorLeft2.enableVoltageCompensation(voltage_comp);
+    motorRight1.enableVoltageCompensation(voltage_comp);
+    motorRight2.enableVoltageCompensation(voltage_comp);
+
+    motorLeft1.setOpenLoopRampRate(ramp_rate);
+    motorLeft2.setOpenLoopRampRate(ramp_rate);
+    motorRight1.setOpenLoopRampRate(ramp_rate);
+    motorRight2.setOpenLoopRampRate(ramp_rate);
 
     kP = 5e-5; 
     kI = 1e-6;
@@ -70,25 +81,14 @@ public class DriveSystem extends SubsystemBase {
 
     NavX = new AHRS();
   }
-  public void setPIDLooped(boolean bool){
-    isPID = bool;
-  }
-
-  public boolean getPIDLooped(){
-    return isPID;
-  }
-
-  public void setFieldOriented(boolean bool){
-    isFieldOriented = bool;
-  }
-
-  public boolean getFieldOriented(){
-    return isFieldOriented;
-  }
 
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
-    if(isFieldOriented == true)
-      mecanumDrive.driveCartesian(xSpeed, ySpeed, (zRotation)/2, -NavX.getAngle());
+    if(isFieldOriented == true){
+      if(isSlowMode)
+        mecanumDrive.driveCartesian((xSpeed/2), (ySpeed)/2, (zRotation)/4, -NavX.getAngle());
+      else
+        mecanumDrive.driveCartesian(xSpeed, ySpeed, (zRotation)/2, -NavX.getAngle());
+    }
     else if(isPID == true){
       MathUtil.clamp(xSpeed, -1.0, 1.0);
       //xSpeed = applyDeadband(xSpeed, 0);
@@ -116,10 +116,14 @@ public class DriveSystem extends SubsystemBase {
       setPID(motorLeft2);
       setPID(motorRight1);
       setPID(motorRight2);
-    }
-
+    }   
     else
-      mecanumDrive.driveCartesian(xSpeed, ySpeed, (zRotation)/2);
+      if(isSlowMode == true)
+       mecanumDrive.driveCartesian((xSpeed/2), (ySpeed)/2, (zRotation)/4);
+      else if(isTurbo == true)
+       mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation);
+      else
+      mecanumDrive.driveCartesian(xSpeed*0.8, ySpeed*0.8, (zRotation)/2);
   }
 
   
@@ -149,6 +153,30 @@ public class DriveSystem extends SubsystemBase {
     motorLeft2.set(yAxis);
     motorRight1.set(yAxis);
     motorRight2.set(yAxis);
+  }
+  public void setPIDLooped(boolean bool){
+    isPID = bool;
+  }
+  public boolean getPIDLooped(){
+    return isPID;
+  }
+  public void setFieldOriented(boolean bool){
+    isFieldOriented = bool;
+  }
+  public boolean getFieldOriented(){
+    return isFieldOriented;
+  }
+  public void setSlow(boolean slow){
+    isSlowMode = slow;
+  }
+  public boolean getSlow(){
+    return isSlowMode;
+  }
+  public void setTurbo(boolean turbo){
+    isTurbo = turbo;
+  }
+  public boolean getTurbo(){
+    return isTurbo;
   }
 
   @Override
