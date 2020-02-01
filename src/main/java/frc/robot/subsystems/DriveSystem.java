@@ -81,11 +81,11 @@ public class DriveSystem extends SubsystemBase {
 
     NavX = new AHRS();
   }
-
+  
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
     if(isFieldOriented == true){
       if(isSlowMode == true)
-        mecanumDrive.driveCartesian((xSpeed/2), (ySpeed)/2, (zRotation)/4, -NavX.getAngle());
+       mecanumDrive.driveCartesian((xSpeed*0.8)/2, (ySpeed*0.8)/2, (zRotation*0.8)/4, -NavX.getAngle());
       else if(isTurbo == true)
         mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation, -NavX.getAngle());
       else
@@ -107,25 +107,25 @@ public class DriveSystem extends SubsystemBase {
       speeds[2] = -input.x + input.y + zRotation;
       speeds[3] = input.x + input.y - zRotation;
 
-      //normalize(speeds);
+      normalize(speeds);
 
       motorLeft1.set(speeds[0]);
       motorRight1.set(speeds[1]*-1.0);
       motorLeft2.set(speeds[2]);
       motorRight2.set(speeds[3]*-1.0);
 
-      //setPID(motorLeft1);
-      //setPID(motorLeft2);
-      //setPID(motorRight1);
-      //setPID(motorRight2);
+      setPID(motorLeft1);
+      setPID(motorLeft2);
+      setPID(motorRight1);
+      setPID(motorRight2);
     }   
     else
       if(isSlowMode == true)
-       mecanumDrive.driveCartesian((xSpeed/2), (ySpeed)/2, (zRotation)/4);
+       mecanumDrive.driveCartesian((xSpeed*0.8)/2, (ySpeed*0.8)/2, (zRotation*0.8)/4);
       else if(isTurbo == true)
        mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation);
       else
-        mecanumDrive.driveCartesian(xSpeed*0.8, ySpeed*0.8, (zRotation)/2);
+        mecanumDrive.driveCartesian(xSpeed*0.8, ySpeed*0.8, (zRotation*0.8)/2);
   }
 
   
@@ -143,12 +143,24 @@ public class DriveSystem extends SubsystemBase {
     pid.setFF(kFF);
     pid.setOutputRange(kMinOutput, kMaxOutput);
 
-    //pid.setReference(500.0, ControlType.kVelocity);
+    pid.setReference(1000.0, ControlType.kVelocity);
 
     motor.setSmartCurrentLimit(current_limit);
     motor.enableVoltageCompensation(voltage_comp);
   }
-  
+  protected static void normalize(double wheelSpeeds[]) {
+    double maxMagnitude = Math.abs(wheelSpeeds[0]);
+    int i;
+    for (i=1; i<4; i++) {
+        double temp = Math.abs(wheelSpeeds[i]);
+        if (maxMagnitude < temp) maxMagnitude = temp;
+    }
+    if (maxMagnitude > 1.0) {
+        for (i=0; i<4; i++) {
+            wheelSpeeds[i] = wheelSpeeds[i] / maxMagnitude;
+        }
+    }
+  }
 
   public void PercentOut(double yAxis){
     motorLeft1.set(yAxis);
