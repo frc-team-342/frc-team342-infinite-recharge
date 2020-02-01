@@ -32,9 +32,12 @@ public class ToggleSlowMode extends CommandBase {
   public void execute() {
     if(driveSystem.getSlow())
       driveSystem.setSlow(false);
-    else
+    else{
       driveSystem.setSlow(true);
+      driveSystem.setTurbo(false);
+    }
     SmartDashboard.putBoolean("Is Slow Mode", driveSystem.getSlow());
+    SmartDashboard.putBoolean("Is Turbo Mode", driveSystem.getTurbo());
   }
 
   // Called once the command ends or is interrupted.

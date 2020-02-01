@@ -84,8 +84,10 @@ public class DriveSystem extends SubsystemBase {
 
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
     if(isFieldOriented == true){
-      if(isSlowMode)
+      if(isSlowMode == true)
         mecanumDrive.driveCartesian((xSpeed/2), (ySpeed)/2, (zRotation)/4, -NavX.getAngle());
+      else if(isTurbo == true)
+        mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation, -NavX.getAngle());
       else
         mecanumDrive.driveCartesian(xSpeed, ySpeed, (zRotation)/2, -NavX.getAngle());
     }
@@ -112,10 +114,10 @@ public class DriveSystem extends SubsystemBase {
       motorLeft2.set(speeds[2]);
       motorRight2.set(speeds[3]*-1.0);
 
-      setPID(motorLeft1);
-      setPID(motorLeft2);
-      setPID(motorRight1);
-      setPID(motorRight2);
+      //setPID(motorLeft1);
+      //setPID(motorLeft2);
+      //setPID(motorRight1);
+      //setPID(motorRight2);
     }   
     else
       if(isSlowMode == true)
@@ -123,7 +125,7 @@ public class DriveSystem extends SubsystemBase {
       else if(isTurbo == true)
        mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation);
       else
-      mecanumDrive.driveCartesian(xSpeed*0.8, ySpeed*0.8, (zRotation)/2);
+        mecanumDrive.driveCartesian(xSpeed*0.8, ySpeed*0.8, (zRotation)/2);
   }
 
   
@@ -141,10 +143,10 @@ public class DriveSystem extends SubsystemBase {
     pid.setFF(kFF);
     pid.setOutputRange(kMinOutput, kMaxOutput);
 
-    pid.setReference(500.0, ControlType.kVelocity);
+    //pid.setReference(500.0, ControlType.kVelocity);
 
-    motor.setSmartCurrentLimit(50);
-    motor.enableVoltageCompensation(12.0);
+    motor.setSmartCurrentLimit(current_limit);
+    motor.enableVoltageCompensation(voltage_comp);
   }
   
 
