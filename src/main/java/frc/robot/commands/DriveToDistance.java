@@ -1,10 +1,7 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
-import frc.robot.Robot;
 import frc.robot.subsystems.DriveSystem;
 
 public class DriveToDistance extends CommandBase {
