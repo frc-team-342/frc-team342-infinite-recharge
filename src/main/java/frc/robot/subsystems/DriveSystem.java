@@ -120,8 +120,8 @@ public class DriveSystem extends SubsystemBase {
       rpms[3] = speeds[3]*maxRPM;
 
       setPIDReference(motorLeft1, rpms[0]);
-      setPIDReference(motorRight1, rpms[1]*-1.0);
-      setPIDReference(motorLeft2, rpms[2]);
+      setPIDReference(motorRight1, rpms[1]);
+      setPIDReference(motorLeft2, rpms[2]*-1.0);
       setPIDReference(motorRight2, rpms[3]*-1.0);
 
     }   
