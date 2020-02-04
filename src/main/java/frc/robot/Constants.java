@@ -48,10 +48,10 @@ public final class Constants {
 
     //sensors
     public static final int INTAKESENSOR1 = 0; 
-    public static final int INTAKESENSOR2 = 0; 
-    public static final int INTAKESENSOR3 = 0; 
-    public static final int INTAKESENSOR4 = 0; 
-    public static final int INTAKESENSOR5 = 0;
+    public static final int INTAKESENSOR2 = 1; 
+    public static final int INTAKESENSOR3 = 2; 
+    public static final int INTAKESENSOR4 = 3; 
+    public static final int INTAKESENSOR5 = 4;
 
 
 }

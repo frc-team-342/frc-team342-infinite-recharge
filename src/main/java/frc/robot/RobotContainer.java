@@ -64,7 +64,7 @@ public class RobotContainer {
     joy = new Joystick(0);
     //leftBumper = new JoystickButton(joy, Constants.LEFTBUMPER); 
     //rightBumper = new JoystickButton(joy, Constants.RIGHTBUMPER); 
-    xbox_A = new JoystickButton(joy, Constants.XBOX_A); 
+    //xbox_A = new JoystickButton(joy, Constants.XBOX_A); 
     trigger = new JoystickButton(joy, Constants.TRIGGER); 
     driveSystem = Factory.getDrive();
     
@@ -90,9 +90,9 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    leftBumper.whileHeld(m_intakeWithButton);
-    rightBumper.whileHeld(m_launchWithButton); 
-    xbox_A.whenPressed(RotateToAngle90);
+    //leftBumper.whileHeld(m_intakeWithButton);
+    //rightBumper.whileHeld(m_launchWithButton); 
+    //xbox_A.whenPressed(RotateToAngle90);
     trigger.whenPressed(RotateToAngle45); 
     
   }
