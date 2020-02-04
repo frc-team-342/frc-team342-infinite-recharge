@@ -24,7 +24,6 @@ public class DriveSystem extends SubsystemBase {
   private CANSparkMax motorRight2;
   private CANSparkMax motorLeft1; 
   private CANSparkMax motorLeft2;
-  private CANPIDController pid;
 
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
 
@@ -77,6 +76,11 @@ public class DriveSystem extends SubsystemBase {
     kMinOutput = -1;
     maxRPM = 5700;
 
+    setPID(motorLeft1);
+    setPID(motorLeft2);
+    setPID(motorRight1);
+    setPID(motorRight2);
+
     mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
 
     NavX = new AHRS();
@@ -98,7 +102,7 @@ public class DriveSystem extends SubsystemBase {
       MathUtil.clamp(ySpeed, -1.0, 1.0);
       //ySpeed = applyDeadband(ySpeed, 0);
 
-      Vector2d input = new Vector2d(xSpeed, ySpeed);
+      Vector2d input = new Vector2d(ySpeed, xSpeed);
       input.rotate(-NavX.getAngle());
 
       double[] speeds = new double[4];
@@ -109,15 +113,17 @@ public class DriveSystem extends SubsystemBase {
 
       normalize(speeds);
 
-      motorLeft1.set(speeds[0]);
-      motorRight1.set(speeds[1]*-1.0);
-      motorLeft2.set(speeds[2]);
-      motorRight2.set(speeds[3]*-1.0);
+      double[] rpms = new double[4];
+      rpms[0] = speeds[0]*maxRPM;
+      rpms[1] = speeds[1]*maxRPM;
+      rpms[2] = speeds[2]*maxRPM;
+      rpms[3] = speeds[3]*maxRPM;
 
-      setPID(motorLeft1);
-      setPID(motorLeft2);
-      setPID(motorRight1);
-      setPID(motorRight2);
+      setPIDReference(motorLeft1, rpms[0]);
+      setPIDReference(motorRight1, rpms[1]*-1.0);
+      setPIDReference(motorLeft2, rpms[2]);
+      setPIDReference(motorRight2, rpms[3]*-1.0);
+
     }   
     else
       if(isSlowMode == true)
@@ -134,7 +140,7 @@ public class DriveSystem extends SubsystemBase {
   }
 
   public void setPID(CANSparkMax motor) {
-    pid = motor.getPIDController();
+    CANPIDController pid = motor.getPIDController();
     
     pid.setP(kP);
     pid.setI(kI);
@@ -143,11 +149,21 @@ public class DriveSystem extends SubsystemBase {
     pid.setFF(kFF);
     pid.setOutputRange(kMinOutput, kMaxOutput);
 
-    pid.setReference(1000.0, ControlType.kVelocity);
-
     motor.setSmartCurrentLimit(current_limit);
     motor.enableVoltageCompensation(voltage_comp);
   }
+
+  public void setPIDReference(CANSparkMax motor, double speed){
+    CANPIDController pid = motor.getPIDController();
+    if(Math.abs(speed) < 1.0){
+      motor.set(0.0);
+      pid.setReference(0.0, ControlType.kVelocity);
+    }  
+    else pid.setReference(speed, ControlType.kVelocity);
+     
+    
+  }
+
   protected static void normalize(double wheelSpeeds[]) {
     double maxMagnitude = Math.abs(wheelSpeeds[0]);
     int i;
