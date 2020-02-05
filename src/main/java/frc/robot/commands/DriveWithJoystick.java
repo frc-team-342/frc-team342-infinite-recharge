@@ -17,9 +17,13 @@ import frc.robot.subsystems.DriveSystem;
 public class DriveWithJoystick extends CommandBase {
   private final DriveSystem driveSystem;
   private final Joystick joy;
+<<<<<<< HEAD
   private double X;
   private double Y;
   private double Z;
+=======
+  private double X, Y, Z;
+>>>>>>> 5b73a501a75362ecdec4a3f120bbcc6c1c7518e1
   /**
    * Creates a new DriveWithJoystick.
    */
@@ -42,6 +46,7 @@ public class DriveWithJoystick extends CommandBase {
     Y = joy.getY();
     Z = joy.getZ();
 
+<<<<<<< HEAD
     SmartDashboard.putNumber("X Axis", X);
     SmartDashboard.putNumber("Y Axis", Y);
     SmartDashboard.putNumber("Z Axis", Z);
@@ -70,12 +75,28 @@ public class DriveWithJoystick extends CommandBase {
 
     driveSystem.Drive(X, -Y, Z);
 
+=======
+    if (Math.abs(X) < 0.4) {
+      X = 0.0;
+    }
+    if (Math.abs(Y) < 0.4) {
+      Y = 0.0;
+    }
+    if (Math.abs(Z) < 0.4) {
+      Z = 0.0;
+    }
+    driveSystem.DriveMecanum(-X, Y, -Z);
+>>>>>>> 5b73a501a75362ecdec4a3f120bbcc6c1c7518e1
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+<<<<<<< HEAD
     driveSystem.Drive(0.0, 0.0, 0.0);
+=======
+    driveSystem.DriveMecanum(0.0, 0.0, 0.0);
+>>>>>>> 5b73a501a75362ecdec4a3f120bbcc6c1c7518e1
   }
 
   // Returns true when the command should end.

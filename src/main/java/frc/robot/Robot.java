@@ -35,13 +35,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {   
 
-    driveWithJoy = new DriveWithJoystick();
+    
 
     m_robotContainer = new RobotContainer();
     driveSystem = Factory.getDrive();
     driveWithJoy = m_robotContainer.getDrive();
     driveWithPercent = m_robotContainer.getPercent();
-    
 
   }
 
