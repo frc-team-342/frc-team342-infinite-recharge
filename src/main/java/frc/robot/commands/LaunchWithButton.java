@@ -32,7 +32,8 @@ public class LaunchWithButton extends CommandBase {
 
   @Override
   public void execute() {
-    intakeAndOutake.outake();  
+    //TODO test velocity later 
+    intakeAndOutake.outake(1000.0);  
   }
 
   @Override
