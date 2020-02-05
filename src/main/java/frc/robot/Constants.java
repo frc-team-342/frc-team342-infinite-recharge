@@ -21,8 +21,13 @@ public final class Constants {
     public static final int INTAKE1 = 9;
     public static final int INTAKE2 = 1;
     public static final int LAUNCH= 2;
-    public static final int LOAD = 3;
     public static final int LOADFOLLOW = 4; 
+
+    public static final int INTAKE = 9;
+    public static final int LAUNCH1 = 2;
+    public static final int LAUNCH2 = 1;
+    public static final int LOAD1 = 3; 
+    public static final int LOAD2 = 4;
     //drive motors
     public static final int motorR1 = 3;
     public static final int motorR2 = 1;
@@ -32,19 +37,21 @@ public final class Constants {
     //buttons (NOTE: starts at 1 not 0)
     public static final int LEFTBUMPER = 5; 
     public static final int RIGHTBUMPER = 6; 
+    public static final int XBOX_A = 1; 
+    public static final int TRIGGER = 1; 
+
     //controller stuff
     public static final int driver_joystick = 1;
     public static final int LOGITECH = 3; 
-
     public static final int driveYAxis = 1;
 
 
     //sensors
     public static final int INTAKESENSOR1 = 0; 
-    public static final int INTAKESENSOR2 = 0; 
-    public static final int INTAKESENSOR3 = 0; 
-    public static final int INTAKESENSOR4 = 0; 
-    public static final int INTAKESENSOR5 = 0;
+    public static final int INTAKESENSOR2 = 1; 
+    public static final int INTAKESENSOR3 = 2; 
+    public static final int INTAKESENSOR4 = 3; 
+    public static final int INTAKESENSOR5 = 4;
 
 
 }

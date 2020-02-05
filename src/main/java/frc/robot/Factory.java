@@ -2,8 +2,7 @@
 package frc.robot;
 
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.IntakeSystem;
-import frc.robot.subsystems.LaunchSubsystem;
+import frc.robot.subsystems.IntakeAndOutake;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
@@ -18,8 +17,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class Factory {
     private static ExampleSubsystem example = null; 
-    private static IntakeSystem intake = null;
-    private static LaunchSubsystem launch = null; 
+    private static IntakeAndOutake intakeOutake = null; 
     private static DriveSystem driveSystem = null;
     private static LimelightSubsystem limelightSystem = null;
 
@@ -30,18 +28,11 @@ public class Factory {
         return example; 
     }
     
-    public static IntakeSystem getIntake(){
-        if (intake == null){
-            intake = new IntakeSystem();
+    public static IntakeAndOutake getIntakeOutake(){
+        if(intakeOutake == null){
+            intakeOutake = new IntakeAndOutake(); 
         }
-        return intake;
-    }
-
-    public static LaunchSubsystem getLaunch(){
-        if(launch == null){
-            launch = new LaunchSubsystem();
-        }
-        return launch; 
+        return intakeOutake; 
     }
     
     public static DriveSystem getDrive(){

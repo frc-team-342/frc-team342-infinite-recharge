@@ -16,14 +16,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.ExampleCommand;
-//import frc.robot.commands.IntakeWithButton;
-//import frc.robot.commands.LaunchWithButton;
+import frc.robot.commands.RotateToAngle;
+import frc.robot.commands.IntakeWithButton;
+import frc.robot.commands.LaunchWithButton;
 import frc.robot.commands.DriveWithJoystick;
 
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.ExampleSubsystem;
-//import frc.robot.subsystems.IntakeSystem;
-//import frc.robot.subsystems.LaunchSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -38,16 +37,21 @@ public class RobotContainer {
   XboxController m_driverController = new XboxController(Constants.driver_joystick);
   private static Joystick joy;
   private static JoystickButton leftBumper; 
-  private static JoystickButton rightBumper; 
+  private static JoystickButton rightBumper;
+  private static JoystickButton xbox_A;  
+  private static JoystickButton trigger; 
 
   //subsystems and commands
-  
   private final DriveSystem driveSystem;
-
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-  //private final IntakeWithButton m_intakeWithButton = new IntakeWithButton();
-  //private final LaunchWithButton m_launchWithButton = new LaunchWithButton(); 
+  private final IntakeWithButton m_intakeWithButton = new IntakeWithButton();
+  private final LaunchWithButton m_launchWithButton = new LaunchWithButton(); 
+  
+
+  //rotate to amgle 
+  private Command RotateToAngle90 = new RotateToAngle(90.0);
+  private Command RotateToAngle45 = new RotateToAngle(45.0);
 
 
   /**
@@ -57,9 +61,11 @@ public class RobotContainer {
   public RobotContainer() {
 
     //establishes joysticks and buttons
-    joy = new Joystick(0);
+    joy = new Joystick(1);
     //leftBumper = new JoystickButton(joy, Constants.LEFTBUMPER); 
     //rightBumper = new JoystickButton(joy, Constants.RIGHTBUMPER); 
+    //xbox_A = new JoystickButton(joy, Constants.XBOX_A); 
+    trigger = new JoystickButton(joy, Constants.TRIGGER); 
     driveSystem = Factory.getDrive();
     
     
@@ -86,9 +92,12 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //leftBumper.whileHeld(m_intakeWithButton);
     //rightBumper.whileHeld(m_launchWithButton); 
+    //xbox_A.whenPressed(RotateToAngle90);
+    trigger.whenPressed(RotateToAngle45); 
+    
   }
 
-
+ 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
