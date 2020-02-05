@@ -3,10 +3,7 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-<<<<<<< HEAD
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-=======
->>>>>>> 5b73a501a75362ecdec4a3f120bbcc6c1c7518e1
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -44,12 +41,9 @@ public class IntakeAndOutake extends SubsystemBase {
     sensor3 = new DigitalInput(Constants.INTAKESENSOR3);
     sensor4 = new DigitalInput(Constants.INTAKESENSOR4);
     sensor5 = new DigitalInput(Constants.INTAKESENSOR5); 
-<<<<<<< HEAD
 
     setPID(launch1, 0.18, 0.23, 0.0007, 0.0, true);
     setPID(launch2, 0.18, 0.23, 0.0007, 0.0, true);
-=======
->>>>>>> 5b73a501a75362ecdec4a3f120bbcc6c1c7518e1
   }
 
   public void intake(){
@@ -58,20 +52,11 @@ public class IntakeAndOutake extends SubsystemBase {
     load2.set(ControlMode.PercentOutput, speed);
   }
 
-<<<<<<< HEAD
   public void outake(double velocity){
     load1.set(ControlMode.PercentOutput, speed); 
     load2.set(ControlMode.PercentOutput, speed);
     launch1.set(ControlMode.Velocity, velocity); 
     launch2.set(ControlMode.Velocity, velocity);
-=======
-  public void outake(){
-    launch2.follow(launch1);
-
-    load1.set(ControlMode.PercentOutput, speed); 
-    load2.set(ControlMode.PercentOutput, speed);
-    launch1.set(ControlMode.PercentOutput, speed); 
->>>>>>> 5b73a501a75362ecdec4a3f120bbcc6c1c7518e1
 
     if(sensor1.get() == true){
       load1.set(ControlMode.PercentOutput, 0.0); 
@@ -98,17 +83,12 @@ public class IntakeAndOutake extends SubsystemBase {
   }
 
   public void launchStop(){
-<<<<<<< HEAD
-=======
-    intake.set(ControlMode.PercentOutput, 0.0); 
->>>>>>> 5b73a501a75362ecdec4a3f120bbcc6c1c7518e1
     load1.set(ControlMode.PercentOutput, 0.0);
     load2.set(ControlMode.PercentOutput, 0.0);
     launch1.set(ControlMode.PercentOutput, 0.0);
     launch2.set(ControlMode.PercentOutput, 0.0); 
   }
 
-<<<<<<< HEAD
   // public void setLaunchSpeed(double speed){
   //   //speed is latter going to be determined by a PID loop
   //   launch1.set(ControlMode.PercentOutput, speed);
@@ -125,11 +105,5 @@ public class IntakeAndOutake extends SubsystemBase {
     motor.config_kI(0, i);
     motor.config_kD(0, d);
 
-=======
-  public void setLaunchSpeed(double speed){
-    //speed is latter going to be determined by a PID loop
-    launch1.set(ControlMode.PercentOutput, speed);
-    launch2.set(ControlMode.PercentOutput, speed);
->>>>>>> 5b73a501a75362ecdec4a3f120bbcc6c1c7518e1
   }
 }

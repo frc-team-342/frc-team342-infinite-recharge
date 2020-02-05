@@ -18,29 +18,18 @@ public final class Constants {
     // all of the names assigned are random. Find reall numbers latter
    
     //motors
-    public static final int INTAKE1 = 9;
-    public static final int INTAKE2 = 1;
-    public static final int LAUNCH= 2;
-    public static final int LOADFOLLOW = 4; 
-
-<<<<<<< HEAD
-=======
     public static final int INTAKE = 9;
     public static final int LAUNCH1 = 2;
     public static final int LAUNCH2 = 1;
     public static final int LOAD1 = 3; 
     public static final int LOAD2 = 4;
->>>>>>> 5b73a501a75362ecdec4a3f120bbcc6c1c7518e1
     //drive motors
     public static final int motorR1 = 3;
     public static final int motorR2 = 1;
     public static final int motorL1 = 4;
     public static final int motorL2 = 2;
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 5b73a501a75362ecdec4a3f120bbcc6c1c7518e1
   
     //buttons (NOTE: starts at 1 not 0)
     public static final int LEFTBUMPER = 5; 

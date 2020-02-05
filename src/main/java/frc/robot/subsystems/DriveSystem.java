@@ -12,23 +12,15 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
-<<<<<<< HEAD
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-=======
->>>>>>> 5b73a501a75362ecdec4a3f120bbcc6c1c7518e1
 
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-<<<<<<< HEAD
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants;
 import frc.robot.Robot;
-=======
-
-import edu.wpi.first.wpiutil.math.MathUtil;
->>>>>>> 5b73a501a75362ecdec4a3f120bbcc6c1c7518e1
 
 public class DriveSystem extends SubsystemBase {
   private CANSparkMax motorRight1;
@@ -116,7 +108,6 @@ public class DriveSystem extends SubsystemBase {
     motorLeft2.setInverted(true);
 
   }
-<<<<<<< HEAD
   
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
     if(isFieldOriented == true){
@@ -239,11 +230,6 @@ public class DriveSystem extends SubsystemBase {
   }
   public boolean getTurbo(){
     return isTurbo;
-=======
-
-  public void Drive(double ySpeed, double xSpeed, double zRotation) {
-    mecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation, NavX.getAngle());
->>>>>>> 5b73a501a75362ecdec4a3f120bbcc6c1c7518e1
   }
 
   public void DriveMecanum(double ySpeed, double xSpeed, double zRotation) {
@@ -296,16 +282,6 @@ public class DriveSystem extends SubsystemBase {
     motorRight2.set(0.0);
   }
 
-  public void setPID(CANSparkMax motor) {
-    CANPIDController pid = motor.getPIDController();
-    pid.setP(0.0);
-    pid.setI(0.0);
-    pid.setD(0.0);
-    pid.setFF(0.0);
-
-    motor.setSmartCurrentLimit(50);
-    motor.enableVoltageCompensation(12.0);
-  }
 
   public void testPrint () {
     System.out.println("hello");
