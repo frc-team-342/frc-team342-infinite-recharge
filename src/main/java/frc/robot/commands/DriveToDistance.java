@@ -67,7 +67,7 @@ public class DriveToDistance extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    driveSystem.stopDrive; 
+    driveSystem.stopDrive(); 
   }
 
   @Override

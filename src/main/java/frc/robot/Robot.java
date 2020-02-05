@@ -25,27 +25,18 @@ public class Robot extends TimedRobot {
  
   private RobotContainer m_robotContainer;
   private Command driveWithJoy;
-<<<<<<< HEAD
 
-  private static DriveSystem driveSystem = Factory.getDrive();
-=======
   private Command driveWithPercent;
   private static DriveSystem driveSystem;
->>>>>>> 9c30ef15ff90410c99a339b8cc146eac5e6949f8
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
   @Override
-<<<<<<< HEAD
   public void robotInit() {   
 
     driveWithJoy = new DriveWithJoystick();
 
-=======
-  public void robotInit() {
->>>>>>> 9c30ef15ff90410c99a339b8cc146eac5e6949f8
     m_robotContainer = new RobotContainer();
     driveSystem = Factory.getDrive();
     driveWithJoy = m_robotContainer.getDrive();
@@ -103,13 +94,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-<<<<<<< HEAD
 
     driveWithJoy.schedule();
 
-=======
-    
->>>>>>> 9c30ef15ff90410c99a339b8cc146eac5e6949f8
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

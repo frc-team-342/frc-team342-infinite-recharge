@@ -9,11 +9,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.kauailabs.navx.frc.AHRS;
-<<<<<<< HEAD
 import com.revrobotics.CANEncoder;
-=======
 import com.revrobotics.CANPIDController;
->>>>>>> 9c30ef15ff90410c99a339b8cc146eac5e6949f8
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -31,14 +28,12 @@ public class DriveSystem extends SubsystemBase {
   private CANSparkMax motorLeft1; 
   private CANSparkMax motorLeft2;
 
-<<<<<<< HEAD
   public CANEncoder encoderL1;
   public CANEncoder encoderL2;
   public CANEncoder encoderR1;
   public CANEncoder encoderR2;
 
   private AHRS NavX;
-=======
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
 
   private boolean isFieldOriented = false;
@@ -49,9 +44,7 @@ public class DriveSystem extends SubsystemBase {
   private static final double ramp_rate = 0.2;
   private static final double voltage_comp = 12.0;
   private static final int current_limit = 50;
->>>>>>> 9c30ef15ff90410c99a339b8cc146eac5e6949f8
 
-  private AHRS NavX;
   private MecanumDrive mecanumDrive;
   /**
    * Creates a new DriveSystem.
