@@ -82,7 +82,7 @@ public class RotateToAngle extends CommandBase {
   @Override
   public boolean isFinished() {
 
-		boolean isFinished = !((gyro_angle) <= (angle) + margin && (gyro_angle) >= (angle) - margin);
+		boolean isFinished = ((gyro_angle) <= (angle) + margin && (gyro_angle) >= (angle) - margin);
     
     System.out.println(gyro_angle); 
     return isFinished;

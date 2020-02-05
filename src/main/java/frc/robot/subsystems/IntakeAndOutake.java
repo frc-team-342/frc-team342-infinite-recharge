@@ -17,8 +17,8 @@ public class IntakeAndOutake extends SubsystemBase {
   private TalonSRX intake;
   private TalonSRX launch1;
   private TalonSRX launch2; 
-  private TalonSRX load;
-  private TalonSRX tbd; 
+  private TalonSRX load1;
+  private TalonSRX load2; 
 
   private DigitalInput sensor1;
   private DigitalInput sensor2;
@@ -32,8 +32,8 @@ public class IntakeAndOutake extends SubsystemBase {
     intake = new TalonSRX(Constants.INTAKE);
     launch1 = new TalonSRX(Constants.LAUNCH1);
     launch2 = new TalonSRX(Constants.LAUNCH2);
-    load = new TalonSRX(Constants.LOAD);
-    tbd = new TalonSRX(Constants.TBD);
+    load1 = new TalonSRX(Constants.LOAD1);
+    load2 = new TalonSRX(Constants.LOAD2);
 
     sensor1 = new DigitalInput(Constants.INTAKESENSOR1);
     sensor2 = new DigitalInput(Constants.INTAKESENSOR2);
@@ -44,19 +44,19 @@ public class IntakeAndOutake extends SubsystemBase {
 
   public void intake(){
     intake.set(ControlMode.PercentOutput, speed); 
-    load.set(ControlMode.PercentOutput, speed);
-    tbd.set(ControlMode.PercentOutput, speed);
+    load1.set(ControlMode.PercentOutput, speed);
+    load2.set(ControlMode.PercentOutput, speed);
   }
 
   public void outake(){
     launch2.follow(launch1);
 
-    load.set(ControlMode.PercentOutput, speed); 
-    tbd.set(ControlMode.PercentOutput, speed);
+    load1.set(ControlMode.PercentOutput, speed); 
+    load2.set(ControlMode.PercentOutput, speed);
     launch1.set(ControlMode.PercentOutput, speed); 
 
     if(sensor1.get() == true){
-      load.set(ControlMode.PercentOutput, 0.0); 
+      load1.set(ControlMode.PercentOutput, 0.0); 
     }
   }
 
@@ -75,14 +75,14 @@ public class IntakeAndOutake extends SubsystemBase {
 
   public void intakeStop(){
     intake.set(ControlMode.PercentOutput, 0.0); 
-    load.set(ControlMode.PercentOutput, 0.0);
-    tbd.set(ControlMode.PercentOutput, 0.0); 
+    load1.set(ControlMode.PercentOutput, 0.0);
+    load2.set(ControlMode.PercentOutput, 0.0); 
   }
 
   public void launchStop(){
     intake.set(ControlMode.PercentOutput, 0.0); 
-    load.set(ControlMode.PercentOutput, 0.0);
-    tbd.set(ControlMode.PercentOutput, 0.0);
+    load1.set(ControlMode.PercentOutput, 0.0);
+    load2.set(ControlMode.PercentOutput, 0.0);
     launch1.set(ControlMode.PercentOutput, 0.0);
     launch2.set(ControlMode.PercentOutput, 0.0); 
   }

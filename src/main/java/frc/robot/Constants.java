@@ -26,8 +26,8 @@ public final class Constants {
     public static final int INTAKE = 9;
     public static final int LAUNCH1 = 2;
     public static final int LAUNCH2 = 1;
-    public static final int LOAD = 3; 
-    public static final int TBD = 4;
+    public static final int LOAD1 = 3; 
+    public static final int LOAD2 = 4;
     //drive motors
     public static final int motorR1 = 3;
     public static final int motorR2 = 1;
