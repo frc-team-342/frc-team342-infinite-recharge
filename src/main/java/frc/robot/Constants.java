@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
  //lol motr like constantly annoyed
 public final class Constants {
+<<<<<<< HEAD
     // all of the names assigned are random. Find reall numbers latter
    
     //motors
@@ -25,9 +26,12 @@ public final class Constants {
     public static final int LOADFOLLOW = 4; 
     //drive motors
     public static final int motorR1 = 5;
+=======
+    public static final int motorR1 = 3;
+>>>>>>> 9c30ef15ff90410c99a339b8cc146eac5e6949f8
     public static final int motorR2 = 1;
-    public static final int motorL1 = 1;
-    public static final int motorL2 = 1;
+    public static final int motorL1 = 4;
+    public static final int motorL2 = 2;
 
 
   
@@ -38,6 +42,11 @@ public final class Constants {
     public static final int driver_joystick = 1;
     public static final int LOGITECH = 3; 
     public static final int driveYAxis = 1;
+    public static final int zeroGyro = 4;
+    public static final int fieldToggler = 3;
+    public static final int pidToggler = 2;
+    public static final int toggleSlow = 5;
+    public static final int toggleTurbo = 6;
 
 
     //sensors
