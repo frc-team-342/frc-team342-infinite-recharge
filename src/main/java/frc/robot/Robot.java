@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.DriveSystem;
 
@@ -73,6 +74,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    new StartEndCommand(
+      () -> driveSystem.Drive(0.5, 0.0, 0.0),
+      () -> driveSystem.Drive(0.0, 0.0, 0.0),
+      driveSystem).withTimeout(2);
+      
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
