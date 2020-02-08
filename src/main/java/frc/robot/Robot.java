@@ -27,6 +27,8 @@ public class Robot extends TimedRobot {
   private Command driveWithJoy;
   private Command driveWithPercent;
   private static DriveSystem driveSystem;
+  private Command autoDrive;
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -39,6 +41,10 @@ public class Robot extends TimedRobot {
     driveWithJoy = m_robotContainer.getDrive();
     driveWithPercent = m_robotContainer.getPercent();
     
+    autoDrive = new StartEndCommand(
+      () -> driveSystem.Drive(0.0, 0.5, 0.0),
+      () -> driveSystem.Drive(0.0, 0.0, 0.0),
+      driveSystem).withTimeout(1.0);
 
   }
 
@@ -74,17 +80,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    new StartEndCommand(
-      () -> driveSystem.Drive(0.5, 0.0, 0.0),
-      () -> driveSystem.Drive(0.0, 0.0, 0.0),
-      driveSystem).withTimeout(2);
+    autoDrive.schedule();
       
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    /*m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
-    }
+    }*/
   }
 
   /**
@@ -92,6 +95,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    CommandScheduler.getInstance().run();
   }
 
   @Override

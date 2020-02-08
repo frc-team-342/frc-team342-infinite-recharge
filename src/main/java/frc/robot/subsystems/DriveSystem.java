@@ -13,11 +13,13 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants;
+import frc.robot.commands.DriveWithJoystick;
 
 public class DriveSystem extends SubsystemBase {
   private CANSparkMax motorRight1;
@@ -38,6 +40,7 @@ public class DriveSystem extends SubsystemBase {
 
   private AHRS NavX;
   private MecanumDrive mecanumDrive;
+  private MotorSafety safety;
   /**
    * Creates a new DriveSystem.
    */
@@ -87,6 +90,7 @@ public class DriveSystem extends SubsystemBase {
   }
   
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
+    mecanumDrive.feed();
     if(isFieldOriented == true){
       if(isSlowMode == true)
        mecanumDrive.driveCartesian((xSpeed*0.8)/2, (ySpeed*0.8)/2, (zRotation*0.8)/4, -NavX.getAngle());
@@ -208,9 +212,16 @@ public class DriveSystem extends SubsystemBase {
   public boolean getTurbo(){
     return isTurbo;
   }
+  public void autoDrive(double xSpeed, double ySpeed, double zRotation){
+    mecanumDrive.driveCartesian(xSpeed*0.8, ySpeed*0.8, (zRotation*0.8)/2, -NavX.getAngle());
+  }
 
   @Override
   public void periodic() {
+    mecanumDrive.feed();
     // This method will be called once per scheduler run
+  }
+  public void initDefaultCommand(){
+    setDefaultCommand(new DriveWithJoystick());
   }
 }
