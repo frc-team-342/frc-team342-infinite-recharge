@@ -13,7 +13,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -40,7 +39,6 @@ public class DriveSystem extends SubsystemBase {
 
   private AHRS NavX;
   private MecanumDrive mecanumDrive;
-  private MotorSafety safety;
   /**
    * Creates a new DriveSystem.
    */
