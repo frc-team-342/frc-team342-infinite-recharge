@@ -15,11 +15,16 @@ import frc.robot.subsystems.DriveSystem;
 
 public class AutoMove extends CommandBase {
   private static DriveSystem driveSystem;
-  private Command autoMove;
+  private double X;
+  private double Y;
+  private double Z;
   /**
    * Creates a new AutoMove.
    */
-  public AutoMove() {
+  public AutoMove(double x, double y, double z) {
+    X = x;
+    Y = y;
+    Z = z;
     driveSystem = Factory.getDrive();
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -33,17 +38,14 @@ public class AutoMove extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    autoMove = new StartEndCommand(
-      () -> driveSystem.autoDrive(0.0, 0.0, 0.0),
-      
-      () -> driveSystem.autoDrive(0.0, 0.0, 0.0),
-      driveSystem).withTimeout(0.0);
+    driveSystem.Drive(X, Y, Z);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    driveSystem.Drive(0.0, 0.0, 0.0);
   }
 
   // Returns true when the command should end.

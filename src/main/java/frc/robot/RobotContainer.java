@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoMove;
+import frc.robot.commands.Autonomous;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithPercent;
 import frc.robot.commands.ExampleCommand;
@@ -41,7 +42,7 @@ public class RobotContainer {
   private final DriveWithJoystick driveWithJoystick;
   private final DriveWithPercent driveWithPercent;
   private final DriveSystem driveSystem;
-  private final AutoMove autoMove;
+  private final Autonomous autoMove = new Autonomous();
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
@@ -61,7 +62,6 @@ public class RobotContainer {
     joy = new Joystick(Constants.driver_joystick);
     driveWithJoystick = new DriveWithJoystick();
     driveWithPercent = new DriveWithPercent();
-    autoMove = new AutoMove();
     
     gyrozeroer = new JoystickButton(joy, Constants.zeroGyro);
     fieldtoggle = new JoystickButton(joy, Constants.fieldToggler);
@@ -88,9 +88,6 @@ public class RobotContainer {
   public Command getPercent(){
     return driveWithPercent;
   }
-  public Command getAuto(){
-    return autoMove;
-  }
 
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by
@@ -114,6 +111,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return autoMove;
   }
 }

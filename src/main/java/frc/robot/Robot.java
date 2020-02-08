@@ -40,11 +40,7 @@ public class Robot extends TimedRobot {
     driveSystem = Factory.getDrive();
     driveWithJoy = m_robotContainer.getDrive();
     driveWithPercent = m_robotContainer.getPercent();
-    
-    autoDrive = new StartEndCommand(
-      () -> driveSystem.Drive(0.0, 0.5, 0.0),
-      () -> driveSystem.Drive(0.0, 0.0, 0.0),
-      driveSystem).withTimeout(1.0);
+    autoDrive = m_robotContainer.getAutonomousCommand();
 
   }
 
