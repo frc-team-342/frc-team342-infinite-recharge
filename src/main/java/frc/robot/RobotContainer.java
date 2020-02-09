@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.Autonomous;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithPercent;
 import frc.robot.commands.ToggleFieldOriented;
@@ -38,6 +39,7 @@ public class RobotContainer {
   private final DriveWithJoystick driveWithJoystick;
   private final DriveWithPercent driveWithPercent;
   private final DriveSystem driveSystem;
+  private final Autonomous auto = new Autonomous();
 
   private final ZeroGyro zero = new ZeroGyro();
   private final ToggleFieldOriented togglefield = new ToggleFieldOriented();
@@ -102,5 +104,9 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+  public Command getAutonomousCommand() {
+    // An ExampleCommand will run in autonomous
+    return auto;
+  }
 
 }
