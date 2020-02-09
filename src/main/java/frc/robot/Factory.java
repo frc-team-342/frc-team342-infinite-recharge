@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -20,6 +21,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 public class Factory {
     private static DriveSystem driveSystem = null;
     private static ExampleSubsystem exampleSS = null;
+    private static AHRS NavX = null;
 
 
     public static DriveSystem getDrive(){

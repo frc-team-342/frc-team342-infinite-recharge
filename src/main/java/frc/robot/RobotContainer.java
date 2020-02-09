@@ -42,10 +42,7 @@ public class RobotContainer {
   private final DriveWithJoystick driveWithJoystick;
   private final DriveWithPercent driveWithPercent;
   private final DriveSystem driveSystem;
-  private final Autonomous autoMove = new Autonomous();
 
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final ZeroGyro zero = new ZeroGyro();
   private final ToggleFieldOriented togglefield = new ToggleFieldOriented();
   private final TogglePID pid = new TogglePID();
@@ -109,8 +106,5 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return autoMove;
-  }
+
 }

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants;
+import frc.robot.Factory;
 import frc.robot.commands.DriveWithJoystick;
 
 public class DriveSystem extends SubsystemBase {
@@ -212,6 +213,9 @@ public class DriveSystem extends SubsystemBase {
   }
   public void autoDrive(double xSpeed, double ySpeed, double zRotation){
     mecanumDrive.driveCartesian(xSpeed*0.8, ySpeed*0.8, (zRotation*0.8)/2, -NavX.getAngle());
+  }
+  public double getGyro(){
+    return NavX.getAngle();
   }
 
   @Override
