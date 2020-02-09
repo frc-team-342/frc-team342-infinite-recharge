@@ -10,18 +10,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.AutoMove;
-import frc.robot.commands.Autonomous;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithPercent;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ToggleFieldOriented;
 import frc.robot.commands.TogglePID;
 import frc.robot.commands.ToggleSlowMode;
 import frc.robot.commands.ToggleTurboMode;
 import frc.robot.commands.ZeroGyro;
 import frc.robot.subsystems.DriveSystem;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
