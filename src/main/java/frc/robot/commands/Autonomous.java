@@ -17,15 +17,12 @@ public class Autonomous extends SequentialCommandGroup {
    * Creates a new Autonomous.
    */
   public Autonomous() {
-    // Add your commands in the super() call, e.g.
-    // super(new FooCommand(), new BarCommand());
-    // super(new AutoMove(0.0, 0.5, 0.0).withTimeout(1.0),
-    //  new AutoMove(0.0, 0.0, -0.5).withTimeout(0.8),
-    //  new AutoMove(0.0, 0.5, 0.0).withTimeout(0.7),
-    //  new AutoMove(0.0, 0.0, -0.5).withTimeout(0.9),
-    //  new AutoMove(0.0, 0.5, 0.0).withTimeout(0.5)
-    //  );
 
-    super(new RotateToAngle(170.0));
+    super(new AutoMove(0.0, 0.5, 0.0).withTimeout(1.0),
+     new RotateToAngle(-90.0),
+      new AutoMove(0.0, 0.5, 0.0).withTimeout(0.5),
+      new RotateToAngle(-180.0),
+      new AutoMove(0.0, 0.5, 0.0).withTimeout(0.5));
+
   }
 }
