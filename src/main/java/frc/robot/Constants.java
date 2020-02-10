@@ -11,7 +11,6 @@ package frc.robot;
  */
 
 
- //lol motr like constantly annoyed
 public final class Constants {
     // all of the names assigned are random. Find reall numbers latter
    
@@ -34,6 +33,11 @@ public final class Constants {
     public static final int driver_joystick = 1;
       public static final int LOGITECH = 3; 
     public static final int driveYAxis = 1;
+    public static final int zeroGyro = 4;
+    public static final int fieldToggler = 3;
+    public static final int pidToggler = 7;
+    public static final int toggleSlow = 5;
+    public static final int toggleTurbo = 6;
 
 
     //sensors

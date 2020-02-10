@@ -15,15 +15,21 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeWithButton;
 import frc.robot.commands.LaunchWithButton;
 import frc.robot.commands.DriveWithJoystick;
 
 import frc.robot.subsystems.DriveSystem;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSystem;
 import frc.robot.subsystems.LaunchSubsystem;
+import frc.robot.commands.Autonomous;
+import frc.robot.commands.DriveWithJoystick;
+import frc.robot.commands.DriveWithPercent;
+import frc.robot.commands.ToggleFieldOriented;
+import frc.robot.commands.TogglePID;
+import frc.robot.commands.ToggleSlowMode;
+import frc.robot.commands.ToggleTurboMode;
+import frc.robot.commands.ZeroGyro;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -42,12 +48,27 @@ public class RobotContainer {
 
   //subsystems and commands
   private final DriveWithJoystick driveWithJoystick;
+  private final DriveWithPercent driveWithPercent;
   private final DriveSystem driveSystem;
+  private final Autonomous auto = new Autonomous();
 
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+
   private final IntakeWithButton m_intakeWithButton = new IntakeWithButton();
   private final LaunchWithButton m_launchWithButton = new LaunchWithButton(); 
+
+  private final ZeroGyro zero = new ZeroGyro();
+  private final ToggleFieldOriented togglefield = new ToggleFieldOriented();
+  private final TogglePID pid = new TogglePID();
+  private final ToggleSlowMode slow = new ToggleSlowMode();
+  private final ToggleTurboMode turbo = new ToggleTurboMode();
+
+  private JoystickButton gyrozeroer;
+  private JoystickButton fieldtoggle;
+  private JoystickButton pidtoggle;
+  private JoystickButton toggleSlow;
+  private JoystickButton toggleTurbo;
+
+
 
 
   /**
@@ -60,7 +81,16 @@ public class RobotContainer {
     leftBumper = new JoystickButton(joy, Constants.LEFTBUMPER); 
     rightBumper = new JoystickButton(joy, Constants.RIGHTBUMPER); 
     driveSystem = Factory.getDrive();
+    joy = new Joystick(Constants.driver_joystick);
     driveWithJoystick = new DriveWithJoystick();
+    driveWithPercent = new DriveWithPercent();
+    
+    gyrozeroer = new JoystickButton(joy, Constants.zeroGyro);
+    fieldtoggle = new JoystickButton(joy, Constants.fieldToggler);
+    pidtoggle = new JoystickButton(joy, Constants.pidToggler);
+    toggleSlow = new JoystickButton(joy, Constants.toggleSlow);
+    toggleTurbo = new JoystickButton(joy, Constants.toggleTurbo);
+    
     
 
     // Configure the button bindings
@@ -78,6 +108,10 @@ public class RobotContainer {
     return driveWithJoystick;
   }
 
+  public Command getPercent(){
+    return driveWithPercent;
+  }
+
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -87,6 +121,11 @@ public class RobotContainer {
   private void configureButtonBindings() {
     leftBumper.whileHeld(m_intakeWithButton);
     rightBumper.whileHeld(m_launchWithButton); 
+    gyrozeroer.whenPressed(zero);
+    fieldtoggle.whenPressed(togglefield);
+    pidtoggle.whileHeld(pid);
+    toggleSlow.whenPressed(slow);
+    toggleTurbo.whenPressed(turbo);
   }
 
 
@@ -97,6 +136,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return auto;
   }
+
 }
