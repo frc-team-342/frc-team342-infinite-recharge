@@ -55,4 +55,13 @@ public final class Constants {
     public static final int INTAKESENSOR5 = 4;
 
 
+    //Control Panel Batteries
+    public static final int colorBtn = 1;
+    public static final int rotaterMotor = 9;
+    
+    //Climb Motors
+    public static final int telescopeMotor = 9;
+    public static final int winch1Motor = 8;
+
+
 }

@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import frc.robot.subsystems.JetsonSubsystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -22,13 +23,18 @@ import frc.robot.commands.DriveWithJoystick;
 
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.Autonomous;
-import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithPercent;
 import frc.robot.commands.ToggleFieldOriented;
 import frc.robot.commands.TogglePID;
 import frc.robot.commands.ToggleSlowMode;
 import frc.robot.commands.ToggleTurboMode;
 import frc.robot.commands.ZeroGyro;
+import frc.robot.commands.ChangeColor;
+import frc.robot.subsystems.ControlPanelSubsystem;
+import frc.robot.subsystems.DriveSystem;
+import frc.robot.commands.ActivateTelescopes;
+import frc.robot.commands.ActivateWinches;
+import frc.robot.commands.LockWinches;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -55,6 +61,11 @@ public class RobotContainer {
   private static JoystickButton toggleSlow;
   private static JoystickButton toggleTurbo;
 
+  private static Joystick colorGetter;
+  private static JoystickButton colorBtn;
+  private static Joystick tele;
+  private static JoystickButton winchLock;
+  private static JoystickButton winchActivate;
   private final DriveWithJoystick driveWithJoystick;
   private final DriveWithPercent driveWithPercent;
   private final DriveSystem driveSystem;
@@ -68,6 +79,11 @@ public class RobotContainer {
   //rotate to amgle 
   private Command RotateToAngle90 = new RotateToAngle(90.0);
   private Command RotateToAngle45 = new RotateToAngle(45.0);
+  private final JetsonSubsystem jetson = new JetsonSubsystem();
+  private final ControlPanelSubsystem control;
+  private final ChangeColor changeColor;
+  private final LockWinches lockWinch;
+  private final ActivateWinches activateWinches;
 
   private final ZeroGyro zero = new ZeroGyro();
   private final ToggleFieldOriented togglefield = new ToggleFieldOriented();
@@ -87,6 +103,8 @@ public class RobotContainer {
     //rightBumper = new JoystickButton(joy, Constants.RIGHTBUMPER); 
     //xbox_A = new JoystickButton(joy, Constants.XBOX_A); 
     trigger = new JoystickButton(joy, Constants.TRIGGER); 
+    control = Factory.getControl();
+    joy = new Joystick(Constants.driver_joystick);
     driveSystem = Factory.getDrive();
     joy = new Joystick(Constants.driver_joystick);
     driveWithJoystick = new DriveWithJoystick();
@@ -97,6 +115,17 @@ public class RobotContainer {
     pidtoggle = new JoystickButton(joy, Constants.pidToggler);
     toggleSlow = new JoystickButton(joy, Constants.toggleSlow);
     toggleTurbo = new JoystickButton(joy, Constants.toggleTurbo);
+    changeColor = new ChangeColor();
+    lockWinch = new LockWinches();
+    activateWinches = new ActivateWinches();
+
+    colorGetter = new Joystick(Constants.colorBtn);
+    colorBtn = new JoystickButton(colorGetter, Constants.colorBtn);
+
+    tele = new Joystick(1);
+    winchLock = new JoystickButton(tele, 7);
+    winchActivate = new JoystickButton(tele, 8);
+
     
     
 
@@ -105,6 +134,10 @@ public class RobotContainer {
   }
   public static Joystick getJoy(){
     return joy;
+  }
+
+  public static Joystick getTele() {
+    return tele;
   }
 
   public static double driverAxis(){
@@ -138,6 +171,10 @@ public class RobotContainer {
     //xbox_A.whenPressed(RotateToAngle90);
     trigger.whenPressed(RotateToAngle45); 
     
+    colorBtn.whenPressed(changeColor);
+    winchLock.whileHeld(lockWinch);
+    winchActivate.whileHeld(activateWinches);
+
   }
 
  
