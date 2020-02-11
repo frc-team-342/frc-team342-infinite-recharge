@@ -1,8 +1,7 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.IntakeSystem;
-import frc.robot.subsystems.LaunchSubsystem;
+import frc.robot.subsystems.IntakeAndOutake;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
@@ -16,27 +15,19 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
  */
 
 public class Factory {
-    private static IntakeSystem intake = null;
-    private static LaunchSubsystem launch = null; 
+    private static IntakeAndOutake intakeOutake = null; 
     private static DriveSystem driveSystem = null;
     private static LimelightSubsystem limelightSystem = null;
     
-    public static IntakeSystem getIntake(){
-        if (intake == null) {
-            intake = new IntakeSystem();
+    public static IntakeAndOutake getIntakeOutake(){
+        if(intakeOutake == null){
+            intakeOutake = new IntakeAndOutake(); 
         }
-        return intake;
-    }
-
-    public static LaunchSubsystem getLaunch(){
-        if(launch == null) {
-            launch = new LaunchSubsystem();
-        }
-        return launch; 
+        return intakeOutake; 
     }
     
     public static DriveSystem getDrive(){
-        if(driveSystem == null) {
+        if(driveSystem == null){
             driveSystem = new DriveSystem(
                 new CANSparkMax(Constants.motorL1, MotorType.kBrushless), 
                 new CANSparkMax(Constants.motorL2, MotorType.kBrushless),

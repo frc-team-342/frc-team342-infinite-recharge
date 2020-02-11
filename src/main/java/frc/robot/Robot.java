@@ -22,12 +22,12 @@ import frc.robot.subsystems.DriveSystem;
 public class Robot extends TimedRobot {
   
   private Command m_autonomousCommand;
-
+ 
   private RobotContainer m_robotContainer;
   private Command driveWithJoy;
 
-  private static DriveSystem driveSystem = Factory.getDrive();
-
+  private Command driveWithPercent;
+  private static DriveSystem driveSystem;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -35,9 +35,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {   
 
-    driveWithJoy = new DriveWithJoystick();
+    
 
     m_robotContainer = new RobotContainer();
+    driveSystem = Factory.getDrive();
+    driveWithJoy = m_robotContainer.getDrive();
+    driveWithPercent = m_robotContainer.getPercent();
 
   }
 
@@ -107,6 +110,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    driveWithJoy.schedule();
+    //driveWithPercent.schedule();
   }
 
   @Override

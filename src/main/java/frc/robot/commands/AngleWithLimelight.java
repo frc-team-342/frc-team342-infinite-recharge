@@ -7,23 +7,13 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeAndOutake;
-import frc.robot.Factory;
-import frc.robot.RobotContainer;
 
-public class LaunchWithButton extends CommandBase {
+public class AngleWithLimelight extends CommandBase {
   /**
-   * Will launch the powercells 
+   * Creates a new AngleWithLimelight.
    */
-
-   private final IntakeAndOutake intakeAndOutake; 
-   private final Joystick joy; 
-
-  public LaunchWithButton() {
-    intakeAndOutake = Factory.getIntakeOutake();
-    joy = RobotContainer.getJoy(); 
+  public AngleWithLimelight() {
   }
 
   @Override
@@ -32,13 +22,10 @@ public class LaunchWithButton extends CommandBase {
 
   @Override
   public void execute() {
-    //TODO test velocity later 
-    intakeAndOutake.outake(1000.0);  
   }
 
   @Override
   public void end(boolean interrupted) {
-    intakeAndOutake.launchStop(); 
   }
 
   @Override

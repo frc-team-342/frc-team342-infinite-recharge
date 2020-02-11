@@ -15,13 +15,12 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
+import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.IntakeWithButton;
 import frc.robot.commands.LaunchWithButton;
 import frc.robot.commands.DriveWithJoystick;
 
 import frc.robot.subsystems.DriveSystem;
-import frc.robot.subsystems.IntakeSystem;
-import frc.robot.subsystems.LaunchSubsystem;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithPercent;
@@ -44,9 +43,18 @@ public class RobotContainer {
   XboxController m_driverController = new XboxController(Constants.driver_joystick);
   private static Joystick joy;
   private static JoystickButton leftBumper; 
-  private static JoystickButton rightBumper; 
+  private static JoystickButton rightBumper;
+  private static JoystickButton xbox_A;  
+  private static JoystickButton trigger; 
 
   //subsystems and commands
+
+  private static JoystickButton gyrozeroer;
+  private static JoystickButton fieldtoggle;
+  private static JoystickButton pidtoggle;
+  private static JoystickButton toggleSlow;
+  private static JoystickButton toggleTurbo;
+
   private final DriveWithJoystick driveWithJoystick;
   private final DriveWithPercent driveWithPercent;
   private final DriveSystem driveSystem;
@@ -55,21 +63,17 @@ public class RobotContainer {
 
   private final IntakeWithButton m_intakeWithButton = new IntakeWithButton();
   private final LaunchWithButton m_launchWithButton = new LaunchWithButton(); 
+  
+
+  //rotate to amgle 
+  private Command RotateToAngle90 = new RotateToAngle(90.0);
+  private Command RotateToAngle45 = new RotateToAngle(45.0);
 
   private final ZeroGyro zero = new ZeroGyro();
   private final ToggleFieldOriented togglefield = new ToggleFieldOriented();
   private final TogglePID pid = new TogglePID();
   private final ToggleSlowMode slow = new ToggleSlowMode();
   private final ToggleTurboMode turbo = new ToggleTurboMode();
-
-  private JoystickButton gyrozeroer;
-  private JoystickButton fieldtoggle;
-  private JoystickButton pidtoggle;
-  private JoystickButton toggleSlow;
-  private JoystickButton toggleTurbo;
-
-
-
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -78,8 +82,11 @@ public class RobotContainer {
   public RobotContainer() {
 
     //establishes joysticks and buttons
-    leftBumper = new JoystickButton(joy, Constants.LEFTBUMPER); 
-    rightBumper = new JoystickButton(joy, Constants.RIGHTBUMPER); 
+    joy = new Joystick(1);
+    //leftBumper = new JoystickButton(joy, Constants.LEFTBUMPER); 
+    //rightBumper = new JoystickButton(joy, Constants.RIGHTBUMPER); 
+    //xbox_A = new JoystickButton(joy, Constants.XBOX_A); 
+    trigger = new JoystickButton(joy, Constants.TRIGGER); 
     driveSystem = Factory.getDrive();
     joy = new Joystick(Constants.driver_joystick);
     driveWithJoystick = new DriveWithJoystick();
@@ -105,7 +112,7 @@ public class RobotContainer {
   }
 
   public Command getDrive(){
-    return driveWithJoystick;
+    return driveWithJoystick; 
   }
 
   public Command getPercent(){
@@ -126,9 +133,14 @@ public class RobotContainer {
     pidtoggle.whileHeld(pid);
     toggleSlow.whenPressed(slow);
     toggleTurbo.whenPressed(turbo);
+    //leftBumper.whileHeld(m_intakeWithButton);
+    //rightBumper.whileHeld(m_launchWithButton); 
+    //xbox_A.whenPressed(RotateToAngle90);
+    trigger.whenPressed(RotateToAngle45); 
+    
   }
 
-
+ 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
