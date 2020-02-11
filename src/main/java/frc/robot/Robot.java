@@ -10,8 +10,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.RobotContainer;
+import frc.robot.commands.ActivateTelescopes;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.ClimbSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -23,6 +26,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+  private Command climb;
   private Command driveWithJoy;
   private static DriveSystem driveSystem = Factory.getDrive();
 
@@ -34,6 +38,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     driveWithJoy = new DriveWithJoystick();
     m_robotContainer = new RobotContainer();
+    climb = new ActivateTelescopes();
+    driveWithJoy = new DriveWithJoystick();
 
   }
 
@@ -51,6 +57,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    
   }
 
   /**
@@ -86,6 +93,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    climb.schedule();
     driveWithJoy.schedule();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to

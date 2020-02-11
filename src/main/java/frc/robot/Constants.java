@@ -24,4 +24,13 @@ public final class Constants {
     public static final int driver_joystick = 1;
     public static final int driveYAxis = 1;
 
+    //Control Panel Batteries
+    public static final int colorBtn = 1;
+    public static final int rotaterMotor = 9;
+    
+    //Climb Motors
+    public static final int telescopeMotor = 9;
+    public static final int winch1Motor = 8;
+
+
 }

@@ -7,14 +7,22 @@
 
 package frc.robot;
 
+import frc.robot.subsystems.JetsonSubsystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.ChangeColor;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.ControlPanelSubsystem;
+import frc.robot.commands.ChangeColor;
 import frc.robot.subsystems.DriveSystem;
+import frc.robot.commands.ActivateTelescopes;
+import frc.robot.commands.ActivateWinches;
+import frc.robot.commands.LockWinches;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -24,27 +32,53 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   private static Joystick joy;
+  private static Joystick colorGetter;
+  private static JoystickButton colorBtn;
+  private static Joystick tele;
+  private static JoystickButton winchLock;
+  private static JoystickButton winchActivate;
   private final DriveWithJoystick driveWithJoystick;
   private final DriveSystem driveSystem;
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
+  private final JetsonSubsystem jetson = new JetsonSubsystem();
+  private final ControlPanelSubsystem control;
+  private final ChangeColor changeColor;
+  private final LockWinches lockWinch;
+  private final ActivateWinches activateWinches;
 
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    control = Factory.getControl();
     joy = new Joystick(Constants.driver_joystick);
     driveSystem = Factory.getDrive();
     driveWithJoystick = new DriveWithJoystick();
+    changeColor = new ChangeColor();
+    lockWinch = new LockWinches();
+    activateWinches = new ActivateWinches();
+
+    colorGetter = new Joystick(Constants.colorBtn);
+    colorBtn = new JoystickButton(colorGetter, Constants.colorBtn);
+
+    tele = new Joystick(1);
+    winchLock = new JoystickButton(tele, 7);
+    winchActivate = new JoystickButton(tele, 8);
+
+    
     
     // Configure the button bindings
     configureButtonBindings();
   }
   public static Joystick getJoy(){
     return joy;
+  }
+
+  public static Joystick getTele() {
+    return tele;
   }
 
   public static double driverAxis(){
@@ -62,6 +96,10 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    colorBtn.whenPressed(changeColor);
+    winchLock.whileHeld(lockWinch);
+    winchActivate.whileHeld(activateWinches);
+
   }
 
 
