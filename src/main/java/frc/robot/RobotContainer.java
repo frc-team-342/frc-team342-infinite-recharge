@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithPercent;
 import frc.robot.commands.ToggleFieldOriented;
@@ -63,6 +64,7 @@ public class RobotContainer {
     toggleTurbo = new JoystickButton(joy, Constants.toggleTurbo);
     
     
+    
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -91,7 +93,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     gyrozeroer.whenPressed(zero);
     fieldtoggle.whenPressed(togglefield);
-    pidtoggle.whileHeld(pid);
+    pidtoggle.whenPressed(pid);
     toggleSlow.whenPressed(slow);
     toggleTurbo.whenPressed(turbo);
   }

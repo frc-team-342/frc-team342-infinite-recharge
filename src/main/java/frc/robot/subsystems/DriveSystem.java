@@ -12,13 +12,19 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.drive.Vector2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
+import frc.robot.RobotContainer;
 import frc.robot.commands.DriveWithJoystick;
 
 public class DriveSystem extends SubsystemBase {
+
+  private Joystick joy = new Joystick(1);
   private CANSparkMax motorRight1;
   private CANSparkMax motorRight2;
   private CANSparkMax motorLeft1; 
@@ -46,21 +52,25 @@ public class DriveSystem extends SubsystemBase {
     motorLeft1 = motor4;
     motorLeft2 = motor2;
 
+    // set inversion
     motorLeft1.setInverted(false);
     motorLeft2.setInverted(false);
     motorRight1.setInverted(false);
     motorRight2.setInverted(false);
 
+    // set current limits
     motorLeft1.setSmartCurrentLimit(current_limit);
     motorLeft2.setSmartCurrentLimit(current_limit);
     motorRight1.setSmartCurrentLimit(current_limit);
     motorRight2.setSmartCurrentLimit(current_limit);
 
+    // set voltage comp
     motorLeft1.enableVoltageCompensation(voltage_comp);
     motorLeft2.enableVoltageCompensation(voltage_comp);
     motorRight1.enableVoltageCompensation(voltage_comp);
     motorRight2.enableVoltageCompensation(voltage_comp);
 
+    //set ramp rate
     motorLeft1.setOpenLoopRampRate(ramp_rate);
     motorLeft2.setOpenLoopRampRate(ramp_rate);
     motorRight1.setOpenLoopRampRate(ramp_rate);
@@ -80,6 +90,8 @@ public class DriveSystem extends SubsystemBase {
     setPID(motorRight1);
     setPID(motorRight2);
 
+    motorLeft1.getEncoder().setPosition(0);
+
     mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
 
     NavX = new AHRS();
@@ -96,33 +108,13 @@ public class DriveSystem extends SubsystemBase {
         mecanumDrive.driveCartesian(xSpeed, ySpeed, (zRotation)/2, -NavX.getAngle());
     }
     else if(isPID == true){
-      MathUtil.clamp(xSpeed, -1.0, 1.0);
-      //xSpeed = applyDeadband(xSpeed, 0);
+      SmartDashboard.putNumber("Slider: ", joy.getRawAxis(3));
+      double target = 70.0;
+      double current = NavX.getAngle();
+      double kP = 2.0;
 
-      MathUtil.clamp(ySpeed, -1.0, 1.0);
-      //ySpeed = applyDeadband(ySpeed, 0);
-
-      Vector2d input = new Vector2d(ySpeed, xSpeed);
-      input.rotate(-NavX.getAngle());
-
-      double[] speeds = new double[4];
-      speeds[0] = input.x + input.y + zRotation;
-      speeds[1] = -input.x + input.y - zRotation;
-      speeds[2] = -input.x + input.y + zRotation;
-      speeds[3] = input.x + input.y - zRotation;
-
-      normalize(speeds);
-
-      double[] rpms = new double[4];
-      rpms[0] = speeds[0]*maxRPM;
-      rpms[1] = speeds[1]*maxRPM;
-      rpms[2] = speeds[2]*maxRPM;
-      rpms[3] = speeds[3]*maxRPM;
-
-      setPIDReference(motorLeft1, rpms[0]);
-      setPIDReference(motorRight1, rpms[1]);
-      setPIDReference(motorLeft2, rpms[2]*-1.0);
-      setPIDReference(motorRight2, rpms[3]*-1.0);
+      SmartDashboard.putNumber("Encoder Ticks: ", motorLeft1.getEncoder().getPosition());
+      mecanumDrive.driveCartesian(0.0, 0.0, ((target-current)*kP)/100);
 
     }   
     else
@@ -130,8 +122,9 @@ public class DriveSystem extends SubsystemBase {
        mecanumDrive.driveCartesian((xSpeed*0.8)/2, (ySpeed*0.8)/2, (zRotation*0.8)/4);
       else if(isTurbo == true)
        mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation);
-      else
+      else{
         mecanumDrive.driveCartesian(xSpeed*0.8, ySpeed*0.8, (zRotation*0.8)/2);
+      }
   }
 
   

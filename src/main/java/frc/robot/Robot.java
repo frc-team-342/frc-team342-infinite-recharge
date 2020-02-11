@@ -38,7 +38,6 @@ public class Robot extends TimedRobot {
     driveSystem = Factory.getDrive();
     driveWithJoy = m_robotContainer.getDrive();
     autoDrive = new Autonomous();
-    driveSystem.zeroGyro();
 
   }
 
