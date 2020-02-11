@@ -7,40 +7,46 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeAndOutake;
 import frc.robot.Factory;
-import frc.robot.RobotContainer;
+import frc.robot.subsystems.DriveSystem;
 
-public class LaunchWithButton extends CommandBase {
+public class AutoMove extends CommandBase {
+  private static DriveSystem driveSystem;
+  private double X;
+  private double Y;
+  private double Z;
   /**
-   * Will launch the powercells 
+   * Creates a new AutoMove.
    */
-
-   private final IntakeAndOutake intakeAndOutake; 
-   private final Joystick joy; 
-
-  public LaunchWithButton() {
-    intakeAndOutake = Factory.getIntakeOutake();
-    joy = RobotContainer.getJoy(); 
+  public AutoMove(double x, double y, double z) {
+    X = x;
+    Y = y;
+    Z = z;
+    driveSystem = Factory.getDrive();
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
   }
 
+  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //TODO test velocity later 
-    intakeAndOutake.outake(1000.0);  
+    driveSystem.Drive(X, Y, Z);
+
   }
 
+  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intakeAndOutake.launchStop(); 
+    driveSystem.Drive(0.0, 0.0, 0.0);
   }
 
+  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
