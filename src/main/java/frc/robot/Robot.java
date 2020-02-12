@@ -42,11 +42,12 @@ public class Robot extends TimedRobot {
     
 
     m_robotContainer = new RobotContainer();
-    //driveSystem = Factory.getDrive();
-    /*driveWithJoy = m_robotContainer.getDrive();
-    driveWithPercent = m_robotContainer.getPercent();*/
+    //driveWithPercent = m_robotContainer.getPercent();*/
     //climb = new ActivateTelescopes();
     //driveWithJoy = new DriveWithJoystick();
+    //driveSystem = Factory.getDrive();
+    //driveWithJoy = m_robotContainer.getDrive();
+    //autoDrive = new Autonomous();
 
   }
 
@@ -89,6 +90,10 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    driveSystem.zeroGyro();
+    autoDrive.schedule();
+    
+   
   }
 
   /**

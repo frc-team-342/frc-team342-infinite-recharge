@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 /*import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.IntakeWithButton;
 import frc.robot.commands.LaunchWithButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DriveWithJoystick;
 
 import frc.robot.subsystems.DriveSystem;
@@ -128,7 +129,6 @@ public class RobotContainer {
 
     
     
-
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -163,7 +163,7 @@ public class RobotContainer {
     rightBumper.whileHeld(m_launchWithButton); 
     gyrozeroer.whenPressed(zero);
     fieldtoggle.whenPressed(togglefield);
-    pidtoggle.whileHeld(pid);
+    pidtoggle.whenPressed(pid);
     toggleSlow.whenPressed(slow);
     toggleTurbo.whenPressed(turbo);
     //leftBumper.whileHeld(m_intakeWithButton);

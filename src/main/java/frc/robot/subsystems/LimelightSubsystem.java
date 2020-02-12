@@ -18,6 +18,9 @@ public class LimelightSubsystem extends SubsystemBase {
   private NetworkTableEntry tv, ty, tx, camMode, ledMode;
   private double yOffsetAngle, xOffsetAngle;
   private int cameraMode, lightMode, validTarget;
+  private double Y;
+  private double X;
+  private double radius;
 
   /**
    * Creates a new LimelightSubsystem.

@@ -1,8 +1,8 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.IntakeAndOutake;
-import frc.robot.subsystems.DriveSystem;
+/*import frc.robot.subsystems.IntakeAndOutake;
+import frc.robot.subsystems.DriveSystem;*/
 import frc.robot.subsystems.LimelightSubsystem;
 
 import com.revrobotics.CANSparkMax;
@@ -10,23 +10,23 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 //import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.ClimbSubsystem;
+/*import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ControlPanelSubsystem;
-import frc.robot.subsystems.JetsonSubsystem;
+import frc.robot.subsystems.JetsonSubsystem;*/
 
 /**
  * Factories are being used in place of singletons.
  */
 
 public class Factory {
-    private static IntakeAndOutake intakeOutake = null; 
-    private static DriveSystem driveSystem = null;
+    /*private static IntakeAndOutake intakeOutake = null; 
+    private static DriveSystem driveSystem = null;*/
     private static LimelightSubsystem limelightSystem = null;
-    private static ControlPanelSubsystem control = null;
+    /*private static ControlPanelSubsystem control = null;
     private static JetsonSubsystem js = null;
-    private static ClimbSubsystem cs = null;
+    private static ClimbSubsystem cs = null;*/
     
-    public static IntakeAndOutake getIntakeOutake(){
+    /*public static IntakeAndOutake getIntakeOutake(){
         if(intakeOutake == null){
             intakeOutake = new IntakeAndOutake(); 
         }
@@ -43,7 +43,7 @@ public class Factory {
             );
         }
         return driveSystem;
-    }
+    }*/
     
     public static LimelightSubsystem getLimelight() {
         if(limelightSystem == null) {
@@ -51,7 +51,7 @@ public class Factory {
         }
         return limelightSystem;
     }
-    public static ControlPanelSubsystem getControl(){
+    /*public static ControlPanelSubsystem getControl(){
         if(control == null) {
             control = new ControlPanelSubsystem();
         }
@@ -68,5 +68,5 @@ public class Factory {
             cs = new ClimbSubsystem();
         }
         return cs;
-    }
+    }*/
 }
