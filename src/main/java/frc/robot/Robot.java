@@ -23,14 +23,12 @@ import frc.robot.subsystems.ClimbSubsystem;
  * project.
  */
 public class Robot extends TimedRobot {
-  
-  private Command m_autonomousCommand;
- 
+
   private RobotContainer m_robotContainer;
+  private Command autonomousCommand;
   private Command climb;
   private Command driveWithJoy;
 
-  private Command driveWithPercent;
   private static DriveSystem driveSystem;
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -38,16 +36,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {   
-
-    
-
     m_robotContainer = new RobotContainer();
-    driveSystem = Factory.getDrive();
-    driveWithJoy = m_robotContainer.getDrive();
-    driveWithPercent = m_robotContainer.getPercent();
-    climb = new ActivateTelescopes();
-    driveWithJoy = new DriveWithJoystick();
 
+    // Commands
+    driveWithJoy = new DriveWithJoystick();
+    climb = new ActivateTelescopes();
   }
 
   /**
@@ -64,7 +57,6 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    
   }
 
   /**
@@ -72,6 +64,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+
   }
 
   @Override
@@ -83,11 +76,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+    if (autonomousCommand != null) {
+      autonomousCommand.schedule();
     }
   }
 
@@ -96,21 +89,21 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+
   }
 
   @Override
   public void teleopInit() {
-
-    climb.schedule();
-    driveWithJoy.schedule();
-
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+    if (autonomousCommand != null) {
+      autonomousCommand.cancel();
     }
+
+    climb.schedule();
+    driveWithJoy.schedule();
   }
 
   /**
@@ -118,8 +111,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    driveWithJoy.schedule();
-    //driveWithPercent.schedule();
+    
   }
 
   @Override
@@ -133,5 +125,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+
   }
 }

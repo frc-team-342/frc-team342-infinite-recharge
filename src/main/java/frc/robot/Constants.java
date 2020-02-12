@@ -30,7 +30,7 @@ public final class Constants {
 
 
   
-    //buttons (NOTE: starts at 1 not 0)
+    /*//buttons (NOTE: starts at 1 not 0)
     public static final int LEFTBUMPER = 5; 
     public static final int RIGHTBUMPER = 6; 
     public static final int XBOX_A = 1; 
@@ -44,8 +44,21 @@ public final class Constants {
     public static final int fieldToggler = 3;
     public static final int pidToggler = 7;
     public static final int toggleSlow = 5;
-    public static final int toggleTurbo = 6;
+    public static final int toggleTurbo = 6;*/
 
+    // Driver controller
+    public static final int driver = 0;
+    public static final int driver_autoAlign = 1;
+    public static final int driver_fieldOrient = 2;
+    public static final int driver_turbo = 5;
+
+    // Operator buttons
+    public static final int operator = 1;
+    public static final int op_launch = 4;
+    public static final int op_slow = 5;
+    public static final int op_intake = 6;
+    public static final int op_lockWinch = 7;
+    public static final int op_runWinch = 8;
 
     //sensors
     public static final int INTAKESENSOR1 = 0; 
