@@ -10,15 +10,11 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.RobotContainer;
 import frc.robot.commands.DriveWithJoystick;
 
@@ -125,7 +121,6 @@ public class DriveSystem extends SubsystemBase {
         mecanumDrive.driveCartesian(xSpeed*0.8, ySpeed*0.8, (zRotation*0.8)/2);
       }
   }
-
   
   public void zeroGyro(){
     NavX.zeroYaw();
@@ -143,17 +138,6 @@ public class DriveSystem extends SubsystemBase {
 
     motor.setSmartCurrentLimit(current_limit);
     motor.enableVoltageCompensation(voltage_comp);
-  }
-
-  public void setPIDReference(CANSparkMax motor, double speed){
-    CANPIDController pid = motor.getPIDController();
-    if(Math.abs(speed) < 1.0){
-      motor.set(0.0);
-      pid.setReference(0.0, ControlType.kVelocity);
-    }  
-    else pid.setReference(speed, ControlType.kVelocity);
-     
-    
   }
 
   protected static void normalize(double wheelSpeeds[]) {
@@ -182,29 +166,43 @@ public class DriveSystem extends SubsystemBase {
   public boolean getPIDLooped(){
     return isPID;
   }
+
   public void setFieldOriented(boolean bool){
     isFieldOriented = bool;
   }
   public boolean getFieldOriented(){
     return isFieldOriented;
   }
+
   public void setSlow(boolean slow){
     isSlowMode = slow;
   }
   public boolean getSlow(){
     return isSlowMode;
   }
+
   public void setTurbo(boolean turbo){
     isTurbo = turbo;
   }
   public boolean getTurbo(){
     return isTurbo;
   }
+
   public void autoDrive(double xSpeed, double ySpeed, double zRotation){
     mecanumDrive.driveCartesian(xSpeed*0.8, ySpeed*0.8, (zRotation*0.8)/2, -NavX.getAngle());
   }
+  public void autoRotate(double angle){
+    double target = angle;
+    double current = NavX.getAngle();
+    double kP = 2.0;
+    mecanumDrive.driveCartesian(0.0, 0.0, ((target-current)*kP)/200);
+  }
+
   public double getGyro(){
     return NavX.getAngle();
+  }
+  public void stopDrive(){
+    mecanumDrive.driveCartesian(0.0, 0.0, 0.0);
   }
 
   @Override

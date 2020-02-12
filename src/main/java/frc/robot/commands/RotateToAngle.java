@@ -16,9 +16,7 @@ public class RotateToAngle extends CommandBase {
   private final DriveSystem driveSystem;
   private double gyro;
   private double angle;
-
-  private double error = 2.5;
-  private double turnSpeed = 0.4;
+  private double error = 1.0;
   private boolean isDone = false;
   /**
    * Creates a new RotateToAngle.
@@ -26,6 +24,7 @@ public class RotateToAngle extends CommandBase {
   public RotateToAngle(double Angle) {
     driveSystem = Factory.getDrive();
     angle = Angle;
+    
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -39,15 +38,12 @@ public class RotateToAngle extends CommandBase {
   @Override
   public void execute() {
     gyro = driveSystem.getGyro();
-    if(gyro > angle)
-      turnSpeed *= -1.0;
-    if(gyro >= (angle-error) && gyro <= (angle+error)){
-      driveSystem.Drive(0.0, 0.0, 0.0);
+    driveSystem.autoRotate(angle);
+    if(gyro + error >= angle && gyro - error <= angle){
+      driveSystem.stopDrive();
       isDone = true;
     }
-    else
-      driveSystem.Drive(0.0, 0.0, turnSpeed);
-
+    
     System.out.println(gyro);
 }
   
@@ -55,7 +51,7 @@ public class RotateToAngle extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveSystem.Drive(0.0, 0.0, 0.0);
+    driveSystem.stopDrive();
   }
 
   // Returns true when the command should end.
