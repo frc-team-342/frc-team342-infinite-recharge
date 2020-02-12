@@ -113,7 +113,6 @@ public class DriveSystem extends SubsystemBase {
       double current = NavX.getAngle();
       double kP = 2.0;
 
-      SmartDashboard.putNumber("Encoder Ticks: ", motorLeft1.getEncoder().getPosition());
       mecanumDrive.driveCartesian(0.0, 0.0, ((target-current)*kP)/100);
 
     }   
