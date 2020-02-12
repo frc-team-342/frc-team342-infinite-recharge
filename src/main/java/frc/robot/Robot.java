@@ -11,10 +11,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotContainer;
-import frc.robot.commands.ActivateTelescopes;
+/*import frc.robot.commands.ActivateTelescopes;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.DriveSystem;
-import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.ClimbSubsystem;*/
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
   private Command driveWithJoy;
 
   private Command driveWithPercent;
-  private static DriveSystem driveSystem;
+  //private static DriveSystem driveSystem;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -42,11 +42,11 @@ public class Robot extends TimedRobot {
     
 
     m_robotContainer = new RobotContainer();
-    driveSystem = Factory.getDrive();
-    driveWithJoy = m_robotContainer.getDrive();
-    driveWithPercent = m_robotContainer.getPercent();
-    climb = new ActivateTelescopes();
-    driveWithJoy = new DriveWithJoystick();
+    //driveSystem = Factory.getDrive();
+    /*driveWithJoy = m_robotContainer.getDrive();
+    driveWithPercent = m_robotContainer.getPercent();*/
+    //climb = new ActivateTelescopes();
+    //driveWithJoy = new DriveWithJoystick();
 
   }
 
@@ -83,7 +83,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {

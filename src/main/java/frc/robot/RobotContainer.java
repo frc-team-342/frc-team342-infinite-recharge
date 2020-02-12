@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.JetsonSubsystem;
+//import frc.robot.subsystems.JetsonSubsystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import frc.robot.commands.RotateToAngle;
+/*import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.IntakeWithButton;
 import frc.robot.commands.LaunchWithButton;
 import frc.robot.commands.DriveWithJoystick;
@@ -34,7 +34,7 @@ import frc.robot.subsystems.ControlPanelSubsystem;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.ActivateTelescopes;
 import frc.robot.commands.ActivateWinches;
-import frc.robot.commands.LockWinches;
+import frc.robot.commands.LockWinches;*/
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -66,18 +66,18 @@ public class RobotContainer {
   private static Joystick tele;
   private static JoystickButton winchLock;
   private static JoystickButton winchActivate;
-  private final DriveWithJoystick driveWithJoystick;
+  /*private final DriveWithJoystick driveWithJoystick;
   private final DriveWithPercent driveWithPercent;
   private final DriveSystem driveSystem;
   private final Autonomous auto = new Autonomous();
 
 
   private final IntakeWithButton m_intakeWithButton = new IntakeWithButton();
-  private final LaunchWithButton m_launchWithButton = new LaunchWithButton(); 
+  private final LaunchWithButton m_launchWithButton = new LaunchWithButton(); */
   
 
   //rotate to amgle 
-  private Command RotateToAngle90 = new RotateToAngle(90.0);
+  /*private Command RotateToAngle90 = new RotateToAngle(90.0);
   private Command RotateToAngle45 = new RotateToAngle(45.0);
   private final JetsonSubsystem jetson = new JetsonSubsystem();
   private final ControlPanelSubsystem control;
@@ -89,7 +89,7 @@ public class RobotContainer {
   private final ToggleFieldOriented togglefield = new ToggleFieldOriented();
   private final TogglePID pid = new TogglePID();
   private final ToggleSlowMode slow = new ToggleSlowMode();
-  private final ToggleTurboMode turbo = new ToggleTurboMode();
+  private final ToggleTurboMode turbo = new ToggleTurboMode();*/
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -103,21 +103,21 @@ public class RobotContainer {
     //rightBumper = new JoystickButton(joy, Constants.RIGHTBUMPER); 
     //xbox_A = new JoystickButton(joy, Constants.XBOX_A); 
     trigger = new JoystickButton(joy, Constants.TRIGGER); 
-    control = Factory.getControl();
+    //control = Factory.getControl();
     joy = new Joystick(Constants.driver_joystick);
-    driveSystem = Factory.getDrive();
+    //driveSystem = Factory.getDrive();
     joy = new Joystick(Constants.driver_joystick);
-    driveWithJoystick = new DriveWithJoystick();
-    driveWithPercent = new DriveWithPercent();
+    //driveWithJoystick = new DriveWithJoystick();
+    //driveWithPercent = new DriveWithPercent();
     
     gyrozeroer = new JoystickButton(joy, Constants.zeroGyro);
     fieldtoggle = new JoystickButton(joy, Constants.fieldToggler);
     pidtoggle = new JoystickButton(joy, Constants.pidToggler);
     toggleSlow = new JoystickButton(joy, Constants.toggleSlow);
     toggleTurbo = new JoystickButton(joy, Constants.toggleTurbo);
-    changeColor = new ChangeColor();
-    lockWinch = new LockWinches();
-    activateWinches = new ActivateWinches();
+    //changeColor = new ChangeColor();
+    //lockWinch = new LockWinches();
+    //activateWinches = new ActivateWinches();
 
     colorGetter = new Joystick(Constants.colorBtn);
     colorBtn = new JoystickButton(colorGetter, Constants.colorBtn);
@@ -144,13 +144,13 @@ public class RobotContainer {
     return joy.getRawAxis(Constants.driveYAxis);
   }
 
-  public Command getDrive(){
+  /*public Command getDrive(){
     return driveWithJoystick; 
-  }
+  }*/
 
-  public Command getPercent(){
+  /*public Command getPercent(){
     return driveWithPercent;
-  }
+  }*/
 
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by
@@ -159,7 +159,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    leftBumper.whileHeld(m_intakeWithButton);
+    /*leftBumper.whileHeld(m_intakeWithButton);
     rightBumper.whileHeld(m_launchWithButton); 
     gyrozeroer.whenPressed(zero);
     fieldtoggle.whenPressed(togglefield);
@@ -173,7 +173,7 @@ public class RobotContainer {
     
     colorBtn.whenPressed(changeColor);
     winchLock.whileHeld(lockWinch);
-    winchActivate.whileHeld(activateWinches);
+    winchActivate.whileHeld(activateWinches);*/
 
   }
 
@@ -183,9 +183,9 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  /*public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return auto;
-  }
+  }*/
 
 }
