@@ -16,7 +16,7 @@ public class RotateToAngle extends CommandBase {
   private final DriveSystem driveSystem;
   private double gyro;
   private double angle;
-  private double error = 1.0;
+  private double error = 2.5;
   private boolean isDone = false;
   /**
    * Creates a new RotateToAngle.

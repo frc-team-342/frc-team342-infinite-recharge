@@ -195,8 +195,9 @@ public class DriveSystem extends SubsystemBase {
     double target = angle;
     double current = NavX.getAngle();
     double kP = 2.0;
-    mecanumDrive.driveCartesian(0.0, 0.0, ((target-current)*kP)/200);
-  }
+    mecanumDrive.driveCartesian(0.0, 0.0, ((target-current)*kP)/300);
+    
+     }
 
   public double getGyro(){
     return NavX.getAngle();

@@ -73,8 +73,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    autoDrive.schedule();
     driveSystem.zeroGyro();
+    autoDrive.schedule();
+    
    
   }
 

@@ -18,10 +18,10 @@ public class Autonomous extends SequentialCommandGroup {
    */
   public Autonomous() {
 
-    super(new AutoMove(0.0, 0.45, 0.0).withTimeout(1.35),
+    super(new AutoMove(0.0, 0.6, 0.0).withTimeout(0.7),
       new RotateToAngle(-90.0),
-      new AutoMove(0.0, 0.5, 0.0).withTimeout(0.8),
-      new RotateToAngle(-180.0),
+      new AutoMove(0.0, 0.6, 0.0).withTimeout(0.5),
+      new RotateToAngle(-179.0),
       new AutoMove(0.0, 0.5, 0.0).withTimeout(0.4));
 
   }
