@@ -75,7 +75,7 @@ public class DriveWithJoystick extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveSystem.Drive(0.0, 0.0, 0.0);
+    driveSystem.stopDrive();
   }
 
   // Returns true when the command should end.

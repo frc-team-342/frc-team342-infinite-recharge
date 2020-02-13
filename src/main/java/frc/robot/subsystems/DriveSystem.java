@@ -206,7 +206,10 @@ public class DriveSystem extends SubsystemBase {
   }
 
   public void stopDrive() {
-    mecanumDrive.driveCartesian(0.0, 0.0, 0.0);
+    motorLeft1.stopMotor();
+    motorLeft2.stopMotor();
+    motorRight1.stopMotor();
+    motorRight2.stopMotor();
   }
 
   @Override
