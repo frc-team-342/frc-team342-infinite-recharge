@@ -17,10 +17,11 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
-import frc.robot.commands.DriveWithJoystick;
+import edu.wpi.first.wpiutil.math.MathUtil;
+//import frc.robot.commands.DriveWithJoystick;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
@@ -29,7 +30,7 @@ public class DriveSystem extends SubsystemBase {
   private Joystick joy = new Joystick(1);
   private CANSparkMax motorRight1;
   private CANSparkMax motorRight2;
-  private CANSparkMax motorLeft1; 
+  private CANSparkMax motorLeft1;
   private CANSparkMax motorLeft2;
 
   public CANEncoder encoderL1;
@@ -44,12 +45,13 @@ public class DriveSystem extends SubsystemBase {
   private boolean isPID = false;
   private boolean isSlowMode = false;
   private boolean isTurbo = false;
-  
+
   private static final double ramp_rate = 0.2;
   private static final double voltage_comp = 12.0;
   private static final int current_limit = 50;
 
   private MecanumDrive mecanumDrive;
+
   /**
    * Creates a new DriveSystem.
    */
@@ -77,18 +79,18 @@ public class DriveSystem extends SubsystemBase {
     motorRight1.enableVoltageCompensation(voltage_comp);
     motorRight2.enableVoltageCompensation(voltage_comp);
 
-    //set ramp rate
+    // set ramp rate
     motorLeft1.setOpenLoopRampRate(ramp_rate);
     motorLeft2.setOpenLoopRampRate(ramp_rate);
     motorRight1.setOpenLoopRampRate(ramp_rate);
     motorRight2.setOpenLoopRampRate(ramp_rate);
 
-    kP = 5e-5; 
+    kP = 5e-5;
     kI = 1e-6;
-    kD = 0; 
-    kIz = 0; 
-    kFF = 0.000156; 
-    kMaxOutput = 1; 
+    kD = 0;
+    kIz = 0;
+    kFF = 0.000156;
+    kMaxOutput = 1;
     kMinOutput = -1;
     maxRPM = 5700;
 
@@ -117,42 +119,40 @@ public class DriveSystem extends SubsystemBase {
     motorLeft2.setInverted(true);
 
   }
-  
+
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
-    if(isFieldOriented == true){
-      if(isSlowMode == true)
-       mecanumDrive.driveCartesian((xSpeed*0.8)/2, (ySpeed*0.8)/2, (zRotation*0.8)/4, -NavX.getAngle());
-      else if(isTurbo == true)
+    mecanumDrive.feed();
+    if (isFieldOriented == true) {
+      if (isSlowMode == true)
+        mecanumDrive.driveCartesian((xSpeed * 0.8) / 2, (ySpeed * 0.8) / 2, (zRotation * 0.8) / 4, -NavX.getAngle());
+      else if (isTurbo == true)
         mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation, -NavX.getAngle());
       else
-        mecanumDrive.driveCartesian(xSpeed, ySpeed, (zRotation)/2, -NavX.getAngle());
-    }
-    else if(isPID == true){
+        mecanumDrive.driveCartesian(xSpeed, ySpeed, (zRotation) / 2, -NavX.getAngle());
+    } else if (isPID == true) {
       SmartDashboard.putNumber("Slider: ", joy.getRawAxis(3));
       double target = 70.0;
       double current = NavX.getAngle();
       double kP = 2.0;
 
-      mecanumDrive.driveCartesian(0.0, 0.0, ((target-current)*kP)/100);
+      mecanumDrive.driveCartesian(0.0, 0.0, ((target - current) * kP) / 100);
 
-    }   
-    else
-      if(isSlowMode == true)
-       mecanumDrive.driveCartesian((xSpeed*0.8)/2, (ySpeed*0.8)/2, (zRotation*0.8)/4);
-      else if(isTurbo == true)
-       mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation);
-      else{
-        mecanumDrive.driveCartesian(xSpeed*0.8, ySpeed*0.8, (zRotation*0.8)/2);
-      }
+    } else if (isSlowMode == true)
+      mecanumDrive.driveCartesian((xSpeed * 0.8) / 2, (ySpeed * 0.8) / 2, (zRotation * 0.8) / 4);
+    else if (isTurbo == true)
+      mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation);
+    else {
+      mecanumDrive.driveCartesian(xSpeed * 0.8, ySpeed * 0.8, (zRotation * 0.8) / 2);
+    }
   }
-  
-  public void zeroGyro(){
+
+  public void zeroGyro() {
     NavX.zeroYaw();
   }
 
   public void setPID(CANSparkMax motor) {
     CANPIDController pid = motor.getPIDController();
-    
+
     pid.setP(kP);
     pid.setI(kI);
     pid.setD(kD);
@@ -164,70 +164,79 @@ public class DriveSystem extends SubsystemBase {
     motor.enableVoltageCompensation(voltage_comp);
   }
 
-  protected static void normalize(double wheelSpeeds[]) {
-    double maxMagnitude = Math.abs(wheelSpeeds[0]);
-    int i;
-    for (i=1; i<4; i++) {
-        double temp = Math.abs(wheelSpeeds[i]);
-        if (maxMagnitude < temp) maxMagnitude = temp;
-    }
-    if (maxMagnitude > 1.0) {
-        for (i=0; i<4; i++) {
-            wheelSpeeds[i] = wheelSpeeds[i] / maxMagnitude;
-        }
-    }
-  }
-
-  public void PercentOut(double yAxis){
+  public void PercentOut(double yAxis) {
     motorLeft1.set(yAxis);
     motorLeft2.set(yAxis);
     motorRight1.set(yAxis);
     motorRight2.set(yAxis);
   }
-  public void setPIDLooped(boolean bool){
+
+  public void setPIDLooped(boolean bool) {
     isPID = bool;
   }
-  public boolean getPIDLooped(){
+
+  public boolean getPIDLooped() {
     return isPID;
   }
 
-  public void setFieldOriented(boolean bool){
+  public void setFieldOriented(boolean bool) {
     isFieldOriented = bool;
   }
-  public boolean getFieldOriented(){
+
+  public boolean getFieldOriented() {
     return isFieldOriented;
   }
 
-  public void setSlow(boolean slow){
+  public void setSlow(boolean slow) {
     isSlowMode = slow;
   }
-  public boolean getSlow(){
+
+  public boolean getSlow() {
     return isSlowMode;
   }
 
-  public void setTurbo(boolean turbo){
+  public void setTurbo(boolean turbo) {
     isTurbo = turbo;
   }
-  public boolean getTurbo(){
+
+  public boolean getTurbo() {
     return isTurbo;
   }
 
-  public void autoDrive(double xSpeed, double ySpeed, double zRotation){
-    mecanumDrive.driveCartesian(xSpeed*0.8, ySpeed*0.8, (zRotation*0.8)/2, -NavX.getAngle());
-  }
-  public void autoRotate(double angle){
+  public void autoRotate(double angle) {
     double target = angle;
     double current = NavX.getAngle();
     double kP = 2.0;
-    mecanumDrive.driveCartesian(0.0, 0.0, ((target-current)*kP)/300);
-    
-     }
+    mecanumDrive.driveCartesian(0.0, 0.0, ((target - current) * kP) / 300);
+  }
 
-  public double getGyro(){
+  public void autoStrafe(double distance) {
+    motorLeft1.getEncoder().setPosition(0.0);
+    double conversion = 1.0; // will change meters to encoders ticks
+    double target = distance * conversion;
+    double current = motorLeft1.getEncoder().getPosition();
+    double kP = 2.0;
+    mecanumDrive.driveCartesian(((target - current) * kP) / 300.0, 0.0, 0.0);
+  }
+
+  public void autoDrive(double distance) {
+    motorLeft1.getEncoder().setPosition(0.0);
+    double conversion = 1.0; // will change meters to encoder ticks
+    double target = distance * conversion;
+    double current = motorLeft1.getEncoder().getPosition();
+    double kP = 2.0;
+    mecanumDrive.driveCartesian(0.0, ((target - current) * kP) / 300, 0.0);
+  }
+
+  public double getGyro() {
     return NavX.getAngle();
   }
-  public void stopDrive(){
-    mecanumDrive.driveCartesian(0.0, 0.0, 0.0);
+
+  public void stopDrive() {
+    motorLeft1.stopMotor();
+    motorLeft2.stopMotor();
+    motorRight1.stopMotor();
+    motorRight2.stopMotor();
   }
 
   public void DriveMecanum(double ySpeed, double xSpeed, double zRotation) {
@@ -256,9 +265,10 @@ public class DriveSystem extends SubsystemBase {
     mecanumDrive.feed();
     // This method will be called once per scheduler run
   }
-  public void initDefaultCommand(){
+
+  /*public void initDefaultCommand() {
     setDefaultCommand(new DriveWithJoystick());
-  }
+  }*/
 
 //TODO: go over these two methods with neal.
   public double getGyro(boolean backwards){
@@ -276,13 +286,13 @@ public class DriveSystem extends SubsystemBase {
     NavX.reset(); 
   }
 
-  public void stopDrive(){
+  /*public void stopDrive(){
 
     motorLeft1.set(0.0); 
     motorLeft2.set(0.0); 
     motorRight1.set(0.0);
     motorRight2.set(0.0);
-  }
+  }*/
 
 
   public void testPrint () {

@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotContainer;
 /*import frc.robot.commands.ActivateTelescopes;
-import frc.robot.commands.DriveWithJoystick;
+import frc.robot.commands.DriveWithJoystick;*/
 import frc.robot.subsystems.DriveSystem;
-import frc.robot.subsystems.ClimbSubsystem;*/
+//import frc.robot.subsystems.ClimbSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
   private Command driveWithJoy;
 
   private Command driveWithPercent;
-  //private static DriveSystem driveSystem;
+  private static DriveSystem driveSystem;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
     //driveWithPercent = m_robotContainer.getPercent();*/
     //climb = new ActivateTelescopes();
     //driveWithJoy = new DriveWithJoystick();
-    //driveSystem = Factory.getDrive();
+    driveSystem = Factory.getDrive();
     //driveWithJoy = m_robotContainer.getDrive();
     //autoDrive = new Autonomous();
 
@@ -91,7 +91,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.schedule();
     }
     driveSystem.zeroGyro();
-    autoDrive.schedule();
+    //autoDrive.schedule();
     
    
   }
