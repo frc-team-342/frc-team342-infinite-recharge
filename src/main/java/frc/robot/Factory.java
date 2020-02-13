@@ -11,19 +11,23 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.LimelightSubsystem;
 
-/**
- * Add your docs here.
- */
 public class Factory {
     private static DriveSystem driveSystem = null;
+    private static LimelightSubsystem lime = null;
 
 
     public static DriveSystem getDrive(){
-
         if(driveSystem == null)
             driveSystem = new DriveSystem(new CANSparkMax(Constants.motorL1, MotorType.kBrushless), new CANSparkMax(Constants.motorL2, MotorType.kBrushless),
             new CANSparkMax(Constants.motorR1, MotorType.kBrushless), new CANSparkMax(Constants.motorR2, MotorType.kBrushless));
         return driveSystem;
+    }
+
+    public static LimelightSubsystem getLime(){
+        if(lime == null)
+            lime = new LimelightSubsystem();
+        return lime;
     }
 }

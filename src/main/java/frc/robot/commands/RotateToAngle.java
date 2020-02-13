@@ -11,19 +11,20 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
 import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.LimelightSubsystem;
 
 public class RotateToAngle extends CommandBase {
+  private final LimelightSubsystem lime;
   private final DriveSystem driveSystem;
   private double gyro;
-  private double angle;
-  private double error = 2.5;
+  private double error = 0.5;
   private boolean isDone = false;
   /**
    * Creates a new RotateToAngle.
    */
-  public RotateToAngle(double Angle) {
+  public RotateToAngle() {
     driveSystem = Factory.getDrive();
-    angle = Angle;
+    lime = Factory.getLime();
     
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -37,14 +38,11 @@ public class RotateToAngle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    gyro = driveSystem.getGyro();
-    driveSystem.autoRotate(angle);
-    if(gyro + error >= angle && gyro - error <= angle){
+    driveSystem.autoRotate(lime.getXOffsetAngle());
+    if(lime.getXOffsetAngle()<error && lime.getValidTarget()){
       driveSystem.stopDrive();
       isDone = true;
     }
-    
-    System.out.println(gyro);
 }
   
 
@@ -52,6 +50,7 @@ public class RotateToAngle extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     driveSystem.stopDrive();
+    System.out.println("yuh");
   }
 
   // Returns true when the command should end.
@@ -61,5 +60,6 @@ public class RotateToAngle extends CommandBase {
       return true;
     else
       return false;
+    
   }
 }

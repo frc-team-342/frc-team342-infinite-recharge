@@ -8,6 +8,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Factory;
+import frc.robot.subsystems.LimelightSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -18,11 +20,13 @@ public class Autonomous extends SequentialCommandGroup {
    */
   public Autonomous() {
 
-    super(new AutoMove(0.6).withTimeout(0.7),
-      new RotateToAngle(-90.0),
-      new AutoMove(0.6).withTimeout(0.5),
-      new RotateToAngle(-179.0),
-      new AutoMove(0.5).withTimeout(0.4));
+    // super(new AutoMove(0.6).withTimeout(0.7),
+    //   new RotateToAngle(-90.0),
+    //   new AutoMove(0.6).withTimeout(0.5),
+    //   new RotateToAngle(-179.0),
+    //   new AutoMove(0.5).withTimeout(0.4));
+    super(new RotateToAngle());
+
 
   }
 }

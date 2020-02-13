@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithPercent;
+import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.ToggleFieldOriented;
 import frc.robot.commands.TogglePID;
 import frc.robot.commands.ToggleSlowMode;
@@ -34,11 +35,13 @@ public class RobotContainer {
   private static JoystickButton pidtoggle;
   private static JoystickButton toggleSlow;
   private static JoystickButton toggleTurbo;
+  private static JoystickButton rotateToggle;
 
   private final DriveWithJoystick driveWithJoystick;
   private final DriveWithPercent driveWithPercent;
   private final DriveSystem driveSystem;
 
+  private final RotateToAngle rotate = new RotateToAngle();
   private final ZeroGyro zero = new ZeroGyro();
   private final ToggleFieldOriented togglefield = new ToggleFieldOriented();
   private final TogglePID pid = new TogglePID();
@@ -58,9 +61,10 @@ public class RobotContainer {
     
     gyrozeroer = new JoystickButton(joy, Constants.zeroGyro);
     fieldtoggle = new JoystickButton(joy, Constants.fieldToggler);
-    pidtoggle = new JoystickButton(joy, Constants.pidToggler);
+    // pidtoggle = new JoystickButton(joy, Constants.pidToggler);
     toggleSlow = new JoystickButton(joy, Constants.toggleSlow);
     toggleTurbo = new JoystickButton(joy, Constants.toggleTurbo);
+    rotateToggle = new JoystickButton(joy, Constants.pidToggler);
     
     
     
@@ -92,9 +96,10 @@ public class RobotContainer {
   private void configureButtonBindings() {
     gyrozeroer.whenPressed(zero);
     fieldtoggle.whenPressed(togglefield);
-    pidtoggle.whenPressed(pid);
+    // pidtoggle.whenPressed(pid);
     toggleSlow.whenPressed(slow);
     toggleTurbo.whenPressed(turbo);
+    rotateToggle.whenPressed(rotate);
   }
 
 
