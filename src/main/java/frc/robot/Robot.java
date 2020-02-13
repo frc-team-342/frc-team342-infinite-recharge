@@ -20,7 +20,6 @@ import frc.robot.subsystems.DriveSystem;
  * project.
  */
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
  
   private RobotContainer m_robotContainer;
   private Command driveWithJoy;
