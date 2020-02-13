@@ -30,17 +30,17 @@ public class IntakeAndOutake extends SubsystemBase {
   private final double speed = 0.75; 
 
   public IntakeAndOutake() {
-    intake = new TalonSRX(Constants.INTAKE);
-    launch1 = new TalonSRX(Constants.LAUNCH1);
-    launch2 = new TalonSRX(Constants.LAUNCH2);
-    load1 = new TalonSRX(Constants.LOAD1);
-    load2 = new TalonSRX(Constants.LOAD2);
+    intake = new TalonSRX(Constants.intake_primary);
+    launch1 = new TalonSRX(Constants.launch_motor1);
+    launch2 = new TalonSRX(Constants.launch_motor2);
+    load1 = new TalonSRX(Constants.intake_conveyor1);
+    load2 = new TalonSRX(Constants.intake_conveyor2);
 
-    sensor1 = new DigitalInput(Constants.INTAKESENSOR1);
-    sensor2 = new DigitalInput(Constants.INTAKESENSOR2);
-    sensor3 = new DigitalInput(Constants.INTAKESENSOR3);
-    sensor4 = new DigitalInput(Constants.INTAKESENSOR4);
-    sensor5 = new DigitalInput(Constants.INTAKESENSOR5); 
+    sensor1 = new DigitalInput(Constants.intake_sensor1);
+    sensor2 = new DigitalInput(Constants.intake_sensor2);
+    sensor3 = new DigitalInput(Constants.intake_sensor3);
+    sensor4 = new DigitalInput(Constants.intake_sensor4);
+    sensor5 = new DigitalInput(Constants.intake_sensor5); 
 
     setPID(launch1, 0.18, 0.23, 0.0007, 0.0, true);
     setPID(launch2, 0.18, 0.23, 0.0007, 0.0, true);

@@ -80,7 +80,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Driver controller
-    driver = new Joystick(Constants.driver);
+    driver = new Joystick(Constants.driver_controller);
     
     driver_autoAlignBtn = new JoystickButton(driver, Constants.driver_autoAlign);
     driver_fieldOrientBtn = new JoystickButton(driver, Constants.driver_fieldOrient);
@@ -91,7 +91,7 @@ public class RobotContainer {
     driver_turbo = new ToggleTurboMode();
 
     // Operator controller
-    operator = new XboxController(Constants.operator);
+    operator = new XboxController(Constants.operator_controller);
 
     op_launchBtn = new JoystickButton(operator, Constants.op_launch);
     op_slowBtn = new JoystickButton(operator, Constants.op_slow);
