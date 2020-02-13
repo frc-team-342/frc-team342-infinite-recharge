@@ -21,7 +21,7 @@ public class ClimbSubsystem extends SubsystemBase {
   /**
    * Creates a new ClimbSubsystem.
    */
-  //Creating three motors
+  // Creating three motors
   private static TalonSRX teleMotor;
   private static TalonSRX winch1;
 
@@ -44,33 +44,27 @@ public class ClimbSubsystem extends SubsystemBase {
   public void spinWinchMotors(double speed) {
     if (enabled) {
       winch1.set(ControlMode.PercentOutput, Math.abs(speed));
-    }
-    else {
+    } else {
       winch1.set(ControlMode.PercentOutput, 0);
     }
   }
 
-  public boolean returnEnabler() {
+  public boolean getEnable() {
     return enabled;
   }
 
-  public void setEnablerTrue() {
-    enabled = true;
+  public void setEnable(boolean enable) {
+    enabled = enable;
   }
 
-  public void setEnablerFalse() {
-    enabled = false;
-  }
-
-  public boolean returnAcivated() {
+  public boolean getActivated() {
     return teleActivated;
   }
-  public void setActivatedTrue() {
-    teleActivated = true;
+
+  public void setActivated(boolean active) {
+    teleActivated = active;
   }
-  public void setActivatedFalse() {
-    teleActivated = false;
-  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

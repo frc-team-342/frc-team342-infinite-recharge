@@ -37,19 +37,18 @@ public class LockWinches extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (cs.returnAcivated() == false) {  
-      cs.setEnablerTrue();
-      System.out.println(cs.returnEnabler());
-    }
-    else {
-      cs.setEnablerFalse();
+    if (!cs.getActivated()) {  
+      cs.setEnable(true);
+      System.out.println(cs.getEnable());
+    } else {
+      cs.setEnable(false);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    cs.setEnablerFalse();
+    cs.setEnable(false);
   }
 
   // Returns true when the command should end.

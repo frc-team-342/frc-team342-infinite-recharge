@@ -42,13 +42,13 @@ public class ActivateTelescopes extends CommandBase {
   @Override
   public void execute() {
     if (tele.getY() > 0.1 || tele.getY() < -0.1)  { 
-      cs.setActivatedTrue();
+      cs.setActivated(true);
     }
     else {
-      cs.setActivatedFalse();
+      cs.setActivated(false);
     }
-    System.out.println("\n-------" + cs.returnAcivated());
-    System.out.println(cs.returnEnabler());
+    System.out.println("\n-------" + cs.getActivated());
+    System.out.println(cs.getEnable());
     Y = tele.getY();
 
     cs.spinTeleMotor(Y);
@@ -57,7 +57,7 @@ public class ActivateTelescopes extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    cs.setActivatedFalse();
+    cs.setActivated(false);
     cs.spinTeleMotor(0.0);
   }
 
