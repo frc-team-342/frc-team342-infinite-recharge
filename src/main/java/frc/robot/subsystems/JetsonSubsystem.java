@@ -18,33 +18,27 @@ public class JetsonSubsystem extends SubsystemBase {
    * Creates a new JetsonSubsystem.
    */
   private NetworkTable table;
-  private NetworkTableEntry colour, cpColor;
-  private String colors;
-  private String cpColors;
-  
+  private NetworkTableEntry camera, controlPanel;
+  private String cameraColor, controlPanelColor;
 
   public JetsonSubsystem() {
     table = NetworkTableInstance.getDefault().getTable("SmartDashboard");
-    colour = table.getEntry("color");
-    cpColor = table.getEntry("cpColor");
+    camera = table.getEntry("color");
+    controlPanel = table.getEntry("cpColor");
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    colors = colour.getString("null");
-    cpColors = cpColor.getString("null");
+    cameraColor = camera.getString("null");
+    controlPanelColor = controlPanel.getString("null");
   }
+
+  /**
+   * Returns the color being seen by the camera
+   */
   public String getColor() {
-    return colors;
+    return cameraColor;
   }
-
-  /*public void setStartColor(String c) {
-    startingColor = c;
-  }
-
-  public String getStartingColor() {
-    return startingColor;
-  }*/
 
 }
