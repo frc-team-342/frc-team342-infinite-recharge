@@ -32,14 +32,14 @@ public class RotateToAngle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    isDone = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     driveSystem.autoRotate(lime.getXOffsetAngle());
-    if(lime.getXOffsetAngle()<error && lime.getValidTarget()){
+    if(Math.abs(lime.getXOffsetAngle())<error && lime.getValidTarget()){
       driveSystem.stopDrive();
       isDone = true;
     }

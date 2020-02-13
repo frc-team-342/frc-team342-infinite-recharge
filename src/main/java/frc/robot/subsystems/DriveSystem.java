@@ -203,7 +203,7 @@ public class DriveSystem extends SubsystemBase {
 
   public void rotateByError(double error) {
     double kP = 2.0;
-    mecanumDrive.driveCartesian(0.0, 0.0, ((error * kP) / 300));
+    mecanumDrive.driveCartesian(0.0, 0.0, ((error * kP) / 100));
   }
 
   public double getGyro() {
