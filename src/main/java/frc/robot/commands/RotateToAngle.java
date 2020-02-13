@@ -7,7 +7,7 @@
 
 package frc.robot.commands;
 
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
 import frc.robot.subsystems.DriveSystem;
@@ -32,6 +32,7 @@ public class RotateToAngle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    driveSystem.errorAccumReset();
     isDone = false;
   }
 
@@ -43,6 +44,7 @@ public class RotateToAngle extends CommandBase {
       driveSystem.stopDrive();
       isDone = true;
     }
+    SmartDashboard.putNumber("Accumulated Error", driveSystem.getAccumError());
 }
   
 

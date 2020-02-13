@@ -35,6 +35,7 @@ public class DriveSystem extends SubsystemBase {
   private static final double ramp_rate = 0.2;
   private static final double voltage_comp = 12.0;
   private static final int current_limit = 50;
+  private double accumError = 0.0;
 
   private AHRS NavX;
   private MecanumDrive mecanumDrive;
@@ -201,13 +202,23 @@ public class DriveSystem extends SubsystemBase {
     mecanumDrive.driveCartesian(0.0, ((target - current) * kP) / 300, 0.0);
   }
 
-  public void rotateByError(double error) {
-    double kP = 2.0;
-    mecanumDrive.driveCartesian(0.0, 0.0, ((error * kP) / 100));
+  public void rotateByError(double Error) {
+    accumError += Error;
+    double kI = 1.0e-3;
+    double kP = 4.0;
+    mecanumDrive.driveCartesian(0.0, 0.0, ((Error * kP) + (accumError*kI)));
   }
 
   public double getGyro() {
     return NavX.getAngle();
+  }
+
+  public void errorAccumReset(){
+    System.out.println("h");
+    accumError = 0.0;
+  }
+  public double getAccumError(){
+    return accumError;
   }
 
   public void stopDrive() {
