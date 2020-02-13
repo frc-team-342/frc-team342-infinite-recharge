@@ -101,11 +101,8 @@ public class LimelightSubsystem extends SubsystemBase {
     return (validTarget == 1) ? true : false;
   }
 
-  public void setLinedUpTrue() {
-    linedUp = true;
-  }
-  public void setLineUpFalse() {
-    linedUp = false;
+  public void setLinedUp(boolean setter) {
+    linedUp = setter;
   }
   public boolean getLineUp() {
     return linedUp;
