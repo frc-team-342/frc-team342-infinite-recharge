@@ -21,6 +21,7 @@ public class LimelightSubsystem extends SubsystemBase {
   private double Y;
   private double X;
   private double radius;
+  private boolean linedUp;
 
   /**
    * Creates a new LimelightSubsystem.
@@ -98,5 +99,15 @@ public class LimelightSubsystem extends SubsystemBase {
 
   public boolean getValidTarget() {
     return (validTarget == 1) ? true : false;
+  }
+
+  public void setLinedUpTrue() {
+    linedUp = true;
+  }
+  public void setLineUpFalse() {
+    linedUp = false;
+  }
+  public boolean getLineUp() {
+    return linedUp;
   }
 }
