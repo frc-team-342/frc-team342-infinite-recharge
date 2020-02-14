@@ -14,13 +14,9 @@ import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithPercent;
 import frc.robot.commands.DriveWithTargeting;
 import frc.robot.commands.RotateToAngle;
-import frc.robot.commands.ToggleFieldOriented;
-import frc.robot.commands.TogglePID;
-import frc.robot.commands.ToggleSlowMode;
-import frc.robot.commands.ToggleTurboMode;
-import frc.robot.commands.ZeroGyro;
 import frc.robot.subsystems.DriveSystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -42,13 +38,13 @@ public class RobotContainer {
   private final DriveWithPercent driveWithPercent;
   private final DriveSystem driveSystem;
 
-  private final DriveWithTargeting rotate = new DriveWithTargeting();
-  private final ZeroGyro zero = new ZeroGyro();
-  private final ToggleFieldOriented togglefield = new ToggleFieldOriented();
-  private final TogglePID pid = new TogglePID();
-  private final ToggleSlowMode slow = new ToggleSlowMode();
-  private final ToggleTurboMode turbo = new ToggleTurboMode();
+  private final RotateToAngle rotate = new RotateToAngle();
 
+  private Command field;
+  private Command slow;
+  private Command turbo;
+  private Command zero;
+  private Command pid;
 
 
   /**
@@ -66,7 +62,12 @@ public class RobotContainer {
     toggleSlow = new JoystickButton(joy, Constants.toggleSlow);
     toggleTurbo = new JoystickButton(joy, Constants.toggleTurbo);
     rotateToggle = new JoystickButton(joy, Constants.pidToggler);
-    
+
+    field = new InstantCommand(driveSystem::setFieldOriented, driveSystem);
+    slow = new InstantCommand(driveSystem::setSlow, driveSystem);
+    turbo = new InstantCommand(driveSystem::setTurbo, driveSystem);
+    zero = new InstantCommand(driveSystem::zeroGyro, driveSystem);
+    pid = new InstantCommand(driveSystem::setPIDLooped, driveSystem);
     
     
     // Configure the button bindings
@@ -96,8 +97,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     gyrozeroer.whenPressed(zero);
-    fieldtoggle.whenPressed(togglefield);
-    // pidtoggle.whenPressed(pid);
+    fieldtoggle.whenPressed(field);
+    //pidtoggle.whenPressed(pid);
     toggleSlow.whenPressed(slow);
     toggleTurbo.whenPressed(turbo);
     rotateToggle.whileHeld(rotate);

@@ -145,36 +145,28 @@ public class DriveSystem extends SubsystemBase {
     motorRight2.set(yAxis);
   }
 
-  public void setPIDLooped(boolean bool) {
-    isPID = bool;
+  public void setPIDLooped() {
+    isPID = !isPID;
+    SmartDashboard.putBoolean("Is PID", isPID);
   }
 
-  public boolean getPIDLooped() {
-    return isPID;
+  public void setFieldOriented() {
+    isFieldOriented = !isFieldOriented;
+    SmartDashboard.putBoolean("Is Field Oriented", isFieldOriented);
   }
 
-  public void setFieldOriented(boolean bool) {
-    isFieldOriented = bool;
+  public void setSlow() {
+    isSlowMode = !isSlowMode;
+    if(isTurbo)
+      isTurbo = false;
+    SmartDashboard.putBoolean("Is Slow", isSlowMode);
   }
 
-  public boolean getFieldOriented() {
-    return isFieldOriented;
-  }
-
-  public void setSlow(boolean slow) {
-    isSlowMode = slow;
-  }
-
-  public boolean getSlow() {
-    return isSlowMode;
-  }
-
-  public void setTurbo(boolean turbo) {
-    isTurbo = turbo;
-  }
-
-  public boolean getTurbo() {
-    return isTurbo;
+  public void setTurbo() {
+    isTurbo = !isTurbo;
+    if(isSlowMode)
+      isSlowMode = false;
+    SmartDashboard.putBoolean("Is Turbo", isTurbo);
   }
 
   public void autoRotate(double angle) {
