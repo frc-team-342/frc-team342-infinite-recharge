@@ -208,6 +208,12 @@ public class DriveSystem extends SubsystemBase {
     double kP = 4.0;
     mecanumDrive.driveCartesian(0.0, 0.0, ((Error * kP) + (accumError * kI))/300);
   }
+  public void driveWithTargeting(double x, double y, double Error){
+    accumError += Error;
+    double kI = 1.0e-3;
+    double kP = 4.0;
+    mecanumDrive.driveCartesian(x, y, ((Error * kP) + (accumError * kI))/300);
+  }
 
   public double getGyro() {
     return NavX.getAngle();

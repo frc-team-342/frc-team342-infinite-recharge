@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithPercent;
+import frc.robot.commands.DriveWithTargeting;
 import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.ToggleFieldOriented;
 import frc.robot.commands.TogglePID;
@@ -41,7 +42,7 @@ public class RobotContainer {
   private final DriveWithPercent driveWithPercent;
   private final DriveSystem driveSystem;
 
-  private final RotateToAngle rotate = new RotateToAngle();
+  private final DriveWithTargeting rotate = new DriveWithTargeting();
   private final ZeroGyro zero = new ZeroGyro();
   private final ToggleFieldOriented togglefield = new ToggleFieldOriented();
   private final TogglePID pid = new TogglePID();
@@ -99,7 +100,7 @@ public class RobotContainer {
     // pidtoggle.whenPressed(pid);
     toggleSlow.whenPressed(slow);
     toggleTurbo.whenPressed(turbo);
-    rotateToggle.whenPressed(rotate);
+    rotateToggle.whileHeld(rotate);
   }
 
 
