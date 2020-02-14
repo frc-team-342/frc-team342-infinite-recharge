@@ -22,13 +22,13 @@ public final class Constants {
 
     /* Motors */
     // Intake
-    public static final int intake_primary = 9;
-    public static final int intake_conveyor1 = 3;
-    public static final int intake_conveyor2 = 4;
+    public static final int intake_primary = 5;
+    public static final int intake_conveyor1 = 6;
+    public static final int intake_conveyor2 = 7;
 
     // Launch
-    public static final int launch_motor1 = 2;
-    public static final int launch_motor2 = 1;
+    public static final int launch_motor1 = 8;
+    public static final int launch_motor2 = 9;
 
     // Drive
     public static final int drive_motorR1 = 3;
@@ -37,9 +37,9 @@ public final class Constants {
     public static final int drive_motorL2 = 2;
 
     // Climb
-    public static final int climb_telescope = 9;
-    public static final int climb_winch1 = 8;
-    public static final int climb_winch2 = 0;
+    public static final int climb_telescope = 10;
+    public static final int climb_winch1 = 11;
+    public static final int climb_winch2 = 12;
 
     // Control Panel
     public static final int cp_rotate = 9;
