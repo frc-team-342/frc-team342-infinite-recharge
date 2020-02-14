@@ -203,21 +203,22 @@ public class DriveSystem extends SubsystemBase {
   }
 
   public void rotateByError(double Error) {
-    accumError += Error;
+    accumError = accumError + Error;
     double kI = 1.0e-3;
     double kP = 4.0;
-    mecanumDrive.driveCartesian(0.0, 0.0, ((Error * kP) + (accumError*kI)));
+    mecanumDrive.driveCartesian(0.0, 0.0, ((Error * kP) + (accumError * kI)));
   }
 
   public double getGyro() {
     return NavX.getAngle();
   }
 
-  public void errorAccumReset(){
+  public void errorAccumReset() {
     System.out.println("h");
     accumError = 0.0;
   }
-  public double getAccumError(){
+
+  public double getAccumError() {
     return accumError;
   }
 
@@ -230,6 +231,7 @@ public class DriveSystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Accumulated Error", accumError);
     mecanumDrive.feed();
     // This method will be called once per scheduler run
   }

@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Factory;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -26,7 +27,5 @@ public class Autonomous extends SequentialCommandGroup {
     //   new RotateToAngle(-179.0),
     //   new AutoMove(0.5).withTimeout(0.4));
     super(new RotateToAngle());
-
-
   }
 }

@@ -16,7 +16,6 @@ import frc.robot.subsystems.LimelightSubsystem;
 public class RotateToAngle extends CommandBase {
   private final LimelightSubsystem lime;
   private final DriveSystem driveSystem;
-  private double gyro;
   private double error = 0.5;
   private boolean isDone = false;
   /**
@@ -44,7 +43,6 @@ public class RotateToAngle extends CommandBase {
       driveSystem.stopDrive();
       isDone = true;
     }
-    SmartDashboard.putNumber("Accumulated Error", driveSystem.getAccumError());
 }
   
 
