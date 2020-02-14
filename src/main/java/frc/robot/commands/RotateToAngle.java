@@ -7,7 +7,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
 import frc.robot.subsystems.DriveSystem;
@@ -38,11 +37,13 @@ public class RotateToAngle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveSystem.autoRotate(lime.getXOffsetAngle());
+    driveSystem.rotateByError(lime.getXOffsetAngle());
     if(Math.abs(lime.getXOffsetAngle())<error && lime.getValidTarget()){
-      driveSystem.stopDrive();
       isDone = true;
     }
+    if(lime.getValidTarget() == false){
+      driveSystem.stopDrive();
+    } 
 }
   
 
@@ -56,9 +57,9 @@ public class RotateToAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(isDone)
-      return true;
-    else
+     if(isDone)
+       return true;
+     else
       return false;
     
   }

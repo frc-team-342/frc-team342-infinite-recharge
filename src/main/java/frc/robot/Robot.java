@@ -103,7 +103,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    //driveWithJoy.schedule();
+    driveWithJoy.schedule();
     //driveWithPercent.schedule();
   }
 
