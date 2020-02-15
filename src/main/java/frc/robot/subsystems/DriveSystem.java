@@ -31,6 +31,7 @@ public class DriveSystem extends SubsystemBase {
   private boolean isPID = false;
   private boolean isSlowMode = false;
   private boolean isTurbo = false;
+  private boolean isTargeting = false;
 
   private static final double ramp_rate = 0.2;
   private static final double voltage_comp = 12.0;
@@ -109,7 +110,7 @@ public class DriveSystem extends SubsystemBase {
       double current = NavX.getAngle();
       double kP = 2.0;
 
-      mecanumDrive.driveCartesian(0.0, 0.0, ((target - current) * kP) / 100);
+      mecanumDrive.driveCartesian(0.0, 0.0, ((target - current) * kP) / 300);
 
     } else if (isSlowMode == true)
       mecanumDrive.driveCartesian((xSpeed * 0.8) / 2, (ySpeed * 0.8) / 2, (zRotation * 0.8) / 4);
@@ -157,14 +158,14 @@ public class DriveSystem extends SubsystemBase {
 
   public void setSlow() {
     isSlowMode = !isSlowMode;
-    if(isTurbo)
+    if (isTurbo)
       isTurbo = false;
     SmartDashboard.putBoolean("Is Slow", isSlowMode);
   }
 
   public void setTurbo() {
     isTurbo = !isTurbo;
-    if(isSlowMode)
+    if (isSlowMode)
       isSlowMode = false;
     SmartDashboard.putBoolean("Is Turbo", isTurbo);
   }
@@ -198,13 +199,23 @@ public class DriveSystem extends SubsystemBase {
     accumError += Error;
     double kI = 1.0e-3;
     double kP = 4.0;
-    mecanumDrive.driveCartesian(0.0, 0.0, ((Error * kP) + (accumError * kI))/300);
+    mecanumDrive.driveCartesian(0.0, 0.0, ((Error * kP) + (accumError * kI)) / 300);
   }
-  public void driveWithTargeting(double x, double y, double Error){
+
+  public void driveWithTargeting(double x, double y, double Error) {
     accumError += Error;
     double kI = 1.0e-3;
     double kP = 4.0;
-    mecanumDrive.driveCartesian(x, y, ((Error * kP) + (accumError * kI))/300);
+    mecanumDrive.driveCartesian(x/2, y/2, ((Error * kP) + (accumError * kI)) / 300);
+  }
+
+  public void toggleTargeting() {
+    isTargeting = !isTargeting;
+    SmartDashboard.putBoolean("Is Targeting", isTargeting);
+  }
+
+  public boolean getTarget() {
+    return isTargeting;
   }
 
   public double getGyro() {

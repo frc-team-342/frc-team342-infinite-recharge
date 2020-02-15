@@ -33,6 +33,7 @@ public class RobotContainer {
   private static JoystickButton toggleSlow;
   private static JoystickButton toggleTurbo;
   private static JoystickButton rotateToggle;
+  private static JoystickButton toggleTarget;
 
   private final DriveWithJoystick driveWithJoystick;
   private final DriveWithPercent driveWithPercent;
@@ -45,6 +46,7 @@ public class RobotContainer {
   private Command turbo;
   private Command zero;
   private Command pid;
+  private Command target;
 
 
   /**
@@ -62,12 +64,14 @@ public class RobotContainer {
     toggleSlow = new JoystickButton(joy, Constants.toggleSlow);
     toggleTurbo = new JoystickButton(joy, Constants.toggleTurbo);
     rotateToggle = new JoystickButton(joy, Constants.pidToggler);
+    toggleTarget = new JoystickButton(joy, Constants.toggleTarget);
 
     field = new InstantCommand(driveSystem::setFieldOriented, driveSystem);
     slow = new InstantCommand(driveSystem::setSlow, driveSystem);
     turbo = new InstantCommand(driveSystem::setTurbo, driveSystem);
     zero = new InstantCommand(driveSystem::zeroGyro, driveSystem);
     pid = new InstantCommand(driveSystem::setPIDLooped, driveSystem);
+    target = new InstantCommand(driveSystem::toggleTargeting, driveSystem);
     
     
     // Configure the button bindings
@@ -102,6 +106,7 @@ public class RobotContainer {
     toggleSlow.whenPressed(slow);
     toggleTurbo.whenPressed(turbo);
     rotateToggle.whileHeld(rotate);
+    toggleTarget.whenPressed(target);
   }
 
 

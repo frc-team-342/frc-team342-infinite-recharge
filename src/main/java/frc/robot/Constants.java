@@ -28,5 +28,6 @@ public final class Constants {
     public static final int pidToggler = 2;
     public static final int toggleSlow = 5;
     public static final int toggleTurbo = 6;
+    public static final int toggleTarget = 7;
 
 }

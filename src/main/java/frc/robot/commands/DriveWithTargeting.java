@@ -63,12 +63,7 @@ public class DriveWithTargeting extends CommandBase {
       SmartDashboard.putString("Y Deadzone", "Y is not in deadzone!");
     
     driveSystem.driveWithTargeting(X, Y, lime.getXOffsetAngle());
-    if(Math.abs(lime.getXOffsetAngle())<error && lime.getValidTarget()){
-      isDone = true;
-    }
-    if(lime.getValidTarget() == false){
-      driveSystem.stopDrive();
-    } 
+
 }
   
 
