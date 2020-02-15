@@ -11,11 +11,13 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.IntakeAndOutake;
 import frc.robot.subsystems.LimelightSubsystem;
 
 public class Factory {
     private static DriveSystem driveSystem = null;
     private static LimelightSubsystem lime = null;
+    private static IntakeAndOutake inAndOut = null;
 
 
     public static DriveSystem getDrive(){
@@ -29,5 +31,11 @@ public class Factory {
         if(lime == null)
             lime = new LimelightSubsystem();
         return lime;
+    }
+
+    public static IntakeAndOutake getIntakeOutake(){
+        if(inAndOut == null)
+            inAndOut = new IntakeAndOutake();
+        return inAndOut;
     }
 }
