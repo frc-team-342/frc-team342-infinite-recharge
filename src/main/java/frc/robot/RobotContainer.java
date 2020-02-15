@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithPercent;
 import frc.robot.commands.DriveWithTargeting;
+import frc.robot.commands.IntakeWithButton;
+import frc.robot.commands.LaunchWithButton;
 import frc.robot.commands.RotateToAngle;
 import frc.robot.subsystems.DriveSystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,12 +36,16 @@ public class RobotContainer {
   private static JoystickButton toggleTurbo;
   private static JoystickButton rotateToggle;
   private static JoystickButton toggleTarget;
+  private static JoystickButton trigger; 
+  private static JoystickButton side;
 
   private final DriveWithJoystick driveWithJoystick;
   private final DriveWithPercent driveWithPercent;
   private final DriveSystem driveSystem;
 
   private final RotateToAngle rotate = new RotateToAngle();
+  private final IntakeWithButton m_intakeWithButton = new IntakeWithButton();
+  private final LaunchWithButton m_launchWithButton = new LaunchWithButton(); 
 
   private Command field;
   private Command slow;
@@ -65,6 +71,9 @@ public class RobotContainer {
     toggleTurbo = new JoystickButton(joy, Constants.toggleTurbo);
     rotateToggle = new JoystickButton(joy, Constants.pidToggler);
     toggleTarget = new JoystickButton(joy, Constants.toggleTarget);
+
+    trigger = new JoystickButton(joy, Constants.TRIGGER);
+    side = new JoystickButton(joy, Constants.SIDE);
 
     field = new InstantCommand(driveSystem::setFieldOriented, driveSystem);
     slow = new InstantCommand(driveSystem::setSlow, driveSystem);
@@ -107,6 +116,9 @@ public class RobotContainer {
     toggleTurbo.whenPressed(turbo);
     rotateToggle.whileHeld(rotate);
     toggleTarget.whenPressed(target);
+
+    side.whileHeld(m_intakeWithButton);
+    trigger.whileHeld(m_launchWithButton);
   }
 
 

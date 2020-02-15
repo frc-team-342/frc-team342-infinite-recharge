@@ -23,19 +23,21 @@ public final class Constants {
 
     public static final int driver_joystick = 1;
     public static final int driveYAxis = 1;
-    
+
     public static final int zeroGyro = 4;
     public static final int fieldToggler = 3;
-    public static final int pidToggler = 2;
+    public static final int pidToggler = 11;
     public static final int toggleSlow = 5;
     public static final int toggleTurbo = 6;
     public static final int toggleTarget = 7;
+    public static final int TRIGGER = 1;
+    public static final int SIDE = 2;
 
-    public static final int INTAKE = 9;
-    public static final int LAUNCH1 = 2;
-    public static final int LAUNCH2 = 1;
-    public static final int LOAD1 = 3; 
-    public static final int LOAD2 = 4;
+    public static final int INTAKE = 5;
+    public static final int LAUNCH1 = 8;
+    public static final int LAUNCH2 = 9;
+    public static final int LOAD1 = 6; 
+    public static final int LOAD2 = 7;
 
     public static final int INTAKESENSOR1 = 1; 
     public static final int INTAKESENSOR2 = 2; 

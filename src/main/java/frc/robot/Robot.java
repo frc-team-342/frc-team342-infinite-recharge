@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.DriveWithTargeting;
 import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.IntakeAndOutake;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -25,6 +26,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private Command driveWithJoy;
   private static DriveSystem driveSystem;
+  private static IntakeAndOutake intakeAndOutake;
   private Command autoDrive;
   private Command driveWithTargeting;
 
@@ -37,6 +39,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer();
     driveSystem = Factory.getDrive();
+    intakeAndOutake = Factory.getIntakeOutake();
     driveWithJoy = m_robotContainer.getDrive();
     autoDrive = new Autonomous();
     driveWithTargeting = new DriveWithTargeting();
@@ -107,6 +110,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    intakeAndOutake.getSensors();
     if(driveSystem.getTarget())
       driveWithTargeting.schedule();
     else
