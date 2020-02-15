@@ -62,7 +62,7 @@ public class DriveWithTargeting extends CommandBase {
     else
       SmartDashboard.putString("Y Deadzone", "Y is not in deadzone!");
     
-    driveSystem.driveWithTargeting(X, Y, lime.getXOffsetAngle());
+    driveSystem.driveWithTargeting(X, -Y, lime.getXOffsetAngle());
 
 }
   
