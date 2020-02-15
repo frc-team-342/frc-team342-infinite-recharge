@@ -27,9 +27,10 @@ public class DriveWithTargeting extends CommandBase {
    * Creates a new RotateToAngle.
    */
   public DriveWithTargeting() {
+    joy = RobotContainer.getJoy();
     driveSystem = Factory.getDrive();
     lime = Factory.getLime();
-    joy = RobotContainer.getJoy();
+    
     
     // Use addRequirements() here to declare subsystem dependencies.
   }
