@@ -28,12 +28,11 @@ public class LaunchWithButton extends CommandBase {
 
   @Override
   public void initialize() {
-    intakeAndOutake.resetErrorAccum();
   }
 
   @Override
   public void execute() {
-    intakeAndOutake.outake(1.0);  
+    intakeAndOutake.outake(2000.0);  
   }
 
   @Override
