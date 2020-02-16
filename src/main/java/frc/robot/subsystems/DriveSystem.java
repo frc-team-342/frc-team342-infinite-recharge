@@ -35,7 +35,7 @@ public class DriveSystem extends SubsystemBase {
 
   private static final double ramp_rate = 0.2;
   private static final double voltage_comp = 12.0;
-  private static final int current_limit = 50;
+  private static final int current_limit = 60;
   private double accumError = 0.0;
 
   private AHRS NavX;

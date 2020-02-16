@@ -29,6 +29,9 @@ public class IntakeAndOutake extends SubsystemBase {
   private final double speed = 0.4;
   private final double speed2 = .75;
 
+  private final int current_limit = 80;
+  private final int current_limit_duration = 2000;
+
   public IntakeAndOutake() {
     intake = new TalonSRX(Constants.INTAKE);
     shooter1 = new TalonSRX(Constants.shooter1);
@@ -43,16 +46,22 @@ public class IntakeAndOutake extends SubsystemBase {
     shooter1.setInverted(true);
     shooter2.setInverted(true);
 
+    shooter1.enableCurrentLimit(true);
+    shooter1.configPeakCurrentLimit(current_limit);
+    shooter1.configPeakCurrentDuration(current_limit_duration);
+
+    shooter2.enableCurrentLimit(true);
+    shooter2.configPeakCurrentLimit(current_limit);
+    shooter2.configPeakCurrentDuration(current_limit_duration);
 
     // shooter1.configAllowableClosedloopError(0, 0, 1);
     // shooter1.selectProfileSlot(0, 0);
     // shooter1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
     // shooter1.setSensorPhase(true);
-    // shooter1.setInverted(true);
-    // shooter1.config_kF(0, (0.75*1023.0)/7112.0);
-    // shooter1.config_kP(0, 0.5);
-    // shooter1.config_kI(0, 0.0);
-    // shooter1.config_kD(0, 0.0);
+    // shooter1.config_kF(0, 1023.0/7200.0);
+    // shooter1.config_kP(0, 0.25);
+    // shooter1.config_kI(0, 0.001);
+    // shooter1.config_kD(0, 20.0);
   }
 
   public void intake() {
@@ -71,7 +80,6 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Shooter 2 Percent: ", shooter2.getMotorOutputPercent());
     SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
     SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
-    
 
     // if (sensor1.get() == true) {
     // load1.set(ControlMode.PercentOutput, 0.0);
