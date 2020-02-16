@@ -26,7 +26,7 @@ public class IntakeAndOutake extends SubsystemBase {
   private DigitalInput sensor2;
   private DigitalInput sensor3;
 
-  private final double speed = 0.4;
+  private final double speed = 0.3;
   private final double speed2 = .75;
 
   private final int current_limit = 80;
@@ -54,14 +54,14 @@ public class IntakeAndOutake extends SubsystemBase {
     shooter2.configPeakCurrentLimit(current_limit);
     shooter2.configPeakCurrentDuration(current_limit_duration);
 
-     shooter1.configAllowableClosedloopError(0, 0, 1);
+     shooter1.configAllowableClosedloopError(0, 0, 25);
      shooter1.selectProfileSlot(0, 0);
      shooter1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
      shooter1.setSensorPhase(true);
-     shooter1.config_kF(0, 1023.0/7200.0);
-     shooter1.config_kP(0, 0.25);
-     shooter1.config_kI(0, 0.001);
-     shooter1.config_kD(0, 20.0);
+     shooter1.config_kF(0, 0.0);
+     shooter1.config_kP(0, 0.185);
+     shooter1.config_kI(0, 1.0e-4);
+     shooter1.config_kD(0, 0.25);
   }
 
   public void intake() {
@@ -82,6 +82,7 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
 
     SmartDashboard.putNumber("Velocity: ", shooter1.getSelectedSensorVelocity());
+    System.out.println("Velocity: "+shooter1.getSelectedSensorVelocity());
     // if (sensor1.get() == true) {
     // load1.set(ControlMode.PercentOutput, 0.0);
     // }
