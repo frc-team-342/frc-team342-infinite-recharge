@@ -32,7 +32,7 @@ public class ShootWithButton extends CommandBase {
 
   @Override
   public void execute() {
-    intakeAndOutake.outake(20000.0);  
+    intakeAndOutake.outake(55000.0);  
   }
 
   @Override

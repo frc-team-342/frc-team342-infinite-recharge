@@ -32,6 +32,8 @@ public class IntakeAndOutake extends SubsystemBase {
   private final int current_limit = 80;
   private final int current_limit_duration = 2000;
 
+  private double rpmsConverter = 60.0/1024.0;
+
   public IntakeAndOutake() {
     intake = new TalonSRX(Constants.INTAKE);
     shooter1 = new TalonSRX(Constants.shooter1);
@@ -60,8 +62,9 @@ public class IntakeAndOutake extends SubsystemBase {
      shooter1.setSensorPhase(true);
      shooter1.config_kF(0, 0.0);
      shooter1.config_kP(0, 0.185);
-     shooter1.config_kI(0, 1.0e-4);
-     shooter1.config_kD(0, 0.25);
+     shooter1.config_kI(0, 4.5e-5);
+     shooter1.config_kD(0, 5.0);
+
   }
 
   public void intake() {
@@ -73,15 +76,7 @@ public class IntakeAndOutake extends SubsystemBase {
   public void outake(double target) {
     shooter2.follow(shooter1);
     shooter1.set(ControlMode.Velocity, target);
-    SmartDashboard.putNumber("Shooter 1 Percent: ", shooter1.getMotorOutputPercent());
-    SmartDashboard.putNumber("Shooter 1 Voltage: ", shooter1.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Shooter 1 Current: ", shooter1.getSupplyCurrent());
 
-    SmartDashboard.putNumber("Shooter 2 Percent: ", shooter2.getMotorOutputPercent());
-    SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
-
-    SmartDashboard.putNumber("Velocity: ", shooter1.getSelectedSensorVelocity());
     System.out.println("Velocity: "+shooter1.getSelectedSensorVelocity());
     // if (sensor1.get() == true) {
     // load1.set(ControlMode.PercentOutput, 0.0);
@@ -90,27 +85,44 @@ public class IntakeAndOutake extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Shooter 1 Percent: ", shooter1.getMotorOutputPercent());
+    SmartDashboard.putNumber("Shooter 1 Voltage: ", shooter1.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Shooter 1 Current: ", shooter1.getSupplyCurrent());
+
+    SmartDashboard.putNumber("Shooter 2 Percent: ", shooter2.getMotorOutputPercent());
+    SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
+
+    SmartDashboard.putNumber("Velocity: ", (shooter1.getSelectedSensorVelocity() * 60.0)/1024.0);
     // if (sensor1.get() && sensor2.get() && sensor3.get())
     // intakeStop();
   }
 
   public void getSensors() {
-    SmartDashboard.putBoolean("Intake Sensor1: ", sensor1.get());
-    SmartDashboard.putBoolean("Intake Sensor2: ", sensor2.get());
-    SmartDashboard.putBoolean("Intake Sensor3: ", sensor3.get());
+    SmartDashboard.putBoolean("Intake Sensor1: ", !sensor1.get());
+    SmartDashboard.putBoolean("Intake Sensor2: ", !sensor2.get());
+    SmartDashboard.putBoolean("Intake Sensor3: ", !sensor3.get());
   }
 
   public void intakeStop() {
     intake.set(ControlMode.PercentOutput, 0.0);
-    load1.set(ControlMode.PercentOutput, 0.0);
-    load2.set(ControlMode.PercentOutput, 0.0);
+    //load1.set(ControlMode.PercentOutput, 0.0);
+    //load2.set(ControlMode.PercentOutput, 0.0);
   }
 
   public void shooterStop() {
-    intake.set(ControlMode.PercentOutput, 0.0);
+    //intake.set(ControlMode.PercentOutput, 0.0);
     load1.set(ControlMode.PercentOutput, 0.0);
     load2.set(ControlMode.PercentOutput, 0.0);
     shooter1.set(ControlMode.PercentOutput, 0.0);
     shooter2.set(ControlMode.PercentOutput, 0.0);
+  }
+
+  public double rpmsToCode(double rpms){
+    return rpms*rpmsConverter;
+  }
+
+  public double codeToRpms(double code){
+    return code/rpmsConverter;
   }
 }
