@@ -54,14 +54,14 @@ public class IntakeAndOutake extends SubsystemBase {
     shooter2.configPeakCurrentLimit(current_limit);
     shooter2.configPeakCurrentDuration(current_limit_duration);
 
-    // shooter1.configAllowableClosedloopError(0, 0, 1);
-    // shooter1.selectProfileSlot(0, 0);
-    // shooter1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    // shooter1.setSensorPhase(true);
-    // shooter1.config_kF(0, 1023.0/7200.0);
-    // shooter1.config_kP(0, 0.25);
-    // shooter1.config_kI(0, 0.001);
-    // shooter1.config_kD(0, 20.0);
+     shooter1.configAllowableClosedloopError(0, 0, 1);
+     shooter1.selectProfileSlot(0, 0);
+     shooter1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+     shooter1.setSensorPhase(true);
+     shooter1.config_kF(0, 1023.0/7200.0);
+     shooter1.config_kP(0, 0.25);
+     shooter1.config_kI(0, 0.001);
+     shooter1.config_kD(0, 20.0);
   }
 
   public void intake() {
@@ -71,8 +71,8 @@ public class IntakeAndOutake extends SubsystemBase {
   }
 
   public void outake(double target) {
-    shooter2.set(ControlMode.PercentOutput, target);
-    shooter1.set(ControlMode.PercentOutput, target);
+    shooter2.follow(shooter1);
+    shooter1.set(ControlMode.Velocity, target);
     SmartDashboard.putNumber("Shooter 1 Percent: ", shooter1.getMotorOutputPercent());
     SmartDashboard.putNumber("Shooter 1 Voltage: ", shooter1.getMotorOutputVoltage());
     SmartDashboard.putNumber("Shooter 1 Current: ", shooter1.getSupplyCurrent());
@@ -81,6 +81,7 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
     SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
 
+    SmartDashboard.putNumber("Velocity: ", shooter1.getSelectedSensorVelocity());
     // if (sensor1.get() == true) {
     // load1.set(ControlMode.PercentOutput, 0.0);
     // }
