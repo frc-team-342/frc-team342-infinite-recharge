@@ -34,8 +34,8 @@ public final class Constants {
     public static final int SIDE = 2;
 
     public static final int INTAKE = 5;
-    public static final int LAUNCH1 = 8;
-    public static final int LAUNCH2 = 9;
+    public static final int shooter1 = 8;
+    public static final int shooter2 = 9;
     public static final int LOAD1 = 6; 
     public static final int LOAD2 = 7;
 

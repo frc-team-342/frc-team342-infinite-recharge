@@ -17,8 +17,8 @@ public class IntakeAndOutake extends SubsystemBase {
    */
 
   private TalonSRX intake;
-  private TalonSRX launch1;
-  private TalonSRX launch2;
+  private TalonSRX shooter1;
+  private TalonSRX shooter2;
   private VictorSPX load1;
   private VictorSPX load2;
 
@@ -31,8 +31,8 @@ public class IntakeAndOutake extends SubsystemBase {
 
   public IntakeAndOutake() {
     intake = new TalonSRX(Constants.INTAKE);
-    launch1 = new TalonSRX(Constants.LAUNCH1);
-    launch2 = new TalonSRX(Constants.LAUNCH2);
+    shooter1 = new TalonSRX(Constants.shooter1);
+    shooter2 = new TalonSRX(Constants.shooter2);
     load1 = new VictorSPX(Constants.LOAD1);
     load2 = new VictorSPX(Constants.LOAD2);
 
@@ -40,15 +40,19 @@ public class IntakeAndOutake extends SubsystemBase {
     sensor2 = new DigitalInput(Constants.INTAKESENSOR2);
     sensor3 = new DigitalInput(Constants.INTAKESENSOR3);
 
-    launch1.configAllowableClosedloopError(0, 0, 1);
-    launch1.selectProfileSlot(0, 0);
-    launch1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    launch1.setSensorPhase(true);
-    launch1.setInverted(true);
-    launch1.config_kF(0, (0.75*1023.0)/7112.0);
-    launch1.config_kP(0, 0.5);
-    launch1.config_kI(0, 0.0);
-    launch1.config_kD(0, 0.0);
+    shooter1.setInverted(true);
+    shooter2.setInverted(true);
+
+
+    // shooter1.configAllowableClosedloopError(0, 0, 1);
+    // shooter1.selectProfileSlot(0, 0);
+    // shooter1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    // shooter1.setSensorPhase(true);
+    // shooter1.setInverted(true);
+    // shooter1.config_kF(0, (0.75*1023.0)/7112.0);
+    // shooter1.config_kP(0, 0.5);
+    // shooter1.config_kI(0, 0.0);
+    // shooter1.config_kD(0, 0.0);
   }
 
   public void intake() {
@@ -58,9 +62,16 @@ public class IntakeAndOutake extends SubsystemBase {
   }
 
   public void outake(double target) {
-    launch2.follow(launch1);
-    launch1.set(ControlMode.Velocity, target);
-    System.out.println("Velocity: " + launch1.getSelectedSensorVelocity());
+    shooter2.set(ControlMode.PercentOutput, target);
+    shooter1.set(ControlMode.PercentOutput, target);
+    SmartDashboard.putNumber("Shooter 1 Percent: ", shooter1.getMotorOutputPercent());
+    SmartDashboard.putNumber("Shooter 1 Voltage: ", shooter1.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Shooter 1 Current: ", shooter1.getSupplyCurrent());
+
+    SmartDashboard.putNumber("Shooter 2 Percent: ", shooter2.getMotorOutputPercent());
+    SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
+    
 
     // if (sensor1.get() == true) {
     // load1.set(ControlMode.PercentOutput, 0.0);
@@ -85,11 +96,11 @@ public class IntakeAndOutake extends SubsystemBase {
     load2.set(ControlMode.PercentOutput, 0.0);
   }
 
-  public void launchStop() {
+  public void shooterStop() {
     intake.set(ControlMode.PercentOutput, 0.0);
     load1.set(ControlMode.PercentOutput, 0.0);
     load2.set(ControlMode.PercentOutput, 0.0);
-    launch1.set(ControlMode.PercentOutput, 0.0);
-    launch2.set(ControlMode.PercentOutput, 0.0);
+    shooter1.set(ControlMode.PercentOutput, 0.0);
+    shooter2.set(ControlMode.PercentOutput, 0.0);
   }
 }

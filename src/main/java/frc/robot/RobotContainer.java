@@ -14,7 +14,7 @@ import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithPercent;
 import frc.robot.commands.DriveWithTargeting;
 import frc.robot.commands.IntakeWithButton;
-import frc.robot.commands.LaunchWithButton;
+import frc.robot.commands.ShootWithButton;
 import frc.robot.commands.RotateToAngle;
 import frc.robot.subsystems.DriveSystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -45,7 +45,7 @@ public class RobotContainer {
 
   private final RotateToAngle rotate = new RotateToAngle();
   private final IntakeWithButton m_intakeWithButton = new IntakeWithButton();
-  private final LaunchWithButton m_launchWithButton = new LaunchWithButton(); 
+  private final ShootWithButton m_shooterWithButton = new ShootWithButton(); 
 
   private Command field;
   private Command slow;
@@ -117,8 +117,8 @@ public class RobotContainer {
     rotateToggle.whileHeld(rotate);
     toggleTarget.whenPressed(target);
 
-    side.whileHeld(m_intakeWithButton);
-    trigger.whileHeld(m_launchWithButton);
+    side.toggleWhenPressed(m_intakeWithButton);
+    trigger.toggleWhenPressed(m_shooterWithButton);
   }
 
 
