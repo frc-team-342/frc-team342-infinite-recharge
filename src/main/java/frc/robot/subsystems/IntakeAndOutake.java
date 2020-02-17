@@ -33,6 +33,7 @@ public class IntakeAndOutake extends SubsystemBase {
   private final int current_limit_duration = 2000;
 
   private double rpmsConverter = 60.0/1024.0;
+  private double error = 250.0;
 
   public IntakeAndOutake() {
     intake = new TalonSRX(Constants.INTAKE);
@@ -60,10 +61,14 @@ public class IntakeAndOutake extends SubsystemBase {
      shooter1.selectProfileSlot(0, 0);
      shooter1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
      shooter1.setSensorPhase(true);
-     shooter1.config_kF(0, 0.0);
-     shooter1.config_kP(0, 0.185);
-     shooter1.config_kI(0, 4.5e-5);
-     shooter1.config_kD(0, 5.0);
+    //  shooter1.config_kF(0, 0.0);
+    //  shooter1.config_kP(0, 0.185);
+    //  shooter1.config_kI(0, 4.5e-5);
+    //  shooter1.config_kD(0, 5.0);
+    shooter1.config_kF(0, 0.015);
+    shooter1.config_kP(0, 0.03);
+    shooter1.config_kI(0, 0.0);
+    shooter1.config_kD(0, 0.0);
 
   }
 
@@ -78,9 +83,12 @@ public class IntakeAndOutake extends SubsystemBase {
     shooter1.set(ControlMode.Velocity, target);
 
     System.out.println("Velocity: "+shooter1.getSelectedSensorVelocity());
-    // if (sensor1.get() == true) {
-    // load1.set(ControlMode.PercentOutput, 0.0);
-    // }
+
+    if(shooter1.getSelectedSensorVelocity() + error < target && sensor3.get())
+      load2.set(ControlMode.PercentOutput, 0.0);
+    else
+      load2.set(ControlMode.PercentOutput, speed);
+
   }
 
   @Override
@@ -93,7 +101,7 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
     SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
 
-    SmartDashboard.putNumber("Velocity: ", (shooter1.getSelectedSensorVelocity() * 60.0)/1024.0);
+    SmartDashboard.putNumber("Velocity: ", codeToRpms(shooter1.getSelectedSensorVelocity()));
     // if (sensor1.get() && sensor2.get() && sensor3.get())
     // intakeStop();
   }
@@ -106,8 +114,8 @@ public class IntakeAndOutake extends SubsystemBase {
 
   public void intakeStop() {
     intake.set(ControlMode.PercentOutput, 0.0);
-    //load1.set(ControlMode.PercentOutput, 0.0);
-    //load2.set(ControlMode.PercentOutput, 0.0);
+    load1.set(ControlMode.PercentOutput, 0.0);
+    load2.set(ControlMode.PercentOutput, 0.0);
   }
 
   public void shooterStop() {

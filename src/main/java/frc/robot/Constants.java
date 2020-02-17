@@ -41,6 +41,6 @@ public final class Constants {
 
     public static final int INTAKESENSOR1 = 1; 
     public static final int INTAKESENSOR2 = 2; 
-    public static final int INTAKESENSOR3 = 3; 
+    public static final int INTAKESENSOR3 = 3;
 
 }
