@@ -75,7 +75,12 @@ public class IntakeAndOutake extends SubsystemBase {
   public void intake() {
     intake.set(ControlMode.PercentOutput, speed2);
     load1.set(ControlMode.PercentOutput, speed);
-    load2.set(ControlMode.PercentOutput, speed);
+    
+
+    if(!sensor3.get())
+      load2.set(ControlMode.PercentOutput, 0.0);
+    else
+      load2.set(ControlMode.PercentOutput, 0.6);
   }
 
   public void outake(double target) {
@@ -84,10 +89,12 @@ public class IntakeAndOutake extends SubsystemBase {
 
     System.out.println("Velocity: "+shooter1.getSelectedSensorVelocity());
 
-    if(shooter1.getSelectedSensorVelocity() + error < target && sensor3.get())
+    if(shooter1.getSelectedSensorVelocity() + error < target && !sensor3.get())
       load2.set(ControlMode.PercentOutput, 0.0);
     else
-      load2.set(ControlMode.PercentOutput, speed);
+      load2.set(ControlMode.PercentOutput, 0.6);
+      load1.set(ControlMode.PercentOutput, 0.6);
+
 
   }
 
