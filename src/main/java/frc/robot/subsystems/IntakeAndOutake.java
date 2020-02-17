@@ -61,14 +61,11 @@ public class IntakeAndOutake extends SubsystemBase {
      shooter1.selectProfileSlot(0, 0);
      shooter1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
      shooter1.setSensorPhase(true);
-    //  shooter1.config_kF(0, 0.0);
-    //  shooter1.config_kP(0, 0.185);
-    //  shooter1.config_kI(0, 4.5e-5);
-    //  shooter1.config_kD(0, 5.0);
-    shooter1.config_kF(0, 0.015);
-    shooter1.config_kP(0, 0.03);
-    shooter1.config_kI(0, 0.0);
-    shooter1.config_kD(0, 0.0);
+
+     shooter1.config_kF(0, 0.015);
+     shooter1.config_kP(0, 0.03);
+     shooter1.config_kI(0, 0.0);
+     shooter1.config_kD(0, 0.0);
 
   }
 
@@ -134,10 +131,10 @@ public class IntakeAndOutake extends SubsystemBase {
   }
 
   public double rpmsToCode(double rpms){
-    return rpms*rpmsConverter;
+    return rpms/rpmsConverter;
   }
 
   public double codeToRpms(double code){
-    return code/rpmsConverter;
+    return code*rpmsConverter;
   }
 }
