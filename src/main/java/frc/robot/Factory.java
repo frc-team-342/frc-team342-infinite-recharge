@@ -19,22 +19,23 @@ public class Factory {
     private static LimelightSubsystem lime = null;
     private static IntakeAndOutake inAndOut = null;
 
-
-    public static DriveSystem getDrive(){
-        if(driveSystem == null)
-            driveSystem = new DriveSystem(new CANSparkMax(Constants.motorL1, MotorType.kBrushless), new CANSparkMax(Constants.motorL2, MotorType.kBrushless),
-            new CANSparkMax(Constants.motorR1, MotorType.kBrushless), new CANSparkMax(Constants.motorR2, MotorType.kBrushless));
+    public static DriveSystem getDrive() {
+        if (driveSystem == null)
+            driveSystem = new DriveSystem(new CANSparkMax(Constants.motorL1, MotorType.kBrushless),
+                    new CANSparkMax(Constants.motorL2, MotorType.kBrushless),
+                    new CANSparkMax(Constants.motorR1, MotorType.kBrushless),
+                    new CANSparkMax(Constants.motorR2, MotorType.kBrushless));
         return driveSystem;
     }
 
-    public static LimelightSubsystem getLime(){
-        if(lime == null)
+    public static LimelightSubsystem getLime() {
+        if (lime == null)
             lime = new LimelightSubsystem();
         return lime;
     }
 
-    public static IntakeAndOutake getIntakeOutake(){
-        if(inAndOut == null)
+    public static IntakeAndOutake getIntakeOutake() {
+        if (inAndOut == null)
             inAndOut = new IntakeAndOutake();
         return inAndOut;
     }

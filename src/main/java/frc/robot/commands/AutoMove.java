@@ -14,6 +14,7 @@ import frc.robot.subsystems.DriveSystem;
 public class AutoMove extends CommandBase {
   private static DriveSystem driveSystem;
   private double Y;
+
   /**
    * Creates a new AutoMove.
    */

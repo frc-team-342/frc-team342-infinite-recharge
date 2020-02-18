@@ -9,7 +9,7 @@ public class IntakeWithButton extends CommandBase {
    * Intakes with left bumper
    */
 
-  private final IntakeAndOutake intakeAndOutake; 
+  private final IntakeAndOutake intakeAndOutake;
 
   public IntakeWithButton() {
     intakeAndOutake = Factory.getIntakeOutake();
@@ -22,7 +22,7 @@ public class IntakeWithButton extends CommandBase {
 
   @Override
   public void execute() {
-    intakeAndOutake.intake(); 
+    intakeAndOutake.intake();
   }
 
   @Override

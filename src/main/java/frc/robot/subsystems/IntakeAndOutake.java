@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
+import frc.robot.Factory;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -32,8 +33,15 @@ public class IntakeAndOutake extends SubsystemBase {
   private final int current_limit = 80;
   private final int current_limit_duration = 2000;
 
-  private double rpmsConverter = 60.0/1024.0;
+  private double rpmsConverter = 60.0 / 1024.0;
   private double error = 250.0;
+  private double hoodAngle = 50.0*(Math.PI/180.0);
+  private double height = 77.125;
+
+  // Gravity in in/s
+  private double gravity = 386.09;
+
+  private final LimelightSubsystem lime;
 
   public IntakeAndOutake() {
     intake = new TalonSRX(Constants.INTAKE);
@@ -57,42 +65,48 @@ public class IntakeAndOutake extends SubsystemBase {
     shooter2.configPeakCurrentLimit(current_limit);
     shooter2.configPeakCurrentDuration(current_limit_duration);
 
-     shooter1.configAllowableClosedloopError(0, 0, 25);
-     shooter1.selectProfileSlot(0, 0);
-     shooter1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-     shooter1.setSensorPhase(true);
+    shooter1.configAllowableClosedloopError(0, 0, 25);
+    shooter1.selectProfileSlot(0, 0);
+    shooter1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    shooter1.setSensorPhase(true);
 
-     shooter1.config_kF(0, 0.015);
-     shooter1.config_kP(0, 0.03);
-     shooter1.config_kI(0, 0.0);
-     shooter1.config_kD(0, 0.0);
+    shooter1.config_kF(0, 0.015);
+    shooter1.config_kP(0, 0.03);
+    shooter1.config_kI(0, 0.0);
+    shooter1.config_kD(0, 0.0);
+
+    lime = Factory.getLime();
 
   }
 
   public void intake() {
     intake.set(ControlMode.PercentOutput, speed2);
     load1.set(ControlMode.PercentOutput, speed);
-    
 
-    if(!sensor3.get())
+    if (!sensor3.get())
       load2.set(ControlMode.PercentOutput, 0.0);
     else
       load2.set(ControlMode.PercentOutput, 0.6);
   }
 
-  public void outake(double target) {
+  public void outake() {
+    double numerator = -(Math.sqrt(gravity) * Math.sqrt(lime.getDistance()) * Math.sqrt(Math.pow(Math.tan(hoodAngle), 2)));
+    double denominator = Math.sqrt(2 * Math.tan(hoodAngle) * (2*(height)/lime.getDistance()));
+
+    double velocity = numerator / denominator;
+
     shooter2.follow(shooter1);
-    shooter1.set(ControlMode.Velocity, target);
+    shooter1.set(ControlMode.Velocity, velocity);
 
-    System.out.println("Velocity: "+shooter1.getSelectedSensorVelocity());
+    System.out.println("Velocity: " + shooter1.getSelectedSensorVelocity());
 
-    if(shooter1.getSelectedSensorVelocity() + error < target && !sensor3.get())
+    if (shooter1.getSelectedSensorVelocity() + error < velocity && !sensor3.get())
       load2.set(ControlMode.PercentOutput, 0.0);
     else
       load2.set(ControlMode.PercentOutput, 0.6);
-      load1.set(ControlMode.PercentOutput, 0.6);
+    load1.set(ControlMode.PercentOutput, 0.6);
 
-
+    
   }
 
   @Override
@@ -123,18 +137,18 @@ public class IntakeAndOutake extends SubsystemBase {
   }
 
   public void shooterStop() {
-    //intake.set(ControlMode.PercentOutput, 0.0);
+    // intake.set(ControlMode.PercentOutput, 0.0);
     load1.set(ControlMode.PercentOutput, 0.0);
     load2.set(ControlMode.PercentOutput, 0.0);
     shooter1.set(ControlMode.PercentOutput, 0.0);
     shooter2.set(ControlMode.PercentOutput, 0.0);
   }
 
-  public double rpmsToCode(double rpms){
-    return rpms/rpmsConverter;
+  public double rpmsToCode(double rpms) {
+    return rpms / rpmsConverter;
   }
 
-  public double codeToRpms(double code){
-    return code*rpmsConverter;
+  public double codeToRpms(double code) {
+    return code * rpmsConverter;
   }
 }

@@ -23,6 +23,7 @@ public class DriveWithTargeting extends CommandBase {
   private boolean isDone = false;
   private double X;
   private double Y;
+
   /**
    * Creates a new RotateToAngle.
    */
@@ -30,14 +31,14 @@ public class DriveWithTargeting extends CommandBase {
     joy = RobotContainer.getJoy();
     driveSystem = Factory.getDrive();
     lime = Factory.getLime();
-    
-    
+
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    lime.visionOn();
     driveSystem.errorAccumReset();
     isDone = false;
   }
@@ -48,39 +49,37 @@ public class DriveWithTargeting extends CommandBase {
     X = joy.getX();
     Y = joy.getY();
 
-    if(Math.abs(X) < 0.15){
+    if (Math.abs(X) < 0.15) {
       X = 0.0;
       SmartDashboard.putString("X Deadzone", "X is in deadzone!");
-    }
-    else  
+    } else
       SmartDashboard.putString("X Deadzone", "X is not in deadzone!");
 
-    if(Math.abs(Y) < 0.15){
+    if (Math.abs(Y) < 0.15) {
       Y = 0.0;
-      SmartDashboard.putString("Y Deadzone","Y is in deadzone!");
-    }
-    else
+      SmartDashboard.putString("Y Deadzone", "Y is in deadzone!");
+    } else
       SmartDashboard.putString("Y Deadzone", "Y is not in deadzone!");
-    
+
     driveSystem.driveWithTargeting(X, -Y, lime.getXOffsetAngle());
 
-}
-  
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     driveSystem.stopDrive();
-    System.out.println("yuh");
+    isDone = true;
+    lime.switchCamMode();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    //  if(isDone)
-    //    return true;
-    //  else
+    if (isDone)
+      return true;
+    else
       return false;
-    
+
   }
 }

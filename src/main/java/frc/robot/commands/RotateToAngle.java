@@ -17,13 +17,14 @@ public class RotateToAngle extends CommandBase {
   private final DriveSystem driveSystem;
   private double error = 0.5;
   private boolean isDone = false;
+
   /**
    * Creates a new RotateToAngle.
    */
   public RotateToAngle() {
     driveSystem = Factory.getDrive();
     lime = Factory.getLime();
-    
+
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -38,14 +39,13 @@ public class RotateToAngle extends CommandBase {
   @Override
   public void execute() {
     driveSystem.rotateByError(lime.getXOffsetAngle());
-    if(Math.abs(lime.getXOffsetAngle())<error && lime.getValidTarget()){
+    if (Math.abs(lime.getXOffsetAngle()) < error && lime.getValidTarget()) {
       isDone = true;
     }
-    if(lime.getValidTarget() == false){
+    if (lime.getValidTarget() == false) {
       driveSystem.stopDrive();
-    } 
-}
-  
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -57,10 +57,10 @@ public class RotateToAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-     if(isDone)
-       return true;
-     else
+    if (isDone)
+      return true;
+    else
       return false;
-    
+
   }
 }

@@ -22,10 +22,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a "declarative" paradigm, very little robot logic should
+ * actually be handled in the {@link Robot} periodic methods (other than the
+ * scheduler calls). Instead, the structure of the robot (including subsystems,
+ * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
   private static JoystickButton gyrozeroer;
@@ -36,7 +37,7 @@ public class RobotContainer {
   private static JoystickButton toggleTurbo;
   private static JoystickButton rotateToggle;
   private static JoystickButton toggleTarget;
-  private static JoystickButton trigger; 
+  private static JoystickButton trigger;
   private static JoystickButton side;
 
   private final DriveWithJoystick driveWithJoystick;
@@ -45,7 +46,7 @@ public class RobotContainer {
 
   private final RotateToAngle rotate = new RotateToAngle();
   private final IntakeWithButton m_intakeWithButton = new IntakeWithButton();
-  private final ShootWithButton m_shooterWithButton = new ShootWithButton(); 
+  private final ShootWithButton m_shooterWithButton = new ShootWithButton();
 
   private Command field;
   private Command slow;
@@ -54,16 +55,15 @@ public class RobotContainer {
   private Command pid;
   private Command target;
 
-
   /**
-   * The container for the robot.  Contains subsystems, OI devices, and commands.
+   * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     driveSystem = Factory.getDrive();
     joy = new Joystick(Constants.driver_joystick);
     driveWithJoystick = new DriveWithJoystick();
     driveWithPercent = new DriveWithPercent();
-    
+
     gyrozeroer = new JoystickButton(joy, Constants.zeroGyro);
     fieldtoggle = new JoystickButton(joy, Constants.fieldToggler);
     // pidtoggle = new JoystickButton(joy, Constants.pidToggler);
@@ -81,37 +81,37 @@ public class RobotContainer {
     zero = new InstantCommand(driveSystem::zeroGyro, driveSystem);
     pid = new InstantCommand(driveSystem::setPIDLooped, driveSystem);
     target = new InstantCommand(driveSystem::toggleTargeting, driveSystem);
-    
-    
+
     // Configure the button bindings
     configureButtonBindings();
   }
-  public static Joystick getJoy(){
+
+  public static Joystick getJoy() {
     return joy;
   }
 
-  public static double driverAxis(){
+  public static double driverAxis() {
     return joy.getRawAxis(Constants.driveYAxis);
   }
 
-  public Command getDrive(){
+  public Command getDrive() {
     return driveWithJoystick;
   }
 
-  public Command getPercent(){
+  public Command getPercent() {
     return driveWithPercent;
   }
 
   /**
-   * Use this method to define your button->command mappings.  Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
-   * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by instantiating a {@link GenericHID} or one of its subclasses
+   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
+   * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
     gyrozeroer.whenPressed(zero);
     fieldtoggle.whenPressed(field);
-    //pidtoggle.whenPressed(pid);
+    // pidtoggle.whenPressed(pid);
     toggleSlow.whenPressed(slow);
     toggleTurbo.whenPressed(turbo);
     rotateToggle.whileHeld(rotate);
@@ -120,7 +120,6 @@ public class RobotContainer {
     side.toggleWhenPressed(m_intakeWithButton);
     trigger.toggleWhenPressed(m_shooterWithButton);
   }
-
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
