@@ -7,63 +7,60 @@
 
 package frc.robot.commands;
 
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
+import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Factory;
-import frc.robot.subsystems.DriveSystem;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.ClimbSubsystem;
 
-public class RotateToAngle extends CommandBase {
-  private final DriveSystem driveSystem;
-  private double gyro;
-  private double angle;
-
-  private double error = 2.5;
-  private double turnSpeed = 0.4;
-  private boolean isDone = false;
+public class ActivateTelescopes extends CommandBase {
   /**
-   * Creates a new RotateToAngle.
+   * Creates a new ActivateTelescopes.
    */
-  public RotateToAngle(double Angle) {
-    driveSystem = Factory.getDrive();
-    angle = Angle;
+
+  private final ClimbSubsystem cs;
+  private final XboxController tele;
+
+  private double Y;
+
+  public ActivateTelescopes() {
     // Use addRequirements() here to declare subsystem dependencies.
+    cs = Factory.getClimb();
+    tele = RobotContainer.getTele();
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    gyro = driveSystem.getGyro();
-    if(gyro > angle)
-      turnSpeed *= -1.0;
-    if(gyro >= (angle-error) && gyro <= (angle+error)){
-      driveSystem.Drive(0.0, 0.0, 0.0);
-      isDone = true;
+    if (tele.getY() > 0.1 || tele.getY() < -0.1)  { 
+      cs.setActivated(true);
     }
-    else
-      driveSystem.Drive(0.0, 0.0, turnSpeed);
+    else {
+      cs.setActivated(false);
+    }
+    System.out.println("\n-------" + cs.getActivated());
+    System.out.println(cs.getEnable());
+    Y = tele.getY();
 
-    System.out.println(gyro);
-}
-  
+    cs.spinTeleMotor(Y);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveSystem.Drive(0.0, 0.0, 0.0);
+    cs.setActivated(false);
+    cs.spinTeleMotor(0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(isDone)
-      return true;
-    else
-      return false;
+    return false;
   }
 }

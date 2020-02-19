@@ -7,63 +7,48 @@
 
 package frc.robot.commands;
 
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Factory;
-import frc.robot.subsystems.DriveSystem;
+import frc.robot.RobotContainer;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ClimbSubsystem;
 
-public class RotateToAngle extends CommandBase {
-  private final DriveSystem driveSystem;
-  private double gyro;
-  private double angle;
-
-  private double error = 2.5;
-  private double turnSpeed = 0.4;
-  private boolean isDone = false;
+public class ActivateWinches extends CommandBase {
   /**
-   * Creates a new RotateToAngle.
+   * Creates a new ActivateWinchs.
    */
-  public RotateToAngle(double Angle) {
-    driveSystem = Factory.getDrive();
-    angle = Angle;
+  private final ClimbSubsystem cs;
+
+  public ActivateWinches() {
     // Use addRequirements() here to declare subsystem dependencies.
+    cs = Factory.getClimb();
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    gyro = driveSystem.getGyro();
-    if(gyro > angle)
-      turnSpeed *= -1.0;
-    if(gyro >= (angle-error) && gyro <= (angle+error)){
-      driveSystem.Drive(0.0, 0.0, 0.0);
-      isDone = true;
-    }
-    else
-      driveSystem.Drive(0.0, 0.0, turnSpeed);
-
-    System.out.println(gyro);
-}
-  
+    cs.spinWinchMotors(0.2);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveSystem.Drive(0.0, 0.0, 0.0);
+    cs.spinWinchMotors(0.0);
   }
 
-  // Returns true when the command should end.
+  // Returns true when the command should end
   @Override
   public boolean isFinished() {
-    if(isDone)
-      return true;
-    else
-      return false;
+    return false;
   }
 }

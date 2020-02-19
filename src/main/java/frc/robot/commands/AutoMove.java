@@ -7,25 +7,23 @@
 
 package frc.robot.commands;
 
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
 import frc.robot.subsystems.DriveSystem;
 
-public class RotateToAngle extends CommandBase {
-  private final DriveSystem driveSystem;
-  private double gyro;
-  private double angle;
-
-  private double error = 2.5;
-  private double turnSpeed = 0.4;
-  private boolean isDone = false;
+public class AutoMove extends CommandBase {
+  private static DriveSystem driveSystem;
+  private double X;
+  private double Y;
+  private double Z;
   /**
-   * Creates a new RotateToAngle.
+   * Creates a new AutoMove.
    */
-  public RotateToAngle(double Angle) {
+  public AutoMove(double x, double y, double z) {
+    X = x;
+    Y = y;
+    Z = z;
     driveSystem = Factory.getDrive();
-    angle = Angle;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -38,19 +36,9 @@ public class RotateToAngle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    gyro = driveSystem.getGyro();
-    if(gyro > angle)
-      turnSpeed *= -1.0;
-    if(gyro >= (angle-error) && gyro <= (angle+error)){
-      driveSystem.Drive(0.0, 0.0, 0.0);
-      isDone = true;
-    }
-    else
-      driveSystem.Drive(0.0, 0.0, turnSpeed);
+    driveSystem.Drive(X, Y, Z);
 
-    System.out.println(gyro);
-}
-  
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -61,9 +49,6 @@ public class RotateToAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(isDone)
-      return true;
-    else
-      return false;
+    return false;
   }
 }
