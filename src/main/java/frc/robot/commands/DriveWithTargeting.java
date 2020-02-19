@@ -38,9 +38,9 @@ public class DriveWithTargeting extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    lime.visionOn();
+    //lime.visionOn();
     driveSystem.errorAccumReset();
-    isDone = false;
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -69,7 +69,6 @@ public class DriveWithTargeting extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     driveSystem.stopDrive();
-    isDone = true;
     lime.switchCamMode();
   }
 

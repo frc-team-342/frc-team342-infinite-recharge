@@ -115,10 +115,15 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     intakeAndOutake.getSensors();
-    if (driveSystem.getTarget())
+    if (driveSystem.getTarget()){
+      driveWithJoy.cancel();
       driveWithTargeting.schedule();
-    else
+    }
+    else{
+      driveWithTargeting.cancel();
       driveWithJoy.schedule();
+    }
+      
 
     // driveWithPercent.schedule();
   }
