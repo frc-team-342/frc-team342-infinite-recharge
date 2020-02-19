@@ -14,6 +14,7 @@ import frc.robot.commands.Autonomous;
 import frc.robot.commands.DriveWithTargeting;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.IntakeAndOutake;
+import frc.robot.subsystems.LimelightSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -30,6 +31,7 @@ public class Robot extends TimedRobot {
   private static IntakeAndOutake intakeAndOutake;
   private Command autoDrive;
   private Command driveWithTargeting;
+  private LimelightSubsystem lime;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -39,10 +41,12 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer();
     driveSystem = Factory.getDrive();
+    lime = Factory.getLime();
     intakeAndOutake = Factory.getIntakeOutake();
     driveWithJoy = m_robotContainer.getDrive();
     autoDrive = new Autonomous();
     driveWithTargeting = new DriveWithTargeting();
+
 
   }
 
@@ -99,7 +103,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-
+    lime.visionOff();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

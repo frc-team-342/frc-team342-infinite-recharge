@@ -78,6 +78,11 @@ public class LimelightSubsystem extends SubsystemBase {
     camMode.setNumber(0);
     ledMode.setNumber(0);
   }
+
+  public void visionOff(){
+    camMode.setNumber(1);
+    ledMode.setNumber(1);
+  }
   /*
    * Returns horizontal angle of target offset from crosshair
    * 

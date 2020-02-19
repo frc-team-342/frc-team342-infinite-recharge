@@ -90,10 +90,10 @@ public class IntakeAndOutake extends SubsystemBase {
   }
 
   public void outake() {
-    double numerator = -(Math.sqrt(gravity) * Math.sqrt(lime.getDistance()) * Math.sqrt(Math.pow(Math.tan(hoodAngle), 2)));
+    double numerator = -(Math.sqrt(gravity) * Math.sqrt(lime.getDistance()) * Math.sqrt(Math.pow(Math.tan(hoodAngle), 2)+1.0));
     double denominator = Math.sqrt(2 * Math.tan(hoodAngle) * (2*(height)/lime.getDistance()));
 
-    double velocity = numerator / denominator;
+    double velocity = 2*(numerator / denominator);
 
     shooter2.follow(shooter1);
     shooter1.set(ControlMode.Velocity, velocity);
