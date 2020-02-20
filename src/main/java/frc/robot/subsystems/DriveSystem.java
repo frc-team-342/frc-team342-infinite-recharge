@@ -94,7 +94,6 @@ public class DriveSystem extends SubsystemBase {
 
     NavX = new AHRS();
 
-
   }
 
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
@@ -213,6 +212,11 @@ public class DriveSystem extends SubsystemBase {
 
   public void toggleTargeting() {
     isTargeting = !isTargeting;
+    SmartDashboard.putBoolean("Is Targeting", isTargeting);
+  }
+
+  public void targetOff(){
+    isTargeting = false;
     SmartDashboard.putBoolean("Is Targeting", isTargeting);
   }
 

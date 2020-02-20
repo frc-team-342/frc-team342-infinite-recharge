@@ -35,7 +35,7 @@ public class IntakeAndOutake extends SubsystemBase {
 
   private double rpmsConverter = 60.0 / 1024.0;
   private double error = 250.0;
-  private double hoodAngle = 50.0*(Math.PI/180.0);
+  private double hoodAngle = 50.0 * (Math.PI / 180.0);
   private double height = 77.125;
 
   // Gravity in in/s
@@ -90,10 +90,11 @@ public class IntakeAndOutake extends SubsystemBase {
   }
 
   public void outake() {
-    double numerator = -(Math.sqrt(gravity) * Math.sqrt(lime.getDistance()) * Math.sqrt(Math.pow(Math.tan(hoodAngle), 2)+1.0));
-    double denominator = Math.sqrt(2 * Math.tan(hoodAngle) * (2*(height)/lime.getDistance()));
+    double numerator = -(Math.sqrt(gravity) * Math.sqrt(lime.getDistance())
+        * Math.sqrt(Math.pow(Math.tan(hoodAngle), 2) + 1.0));
+    double denominator = Math.sqrt(2 * Math.tan(hoodAngle) * (2 * (height) / lime.getDistance()));
 
-    double velocity = 2*(numerator / denominator);
+    double velocity = 2 * (numerator / denominator);
 
     shooter2.follow(shooter1);
     shooter1.set(ControlMode.Velocity, velocity);
@@ -106,7 +107,6 @@ public class IntakeAndOutake extends SubsystemBase {
       load2.set(ControlMode.PercentOutput, 0.6);
     load1.set(ControlMode.PercentOutput, 0.6);
 
-    
   }
 
   @Override
