@@ -18,6 +18,10 @@ public class LimelightSubsystem extends SubsystemBase {
   private NetworkTableEntry tv, ty, tx, camMode, ledMode;
   private double yOffsetAngle, xOffsetAngle;
   private int cameraMode, lightMode, validTarget;
+  private double X;
+  private double Y;
+  private double radius;
+  private boolean linedUp;
 
   /**
    * Creates a new LimelightSubsystem.
@@ -95,5 +99,12 @@ public class LimelightSubsystem extends SubsystemBase {
 
   public boolean getValidTarget() {
     return (validTarget == 1) ? true : false;
+  }
+
+  public void setLinedUp(boolean setter) {
+    linedUp = setter;
+  }
+  public boolean getLineUp() {
+    return linedUp;
   }
 }

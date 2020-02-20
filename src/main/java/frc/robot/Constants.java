@@ -43,6 +43,7 @@ public final class Constants {
 
     // Control Panel
     public static final int cp_rotate = 9;
+    public static final int cp_arm = 10;
 
     /* Buttons */
     // Driver controller
