@@ -94,7 +94,7 @@ public class IntakeAndOutake extends SubsystemBase {
     double denominator = Math.sqrt(2 * Math.tan(hoodAngle) * (2 * (height) / lime.getDistance()));
 
     double inchPerSec = 2 * (numerator / denominator);
-    double unitConversion = (4096.0*10)/(6.0*Math.PI*1000.0);
+    double unitConversion = (8192.0*10)/(6.0*Math.PI*1000.0);
 
     double velocity = inchPerSec*unitConversion;
 
