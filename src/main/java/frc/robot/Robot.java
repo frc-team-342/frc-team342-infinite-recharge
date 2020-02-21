@@ -24,10 +24,10 @@ import frc.robot.subsystems.LimelightSubsystem;
  * project.
  */
 public class Robot extends TimedRobot {
-  
-  private Command m_autonomousCommand;
- 
+
   private RobotContainer m_robotContainer;
+  private Command autonomousCommand;
+  private Command climb;
   private Command driveWithJoy;
   private static DriveSystem driveSystem;
   private static IntakeAndOutake intakeAndOutake;
@@ -46,11 +46,13 @@ public class Robot extends TimedRobot {
     driveSystem = Factory.getDrive();
     lime = Factory.getLime();
     intakeAndOutake = Factory.getIntakeOutake();
-    driveWithJoy = m_robotContainer.getDrive();
     autoDrive = new Autonomous();
     driveWithTargeting = new DriveWithTargeting();
 
 
+    // Commands
+    driveWithJoy = new DriveWithJoystick();
+    climb = new ActivateTelescopes();
   }
 
   /**
@@ -79,6 +81,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+
   }
 
   @Override
@@ -101,7 +104,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    CommandScheduler.getInstance().run();
+
   }
 
   @Override
@@ -112,9 +115,12 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (autoDrive != null) {
-      autoDrive.cancel();
+    if (autonomousCommand != null) {
+      autonomousCommand.cancel();
     }
+
+    climb.schedule();
+    driveWithJoy.schedule();
   }
 
   /**
@@ -147,5 +153,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+
   }
 }

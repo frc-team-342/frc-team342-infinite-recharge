@@ -7,63 +7,48 @@
 
 package frc.robot.commands;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 78670a7a61976ce54a67c53d9d59cb3232c5a1c5
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Factory;
-import frc.robot.subsystems.DriveSystem;
-import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.RobotContainer;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ClimbSubsystem;
 
-public class RotateToAngle extends CommandBase {
-  private final LimelightSubsystem lime;
-  private final DriveSystem driveSystem;
-  private double error = 0.5;
-  private boolean isDone = false;
-
+public class ActivateWinches extends CommandBase {
   /**
-   * Creates a new RotateToAngle.
+   * Creates a new ActivateWinchs.
    */
-  public RotateToAngle() {
-    driveSystem = Factory.getDrive();
-    lime = Factory.getLime();
+  private final ClimbSubsystem cs;
 
+  public ActivateWinches() {
     // Use addRequirements() here to declare subsystem dependencies.
+    cs = Factory.getClimb();
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    driveSystem.errorAccumReset();
-    isDone = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveSystem.rotateByError(lime.getXOffsetAngle());
-    if (Math.abs(lime.getXOffsetAngle()) < error && lime.getValidTarget()) {
-      isDone = true;
-    }
-    if (lime.getValidTarget() == false) {
-      driveSystem.stopDrive();
-    }
+    cs.spinWinchMotors(0.2);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveSystem.stopDrive();
-    System.out.println("yuh");
+    cs.spinWinchMotors(0.0);
   }
 
-  // Returns true when the command should end.
+  // Returns true when the command should end
   @Override
   public boolean isFinished() {
-    if (isDone)
-      return true;
-    else
-      return false;
+    return false;
   }
 }
