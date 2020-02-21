@@ -38,8 +38,8 @@ public class ControlPanelSubsystem extends SubsystemBase {
     armMotor = new TalonSRX(Constants.cp_arm);
     armPlacement = true;
 
-    //armLimitUp = new DigitalInput(Constants.ARMLIMITUP);
-    //armLimitDown = new DigitalInput(Constants.ARMLIMITDOWN);
+    armLimitUp = new DigitalInput(Constants.ARMLIMITUP);
+    armLimitDown = new DigitalInput(Constants.ARMLIMITDOWN);
   }
   public void spin(double speed) {
     //-.5
@@ -63,21 +63,21 @@ public class ControlPanelSubsystem extends SubsystemBase {
   }
   public void moveArm() {
     if (armPlacement == false) {
-      //if (armLimitUp.get() == false) {
+      while (armLimitUp.get() == false) {
         armMotor.set(ControlMode.PercentOutput, -0.1);
-      //}
-      //else if (armLimitUp.get()) {
-        //armMotor.set(ControlMode.PercentOutput, 0.0);
-      //}
+      }
+      if (armLimitUp.get()) {
+        armMotor.set(ControlMode.PercentOutput, 0.0);
+      }
     }
     else if (armPlacement == true) {
-      //if (armLimitDown.get() == false) {
+      while (armLimitDown.get() == false) {
         //Moves the arm down
-        //armMotor.set(ControlMode.PercentOutput, 0.1);
-      //}
-      //if (armLimitDown.get()) {
+        armMotor.set(ControlMode.PercentOutput, 0.1);
+      }
+      if (armLimitDown.get()) {
         //armMotor.set(ControlMode.PercentOutput, 0.0);
-      //}
+      }
     }
   }
 

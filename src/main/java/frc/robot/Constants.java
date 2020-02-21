@@ -68,4 +68,8 @@ public final class Constants {
     public static final int intake_sensor4 = 3;
     public static final int intake_sensor5 = 4;
 
+    /*Limit Switches*/
+    public static final int ARMLIMITUP = 5;
+    public static final int ARMLIMITDOWN = 6;
+
 }
