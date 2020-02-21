@@ -7,21 +7,28 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.LimelightSubsystem;
+import edu.wpi.first.wpilibj.Joystick;
 
-public class RotateToAngle extends CommandBase {
+public class DriveWithTargeting extends CommandBase {
   private final LimelightSubsystem lime;
   private final DriveSystem driveSystem;
+  private final Joystick joy;
   private double error = 0.5;
   private boolean isDone = false;
+  private double X;
+  private double Y;
 
   /**
    * Creates a new RotateToAngle.
    */
-  public RotateToAngle() {
+  public DriveWithTargeting() {
+    joy = RobotContainer.getJoy();
     driveSystem = Factory.getDrive();
     lime = Factory.getLime();
 
@@ -31,27 +38,38 @@ public class RotateToAngle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    lime.visionOn();
     driveSystem.errorAccumReset();
-    isDone = false;
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveSystem.rotateByError(lime.getXOffsetAngle());
-    if (Math.abs(lime.getXOffsetAngle()) < error && lime.getValidTarget()) {
-      isDone = true;
-    }
-    if (lime.getValidTarget() == false) {
-      driveSystem.stopDrive();
-    }
+    X = joy.getX();
+    Y = joy.getY();
+
+    if (Math.abs(X) < 0.15) {
+      X = 0.0;
+      SmartDashboard.putString("X Deadzone", "X is in deadzone!");
+    } else
+      SmartDashboard.putString("X Deadzone", "X is not in deadzone!");
+
+    if (Math.abs(Y) < 0.15) {
+      Y = 0.0;
+      SmartDashboard.putString("Y Deadzone", "Y is in deadzone!");
+    } else
+      SmartDashboard.putString("Y Deadzone", "Y is not in deadzone!");
+
+    driveSystem.driveWithTargeting(X, -Y, lime.getXOffsetAngle());
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     driveSystem.stopDrive();
-    System.out.println("yuh");
+    lime.switchCamMode();
   }
 
   // Returns true when the command should end.
