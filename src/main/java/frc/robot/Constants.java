@@ -22,49 +22,50 @@ public final class Constants {
 
     /* Motors */
     // Intake
-    public static final int intake_primary = 5;
-    public static final int intake_conveyor1 = 6;
-    public static final int intake_conveyor2 = 7;
+    public static final int INTAKE_PRIMARY = 5;
+    public static final int INTAKE_CONVEYOR1 = 6;
+    public static final int INTAKE_CONVEYOR2 = 7;
 
     // Launch
-    public static final int launch_motor1 = 8;
-    public static final int launch_motor2 = 9;
+    public static final int LAUNCH_MOTOR1 = 8;
+    public static final int LAUNCH_MOTOR2 = 9;
 
     // Drive
-    public static final int drive_motorR1 = 3;
-    public static final int drive_motorR2 = 1;
-    public static final int drive_motorL1 = 4;
-    public static final int drive_motorL2 = 2;
+    public static final int DRIVE_MOTOR_R1 = 3;
+    public static final int DRIVE_MOTOR_R2 = 1;
+    public static final int DRIVE_MOTOR_L1 = 4;
+    public static final int DRIVE_MOTOR_L2 = 2;
 
     // Climb
-    public static final int climb_telescope = 10;
-    public static final int climb_winch1 = 11;
-    public static final int climb_winch2 = 12;
+    public static final int CLIMB_TELESCOPE = 10;
+    public static final int CLIMB_WINCH1 = 11;
+    public static final int CLIMB_WINCH2 = 12;
 
     // Control Panel
-    public static final int cp_rotate = 9;
+    public static final int CP_ROTATE = 9;
+    public static final int CP_ARM = 13;
 
     /* Buttons */
     // Driver controller
-    public static final int driver_controller = 0;
-    public static final int driver_autoAlign = 1;
-    public static final int driver_fieldOrient = 2;
-    public static final int driver_turbo = 5;
+    public static final int DRIVER_CONTROLLER = 0;
+    public static final int DRIVER_AUTOALIGN = 1;
+    public static final int DRIVER_FIELDORIENT = 2;
+    public static final int DRIVER_TURBO = 5;
 
     // Operator buttons
-    public static final int operator_controller = 1;
-    public static final int op_launch = 4;
-    public static final int op_slow = 5;
-    public static final int op_intake = 6;
-    public static final int op_lockWinch = 7;
-    public static final int op_runWinch = 8;
+    public static final int OPERATOR_CONTROLLER = 1;
+    public static final int OP_LAUNCH = 4;
+    public static final int OP_SLOW = 5;
+    public static final int OP_INTAKE = 6;
+    public static final int OP_LOCKWINCH = 7;
+    public static final int OP_RUNWINCH = 8;
 
     /* Sensors */
     // Intake sensors
-    public static final int intake_sensor1 = 0;
-    public static final int intake_sensor2 = 1;
-    public static final int intake_sensor3 = 2;
-    public static final int intake_sensor4 = 3;
-    public static final int intake_sensor5 = 4;
+    public static final int INTAKE_SENSOR1 = 0;
+    public static final int INTAKE_SENSOR2 = 1;
+    public static final int INTAKE_SENSOR3 = 2;
+    public static final int INTAKE_SENSOR4 = 3;
+    public static final int INTAKE_SENSOR5 = 4;
 
 }
