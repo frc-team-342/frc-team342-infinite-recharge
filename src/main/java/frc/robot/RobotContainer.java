@@ -80,24 +80,24 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Driver controller
-    driver = new Joystick(Constants.driver_controller);
+    driver = new Joystick(Constants.DRIVER_CONTROLLER);
     
-    driver_autoAlignBtn = new JoystickButton(driver, Constants.driver_autoAlign);
-    driver_fieldOrientBtn = new JoystickButton(driver, Constants.driver_fieldOrient);
-    driver_turboBtn = new JoystickButton(driver, Constants.driver_turbo);
+    driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTOALIGN);
+    driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELDORIENT);
+    driver_turboBtn = new JoystickButton(driver, Constants.DRIVER_TURBO);
 
     driver_autoAlign = new AngleWithLimelight();
     driver_fieldOrient = new ToggleFieldOriented();
     driver_turbo = new ToggleTurboMode();
 
     // Operator controller
-    operator = new XboxController(Constants.operator_controller);
+    operator = new XboxController(Constants.OPERATOR_CONTROLLER);
 
-    op_launchBtn = new JoystickButton(operator, Constants.op_launch);
-    op_slowBtn = new JoystickButton(operator, Constants.op_slow);
-    op_intakeBtn = new JoystickButton(operator, Constants.op_intake);
-    op_lockWinchBtn = new JoystickButton(operator, Constants.op_lockWinch);
-    op_runWinchBtn = new JoystickButton(operator, Constants.op_runWinch);
+    op_launchBtn = new JoystickButton(operator, Constants.OP_LAUNCH);
+    op_slowBtn = new JoystickButton(operator, Constants.OP_SLOW);
+    op_intakeBtn = new JoystickButton(operator, Constants.OP_INTAKE);
+    op_lockWinchBtn = new JoystickButton(operator, Constants.OP_LOCKWINCH);
+    op_runWinchBtn = new JoystickButton(operator, Constants.OP_RUNWINCH);
 
     op_launch = new LaunchWithButton();
     op_slow = new ToggleSlowMode();

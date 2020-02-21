@@ -36,10 +36,10 @@ public class Factory {
     public static DriveSystem getDrive(){
         if(driveSystem == null){
             driveSystem = new DriveSystem(
-                new CANSparkMax(Constants.drive_motorL1, MotorType.kBrushless), 
-                new CANSparkMax(Constants.drive_motorL2, MotorType.kBrushless),
-                new CANSparkMax(Constants.drive_motorR1, MotorType.kBrushless), 
-                new CANSparkMax(Constants.drive_motorR2, MotorType.kBrushless)
+                new CANSparkMax(Constants.DRIVE_MOTOR_L1, MotorType.kBrushless), 
+                new CANSparkMax(Constants.DRIVE_MOTOR_L2, MotorType.kBrushless),
+                new CANSparkMax(Constants.DRIVE_MOTOR_R1, MotorType.kBrushless), 
+                new CANSparkMax(Constants.DRIVE_MOTOR_R2, MotorType.kBrushless)
             );
         }
         return driveSystem;

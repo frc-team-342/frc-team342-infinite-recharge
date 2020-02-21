@@ -26,7 +26,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
   Encoder encoder = new Encoder(1, 2, false, EncodingType.k1X);
 
   public ControlPanelSubsystem() {
-    rotater = new TalonSRX(Constants.cp_rotate);
+    rotater = new TalonSRX(Constants.CP_ROTATE);
   }
   public void spin(double speed) {
     //-.5
