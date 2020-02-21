@@ -13,15 +13,15 @@ import frc.robot.subsystems.IntakeAndOutake;
 import frc.robot.Factory;
 import frc.robot.RobotContainer;
 
-public class LaunchWithButton extends CommandBase {
+public class ShootWithButton extends CommandBase {
   /**
-   * Will launch the powercells 
+   * Will shooter the powercells 
    */
 
    private final IntakeAndOutake intakeAndOutake; 
    private final Joystick joy; 
 
-  public LaunchWithButton() {
+  public ShootWithButton() {
     intakeAndOutake = Factory.getIntakeOutake();
     joy = RobotContainer.getJoy(); 
   }
@@ -32,8 +32,7 @@ public class LaunchWithButton extends CommandBase {
 
   @Override
   public void execute() {
-    //TODO test velocity later 
-    intakeAndOutake.outake(1000.0);  
+    intakeAndOutake.outake(25000);  
   }
 
   @Override

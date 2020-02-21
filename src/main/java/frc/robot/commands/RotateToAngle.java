@@ -7,84 +7,60 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Factory;
 import frc.robot.subsystems.DriveSystem;
-import frc.robot.Factory; 
+import frc.robot.subsystems.LimelightSubsystem;
 
 public class RotateToAngle extends CommandBase {
+  private final LimelightSubsystem lime;
+  private final DriveSystem driveSystem;
+  private double error = 0.5;
+  private boolean isDone = false;
+
   /**
-   * Rotates the robot to a given angle
+   * Creates a new RotateToAngle.
    */
-  
-  private final DriveSystem driveSystem; 
+  public RotateToAngle() {
+    driveSystem = Factory.getDrive();
+    lime = Factory.getLime();
 
-  private double angle;
-  private double gyro_angle; 
-
-  private boolean TurnRight;
-
-  private static final double RotateSpeed = 1.0;
-  private static final double RotateSlowSpeed = 0.5; 
-  private static final double margin = 5;
-	private static double slowmargin;
-	private static final double SPEED = 0.7;
-
-  public RotateToAngle(double angle) {
-    driveSystem = Factory.getDrive(); 
-    this.angle = angle; 
-    slowmargin = angle / 2; 
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    driveSystem.resetGyro(); 
+    driveSystem.errorAccumReset();
+    isDone = false;
   }
 
+  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    double CurrentDriveSpeed;
-		boolean slowdown = (gyro_angle) <= (angle) + slowmargin && (gyro_angle) >= (angle) - slowmargin;
-    
-    gyro_angle = driveSystem.getGyro(false); 
-
-    double diff = angle - gyro_angle; 
-
-    if(diff<0) {
-      diff = diff + 360;
-    } else if (diff > 180){
-      TurnRight = false;
-    } else {
-      TurnRight = true; 
+    driveSystem.rotateByError(lime.getXOffsetAngle());
+    if (Math.abs(lime.getXOffsetAngle()) < error && lime.getValidTarget()) {
+      isDone = true;
     }
-
-    SmartDashboard.putNumber("diff value: ", diff);
-
-    if(slowdown){
-      CurrentDriveSpeed = RotateSlowSpeed;
-    } else {
-      CurrentDriveSpeed = RotateSpeed;
-    }
-
-    if(TurnRight){
-      driveSystem.Drive(CurrentDriveSpeed * SPEED, CurrentDriveSpeed * SPEED, CurrentDriveSpeed); 
-    } else {
-      driveSystem.Drive(-CurrentDriveSpeed * SPEED, -CurrentDriveSpeed * SPEED, -CurrentDriveSpeed);
+    if (lime.getValidTarget() == false) {
+      driveSystem.stopDrive();
     }
   }
 
+  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveSystem.stopDrive(); 
+    driveSystem.stopDrive();
+    System.out.println("yuh");
   }
 
+  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (isDone)
+      return true;
+    else
+      return false;
 
-		boolean isFinished = ((gyro_angle) <= (angle) + margin && (gyro_angle) >= (angle) - margin);
-    
-    System.out.println(gyro_angle); 
-    return isFinished;
   }
 }

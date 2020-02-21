@@ -1,39 +1,39 @@
 package frc.robot.commands;
 
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Factory;
+import frc.robot.subsystems.DriveSystem;
 
-/**
- * An example command that uses an example subsystem.
- */
-public class ExampleCommand extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ExampleSubsystem m_subsystem;
+public class AutoMove extends CommandBase {
+  private static DriveSystem driveSystem;
+  private double Y;
 
   /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
+   * Creates a new AutoMove.
    */
-  public ExampleCommand(ExampleSubsystem subsystem) {
-    m_subsystem = subsystem;
+  public AutoMove(double y) {
+    Y = y;
+    driveSystem = Factory.getDrive();
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    driveSystem.Drive(0.0, Y, 0.0);
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    driveSystem.stopDrive();
   }
 
   // Returns true when the command should end.

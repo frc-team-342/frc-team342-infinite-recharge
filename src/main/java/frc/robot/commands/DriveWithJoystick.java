@@ -46,46 +46,32 @@ public class DriveWithJoystick extends CommandBase {
     SmartDashboard.putNumber("Y Axis", Y);
     SmartDashboard.putNumber("Z Axis", Z);
 
-
-    if(Math.abs(X) < 0.15){
+    if (Math.abs(X) < 0.15) {
       X = 0.0;
       SmartDashboard.putString("X Deadzone", "X is in deadzone!");
-    }
-    else  
+    } else
       SmartDashboard.putString("X Deadzone", "X is not in deadzone!");
 
-    if(Math.abs(Y) < 0.15){
+    if (Math.abs(Y) < 0.15) {
       Y = 0.0;
-      SmartDashboard.putString("Y Deadzone","Y is in deadzone!");
-    }
-    else
+      SmartDashboard.putString("Y Deadzone", "Y is in deadzone!");
+    } else
       SmartDashboard.putString("Y Deadzone", "Y is not in deadzone!");
-    
-    if(Math.abs(Z) < 0.15){
+
+    if (Math.abs(Z) < 0.15) {
       Z = 0.0;
       SmartDashboard.putString("Z Deadzone", "Z is in deadzone!");
-    }
-    else
+    } else
       SmartDashboard.putString("Z Deadzone", "Z is not in deadzone!");
 
     driveSystem.Drive(X, -Y, Z);
 
-    if (Math.abs(X) < 0.4) {
-      X = 0.0;
-    }
-    if (Math.abs(Y) < 0.4) {
-      Y = 0.0;
-    }
-    if (Math.abs(Z) < 0.4) {
-      Z = 0.0;
-    }
-    driveSystem.DriveMecanum(-X, Y, -Z);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveSystem.Drive(0.0, 0.0, 0.0);
+    driveSystem.stopDrive();
   }
 
   // Returns true when the command should end.
