@@ -12,6 +12,7 @@ package frc.robot;
  */
 
 public final class Constants {
+
     /*
      * Follow these variable naming conventions: - Motor names should be named
      * prefixed by the subsystem they are a part of, followed by its function and
@@ -71,5 +72,4 @@ public final class Constants {
     /*Limit Switches*/
     public static final int ARMLIMITUP = 5;
     public static final int ARMLIMITDOWN = 6;
-
 }
