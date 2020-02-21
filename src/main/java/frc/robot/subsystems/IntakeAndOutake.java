@@ -39,7 +39,7 @@ public class IntakeAndOutake extends SubsystemBase {
   private double height = 77.125;
 
   // Gravity in in/s
-  private double gravity = 386.09;
+  private double gravity = 386.22;
 
   private final LimelightSubsystem lime;
 
@@ -90,8 +90,8 @@ public class IntakeAndOutake extends SubsystemBase {
   }
 
   public void outake() {
-    double numerator = -(Math.sqrt(gravity) * Math.sqrt(lime.getDistance()) * Math.sqrt(Math.pow(Math.tan(hoodAngle), 2) + 1.0));
-    double denominator = Math.sqrt(2 * Math.tan(hoodAngle) * (2 * (height) / lime.getDistance()));
+    double numerator = (Math.sqrt(gravity) * Math.sqrt(lime.getDistance()) * Math.sqrt(Math.pow(Math.tan(hoodAngle), 2) + 1.0));
+    double denominator = Math.sqrt(2 * Math.tan(hoodAngle) + (2 * (height) / lime.getDistance()));
 
     double inchPerSec = 2 * (numerator / denominator);
     double unitConversion = 819.2/(6.0*Math.PI);
@@ -134,7 +134,7 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
     SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
 
-    SmartDashboard.putNumber("Velocity: ", codeToRpms(shooter1.getSelectedSensorVelocity()));
+    SmartDashboard.putNumber("Velocity: ", shooter1.getSelectedSensorVelocity());
     // if (sensor1.get() && sensor2.get() && sensor3.get())
     // intakeStop();
   }
