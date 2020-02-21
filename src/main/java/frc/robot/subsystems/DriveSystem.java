@@ -32,6 +32,12 @@ public class DriveSystem extends SubsystemBase {
   private CANSparkMax motorLeft1; 
   private CANSparkMax motorLeft2;
 
+  public CANEncoder encoderL1;
+  public CANEncoder encoderL2;
+  public CANEncoder encoderR1;
+  public CANEncoder encoderR2;
+
+  private AHRS NavX;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
 
   private boolean isFieldOriented = false;
@@ -45,7 +51,6 @@ public class DriveSystem extends SubsystemBase {
   private static final int current_limit = 60;
   private double accumError = 0.0;
 
-  private AHRS NavX;
   private MecanumDrive mecanumDrive;
 
   /**
@@ -92,6 +97,10 @@ public class DriveSystem extends SubsystemBase {
     setPID(motorRight2);
 
     motorLeft1.getEncoder().setPosition(0);
+    encoderL1 = new CANEncoder(motorLeft1);
+    encoderL2 = new CANEncoder(motorLeft2);
+    encoderR1 = new CANEncoder(motorRight1);
+    encoderR2 = new CANEncoder(motorRight2); 
 
     mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
 

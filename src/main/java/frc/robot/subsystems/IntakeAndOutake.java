@@ -45,15 +45,17 @@ public class IntakeAndOutake extends SubsystemBase {
   private final LimelightSubsystem lime;
 
   public IntakeAndOutake() {
-    intake = new TalonSRX(Constants.INTAKE);
-    shooter1 = new TalonSRX(Constants.shooter1);
-    shooter2 = new TalonSRX(Constants.shooter2);
-    load1 = new VictorSPX(Constants.LOAD1);
-    load2 = new VictorSPX(Constants.LOAD2);
+    intake = new TalonSRX(Constants.INTAKE_PRIMARY);
+    launch1 = new TalonSRX(Constants.LAUNCH_MOTOR1);
+    launch2 = new TalonSRX(Constants.LAUNCH_MOTOR2);
+    load1 = new TalonSRX(Constants.INTAKE_CONVEYOR1);
+    load2 = new TalonSRX(Constants.INTAKE_CONVEYOR2);
 
-    sensor1 = new DigitalInput(Constants.INTAKESENSOR1);
-    sensor2 = new DigitalInput(Constants.INTAKESENSOR2);
-    sensor3 = new DigitalInput(Constants.INTAKESENSOR3);
+    sensor1 = new DigitalInput(Constants.INTAKE_SENSOR1);
+    sensor2 = new DigitalInput(Constants.INTAKE_SENSOR2);
+    sensor3 = new DigitalInput(Constants.INTAKE_SENSOR3);
+    sensor4 = new DigitalInput(Constants.INTAKE_SENSOR4);
+    sensor5 = new DigitalInput(Constants.INTAKE_SENSOR5); 
 
     shooter1.setInverted(true);
     shooter2.setInverted(true);

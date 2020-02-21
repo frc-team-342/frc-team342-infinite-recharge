@@ -46,7 +46,7 @@ public class LimelightSubsystem extends SubsystemBase {
    * 
    */
   public double getDistance() {
-    return (98.25 - 21.125) / Math.tan(yOffsetAngle * Math.PI / 180);
+    return (98.25 - 19.528) / Math.tan(yOffsetAngle * Math.PI / 180);
   }
 
   /*
@@ -87,6 +87,7 @@ public class LimelightSubsystem extends SubsystemBase {
   /*
    * Returns horizontal angle of target offset from crosshair
    * 
+   *  
    */
   public double getXOffsetAngle() {
     return xOffsetAngle;
@@ -95,6 +96,7 @@ public class LimelightSubsystem extends SubsystemBase {
   /*
    * Returns vertical angle of target offset from crosshair
    * 
+   *  
    */
   public double getYOffsetAngle() {
     return yOffsetAngle;

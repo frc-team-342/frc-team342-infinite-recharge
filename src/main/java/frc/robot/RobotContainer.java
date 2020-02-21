@@ -7,9 +7,11 @@
 
 package frc.robot;
 
+import frc.robot.subsystems.JetsonSubsystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+<<<<<<< HEAD
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithPercent;
 import frc.robot.commands.DriveWithTargeting;
@@ -21,6 +23,33 @@ import frc.robot.subsystems.IntakeAndOutake;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+=======
+import edu.wpi.first.wpilibj.XboxController.Button;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import frc.robot.commands.RotateToAngle;
+import frc.robot.commands.IntakeWithButton;
+import frc.robot.commands.LaunchWithButton;
+import frc.robot.commands.DriveWithJoystick;
+
+import frc.robot.subsystems.DriveSystem;
+import frc.robot.commands.Autonomous;
+import frc.robot.commands.DriveWithPercent;
+import frc.robot.commands.ToggleFieldOriented;
+import frc.robot.commands.TogglePID;
+import frc.robot.commands.ToggleSlowMode;
+import frc.robot.commands.ToggleTurboMode;
+import frc.robot.commands.ZeroGyro;
+import frc.robot.commands.ChangeColor;
+import frc.robot.subsystems.ControlPanelSubsystem;
+import frc.robot.subsystems.DriveSystem;
+import frc.robot.commands.ActivateTelescopes;
+import frc.robot.commands.ActivateWinches;
+import frc.robot.commands.AngleWithLimelight;
+import frc.robot.commands.LockWinches;
+>>>>>>> 78670a7a61976ce54a67c53d9d59cb3232c5a1c5
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -31,84 +60,78 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 
 public class RobotContainer {
-  private static JoystickButton gyrozeroer;
-  private static Joystick joy;
-  private static JoystickButton fieldtoggle;
-  private static JoystickButton pidtoggle;
-  private static JoystickButton toggleSlow;
-  private static JoystickButton toggleTurbo;
-  private static JoystickButton rotateToggle;
-  private static JoystickButton toggleTarget;
-  private static JoystickButton trigger;
-  private static JoystickButton side;
-  private static JoystickButton toggleReverse;
 
-  private final DriveWithJoystick driveWithJoystick;
-  private final DriveWithPercent driveWithPercent;
-  private final DriveSystem driveSystem;
-  private final IntakeAndOutake intakeAndOut;
+  // Driver controller
+  private static Joystick driver; // port 0
 
-  private final RotateToAngle rotate = new RotateToAngle();
-  private final IntakeWithButton m_intakeWithButton = new IntakeWithButton();
-  private final ShootWithButton m_shooterWithButton = new ShootWithButton();
+  private JoystickButton driver_autoAlignBtn; // button 1
+  private JoystickButton driver_fieldOrientBtn; // button 2
+  private JoystickButton driver_turboBtn; // button 5
 
-  private Command field;
-  private Command slow;
-  private Command turbo;
-  private Command zero;
-  private Command pid;
-  private Command target;
-  private Command reversed;
+  private Command driver_autoAlign;
+  private Command driver_fieldOrient;
+  private Command driver_turbo;
+
+  // Operator controller
+  private static XboxController operator;
+
+  private JoystickButton op_launchBtn; // button 4
+  private JoystickButton op_slowBtn; // button 5
+  private JoystickButton op_intakeBtn; // button 6
+  private JoystickButton op_lockWinchBtn; // button 7
+  private JoystickButton op_runWinchBtn; // button 8
+
+  private Command op_launch;
+  private Command op_slow;
+  private Command op_intake;
+  private Command op_lockWinch;
+  private Command op_runWinch;
+
+  // Autonomous
+  private Command auto;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-
   public RobotContainer() {
-    driveSystem = Factory.getDrive();
-    joy = new Joystick(Constants.driver_joystick);
-    driveWithJoystick = new DriveWithJoystick();
-    driveWithPercent = new DriveWithPercent();
-    intakeAndOut = Factory.getIntakeOutake();
+    // Driver controller
+    driver = new Joystick(Constants.DRIVER_CONTROLLER);
+    
+    driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTOALIGN);
+    driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELDORIENT);
+    driver_turboBtn = new JoystickButton(driver, Constants.DRIVER_TURBO);
 
-    gyrozeroer = new JoystickButton(joy, Constants.zeroGyro);
-    fieldtoggle = new JoystickButton(joy, Constants.fieldToggler);
-    // pidtoggle = new JoystickButton(joy, Constants.pidToggler);
-    toggleSlow = new JoystickButton(joy, Constants.toggleSlow);
-    toggleTurbo = new JoystickButton(joy, Constants.toggleTurbo);
-    rotateToggle = new JoystickButton(joy, Constants.pidToggler);
-    toggleTarget = new JoystickButton(joy, Constants.toggleTarget);
-    toggleReverse = new JoystickButton(joy, Constants.toggleReverse);
+    driver_autoAlign = new AngleWithLimelight();
+    driver_fieldOrient = new ToggleFieldOriented();
+    driver_turbo = new ToggleTurboMode();
 
-    trigger = new JoystickButton(joy, Constants.TRIGGER);
-    side = new JoystickButton(joy, Constants.SIDE);
+    // Operator controller
+    operator = new XboxController(Constants.OPERATOR_CONTROLLER);
 
-    field = new InstantCommand(driveSystem::setFieldOriented, driveSystem);
-    slow = new InstantCommand(driveSystem::setSlow, driveSystem);
-    turbo = new InstantCommand(driveSystem::setTurbo, driveSystem);
-    zero = new InstantCommand(driveSystem::zeroGyro, driveSystem);
-    pid = new InstantCommand(driveSystem::setPIDLooped, driveSystem);
-    target = new InstantCommand(driveSystem::toggleTargeting, driveSystem);
-    reversed = new InstantCommand(intakeAndOut::setReverse, intakeAndOut);
+    op_launchBtn = new JoystickButton(operator, Constants.OP_LAUNCH);
+    op_slowBtn = new JoystickButton(operator, Constants.OP_SLOW);
+    op_intakeBtn = new JoystickButton(operator, Constants.OP_INTAKE);
+    op_lockWinchBtn = new JoystickButton(operator, Constants.OP_LOCKWINCH);
+    op_runWinchBtn = new JoystickButton(operator, Constants.OP_RUNWINCH);
 
-    // Configure the button bindings
+    op_launch = new LaunchWithButton();
+    op_slow = new ToggleSlowMode();
+    op_intake = new IntakeWithButton();
+    op_lockWinch = new LockWinches();
+    op_runWinch = new ActivateWinches();
+
+    // Autonomous
+    auto = new Autonomous();
+
     configureButtonBindings();
   }
 
-  public static Joystick getJoy() {
-    return joy;
+  public static Joystick getJoy(){
+    return driver;
   }
 
-  public static double driverAxis() {
-    return joy.getRawAxis(Constants.driveYAxis);
-  }
-
-  public Command getDrive() {
-    return driveWithJoystick;
-  }
-
-  public Command getPercent() {
-    return driveWithPercent;
+  public static XboxController getTele() {
+    return operator;
   }
 
   /**
@@ -118,17 +141,17 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    gyrozeroer.whenPressed(zero);
-    fieldtoggle.whenPressed(field);
-    // pidtoggle.whenPressed(pid);
-    toggleSlow.whenPressed(slow);
-    toggleTurbo.whenPressed(turbo);
-    rotateToggle.whileHeld(rotate);
-    toggleTarget.whenPressed(target);
-    toggleReverse.whenPressed(reversed);
+    // Driver button bindings
+    driver_autoAlignBtn.whenPressed(driver_autoAlign);
+    driver_fieldOrientBtn.whenPressed(driver_fieldOrient);
+    driver_turboBtn.whenPressed(driver_turbo);
 
-    side.toggleWhenPressed(m_intakeWithButton);
-    trigger.toggleWhenPressed(m_shooterWithButton);
+    // Operator button bindings
+    op_launchBtn.whenPressed(op_launch);
+    op_slowBtn.whenPressed(op_slow);
+    op_intakeBtn.whenPressed(op_intake);
+    op_lockWinchBtn.whenPressed(op_lockWinch);
+    op_runWinchBtn.whenPressed(op_runWinch);
   }
 
   /**
@@ -136,5 +159,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+  public Command getAutonomousCommand() {
+    return auto;
+  }
 
 }
