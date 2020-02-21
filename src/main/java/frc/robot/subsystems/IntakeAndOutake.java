@@ -111,6 +111,19 @@ public class IntakeAndOutake extends SubsystemBase {
 
   }
 
+  public void outake(double velocity){
+    shooter2.follow(shooter1);
+    shooter1.set(ControlMode.Velocity, velocity);
+
+    System.out.println("Velocity: " + shooter1.getSelectedSensorVelocity());
+
+    if (shooter1.getSelectedSensorVelocity() + error < velocity && !sensor3.get())
+      load2.set(ControlMode.PercentOutput, 0.0);
+    else
+      load2.set(ControlMode.PercentOutput, 0.6);
+    load1.set(ControlMode.PercentOutput, 0.6);
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Shooter 1 Percent: ", shooter1.getMotorOutputPercent());
