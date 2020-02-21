@@ -11,7 +11,7 @@ public class DriveToDistance extends CommandBase {
    * https://www.chiefdelphi.com/t/neo-motor-integrated-encoder-w-spark-max-controller/340458
    */
 
-  private final DriveSystem driveSystem; 
+  //private final DriveSystem driveSystem; 
 
   private double goal;
 
@@ -31,7 +31,10 @@ public class DriveToDistance extends CommandBase {
 	//private double degrees_off_zero;
 	private double left_speed;
   private double right_speed;
-  
+  /*
+
+  commented out becuase this is an issue
+
   private static final double SPEED_CONST = 0.5;
   public static final double TEST_DISTANCE = 1.5;
 
@@ -71,4 +74,5 @@ public class DriveToDistance extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+  */
 }

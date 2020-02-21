@@ -45,6 +45,7 @@ public final class Constants {
     public static final int toggleSlow = 5;
     public static final int toggleTurbo = 6;
     public static final int toggleTarget = 7;
+    public static final int toggleReverse = 8;
     public static final int TRIGGER = 1;
     public static final int SIDE = 2;
 
