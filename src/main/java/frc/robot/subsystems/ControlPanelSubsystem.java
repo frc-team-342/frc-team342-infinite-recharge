@@ -14,6 +14,7 @@ import com.revrobotics.CANDigitalInput.LimitSwitch;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -28,26 +29,35 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
   private boolean armPlacement;
 
-  //Encoder encoder = new Encoder(1, 2, false, EncodingType.k1X);
+  // Encoder encoder = new Encoder(1, 2, false, EncodingType.k1X);
 
   public ControlPanelSubsystem() {
     rotater = new TalonSRX(Constants.CP_ROTATE);
     armMotor = new TalonSRX(Constants.CP_ARM);
     armPlacement = true;
 
-    
   }
 
   public void spin(double speed) {
     rotater.set(ControlMode.PercentOutput, speed);
 
     // Dividing pulses by 44.4 to find the revolutions
-    //double rotations = (int) (encoder.getDistance() / 44.4);
+    // double rotations = (int) (encoder.getDistance() / 44.4);
     // System.out.println(rotations);
   }
 
-  public int getLimit(){
-    return armMotor.isFwdLimitSwitchClosed();
+  public boolean getLimitFwd() {
+    if (armMotor.isFwdLimitSwitchClosed() == 1)
+      return true;
+    else
+      return false;
+  }
+
+  public boolean getLimitRev() {
+    if (armMotor.isRevLimitSwitchClosed() == 1)
+      return true;
+    else
+      return false;
   }
 
   public void setArmBoolean() {
@@ -60,15 +70,26 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
   public void moveArm() {
     if (armPlacement == false) {
-      armMotor.set(ControlMode.PercentOutput, -1.0);
+      if (!getLimitFwd())
+        armMotor.set(ControlMode.PercentOutput, -1.0);
+      else
+        stopArm();
+    } else if (armPlacement == true) {
+      if (!getLimitRev())
+        armMotor.set(ControlMode.PercentOutput, 1.0);
+      else
+        stopArm();
     }
-    else if(armPlacement==true){
-      armMotor.set(ControlMode.PercentOutput, 1.0);
-    }
+  }
+
+  public void stopArm() {
+    armMotor.set(ControlMode.PercentOutput, 0.0);
   }
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("Forward Limit Switch", getLimitFwd());
+    SmartDashboard.putBoolean("Reverse Limit Switch", getLimitRev());
     // This method will be called once per scheduler run
   }
 }
