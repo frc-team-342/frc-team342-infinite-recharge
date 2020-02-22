@@ -25,35 +25,33 @@ import frc.robot.subsystems.LimelightSubsystem;
 public class Factory {
     private static IntakeAndOutake intakeOutake = null; 
     private static DriveSystem driveSystem = null;
-    private static LimelightSubsystem lime = null;
-    private static IntakeAndOutake inAndOut = null;
-
-    public static DriveSystem getDrive() {
-        if (driveSystem == null)
-            driveSystem = new DriveSystem(new CANSparkMax(Constants.drive_motorL1, MotorType.kBrushless),
-                    new CANSparkMax(Constants.drive_motorL2, MotorType.kBrushless),
-                    new CANSparkMax(Constants.drive_motorR1, MotorType.kBrushless),
-                    new CANSparkMax(Constants.drive_motorR2, MotorType.kBrushless));
-        return driveSystem;
-    }
-
-    public static LimelightSubsystem getLime() {
-        if (lime == null)
-            lime = new LimelightSubsystem();
-        return lime;
-    }
-
-    public static IntakeAndOutake getIntakeOutake() {
-        if (inAndOut == null)
-            inAndOut = new IntakeAndOutake();
-        return inAndOut;
+    private static LimelightSubsystem limelightSystem = null;
+    private static ControlPanelSubsystem control = null;
+    private static JetsonSubsystem js = null;
+    private static ClimbSubsystem cs = null;
+    
+    public static IntakeAndOutake getIntakeOutake(){
+        if(intakeOutake == null){
+            intakeOutake = new IntakeAndOutake(); 
+        }
+        return intakeOutake; 
     }
     
-    public static LimelightSubsystem getLimelight() {
-        if(lime == null) {
-            lime = new LimelightSubsystem();
+    public static DriveSystem getDrive(){
+        if(driveSystem == null){
+            driveSystem = new DriveSystem(
+                new CANSparkMax(Constants.DRIVE_MOTOR_L1, MotorType.kBrushless), 
+                new CANSparkMax(Constants.DRIVE_MOTOR_L2, MotorType.kBrushless),
+                new CANSparkMax(Constants.DRIVE_MOTOR_R1, MotorType.kBrushless), 
+                new CANSparkMax(Constants.DRIVE_MOTOR_R2, MotorType.kBrushless)
+            );
         }
-        return lime;
+    }
+    public static LimelightSubsystem getLimelight() {
+        if(limelightSystem == null) {
+            limelightSystem = new LimelightSubsystem();
+        }
+        return limelightSystem;
     }
     public static ControlPanelSubsystem getControl(){
         if(control == null) {
@@ -66,6 +64,12 @@ public class Factory {
             js = new JetsonSubsystem();
         }    
         return js;
+    }
+    public static ClimbSubsystem getClimb() {
+        if (cs == null) {
+            cs = new ClimbSubsystem();
+        }
+        return cs;
     }
     public static ClimbSubsystem getClimb() {
         if (cs == null) {

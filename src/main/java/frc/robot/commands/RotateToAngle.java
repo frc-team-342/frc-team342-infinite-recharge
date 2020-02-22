@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
 import frc.robot.subsystems.DriveSystem;
@@ -23,7 +24,7 @@ public class RotateToAngle extends CommandBase {
    */
   public RotateToAngle() {
     driveSystem = Factory.getDrive();
-    lime = Factory.getLime();
+    lime = Factory.getLimelight();
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -61,6 +62,5 @@ public class RotateToAngle extends CommandBase {
       return true;
     else
       return false;
-
   }
 }

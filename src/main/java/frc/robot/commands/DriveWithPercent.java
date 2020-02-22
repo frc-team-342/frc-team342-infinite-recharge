@@ -17,7 +17,6 @@ public class DriveWithPercent extends CommandBase {
   private final DriveSystem driveSystem;
   private final Joystick joy;
   private double Y;
-
   /**
    * Creates a new DriveWithPercent.
    */

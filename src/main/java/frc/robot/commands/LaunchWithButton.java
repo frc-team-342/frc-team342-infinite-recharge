@@ -38,7 +38,9 @@ public class LaunchWithButton extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    intakeAndOutake.launchStop(); 
+
+    intakeAndOutake.shooterStop(); 
+
   }
 
   @Override

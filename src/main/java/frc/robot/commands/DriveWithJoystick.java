@@ -20,7 +20,6 @@ public class DriveWithJoystick extends CommandBase {
   private double X;
   private double Y;
   private double Z;
-
   /**
    * Creates a new DriveWithJoystick.
    */

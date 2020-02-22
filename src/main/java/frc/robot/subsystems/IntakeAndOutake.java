@@ -29,6 +29,7 @@ public class IntakeAndOutake extends SubsystemBase {
 
   private final double speed = 0.3;
   private final double speed2 = .75;
+  private boolean isReversed = false;
 
   private final int current_limit = 80;
   private final int current_limit_duration = 2000;
@@ -44,15 +45,15 @@ public class IntakeAndOutake extends SubsystemBase {
   private final LimelightSubsystem lime;
 
   public IntakeAndOutake() {
-    intake = new TalonSRX(Constants.INTAKE);
-    shooter1 = new TalonSRX(Constants.shooter1);
-    shooter2 = new TalonSRX(Constants.shooter2);
-    load1 = new VictorSPX(Constants.LOAD1);
-    load2 = new VictorSPX(Constants.LOAD2);
+    intake = new TalonSRX(Constants.INTAKE_PRIMARY);
+    shooter1 = new TalonSRX(Constants.LAUNCH_MOTOR1);
+    shooter2 = new TalonSRX(Constants.LAUNCH_MOTOR2);
+    load1 = new VictorSPX(Constants.INTAKE_CONVEYOR1);
+    load2 = new VictorSPX(Constants.INTAKE_CONVEYOR2);
 
-    sensor1 = new DigitalInput(Constants.INTAKESENSOR1);
-    sensor2 = new DigitalInput(Constants.INTAKESENSOR2);
-    sensor3 = new DigitalInput(Constants.INTAKESENSOR3);
+    sensor1 = new DigitalInput(Constants.INTAKE_SENSOR1);
+    sensor2 = new DigitalInput(Constants.INTAKE_SENSOR2);
+    sensor3 = new DigitalInput(Constants.INTAKE_SENSOR3);
 
     shooter1.setInverted(true);
     shooter2.setInverted(true);
@@ -75,7 +76,7 @@ public class IntakeAndOutake extends SubsystemBase {
     shooter1.config_kI(0, 0.0);
     shooter1.config_kD(0, 0.0);
 
-    lime = Factory.getLime();
+    lime = Factory.getLimelight();
 
   }
 
@@ -87,6 +88,16 @@ public class IntakeAndOutake extends SubsystemBase {
       load2.set(ControlMode.PercentOutput, 0.0);
     else
       load2.set(ControlMode.PercentOutput, 0.6);
+  }
+
+  public void reverseIntake(){
+    intake.set(ControlMode.PercentOutput, -speed2);
+    load1.set(ControlMode.PercentOutput, -speed);
+  }
+
+  public void setReverse(){
+    isReversed = !isReversed;
+    SmartDashboard.putBoolean("Intake Is Reversed", isReversed);
   }
 
   public void outake() {
