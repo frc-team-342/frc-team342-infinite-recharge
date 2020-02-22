@@ -8,23 +8,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
 import frc.robot.Factory;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.ControlPanelSubsystem;
 
-public class ActivateTelescopes extends CommandBase {
+public class ManualControlPanel extends CommandBase {
+  private final ControlPanelSubsystem cps;
   /**
-   * Creates a new ActivateTelescopes.
+   * Creates a new ManualControlPanel.
    */
-
-  private final ClimbSubsystem cs;
-
-  private double speed = -0.6;
-
-  public ActivateTelescopes() {
+  public ManualControlPanel() {
+    cps = Factory.getControl();
     // Use addRequirements() here to declare subsystem dependencies.
-    cs = Factory.getClimb();
   }
 
   // Called when the command is initially scheduled.
@@ -35,15 +29,13 @@ public class ActivateTelescopes extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      cs.setActivated(true);
-      cs.spinTeleMotor(speed);
-    }
+    cps.spin(0.5);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    cs.setActivated(false);
-    cs.spinTeleMotor(0.0);
+    cps.spin(0.0);
   }
 
   // Returns true when the command should end.

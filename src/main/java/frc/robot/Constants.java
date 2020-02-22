@@ -48,16 +48,16 @@ public final class Constants {
     /* Buttons */
     // Driver controller
     public static final int DRIVER_CONTROLLER = 0;
-    public static final int DRIVER_TURBO = 6;
-    public static final int DRIVER_SLOW = 5;
-    public static final int DRIVER_REVERSE = 2;
+    public static final int DRIVER_TURBO = 6; // top right
+    public static final int DRIVER_SLOW = 5; // top left
+    public static final int DRIVER_REVERSE = 2; // side button
     public static final int DRIVER_AUTO_ALIGN = 1; // trigger
-    public static final int DRIVER_FIELD_ORIENT = 3; // TODO: find where drive team wants this
-    public static final int DRIVER_ZERO = 4;
+    public static final int DRIVER_FIELD_ORIENT = 3; // bottom left
+    public static final int DRIVER_ZERO = 4; // bottom right
     
     // Operator buttons
     public static final int OPERATOR_CONTROLLER = 1;
-    public static final int OP_LAUNCH = 5; // TODO chnage name in left bumper
+    public static final int OP_LAUNCH = 5; // left bumper
     public static final int OP_SLOW = 2; // B button
     public static final int OP_INTAKE = 6; // right bumper
     public static final int OP_LOCK_WINCH = 7; // menu left
@@ -65,8 +65,8 @@ public final class Constants {
     public static final int OP_REVERSE = 3; // X button
     public static final int OP_CONTROL_ARM = 1; // A button
     public static final int OP_TELESCOPES = 4; // Y button
-    public static final int OP_CONTROL_LEFT = 9;
-    public static final int OP_CONTROL_RIGHT = 10;
+    public static final int OP_CONTROL_LEFT = 9; // left joy click
+    public static final int OP_CONTROL_RIGHT = 10; // right joy click
 
     /* Sensors */
     // Intake sensors

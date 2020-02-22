@@ -32,6 +32,8 @@ import frc.robot.commands.ActivateTelescopes;
 import frc.robot.commands.ActivateWinches;
 import frc.robot.commands.DriveWithTargeting;
 import frc.robot.commands.LockWinches;
+import frc.robot.commands.ManualControlPanel;
+import frc.robot.commands.MoveArm;
 import frc.robot.commands.ReverseIntake;
 
 /**
@@ -71,6 +73,8 @@ public class RobotContainer {
   private JoystickButton op_runWinchBtn; 
   private JoystickButton op_telescopesBtn;
   private JoystickButton op_reverseBtn;
+  private JoystickButton op_controlarmBtn;
+  private JoystickButton op_manual_wheelBtn;
 
   private Command op_launch;
   private Command op_slow;
@@ -79,6 +83,8 @@ public class RobotContainer {
   private Command op_runWinch;
   private Command op_telescopes;
   private Command op_reverse;
+  private Command op_controlarm;
+  private Command op_manual_wheel;
 
   // Autonomous
   private Command auto;
@@ -116,6 +122,8 @@ public class RobotContainer {
     op_runWinchBtn = new JoystickButton(operator, Constants.OP_RUN_WINCH);
     op_telescopesBtn = new JoystickButton(operator, Constants.OP_TELESCOPES);
     op_reverseBtn = new JoystickButton(operator, Constants.OP_REVERSE);
+    op_controlarmBtn = new JoystickButton(operator, Constants.OP_CONTROL_ARM);
+    op_manual_wheelBtn = new JoystickButton(operator, Constants.OP_CONTROL_RIGHT);
   
     op_launch = new LaunchWithButton();
     op_slow = new InstantCommand(driveSystem::setSlow, driveSystem);
@@ -124,6 +132,8 @@ public class RobotContainer {
     op_runWinch = new ActivateWinches();
     op_telescopes = new ActivateTelescopes();
     op_reverse = new ReverseIntake();
+    op_controlarm = new MoveArm();
+    op_manual_wheel = new ManualControlPanel();
 
     // Autonomous
     auto = new Autonomous();
@@ -162,6 +172,8 @@ public class RobotContainer {
     op_runWinchBtn.whenPressed(op_runWinch);
     op_telescopesBtn.whileHeld(op_telescopes);
     op_reverseBtn.whileHeld(op_reverse);
+    op_controlarmBtn.toggleWhenPressed(op_controlarm);
+    op_manual_wheelBtn.whileHeld(op_manual_wheel);
   }
 
  
