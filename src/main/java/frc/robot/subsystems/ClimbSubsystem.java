@@ -20,6 +20,7 @@ public class ClimbSubsystem extends SubsystemBase {
   // Creating three motors
   private static TalonSRX teleMotor;
   private static TalonSRX winch1;
+  private static TalonSRX winch2;
 
   private boolean enabled;
   private boolean teleActivated;
@@ -27,6 +28,7 @@ public class ClimbSubsystem extends SubsystemBase {
   public ClimbSubsystem() {
     teleMotor = new TalonSRX(Constants.CLIMB_TELESCOPE);
     winch1 = new TalonSRX(Constants.CLIMB_WINCH_1);
+    winch2 = new TalonSRX(Constants.CLIMB_WINCH_2);
 
     enabled = false;
     teleActivated = false;
@@ -40,8 +42,10 @@ public class ClimbSubsystem extends SubsystemBase {
   public void spinWinchMotors(double speed) {
     if (enabled) {
       winch1.set(ControlMode.PercentOutput, Math.abs(speed));
+      winch2.set(ControlMode.PercentOutput, Math.abs(speed));
     } else {
-      winch1.set(ControlMode.PercentOutput, 0);
+      winch1.set(ControlMode.PercentOutput, 0.0);
+      winch2.set(ControlMode.PercentOutput, 0.0);
     }
   }
 
