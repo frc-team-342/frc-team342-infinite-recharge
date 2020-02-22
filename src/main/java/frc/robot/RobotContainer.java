@@ -17,6 +17,7 @@ import frc.robot.commands.IntakeWithButton;
 import frc.robot.commands.ShootWithButton;
 import frc.robot.commands.RotateToAngle;
 import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.IntakeAndOutake;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -39,10 +40,12 @@ public class RobotContainer {
   private static JoystickButton toggleTarget;
   private static JoystickButton trigger;
   private static JoystickButton side;
+  private static JoystickButton intakeReverse;
 
   private final DriveWithJoystick driveWithJoystick;
   private final DriveWithPercent driveWithPercent;
   private final DriveSystem driveSystem;
+  private final IntakeAndOutake intakeAndOutake;
 
   private final RotateToAngle rotate = new RotateToAngle();
   private final IntakeWithButton m_intakeWithButton = new IntakeWithButton();
@@ -54,6 +57,7 @@ public class RobotContainer {
   private Command zero;
   private Command pid;
   private Command target;
+  private Command reverse;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -63,6 +67,7 @@ public class RobotContainer {
     joy = new Joystick(Constants.driver_joystick);
     driveWithJoystick = new DriveWithJoystick();
     driveWithPercent = new DriveWithPercent();
+    intakeAndOutake = Factory.getIntakeOutake();
 
     gyrozeroer = new JoystickButton(joy, Constants.zeroGyro);
     fieldtoggle = new JoystickButton(joy, Constants.fieldToggler);
@@ -71,6 +76,7 @@ public class RobotContainer {
     toggleTurbo = new JoystickButton(joy, Constants.toggleTurbo);
     rotateToggle = new JoystickButton(joy, Constants.pidToggler);
     toggleTarget = new JoystickButton(joy, Constants.toggleTarget);
+    intakeReverse = new JoystickButton(joy, Constants.toggleReversed);
 
     trigger = new JoystickButton(joy, Constants.TRIGGER);
     side = new JoystickButton(joy, Constants.SIDE);
@@ -81,6 +87,7 @@ public class RobotContainer {
     zero = new InstantCommand(driveSystem::zeroGyro, driveSystem);
     pid = new InstantCommand(driveSystem::setPIDLooped, driveSystem);
     target = new InstantCommand(driveSystem::toggleTargeting, driveSystem);
+    reverse = new InstantCommand(intakeAndOutake::setReversed, intakeAndOutake);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -116,6 +123,7 @@ public class RobotContainer {
     toggleTurbo.whenPressed(turbo);
     rotateToggle.whileHeld(rotate);
     toggleTarget.whenPressed(target);
+    intakeReverse.whenPressed(reverse);
 
     side.toggleWhenPressed(m_intakeWithButton);
     trigger.toggleWhenPressed(m_shooterWithButton);

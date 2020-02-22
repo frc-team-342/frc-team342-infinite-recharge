@@ -27,8 +27,9 @@ public class IntakeAndOutake extends SubsystemBase {
   private DigitalInput sensor2;
   private DigitalInput sensor3;
 
-  private final double speed = 0.3;
+  private final double speed = 0.6;
   private final double speed2 = .75;
+  private boolean isReversed = false;
 
   private final int current_limit = 80;
   private final int current_limit_duration = 2000;
@@ -56,6 +57,7 @@ public class IntakeAndOutake extends SubsystemBase {
 
     shooter1.setInverted(true);
     shooter2.setInverted(true);
+  
 
     shooter1.enableCurrentLimit(true);
     shooter1.configPeakCurrentLimit(current_limit);
@@ -68,7 +70,7 @@ public class IntakeAndOutake extends SubsystemBase {
     shooter1.configAllowableClosedloopError(0, 0, 25);
     shooter1.selectProfileSlot(0, 0);
     shooter1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    shooter1.setSensorPhase(true);
+    shooter1.setSensorPhase(false);
 
     shooter1.config_kF(0, 0.015);
     shooter1.config_kP(0, 0.03);
@@ -89,9 +91,23 @@ public class IntakeAndOutake extends SubsystemBase {
       load2.set(ControlMode.PercentOutput, 0.6);
   }
 
+  public void reverseIntake(){
+    intake.set(ControlMode.PercentOutput, -speed2);
+    load1.set(ControlMode.PercentOutput, -speed);
+  }
+
+  public void setReversed(){
+    isReversed = !isReversed;
+    SmartDashboard.putBoolean("Intake Is Reversed", isReversed);
+  }
+
+  public boolean getReversed(){
+    return isReversed;
+  }
+
   public void outake() {
-    double numerator = -(Math.sqrt(gravity) * Math.sqrt(lime.getDistance()) * Math.sqrt(Math.pow(Math.tan(hoodAngle), 2) + 1.0));
-    double denominator = Math.sqrt(2 * Math.tan(hoodAngle) * (2 * (height) / lime.getDistance()));
+    double numerator = (Math.sqrt(gravity) * Math.sqrt(lime.getDistance()) * Math.sqrt(Math.pow(Math.tan(hoodAngle), 2) + 1.0));
+    double denominator = Math.sqrt(2 * Math.tan(hoodAngle) - (2 * (height) / lime.getDistance()));
 
     double inchPerSec = 2 * (numerator / denominator);
     double unitConversion = 819.2/(6.0*Math.PI);
@@ -117,11 +133,14 @@ public class IntakeAndOutake extends SubsystemBase {
 
     System.out.println("Velocity: " + shooter1.getSelectedSensorVelocity());
 
-    if (shooter1.getSelectedSensorVelocity() + error < velocity && !sensor3.get())
+    if (shooter1.getSelectedSensorVelocity() + error < velocity && !sensor3.get()){
       load2.set(ControlMode.PercentOutput, 0.0);
-    else
+      load1.set(ControlMode.PercentOutput, 0.0);
+  }
+    else{
       load2.set(ControlMode.PercentOutput, 0.6);
-    load1.set(ControlMode.PercentOutput, 0.6);
+      load1.set(ControlMode.PercentOutput, 0.6);
+    }
   }
 
   @Override
@@ -134,7 +153,7 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
     SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
 
-    SmartDashboard.putNumber("Velocity: ", codeToRpms(shooter1.getSelectedSensorVelocity()));
+    SmartDashboard.putNumber("Velocity: ", shooter1.getSelectedSensorVelocity());
     // if (sensor1.get() && sensor2.get() && sensor3.get())
     // intakeStop();
   }

@@ -22,7 +22,10 @@ public class IntakeWithButton extends CommandBase {
 
   @Override
   public void execute() {
-    intakeAndOutake.intake();
+    if(intakeAndOutake.getReversed())
+      intakeAndOutake.reverseIntake();
+    else
+      intakeAndOutake.intake();
   }
 
   @Override

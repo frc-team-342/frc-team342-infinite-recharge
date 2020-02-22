@@ -34,6 +34,7 @@ public final class Constants {
     public static final int toggleTarget = 7;
     public static final int TRIGGER = 1;
     public static final int SIDE = 2;
+    public static final int toggleReversed = 8;
 
     public static final int INTAKE = 5;
     public static final int shooter1 = 8;
