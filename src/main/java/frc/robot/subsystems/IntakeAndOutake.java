@@ -29,7 +29,6 @@ public class IntakeAndOutake extends SubsystemBase {
 
   private final double speed = 0.6;
   private final double speed2 = .75;
-  private boolean isReversed = false;
 
   private final int current_limit = 80;
   private final int current_limit_duration = 2000;
@@ -152,15 +151,6 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Power Cell Count: ", powerCellCount); 
   }
 
-  public void setReversed(){
-    isReversed = !isReversed;
-    SmartDashboard.putBoolean("Intake Is Reversed", isReversed);
-  }
-
-  public boolean getReversed(){
-    return isReversed;
-  }
-
   public void outake() {
     powerCellCount();
     double numerator = (Math.sqrt(gravity) * Math.sqrt(lime.getDistance()) * Math.sqrt(Math.pow(Math.tan(hoodAngle), 2) + 1.0));
@@ -176,12 +166,14 @@ public class IntakeAndOutake extends SubsystemBase {
 
     System.out.println("Velocity: " + shooter1.getSelectedSensorVelocity());
 
-    if (shooter1.getSelectedSensorVelocity() + error < velocity && !sensor3.get())
+    if (shooter1.getSelectedSensorVelocity() + error < velocity && !sensor3.get()){
       load2.set(ControlMode.PercentOutput, 0.0);
-    else
+      load1.set(ControlMode.PercentOutput, 0.0);
+    }
+    else{
       load2.set(ControlMode.PercentOutput, 0.6);
-    load1.set(ControlMode.PercentOutput, 0.6);
-
+      load1.set(ControlMode.PercentOutput, 0.6);
+    }
   }
 
   public void outake(double velocity){
