@@ -20,14 +20,14 @@ public class ActivateTelescopes extends CommandBase {
    */
 
   private final ClimbSubsystem cs;
-  private final XboxController tele;
+  private final XboxController operator;
 
-  private double Y;
+  private double speed = -0.4;
 
   public ActivateTelescopes() {
     // Use addRequirements() here to declare subsystem dependencies.
     cs = Factory.getClimb();
-    tele = RobotContainer.getTele();
+    operator = RobotContainer.getOperator();
   }
 
   // Called when the command is initially scheduled.
@@ -38,18 +38,9 @@ public class ActivateTelescopes extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (tele.getY() > 0.1 || tele.getY() < -0.1)  { 
       cs.setActivated(true);
+      cs.spinTeleMotor(speed);
     }
-    else {
-      cs.setActivated(false);
-    }
-    System.out.println("\n-------" + cs.getActivated());
-    System.out.println(cs.getEnable());
-    Y = tele.getY();
-
-    cs.spinTeleMotor(Y);
-  }
 
   // Called once the command ends or is interrupted.
   @Override

@@ -1,9 +1,7 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.IntakeAndOutake;
 
 public class IntakeWithButton extends CommandBase {
@@ -11,12 +9,10 @@ public class IntakeWithButton extends CommandBase {
    * Intakes with left bumper
    */
 
-  private final IntakeAndOutake intakeAndOutake; 
-  private final Joystick joy; 
+  private final IntakeAndOutake intakeAndOutake;
 
   public IntakeWithButton() {
     intakeAndOutake = Factory.getIntakeOutake();
-    joy = RobotContainer.getJoy(); 
 
   }
 
@@ -26,7 +22,7 @@ public class IntakeWithButton extends CommandBase {
 
   @Override
   public void execute() {
-    intakeAndOutake.intake(); 
+    intakeAndOutake.intake();
   }
 
   @Override

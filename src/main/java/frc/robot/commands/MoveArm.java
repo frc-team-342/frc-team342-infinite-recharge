@@ -16,7 +16,7 @@ public class MoveArm extends CommandBase {
    * Creates a new MoveArm.
    */
 
-   private ControlPanelSubsystem cps;
+  private ControlPanelSubsystem cps;
 
   public MoveArm() {
     // Use addRequirements() here to declare subsystem dependencies.
