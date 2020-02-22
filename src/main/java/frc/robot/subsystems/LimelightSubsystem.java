@@ -18,10 +18,6 @@ public class LimelightSubsystem extends SubsystemBase {
   private NetworkTableEntry tv, ty, tx, camMode, ledMode;
   private double yOffsetAngle, xOffsetAngle;
   private int cameraMode, lightMode, validTarget;
-  private double X;
-  private double Y;
-  private double radius;
-  private boolean linedUp;
 
   /**
    * Creates a new LimelightSubsystem.
@@ -50,7 +46,7 @@ public class LimelightSubsystem extends SubsystemBase {
    * 
    */
   public double getDistance() {
-    return (98.25 - 19.528) / Math.tan(yOffsetAngle * Math.PI / 180);
+    return (98.25 - 21.125) / Math.tan(yOffsetAngle * Math.PI / 180);
   }
 
   /*
@@ -66,10 +62,7 @@ public class LimelightSubsystem extends SubsystemBase {
    * 
    */
   public double getDirectDistance() {
-    return Math.sqrt(
-      Math.pow(getXOffset(), 2) + 
-      Math.pow(getDistance(), 2)
-    );
+    return Math.sqrt(Math.pow(getXOffset(), 2) + Math.pow(getDistance(), 2));
   }
 
   /*
@@ -78,12 +71,22 @@ public class LimelightSubsystem extends SubsystemBase {
    */
   public void switchCamMode() {
     camMode.setNumber((cameraMode == 0) ? 1 : 0);
-    ledMode.setNumber((cameraMode == 0) ? 1: 3);
+    ledMode.setNumber((cameraMode == 0) ? 1 : 0);
+  }
+
+  public void visionOn() {
+    camMode.setNumber(0);
+    ledMode.setNumber(0);
+  }
+
+  public void visionOff() {
+    camMode.setNumber(1);
+    ledMode.setNumber(1);
   }
 
   /*
    * Returns horizontal angle of target offset from crosshair
-   *  
+   * 
    */
   public double getXOffsetAngle() {
     return xOffsetAngle;
@@ -91,7 +94,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
   /*
    * Returns vertical angle of target offset from crosshair
-   *  
+   * 
    */
   public double getYOffsetAngle() {
     return yOffsetAngle;
@@ -99,12 +102,5 @@ public class LimelightSubsystem extends SubsystemBase {
 
   public boolean getValidTarget() {
     return (validTarget == 1) ? true : false;
-  }
-
-  public void setLinedUp(boolean setter) {
-    linedUp = setter;
-  }
-  public boolean getLineUp() {
-    return linedUp;
   }
 }
