@@ -23,9 +23,9 @@ public class IntakeAndOutake extends SubsystemBase {
   private VictorSPX load1;
   private VictorSPX load2;
 
-  private DigitalInput sensor1;
-  private DigitalInput sensor2;
-  private DigitalInput sensor3;
+  private DigitalInput sensor1; //intake
+  private DigitalInput sensor2; //hopper
+  private DigitalInput sensor3; //shooter
 
   private final double speed = 0.6;
   private final double speed2 = .75;
@@ -43,6 +43,13 @@ public class IntakeAndOutake extends SubsystemBase {
   private double gravity = 386.09;
 
   private final LimelightSubsystem lime;
+
+  // measures how many cells are in 
+  // returns 0 if there is nothing in basket
+  // returns 1 if 
+  // returns 3 if 
+ 
+  private int powerCellCount = 0; 
 
   public IntakeAndOutake() {
     intake = new TalonSRX(Constants.INTAKE_PRIMARY);
@@ -81,19 +88,65 @@ public class IntakeAndOutake extends SubsystemBase {
 
   }
 
+  public void powerCellCount(){
+    boolean isTriggered1 = !sensor1.get(); 
+    boolean isTriggered2 = !sensor3.get(); 
+    boolean holding1 = false;
+    boolean holding2 = false; 
+
+    if(!holding1){
+      if(isTriggered1){
+        holding1 = false;
+      }
+    } else {
+      if(!isTriggered1){
+        holding1 = false;
+        powerCellCount++; 
+      }
+    }
+
+    if(!holding2){
+      if(isTriggered2){
+        holding2 = false;
+      }
+    } else {
+      if(!isTriggered2){
+        holding2 = false;
+        powerCellCount++; 
+      }
+    }
+    
+  }
+
   public void intake() {
+    powerCellCount(); 
     intake.set(ControlMode.PercentOutput, speed2);
     load1.set(ControlMode.PercentOutput, speed);
 
-    if (!sensor3.get())
-      load2.set(ControlMode.PercentOutput, 0.0);
-    else
+    if (!sensor3.get()){
+      //occurs when hopper is full
+      load2.set(ControlMode.PercentOutput, 0.0); 
+    } else {
       load2.set(ControlMode.PercentOutput, 0.6);
+    }
   }
 
   public void reverseIntake(){
     intake.set(ControlMode.PercentOutput, -speed2);
     load1.set(ControlMode.PercentOutput, -speed);
+
+    boolean isTriggered = !sensor1.get(); 
+    boolean holding = false;
+    if(!holding){
+      if(isTriggered){
+        holding = false;
+      }
+    } else {
+      if(!isTriggered){
+        holding = false;
+        powerCellCount--; 
+      }
+    }
   }
 
   public void setReversed(){
@@ -106,6 +159,7 @@ public class IntakeAndOutake extends SubsystemBase {
   }
 
   public void outake() {
+    powerCellCount();
     double numerator = (Math.sqrt(gravity) * Math.sqrt(lime.getDistance()) * Math.sqrt(Math.pow(Math.tan(hoodAngle), 2) + 1.0));
     double denominator = Math.sqrt(2 * Math.tan(hoodAngle) - (2 * (height) / lime.getDistance()));
 
