@@ -115,6 +115,8 @@ public class IntakeAndOutake extends SubsystemBase {
         powerCellCount++; 
       }
     }
+
+  SmartDashboard.putNumber("Power Cell Count: ", powerCellCount); 
     
   }
 
@@ -147,6 +149,7 @@ public class IntakeAndOutake extends SubsystemBase {
         powerCellCount--; 
       }
     }
+    SmartDashboard.putNumber("Power Cell Count: ", powerCellCount); 
   }
 
   public void setReversed(){
