@@ -9,15 +9,15 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
-import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.IntakeAndOutake;
 
-public class ZeroGyro extends CommandBase {
-  private final DriveSystem driveSystem;
+public class ReverseIntake extends CommandBase {
+  private final IntakeAndOutake intakeAndOutake;
   /**
-   * Creates a new ZeroGyro.
+   * Creates a new ReverseIntake.
    */
-  public ZeroGyro() {
-    driveSystem = Factory.getDrive();
+  public ReverseIntake() {
+    intakeAndOutake = Factory.getIntakeOutake();
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -29,18 +29,18 @@ public class ZeroGyro extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveSystem.zeroGyro();
+    intakeAndOutake.reverseIntake();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
+    intakeAndOutake.intakeStop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

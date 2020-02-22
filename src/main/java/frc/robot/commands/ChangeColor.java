@@ -17,7 +17,7 @@ public class ChangeColor extends CommandBase {
   /**
    * Creates a new ChangeColor.
    */
-  
+
   private final JetsonSubsystem js;
   private final ControlPanelSubsystem control;
 
@@ -26,7 +26,6 @@ public class ChangeColor extends CommandBase {
   private String currColor;
   private int count;
   private int rotations;
-
 
   public ChangeColor() {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -45,35 +44,34 @@ public class ChangeColor extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("---------------------");    
+    System.out.println("---------------------");
     System.out.println(js.getColor());
     System.out.println(count);
     System.out.println(rotations);
     SmartDashboard.putNumber("Rotations", rotations);
-    if (count == 0) { 
+    if (count == 0) {
       if (js.getColor().equals(startColor)) {
         currColor = js.getColor();
         control.spin(0.2);
-        //System.out.println("SC: " + startColor + "\tCC: " + js.getColor()); 
-      }
-      else if(!js.getColor().equals(startColor)) {
+        // System.out.println("SC: " + startColor + "\tCC: " + js.getColor());
+      } else if (!js.getColor().equals(startColor)) {
         count = 1;
       }
     }
     if (count == 1) {
-      if(!js.getColor().equals(startColor)) {
+      if (!js.getColor().equals(startColor)) {
         currColor = js.getColor();
         control.spin(0.2);
-        //System.out.println("SC: " + startColor + "\tCC: " + js.getColor()); 
-      }
-      else if (js.getColor().equals(startColor)) {
+        // System.out.println("SC: " + startColor + "\tCC: " + js.getColor());
+      } else if (js.getColor().equals(startColor)) {
         count = 0;
         rotations++;
       }
     }
-    /*currColor = js.getColor();
-    control.spin(0.2);
-    System.out.println("SC: " + startColor + "\tCC: " + js.getColor());*/
+    /*
+     * currColor = js.getColor(); control.spin(0.2); System.out.println("SC: " +
+     * startColor + "\tCC: " + js.getColor());
+     */
   }
 
   // Called once the command ends or is interrupted.
@@ -85,13 +83,12 @@ public class ChangeColor extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (rotations == 4) {  
+    if (rotations == 4) {
       rotations = 0;
       count = 0;
       return true;
-    } 
-    else {
+    } else {
       return false;
-    } 
+    }
   }
 }
