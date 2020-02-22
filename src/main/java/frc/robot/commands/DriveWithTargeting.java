@@ -30,7 +30,7 @@ public class DriveWithTargeting extends CommandBase {
   public DriveWithTargeting() {
     joy = RobotContainer.getJoy();
     driveSystem = Factory.getDrive();
-    lime = Factory.getLime();
+    lime = Factory.getLimelight(); 
 
     // Use addRequirements() here to declare subsystem dependencies.
   }

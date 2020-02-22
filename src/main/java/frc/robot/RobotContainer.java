@@ -11,11 +11,14 @@ import frc.robot.subsystems.JetsonSubsystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-<<<<<<< HEAD
+import frc.robot.commands.ActivateWinches;
+import frc.robot.commands.Autonomous;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithPercent;
 import frc.robot.commands.DriveWithTargeting;
 import frc.robot.commands.IntakeWithButton;
+import frc.robot.commands.LaunchWithButton;
+import frc.robot.commands.LockWinches;
 import frc.robot.commands.ShootWithButton;
 import frc.robot.commands.RotateToAngle;
 import frc.robot.subsystems.DriveSystem;
@@ -23,33 +26,6 @@ import frc.robot.subsystems.IntakeAndOutake;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-=======
-import edu.wpi.first.wpilibj.XboxController.Button;
-
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import frc.robot.commands.RotateToAngle;
-import frc.robot.commands.IntakeWithButton;
-import frc.robot.commands.LaunchWithButton;
-import frc.robot.commands.DriveWithJoystick;
-
-import frc.robot.subsystems.DriveSystem;
-import frc.robot.commands.Autonomous;
-import frc.robot.commands.DriveWithPercent;
-import frc.robot.commands.ToggleFieldOriented;
-import frc.robot.commands.TogglePID;
-import frc.robot.commands.ToggleSlowMode;
-import frc.robot.commands.ToggleTurboMode;
-import frc.robot.commands.ZeroGyro;
-import frc.robot.commands.ChangeColor;
-import frc.robot.subsystems.ControlPanelSubsystem;
-import frc.robot.subsystems.DriveSystem;
-import frc.robot.commands.ActivateTelescopes;
-import frc.robot.commands.ActivateWinches;
-import frc.robot.commands.AngleWithLimelight;
-import frc.robot.commands.LockWinches;
->>>>>>> 78670a7a61976ce54a67c53d9d59cb3232c5a1c5
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -87,8 +63,17 @@ public class RobotContainer {
   private Command op_lockWinch;
   private Command op_runWinch;
 
+  private Command field;
+  private Command slow;
+  private Command turbo;
+  private Command zero;
+  private Command pid;
+  private Command target;
+
   // Autonomous
   private Command auto;
+
+  private final DriveSystem driveSystem; 
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -96,14 +81,19 @@ public class RobotContainer {
   public RobotContainer() {
     // Driver controller
     driver = new Joystick(Constants.DRIVER_CONTROLLER);
+    driveSystem = Factory.getDrive(); 
     
     driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTOALIGN);
     driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELDORIENT);
     driver_turboBtn = new JoystickButton(driver, Constants.DRIVER_TURBO);
 
-    driver_autoAlign = new AngleWithLimelight();
-    driver_fieldOrient = new ToggleFieldOriented();
-    driver_turbo = new ToggleTurboMode();
+    //driver_autoAlign = new AngleWithLimelight();
+    field = new InstantCommand(driveSystem::setFieldOriented, driveSystem);
+    slow = new InstantCommand(driveSystem::setSlow, driveSystem);
+    turbo = new InstantCommand(driveSystem::setTurbo, driveSystem);
+    zero = new InstantCommand(driveSystem::zeroGyro, driveSystem);
+    pid = new InstantCommand(driveSystem::setPIDLooped, driveSystem);
+    target = new InstantCommand(driveSystem::toggleTargeting, driveSystem);
 
     // Operator controller
     operator = new XboxController(Constants.OPERATOR_CONTROLLER);
@@ -115,7 +105,7 @@ public class RobotContainer {
     op_runWinchBtn = new JoystickButton(operator, Constants.OP_RUNWINCH);
 
     op_launch = new LaunchWithButton();
-    op_slow = new ToggleSlowMode();
+    //op_slow = new ToggleSlowMode();
     op_intake = new IntakeWithButton();
     op_lockWinch = new LockWinches();
     op_runWinch = new ActivateWinches();

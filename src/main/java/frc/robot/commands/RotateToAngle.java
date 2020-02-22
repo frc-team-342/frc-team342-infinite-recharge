@@ -7,10 +7,7 @@
 
 package frc.robot.commands;
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 78670a7a61976ce54a67c53d9d59cb3232c5a1c5
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
 import frc.robot.subsystems.DriveSystem;
@@ -27,7 +24,7 @@ public class RotateToAngle extends CommandBase {
    */
   public RotateToAngle() {
     driveSystem = Factory.getDrive();
-    lime = Factory.getLime();
+    lime = Factory.getLimelight();
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
