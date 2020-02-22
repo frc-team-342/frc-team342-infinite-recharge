@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANDigitalInput.LimitSwitch;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
@@ -27,20 +28,26 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
   private boolean armPlacement;
 
-  Encoder encoder = new Encoder(1, 2, false, EncodingType.k1X);
+  //Encoder encoder = new Encoder(1, 2, false, EncodingType.k1X);
 
   public ControlPanelSubsystem() {
     rotater = new TalonSRX(Constants.CP_ROTATE);
     armMotor = new TalonSRX(Constants.CP_ARM);
     armPlacement = true;
+
+    
   }
 
   public void spin(double speed) {
     rotater.set(ControlMode.PercentOutput, speed);
 
     // Dividing pulses by 44.4 to find the revolutions
-    double rotations = (int) (encoder.getDistance() / 44.4);
+    //double rotations = (int) (encoder.getDistance() / 44.4);
     // System.out.println(rotations);
+  }
+
+  public int getLimit(){
+    return armMotor.isFwdLimitSwitchClosed();
   }
 
   public void setArmBoolean() {
