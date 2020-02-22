@@ -106,7 +106,7 @@ Temporary Items
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
-!.vscode/shooter.json
+!.vscode/launch.json
 !.vscode/extensions.json
 
 ### Windows ###

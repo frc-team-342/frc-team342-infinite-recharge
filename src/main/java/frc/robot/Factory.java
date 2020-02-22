@@ -46,9 +46,7 @@ public class Factory {
                 new CANSparkMax(Constants.DRIVE_MOTOR_R2, MotorType.kBrushless)
             );
         }
-        return driveSystem;
     }
-    
     public static LimelightSubsystem getLimelight() {
         if(limelightSystem == null) {
             limelightSystem = new LimelightSubsystem();
@@ -66,6 +64,12 @@ public class Factory {
             js = new JetsonSubsystem();
         }    
         return js;
+    }
+    public static ClimbSubsystem getClimb() {
+        if (cs == null) {
+            cs = new ClimbSubsystem();
+        }
+        return cs;
     }
     public static ClimbSubsystem getClimb() {
         if (cs == null) {

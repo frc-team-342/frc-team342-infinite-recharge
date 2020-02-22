@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
    * for any initialization code.
    */
   @Override
-  public void robotInit() {
+  public void robotInit() {   
     m_robotContainer = new RobotContainer();
     driveSystem = Factory.getDrive();
     lime = Factory.getLimelight();
@@ -55,6 +55,7 @@ public class Robot extends TimedRobot {
     // Commands
     driveWithJoy = new DriveWithJoystick();
     climb = new ActivateTelescopes();
+
   }
 
   /**

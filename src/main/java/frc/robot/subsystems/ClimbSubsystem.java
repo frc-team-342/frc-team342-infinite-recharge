@@ -25,8 +25,10 @@ public class ClimbSubsystem extends SubsystemBase {
   private boolean teleActivated;
 
   public ClimbSubsystem() {
+
     teleMotor = new TalonSRX(Constants.CLIMB_TELESCOPE);
     winch1 = new TalonSRX(Constants.CLIMB_WINCH1);
+
 
     enabled = false;
     teleActivated = false;
