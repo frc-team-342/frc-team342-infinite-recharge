@@ -39,11 +39,15 @@ public class MoveArm extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     cps.setArmBoolean();
+    cps.stopArm();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if(cps.getLimitFwd() || cps.getLimitRev())
+      return true;
+    else
+      return false;
   }
 }

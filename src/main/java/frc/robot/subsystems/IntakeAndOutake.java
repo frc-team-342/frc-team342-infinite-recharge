@@ -37,6 +37,8 @@ public class IntakeAndOutake extends SubsystemBase {
   private double error = 250.0;
   private double hoodAngle = 50.0 * (Math.PI / 180.0);
   private double height = 77.125;
+  private double targetDepth = 30.0;
+  private double limeToHood = 27.0;
 
   // Gravity in in/s
   private double gravity = 386.09;
@@ -153,8 +155,9 @@ public class IntakeAndOutake extends SubsystemBase {
 
   public void outake() {
     powerCellCount();
-    double numerator = (Math.sqrt(gravity) * Math.sqrt(lime.getDistance()) * Math.sqrt(Math.pow(Math.tan(hoodAngle), 2) + 1.0));
-    double denominator = Math.sqrt(2 * Math.tan(hoodAngle) - (2 * (height) / lime.getDistance()));
+    double actualDist = lime.getDistance() + limeToHood + targetDepth;
+    double numerator = (Math.sqrt(gravity) * Math.sqrt(actualDist) * Math.sqrt(Math.pow(Math.tan(hoodAngle), 2) + 1.0));
+    double denominator = Math.sqrt(2 * Math.tan(hoodAngle) - (2 * (height) / actualDist));
 
     double inchPerSec = 2 * (numerator / denominator);
     double unitConversion = 819.2/(6.0*Math.PI);
@@ -166,7 +169,7 @@ public class IntakeAndOutake extends SubsystemBase {
 
     System.out.println("Velocity: " + shooter1.getSelectedSensorVelocity());
 
-    if (shooter1.getSelectedSensorVelocity() + error < velocity && !sensor3.get()){
+    if (Math.abs(shooter1.getSelectedSensorVelocity()) + error < velocity && !sensor3.get()){
       load2.set(ControlMode.PercentOutput, 0.0);
       load1.set(ControlMode.PercentOutput, 0.0);
     }
