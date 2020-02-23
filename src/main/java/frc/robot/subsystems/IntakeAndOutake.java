@@ -157,7 +157,7 @@ public class IntakeAndOutake extends SubsystemBase {
     powerCellCount();
     double actualDist = lime.getDistance() + limeToHood + targetDepth;
     double numerator = (Math.sqrt(gravity) * Math.sqrt(actualDist) * Math.sqrt(Math.pow(Math.tan(hoodAngle), 2) + 1.0));
-    double denominator = Math.sqrt(2 * Math.tan(hoodAngle) - (2 * (height) / actualDist));
+    double denominator = Math.sqrt(2 * Math.tan(hoodAngle) - ((2 * height) / actualDist));
 
     double inchPerSec = 2 * (numerator / denominator);
     double unitConversion = 819.2/(6.0*Math.PI);
