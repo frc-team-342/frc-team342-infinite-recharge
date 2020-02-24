@@ -158,14 +158,12 @@ public class DriveSystem extends SubsystemBase {
     isSlowMode = !isSlowMode;
     if (isTurbo)
       isTurbo = false;
-    SmartDashboard.putBoolean("Is Slow", isSlowMode);
   }
 
   public void setTurbo() {
     isTurbo = !isTurbo;
     if (isSlowMode)
       isSlowMode = false;
-    SmartDashboard.putBoolean("Is Turbo", isTurbo);
   }
 
   public void autoRotate(double angle) {
@@ -244,6 +242,8 @@ public class DriveSystem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Accumulated Error", accumError);
+    SmartDashboard.putBoolean("Is Slow", isSlowMode);
+    SmartDashboard.putBoolean("Is Turbo", isTurbo);
     mecanumDrive.feed();
     // This method will be called once per scheduler run
   }

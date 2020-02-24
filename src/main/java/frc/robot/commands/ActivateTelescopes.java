@@ -36,7 +36,10 @@ public class ActivateTelescopes extends CommandBase {
   @Override
   public void execute() {
       cs.setActivated(true);
-      cs.spinTeleMotor(speed);
+      if(cs.isReverse())
+        cs.reverseTeleMotor(0.4);
+      else
+        cs.spinTeleMotor(speed);
     }
 
   // Called once the command ends or is interrupted.

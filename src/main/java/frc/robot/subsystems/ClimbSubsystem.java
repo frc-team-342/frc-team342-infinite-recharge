@@ -24,6 +24,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
   private boolean enabled;
   private boolean teleActivated;
+  private boolean isReverse;
 
   public ClimbSubsystem() {
     teleMotor = new TalonSRX(Constants.CLIMB_TELESCOPE);
@@ -32,11 +33,24 @@ public class ClimbSubsystem extends SubsystemBase {
 
     enabled = false;
     teleActivated = false;
+    isReverse = false;
 
   }
 
   public void spinTeleMotor(double speed) {
-    teleMotor.set(ControlMode.PercentOutput, Math.abs(speed));
+    teleMotor.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void reverseTeleMotor(double speed){
+    teleMotor.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void setReverse(){
+    isReverse = !isReverse;
+  }
+
+  public boolean isReverse(){
+    return isReverse;
   }
 
   public void spinWinchMotors(double speed) {

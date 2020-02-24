@@ -26,6 +26,7 @@ import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.DriveWithPercent;
 import frc.robot.commands.ChangeColor;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ControlPanelSubsystem;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.ActivateTelescopes;
@@ -45,6 +46,7 @@ import frc.robot.commands.ReverseIntake;
 
 public class RobotContainer {
   private final DriveSystem driveSystem;
+  private final ClimbSubsystem climb;
 
   // Driver controller
   private static Joystick driver; // port 0
@@ -75,6 +77,7 @@ public class RobotContainer {
   private JoystickButton op_reverseBtn;
   private JoystickButton op_controlarmBtn;
   private JoystickButton op_manual_wheelBtn;
+  private JoystickButton op_reverse_teleBtn;
 
   private Command op_launch;
   private Command op_slow;
@@ -85,6 +88,7 @@ public class RobotContainer {
   private Command op_reverse;
   private Command op_controlarm;
   private Command op_manual_wheel;
+  private Command op_reverse_tele;
 
   // Autonomous
   private Command auto;
@@ -94,6 +98,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     driveSystem = Factory.getDrive();
+    climb = Factory.getClimb();
 
     // Driver controller
     driver = new Joystick(Constants.DRIVER_CONTROLLER);
@@ -124,6 +129,7 @@ public class RobotContainer {
     op_reverseBtn = new JoystickButton(operator, Constants.OP_REVERSE);
     op_controlarmBtn = new JoystickButton(operator, Constants.OP_CONTROL_ARM);
     op_manual_wheelBtn = new JoystickButton(operator, Constants.OP_CONTROL_RIGHT);
+    op_reverse_teleBtn = new JoystickButton(operator, Constants.OP_REVERSE_TELE);
   
     op_launch = new LaunchWithButton();
     op_slow = new InstantCommand(driveSystem::setSlow, driveSystem);
@@ -134,6 +140,7 @@ public class RobotContainer {
     op_reverse = new ReverseIntake();
     op_controlarm = new MoveArm();
     op_manual_wheel = new ManualControlPanel();
+    op_reverse_tele = new InstantCommand(climb::setReverse, climb);
 
     // Autonomous
     auto = new Autonomous();
@@ -174,6 +181,7 @@ public class RobotContainer {
     op_reverseBtn.whileHeld(op_reverse);
     op_controlarmBtn.whenPressed(op_controlarm);
     op_manual_wheelBtn.whileHeld(op_manual_wheel);
+    op_reverse_teleBtn.whenPressed(op_reverse_tele);
   }
 
  
