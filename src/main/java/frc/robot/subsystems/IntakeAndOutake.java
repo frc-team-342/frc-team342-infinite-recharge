@@ -27,7 +27,7 @@ public class IntakeAndOutake extends SubsystemBase {
   private DigitalInput sensor2; //hopper
   private DigitalInput sensor3; //shooter
 
-  private final double speed = 0.6;
+  private final double speed = 0.9;
   private final double speed2 = .75;
 
   private final int current_limit = 80;
@@ -63,6 +63,7 @@ public class IntakeAndOutake extends SubsystemBase {
     sensor2 = new DigitalInput(Constants.INTAKE_SENSOR_2);
     sensor3 = new DigitalInput(Constants.INTAKE_SENSOR_3);
 
+    // sets shooter to turn in correct direction
     shooter1.setInverted(true);
     shooter2.setInverted(true);
   
@@ -80,6 +81,7 @@ public class IntakeAndOutake extends SubsystemBase {
     shooter1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
     shooter1.setSensorPhase(false);
 
+    // PID loop values for shooter
     shooter1.config_kF(0, 0.015);
     shooter1.config_kP(0, 0.03);
     shooter1.config_kI(0, 0.0);
@@ -90,6 +92,7 @@ public class IntakeAndOutake extends SubsystemBase {
   }
 
   public void powerCellCount(){
+    // counts power cells in and out so we dont get more than 5
     boolean isTriggered1 = !sensor1.get(); 
     boolean isTriggered2 = !sensor3.get(); 
     boolean holding1 = false;
@@ -126,15 +129,17 @@ public class IntakeAndOutake extends SubsystemBase {
     intake.set(ControlMode.PercentOutput, speed2);
     load1.set(ControlMode.PercentOutput, speed);
 
+    // stops shooter loader if cell is sensed to prevent jamming of shooter
     if (!sensor3.get()){
       //occurs when hopper is full
       load2.set(ControlMode.PercentOutput, 0.0); 
     } else {
-      load2.set(ControlMode.PercentOutput, 0.6);
+      load2.set(ControlMode.PercentOutput, speed);
     }
   }
 
   public void reverseIntake(){
+    // If cell gets stuck in the intake
     intake.set(ControlMode.PercentOutput, -speed2);
     load1.set(ControlMode.PercentOutput, -speed);
 
@@ -155,6 +160,8 @@ public class IntakeAndOutake extends SubsystemBase {
 
   public void outake() {
     powerCellCount();
+
+    // Not even going to try to document this lol. Distance calculation for velocity
     double actualDist = lime.getDistance() + limeToHood + targetDepth;
     double numerator = (Math.sqrt(gravity) * Math.sqrt(actualDist) * Math.sqrt(Math.pow(Math.tan(hoodAngle), 2) + 1.0));
     double denominator = Math.sqrt(2 * Math.tan(hoodAngle) - ((2 * height) / actualDist));
@@ -169,13 +176,15 @@ public class IntakeAndOutake extends SubsystemBase {
 
     System.out.println("Velocity: " + shooter1.getSelectedSensorVelocity());
 
-    if (Math.abs(shooter1.getSelectedSensorVelocity()) + error < velocity && !sensor3.get()){
+    if (Math.abs(shooter1.getSelectedSensorVelocity()) + error < velocity && !sensor3.get()){ 
+      // Will not shoot if fly wheel isnt up to speed. stops intake if shooter sensor sees cell
+      //sensor.get() returns true if nothing is sensed. ! it to make it work
       load2.set(ControlMode.PercentOutput, 0.0);
       load1.set(ControlMode.PercentOutput, 0.0);
     }
     else{
-      load2.set(ControlMode.PercentOutput, 0.6);
-      load1.set(ControlMode.PercentOutput, 0.6);
+      load2.set(ControlMode.PercentOutput, 0.9);
+      load1.set(ControlMode.PercentOutput, 0.9);
     }
   }
 
@@ -190,20 +199,20 @@ public class IntakeAndOutake extends SubsystemBase {
       load1.set(ControlMode.PercentOutput, 0.0);
   }
     else{
-      load2.set(ControlMode.PercentOutput, 0.6);
-      load1.set(ControlMode.PercentOutput, 0.6);
+      load2.set(ControlMode.PercentOutput, 0.9);
+      load1.set(ControlMode.PercentOutput, 0.9);
     }
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Shooter 1 Percent: ", shooter1.getMotorOutputPercent());
-    SmartDashboard.putNumber("Shooter 1 Voltage: ", shooter1.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Shooter 1 Current: ", shooter1.getSupplyCurrent());
+    //SmartDashboard.putNumber("Shooter 1 Percent: ", shooter1.getMotorOutputPercent());
+    //SmartDashboard.putNumber("Shooter 1 Voltage: ", shooter1.getMotorOutputVoltage());
+    //SmartDashboard.putNumber("Shooter 1 Current: ", shooter1.getSupplyCurrent());
 
-    SmartDashboard.putNumber("Shooter 2 Percent: ", shooter2.getMotorOutputPercent());
-    SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
+    //SmartDashboard.putNumber("Shooter 2 Percent: ", shooter2.getMotorOutputPercent());
+    //SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
+    //SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
 
     SmartDashboard.putNumber("Velocity: ", shooter1.getSelectedSensorVelocity());
     // if (sensor1.get() && sensor2.get() && sensor3.get())
