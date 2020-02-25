@@ -9,7 +9,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Factory;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ClimbSubsystem;
@@ -20,14 +19,12 @@ public class ActivateTelescopes extends CommandBase {
    */
 
   private final ClimbSubsystem cs;
-  private final XboxController tele;
 
-  private double Y;
+  private double speed = -0.6;
 
   public ActivateTelescopes() {
     // Use addRequirements() here to declare subsystem dependencies.
     cs = Factory.getClimb();
-    tele = RobotContainer.getTele();
   }
 
   // Called when the command is initially scheduled.
@@ -38,18 +35,12 @@ public class ActivateTelescopes extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (tele.getY() > 0.1 || tele.getY() < -0.1)  { 
       cs.setActivated(true);
+      if(cs.isReverse())
+        cs.reverseTeleMotor(0.4);
+      else
+        cs.spinTeleMotor(speed);
     }
-    else {
-      cs.setActivated(false);
-    }
-    System.out.println("\n-------" + cs.getActivated());
-    System.out.println(cs.getEnable());
-    Y = tele.getY();
-
-    cs.spinTeleMotor(Y);
-  }
 
   // Called once the command ends or is interrupted.
   @Override

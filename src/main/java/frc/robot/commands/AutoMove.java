@@ -8,6 +8,9 @@ public class AutoMove extends CommandBase {
   private static DriveSystem driveSystem;
   private double Y;
 
+  private double Z;
+
+
   /**
    * Creates a new AutoMove.
    */

@@ -23,19 +23,20 @@ import frc.robot.subsystems.IntakeAndOutake;
 import frc.robot.subsystems.LimelightSubsystem;
 
 public class Factory {
-    private static IntakeAndOutake intakeOutake = null; 
+    private static IntakeAndOutake intakeOutake = null;
     private static DriveSystem driveSystem = null;
     private static LimelightSubsystem limelightSystem = null;
     private static ControlPanelSubsystem control = null;
     private static JetsonSubsystem js = null;
     private static ClimbSubsystem cs = null;
-    
-    public static IntakeAndOutake getIntakeOutake(){
-        if(intakeOutake == null){
-            intakeOutake = new IntakeAndOutake(); 
+
+    public static IntakeAndOutake getIntakeOutake() {
+        if (intakeOutake == null) {
+            intakeOutake = new IntakeAndOutake();
         }
-        return intakeOutake; 
+        return intakeOutake;
     }
+
     
     public static DriveSystem getDrive(){
         if(driveSystem == null){
@@ -45,26 +46,31 @@ public class Factory {
                 new CANSparkMax(Constants.DRIVE_MOTOR_R1, MotorType.kBrushless), 
                 new CANSparkMax(Constants.DRIVE_MOTOR_R2, MotorType.kBrushless)
             );
+
         }
     }
+
     public static LimelightSubsystem getLimelight() {
-        if(limelightSystem == null) {
+        if (limelightSystem == null) {
             limelightSystem = new LimelightSubsystem();
         }
         return limelightSystem;
     }
-    public static ControlPanelSubsystem getControl(){
-        if(control == null) {
+
+    public static ControlPanelSubsystem getControl() {
+        if (control == null) {
             control = new ControlPanelSubsystem();
         }
         return control;
     }
-    public static JetsonSubsystem getJetson(){
-        if(js == null) {
+
+    public static JetsonSubsystem getJetson() {
+        if (js == null) {
             js = new JetsonSubsystem();
-        }    
+        }
         return js;
     }
+
     public static ClimbSubsystem getClimb() {
         if (cs == null) {
             cs = new ClimbSubsystem();

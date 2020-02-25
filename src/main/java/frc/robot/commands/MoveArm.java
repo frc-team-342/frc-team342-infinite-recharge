@@ -16,7 +16,7 @@ public class MoveArm extends CommandBase {
    * Creates a new MoveArm.
    */
 
-   private ControlPanelSubsystem cps;
+  private ControlPanelSubsystem cps;
 
   public MoveArm() {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -26,6 +26,7 @@ public class MoveArm extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,11 +40,15 @@ public class MoveArm extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     cps.setArmBoolean();
+    cps.stopArm();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    // if((cps.getLimitFwd() && cps.getArmBoolean() == false) || (cps.getLimitRev() && cps.getArmBoolean() == true))
+    //   return true;
+    // else
+      return false;
   }
 }
