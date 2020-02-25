@@ -42,8 +42,8 @@ public final class Constants {
     public static final int CLIMB_WINCH_2 = 12;
 
     // Control Panel
-    public static final int CP_ROTATE = 9;
-    public static final int CP_ARM = 10;
+    public static final int CP_ROTATE = 14;
+    public static final int CP_ARM = 13;
 
     /* Buttons */
     // Driver controller

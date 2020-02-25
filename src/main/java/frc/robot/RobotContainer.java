@@ -176,10 +176,10 @@ public class RobotContainer {
     op_slowBtn.whenPressed(op_slow);
     op_intakeBtn.toggleWhenPressed(op_intake);
     op_lockWinchBtn.whenPressed(op_lockWinch);
-    op_runWinchBtn.whenPressed(op_runWinch);
+    op_runWinchBtn.whileHeld(op_runWinch);
     op_telescopesBtn.whileHeld(op_telescopes);
     op_reverseBtn.whileHeld(op_reverse);
-    op_controlarmBtn.whenPressed(op_controlarm);
+    op_controlarmBtn.toggleWhenPressed(op_controlarm);
     op_manual_wheelBtn.whileHeld(op_manual_wheel);
     op_reverse_teleBtn.whenPressed(op_reverse_tele);
   }

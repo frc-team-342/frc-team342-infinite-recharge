@@ -49,7 +49,7 @@ public class LimelightSubsystem extends SubsystemBase {
    * 
    */
   public double getDistance() {
-    return (98.25 - 21.125) / Math.tan((yOffsetAngle + 15.0) * Math.PI / 180);
+    return (90.0 - 21.125) / Math.tan((yOffsetAngle + 15.0) * Math.PI / 180);
   }
 
   /*

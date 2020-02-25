@@ -26,6 +26,7 @@ public class MoveArm extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -45,9 +46,9 @@ public class MoveArm extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(cps.getLimitFwd() || cps.getLimitRev())
-      return true;
-    else
+    // if((cps.getLimitFwd() && cps.getArmBoolean() == false) || (cps.getLimitRev() && cps.getArmBoolean() == true))
+    //   return true;
+    // else
       return false;
   }
 }

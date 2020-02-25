@@ -69,18 +69,14 @@ public class ControlPanelSubsystem extends SubsystemBase {
   }
 
   public void moveArm() {
-    if (armPlacement == false) {
-      if (!getLimitFwd())
+    if (armPlacement == true && !getLimitRev()) {
         armMotor.set(ControlMode.PercentOutput, -1.0);
-      else
-        stopArm();
-    } else if (armPlacement == true) {
-      if (!getLimitRev())
+    } else if (armPlacement == false && !getLimitFwd()) {
         armMotor.set(ControlMode.PercentOutput, 1.0);
+    }
       else
         stopArm();
     }
-  }
 
   public void stopArm() {
     armMotor.set(ControlMode.PercentOutput, 0.0);
@@ -90,6 +86,8 @@ public class ControlPanelSubsystem extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putBoolean("Forward Limit Switch", getLimitFwd());
     SmartDashboard.putBoolean("Reverse Limit Switch", getLimitRev());
+
+    SmartDashboard.putBoolean("Arm Placement", getArmBoolean());
     // This method will be called once per scheduler run
   }
 }

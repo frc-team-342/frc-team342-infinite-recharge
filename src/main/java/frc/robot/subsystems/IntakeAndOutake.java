@@ -35,8 +35,8 @@ public class IntakeAndOutake extends SubsystemBase {
 
   private double rpmsConverter = 60.0 / 1024.0;
   private double error = 250.0;
-  private double hoodAngle = 50.0 * (Math.PI / 180.0);
-  private double height = 77.125;
+  private double hoodAngle = 40.0 * (Math.PI / 180.0);
+  private double height = 90.0 - 21.125;
   private double targetDepth = 30.0;
   private double limeToHood = 27.0;
 
@@ -162,19 +162,23 @@ public class IntakeAndOutake extends SubsystemBase {
     powerCellCount();
 
     // Not even going to try to document this lol. Distance calculation for velocity
-    double actualDist = lime.getDistance() + limeToHood + targetDepth;
+    double adjustedDist = (lime.getDistance() * 0.83) + 9.2;
+    double actualDist = adjustedDist + limeToHood + targetDepth;
     double numerator = (Math.sqrt(gravity) * Math.sqrt(actualDist) * Math.sqrt(Math.pow(Math.tan(hoodAngle), 2) + 1.0));
     double denominator = Math.sqrt(2 * Math.tan(hoodAngle) - ((2 * height) / actualDist));
 
     double inchPerSec = 2 * (numerator / denominator);
     double unitConversion = 819.2/(6.0*Math.PI);
-
-    double velocity = inchPerSec*unitConversion;
+    
+    // double velocity = ((inchPerSec*(58.026) + 17434.0) + 155.8) / 0.75;
+    double velocity = (((inchPerSec) + 240.8) / 0.975) * unitConversion;
 
     shooter2.follow(shooter1);
     shooter1.set(ControlMode.Velocity, velocity);
 
     System.out.println("Velocity: " + shooter1.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Target Velocity", velocity);
+    SmartDashboard.putNumber("Actual LL Dist", adjustedDist);
 
     if (Math.abs(shooter1.getSelectedSensorVelocity()) + error < velocity && !sensor3.get()){ 
       // Will not shoot if fly wheel isnt up to speed. stops intake if shooter sensor sees cell
@@ -190,7 +194,7 @@ public class IntakeAndOutake extends SubsystemBase {
 
   public void outake(double velocity){
     shooter2.follow(shooter1);
-    shooter1.set(ControlMode.Velocity, velocity);
+    shooter1.set(ControlMode.PercentOutput, velocity);
 
     System.out.println("Velocity: " + shooter1.getSelectedSensorVelocity());
 
@@ -206,13 +210,13 @@ public class IntakeAndOutake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    //SmartDashboard.putNumber("Shooter 1 Percent: ", shooter1.getMotorOutputPercent());
-    //SmartDashboard.putNumber("Shooter 1 Voltage: ", shooter1.getMotorOutputVoltage());
-    //SmartDashboard.putNumber("Shooter 1 Current: ", shooter1.getSupplyCurrent());
+    SmartDashboard.putNumber("Shooter 1 Percent: ", shooter1.getMotorOutputPercent());
+    SmartDashboard.putNumber("Shooter 1 Voltage: ", shooter1.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Shooter 1 Current: ", shooter1.getSupplyCurrent());
 
-    //SmartDashboard.putNumber("Shooter 2 Percent: ", shooter2.getMotorOutputPercent());
-    //SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
-    //SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
+    SmartDashboard.putNumber("Shooter 2 Percent: ", shooter2.getMotorOutputPercent());
+    SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
 
     SmartDashboard.putNumber("Velocity: ", shooter1.getSelectedSensorVelocity());
     // if (sensor1.get() && sensor2.get() && sensor3.get())

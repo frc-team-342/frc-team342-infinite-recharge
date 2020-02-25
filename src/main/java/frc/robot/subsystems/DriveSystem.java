@@ -158,12 +158,14 @@ public class DriveSystem extends SubsystemBase {
     isSlowMode = !isSlowMode;
     if (isTurbo)
       isTurbo = false;
+    SmartDashboard.putBoolean("Is Slow", isSlowMode);
   }
 
   public void setTurbo() {
     isTurbo = !isTurbo;
     if (isSlowMode)
       isSlowMode = false;
+    SmartDashboard.putBoolean("Is Turbo", isTurbo);
   }
 
   public void autoRotate(double angle) {
@@ -198,6 +200,7 @@ public class DriveSystem extends SubsystemBase {
     mecanumDrive.driveCartesian(0.0, 0.0, ((Error * kP) + (accumError * kI)) / 300);
   }
 
+  // PID Loop for driving the robot while also targeting with limelgiht
   public void driveWithTargeting(double x, double y, double Error) {
     accumError += Error;
     double kI = 1.0e-3;
@@ -205,11 +208,13 @@ public class DriveSystem extends SubsystemBase {
     mecanumDrive.driveCartesian(x / 2, y / 2, ((Error * kP) + (accumError * kI)) / 300);
   }
 
+  // Toggle for limelight targeting
   public void toggleTargeting() {
     isTargeting = !isTargeting;
     SmartDashboard.putBoolean("Is Targeting", isTargeting);
   }
 
+  // Set off toggle for robot start so targeting is always off unless turned on
   public void targetOff() {
     isTargeting = false;
     SmartDashboard.putBoolean("Is Targeting", isTargeting);
@@ -242,8 +247,6 @@ public class DriveSystem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Accumulated Error", accumError);
-    SmartDashboard.putBoolean("Is Slow", isSlowMode);
-    SmartDashboard.putBoolean("Is Turbo", isTurbo);
     mecanumDrive.feed();
     // This method will be called once per scheduler run
   }

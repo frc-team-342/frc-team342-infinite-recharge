@@ -32,7 +32,7 @@ public class LaunchWithButton extends CommandBase {
 
   @Override
   public void execute() {
-    intakeAndOutake.outake(50000.0);
+    intakeAndOutake.outake();
   }
 
   @Override
