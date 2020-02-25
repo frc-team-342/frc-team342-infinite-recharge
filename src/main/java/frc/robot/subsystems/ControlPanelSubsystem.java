@@ -8,9 +8,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANDigitalInput.LimitSwitch;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
@@ -19,12 +22,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
+
 public class ControlPanelSubsystem extends SubsystemBase {
   /**
    * Creates a new ControlPanelSubsystem.
    */
   // Creating a motor
   private static TalonSRX rotater;
+
   private static TalonSRX armMotor;
 
   private boolean armPlacement;
@@ -35,6 +40,23 @@ public class ControlPanelSubsystem extends SubsystemBase {
     rotater = new TalonSRX(Constants.CP_ROTATE);
     armMotor = new TalonSRX(Constants.CP_ARM);
     armPlacement = true;
+
+  DigitalInput armLimitUp;
+  DigitalInput armLimitDown;
+
+
+  Encoder encoder = new Encoder(1, 2, false, EncodingType.k1X);
+
+  public ControlPanelSubsystem() {
+
+    rotater = new TalonSRX(Constants.CP_ROTATE);
+
+    armMotor = new TalonSRX(Constants.CP_ARM);
+    armPlacement = true;
+
+    armLimitUp = new DigitalInput(Constants.ARMLIMITUP);
+    armLimitDown = new DigitalInput(Constants.ARMLIMITDOWN);
+
 
   }
 
@@ -60,6 +82,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
       return false;
   }
 
+
   public void setArmBoolean() {
     armPlacement = !armPlacement;
   }
@@ -81,6 +104,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
   public void stopArm() {
     armMotor.set(ControlMode.PercentOutput, 0.0);
   }
+
 
   @Override
   public void periodic() {

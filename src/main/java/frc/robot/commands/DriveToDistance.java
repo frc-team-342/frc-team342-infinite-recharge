@@ -11,7 +11,12 @@ public class DriveToDistance extends CommandBase {
    * https://www.chiefdelphi.com/t/neo-motor-integrated-encoder-w-spark-max-controller/340458
    */
 
+
   private final DriveSystem driveSystem;
+
+  private static IntakeAndOutake inAndOut = null;
+
+
 
   private double goal;
 

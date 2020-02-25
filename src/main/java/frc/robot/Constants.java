@@ -12,6 +12,7 @@ package frc.robot;
  */
 
 public final class Constants {
+
     /*
      * Follow these variable naming conventions: - Motor names should be named
      * prefixed by the subsystem they are a part of, followed by its function and
@@ -43,6 +44,7 @@ public final class Constants {
 
     // Control Panel
     public static final int CP_ROTATE = 14;
+
     public static final int CP_ARM = 13;
 
     /* Buttons */

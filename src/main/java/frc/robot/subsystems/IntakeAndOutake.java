@@ -30,11 +30,13 @@ public class IntakeAndOutake extends SubsystemBase {
   private final double speed = 0.9;
   private final double speed2 = .75;
 
+
   private final int current_limit = 80;
   private final int current_limit_duration = 2000;
 
   private double rpmsConverter = 60.0 / 1024.0;
   private double error = 250.0;
+
   private double hoodAngle = 40.0 * (Math.PI / 180.0);
   private double height = 90.0 - 21.125;
   private double targetDepth = 30.0;
@@ -79,15 +81,18 @@ public class IntakeAndOutake extends SubsystemBase {
     shooter1.configAllowableClosedloopError(0, 0, 25);
     shooter1.selectProfileSlot(0, 0);
     shooter1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+
     shooter1.setSensorPhase(false);
 
     // PID loop values for shooter
+
     shooter1.config_kF(0, 0.015);
     shooter1.config_kP(0, 0.03);
     shooter1.config_kI(0, 0.0);
     shooter1.config_kD(0, 0.0);
 
     lime = Factory.getLimelight();
+
 
   }
 
@@ -173,10 +178,12 @@ public class IntakeAndOutake extends SubsystemBase {
     // double velocity = ((inchPerSec*(58.026) + 17434.0) + 155.8) / 0.75;
     double velocity = (((inchPerSec) + 240.8) / 0.975) * unitConversion;
 
+
     shooter2.follow(shooter1);
     shooter1.set(ControlMode.Velocity, velocity);
 
     System.out.println("Velocity: " + shooter1.getSelectedSensorVelocity());
+
     SmartDashboard.putNumber("Target Velocity", velocity);
     SmartDashboard.putNumber("Actual LL Dist", adjustedDist);
 
@@ -190,10 +197,12 @@ public class IntakeAndOutake extends SubsystemBase {
       load2.set(ControlMode.PercentOutput, 0.9);
       load1.set(ControlMode.PercentOutput, 0.9);
     }
+
   }
 
   public void outake(double velocity){
     shooter2.follow(shooter1);
+
     shooter1.set(ControlMode.PercentOutput, velocity);
 
     System.out.println("Velocity: " + shooter1.getSelectedSensorVelocity());
@@ -206,6 +215,7 @@ public class IntakeAndOutake extends SubsystemBase {
       load2.set(ControlMode.PercentOutput, 0.9);
       load1.set(ControlMode.PercentOutput, 0.9);
     }
+
   }
 
   @Override
@@ -213,6 +223,7 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Shooter 1 Percent: ", shooter1.getMotorOutputPercent());
     SmartDashboard.putNumber("Shooter 1 Voltage: ", shooter1.getMotorOutputVoltage());
     SmartDashboard.putNumber("Shooter 1 Current: ", shooter1.getSupplyCurrent());
+
 
     SmartDashboard.putNumber("Shooter 2 Percent: ", shooter2.getMotorOutputPercent());
     SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
@@ -228,6 +239,7 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putBoolean("Intake Sensor2: ", !sensor2.get());
     SmartDashboard.putBoolean("Intake Sensor3: ", !sensor3.get());
   }
+
 
   public void intakeStop() {
     intake.set(ControlMode.PercentOutput, 0.0);

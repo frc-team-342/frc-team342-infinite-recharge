@@ -10,6 +10,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
+import frc.robot.commands.ActivateTelescopes;
+
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithTargeting;
@@ -34,6 +37,9 @@ public class Robot extends TimedRobot {
   private Command driveWithTargeting;
   private LimelightSubsystem lime;
 
+
+  private Command driveWithPercent;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -44,9 +50,16 @@ public class Robot extends TimedRobot {
     driveSystem = Factory.getDrive();
     lime = Factory.getLimelight();
     intakeAndOutake = Factory.getIntakeOutake();
+
     driveWithJoy = new DriveWithJoystick();
     autoDrive = new Autonomous();
     driveWithTargeting = new DriveWithTargeting();
+
+
+
+
+    // Commands
+    climb = new ActivateTelescopes();
 
 
   }
@@ -120,7 +133,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+
     intakeAndOutake.getSensors();
+
+    //intakeAndOutake.getSensors();
+
     if (driveSystem.getTarget()){
       driveWithJoy.cancel();
       driveWithTargeting.schedule();

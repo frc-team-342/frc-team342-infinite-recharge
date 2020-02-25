@@ -106,4 +106,6 @@ public class LimelightSubsystem extends SubsystemBase {
   public boolean getValidTarget() {
     return (validTarget == 1) ? true : false;
   }
+
 }
+

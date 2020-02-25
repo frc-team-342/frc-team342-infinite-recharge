@@ -11,6 +11,7 @@ import frc.robot.subsystems.JetsonSubsystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+
 import edu.wpi.first.wpilibj.XboxController.Button;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,25 +24,37 @@ import frc.robot.commands.LaunchWithButton;
 import frc.robot.commands.DriveWithJoystick;
 
 import frc.robot.subsystems.DriveSystem;
+
+import frc.robot.commands.ActivateWinches;
+
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.DriveWithPercent;
+
 import frc.robot.commands.ChangeColor;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ControlPanelSubsystem;
-import frc.robot.subsystems.DriveSystem;
+
 import frc.robot.commands.ActivateTelescopes;
-import frc.robot.commands.ActivateWinches;
+
 import frc.robot.commands.DriveWithTargeting;
 import frc.robot.commands.LockWinches;
 import frc.robot.commands.ManualControlPanel;
 import frc.robot.commands.MoveArm;
 import frc.robot.commands.ReverseIntake;
 
+
+
+import frc.robot.commands.ShootWithButton;
+
+import frc.robot.subsystems.IntakeAndOutake;
+
+
 /**
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a "declarative" paradigm, very little robot logic should
+ * actually be handled in the {@link Robot} periodic methods (other than the
+ * scheduler calls). Instead, the structure of the robot (including subsystems,
+ * commands, and button mappings) should be declared here.
  */
 
 public class RobotContainer {
@@ -90,11 +103,20 @@ public class RobotContainer {
   private Command op_manual_wheel;
   private Command op_reverse_tele;
 
+  private Command field;
+  private Command slow;
+  private Command turbo;
+  private Command zero;
+  private Command pid;
+  private Command target;
+
   // Autonomous
   private Command auto;
 
+  private final DriveSystem driveSystem; 
+
   /**
-   * The container for the robot.  Contains subsystems, OI devices, and commands.
+   * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     driveSystem = Factory.getDrive();
@@ -102,6 +124,7 @@ public class RobotContainer {
 
     // Driver controller
     driver = new Joystick(Constants.DRIVER_CONTROLLER);
+
     
     driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTO_ALIGN);
     driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELD_ORIENT);
@@ -117,12 +140,22 @@ public class RobotContainer {
     driver_zero = new InstantCommand(driveSystem::zeroGyro, driveSystem);
     driver_reverse = new ReverseIntake();
 
+    driveSystem = Factory.getDrive(); 
+    
+    driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTOALIGN);
+    driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELDORIENT);
+    driver_turboBtn = new JoystickButton(driver, Constants.DRIVER_TURBO);
+
+
+
+
     // Operator controller
     operator = new XboxController(Constants.OPERATOR_CONTROLLER);
 
     op_launchBtn = new JoystickButton(operator, Constants.OP_LAUNCH);
     op_slowBtn = new JoystickButton(operator, Constants.OP_SLOW);
     op_intakeBtn = new JoystickButton(operator, Constants.OP_INTAKE);
+
     op_lockWinchBtn = new JoystickButton(operator, Constants.OP_LOCK_WINCH);
     op_runWinchBtn = new JoystickButton(operator, Constants.OP_RUN_WINCH);
     op_telescopesBtn = new JoystickButton(operator, Constants.OP_TELESCOPES);
@@ -133,6 +166,12 @@ public class RobotContainer {
   
     op_launch = new LaunchWithButton();
     op_slow = new InstantCommand(driveSystem::setSlow, driveSystem);
+
+    op_lockWinchBtn = new JoystickButton(operator, Constants.OP_LOCKWINCH);
+    op_runWinchBtn = new JoystickButton(operator, Constants.OP_RUNWINCH);
+
+    //op_slow = new ToggleSlowMode();
+
     op_intake = new IntakeWithButton();
     op_lockWinch = new LockWinches();
     op_runWinch = new ActivateWinches();
@@ -157,10 +196,10 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your button->command mappings.  Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
-   * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by instantiating a {@link GenericHID} or one of its subclasses
+   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
+   * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
     // Driver button bindings
@@ -184,7 +223,6 @@ public class RobotContainer {
     op_reverse_teleBtn.whenPressed(op_reverse_tele);
   }
 
- 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
