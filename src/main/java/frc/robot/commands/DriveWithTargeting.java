@@ -7,26 +7,32 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveSystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.LimelightSubsystem;
+import edu.wpi.first.wpilibj.Joystick;
 
-public class DriveWithJoystick extends CommandBase {
+public class DriveWithTargeting extends CommandBase {
+  private final LimelightSubsystem lime;
   private final DriveSystem driveSystem;
   private final Joystick joy;
+  private double error = 0.5;
+  private boolean isDone = false;
   private double X;
   private double Y;
-  private double Z;
 
   /**
-   * Creates a new DriveWithJoystick.
+   * Creates a new RotateToAngle.
    */
-  public DriveWithJoystick() {
-    driveSystem = Factory.getDrive();
+  public DriveWithTargeting() {
     joy = RobotContainer.getJoy();
+    driveSystem = Factory.getDrive();
+
+    lime = Factory.getLimelight(); 
+
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -34,6 +40,9 @@ public class DriveWithJoystick extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    lime.visionOn();
+    driveSystem.errorAccumReset();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,34 +50,20 @@ public class DriveWithJoystick extends CommandBase {
   public void execute() {
     X = joy.getX();
     Y = joy.getY();
-    Z = joy.getZ();
-
-    SmartDashboard.putNumber("X Axis", X);
-    SmartDashboard.putNumber("Y Axis", Y);
-    SmartDashboard.putNumber("Z Axis", Z);
 
     if (Math.abs(X) < 0.15) {
       X = 0.0;
       SmartDashboard.putString("X Deadzone", "X is in deadzone!");
-    } else {
+    } else
       SmartDashboard.putString("X Deadzone", "X is not in deadzone!");
-    }
 
     if (Math.abs(Y) < 0.15) {
       Y = 0.0;
       SmartDashboard.putString("Y Deadzone", "Y is in deadzone!");
-    } else {
+    } else
       SmartDashboard.putString("Y Deadzone", "Y is not in deadzone!");
-    }
 
-    if (Math.abs(Z) < 0.15) {
-      Z = 0.0;
-      SmartDashboard.putString("Z Deadzone", "Z is in deadzone!");
-    } else {
-      SmartDashboard.putString("Z Deadzone", "Z is not in deadzone!");
-    }
-
-    driveSystem.Drive(X, -Y, Z);
+    driveSystem.driveWithTargeting(X, -Y, lime.getXOffsetAngle());
 
   }
 
@@ -76,11 +71,16 @@ public class DriveWithJoystick extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     driveSystem.stopDrive();
+    lime.switchCamMode();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (isDone)
+      return true;
+    else
+      return false;
+
   }
 }
