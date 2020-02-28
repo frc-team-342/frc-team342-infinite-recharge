@@ -19,6 +19,7 @@ public class LimelightSubsystem extends SubsystemBase {
   private NetworkTableEntry tv, ty, tx, camMode, ledMode;
   private double yOffsetAngle, xOffsetAngle;
   private int cameraMode, lightMode, validTarget;
+  private double limeError = 2.5;
 
   /**
    * Creates a new LimelightSubsystem.
@@ -92,7 +93,7 @@ public class LimelightSubsystem extends SubsystemBase {
    * 
    */
   public double getXOffsetAngle() {
-    return xOffsetAngle;
+      return xOffsetAngle + limeError;
   }
 
   /*

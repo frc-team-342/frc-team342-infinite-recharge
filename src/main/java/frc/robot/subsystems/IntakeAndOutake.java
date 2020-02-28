@@ -172,7 +172,7 @@ public class IntakeAndOutake extends SubsystemBase {
     double numerator = (Math.sqrt(gravity) * Math.sqrt(actualDist) * Math.sqrt(Math.pow(Math.tan(hoodAngle), 2) + 1.0));
     double denominator = Math.sqrt(2 * Math.tan(hoodAngle) - ((2 * height) / actualDist));
 
-    double inchPerSec = 2 * (numerator / denominator);
+    double inchPerSec = 2.0 * (numerator / denominator);
     double unitConversion = 819.2/(6.0*Math.PI);
     
     // double velocity = ((inchPerSec*(58.026) + 17434.0) + 155.8) / 0.75;

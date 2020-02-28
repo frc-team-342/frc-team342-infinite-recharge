@@ -135,7 +135,7 @@ public class DriveSystem extends SubsystemBase {
 
       mecanumDrive.driveCartesian(0.0, 0.0, ((target - current) * kP) / 300);
 
-    else {
+    } else {
       mecanumDrive.driveCartesian(xSpeed * 0.8, ySpeed * 0.8, (zRotation * 0.8) / 2);
     }
   }

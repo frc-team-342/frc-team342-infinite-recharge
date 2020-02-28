@@ -9,7 +9,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 //import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+//import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ControlPanelSubsystem;
 import frc.robot.subsystems.JetsonSubsystem;
@@ -18,9 +18,7 @@ import frc.robot.subsystems.JetsonSubsystem;
  * Factories are being used in place of singletons.
  */
 
-import frc.robot.subsystems.DriveSystem;
-import frc.robot.subsystems.IntakeAndOutake;
-import frc.robot.subsystems.LimelightSubsystem;
+
 
 public class Factory {
     private static IntakeAndOutake intakeOutake = null;
@@ -46,8 +44,9 @@ public class Factory {
                 new CANSparkMax(Constants.DRIVE_MOTOR_R1, MotorType.kBrushless), 
                 new CANSparkMax(Constants.DRIVE_MOTOR_R2, MotorType.kBrushless)
             );
-
+            
         }
+        return driveSystem;
     }
 
     public static LimelightSubsystem getLimelight() {
@@ -77,10 +76,5 @@ public class Factory {
         }
         return cs;
     }
-    public static ClimbSubsystem getClimb() {
-        if (cs == null) {
-            cs = new ClimbSubsystem();
-        }
-        return cs;
-    }
+    
 }

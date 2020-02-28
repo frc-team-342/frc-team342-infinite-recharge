@@ -22,15 +22,12 @@ import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.IntakeWithButton;
 import frc.robot.commands.LaunchWithButton;
 import frc.robot.commands.DriveWithJoystick;
-
 import frc.robot.subsystems.DriveSystem;
-
 import frc.robot.commands.ActivateWinches;
-
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.DriveWithPercent;
-
 import frc.robot.commands.ChangeColor;
+
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ControlPanelSubsystem;
 
@@ -113,7 +110,7 @@ public class RobotContainer {
   // Autonomous
   private Command auto;
 
-  private final DriveSystem driveSystem; 
+  
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -139,11 +136,9 @@ public class RobotContainer {
     driver_slow = new InstantCommand(driveSystem::setSlow, driveSystem);
     driver_zero = new InstantCommand(driveSystem::zeroGyro, driveSystem);
     driver_reverse = new ReverseIntake();
-
-    driveSystem = Factory.getDrive(); 
     
-    driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTOALIGN);
-    driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELDORIENT);
+    driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTO_ALIGN);
+    driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELD_ORIENT);
     driver_turboBtn = new JoystickButton(driver, Constants.DRIVER_TURBO);
 
 
@@ -167,8 +162,8 @@ public class RobotContainer {
     op_launch = new LaunchWithButton();
     op_slow = new InstantCommand(driveSystem::setSlow, driveSystem);
 
-    op_lockWinchBtn = new JoystickButton(operator, Constants.OP_LOCKWINCH);
-    op_runWinchBtn = new JoystickButton(operator, Constants.OP_RUNWINCH);
+    op_lockWinchBtn = new JoystickButton(operator, Constants.OP_LOCK_WINCH);
+    op_runWinchBtn = new JoystickButton(operator, Constants.OP_RUN_WINCH);
 
     //op_slow = new ToggleSlowMode();
 
