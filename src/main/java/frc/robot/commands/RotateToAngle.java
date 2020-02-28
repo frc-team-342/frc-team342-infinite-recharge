@@ -17,7 +17,7 @@ public class RotateToAngle extends CommandBase {
   private double angle;
 
   private double error = 2.5;
-  private double turnSpeed = 0.6;
+  private double turnSpeed = 0.75;
   private boolean isDone = false;
 
   /**
