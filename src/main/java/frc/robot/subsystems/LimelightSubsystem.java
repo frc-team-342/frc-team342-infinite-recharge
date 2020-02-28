@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LimelightSubsystem extends SubsystemBase {
   private NetworkTable table;
@@ -42,7 +41,7 @@ public class LimelightSubsystem extends SubsystemBase {
     cameraMode = camMode.getNumber(0).intValue();
     lightMode = ledMode.getNumber(0).intValue();
 
-    SmartDashboard.putNumber("Limelight Distance", getDistance());
+    //SmartDashboard.putNumber("Limelight Distance", getDistance());
   }
 
   /*

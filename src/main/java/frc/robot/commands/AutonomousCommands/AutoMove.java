@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.AutonomousCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
@@ -7,15 +7,17 @@ import frc.robot.subsystems.DriveSystem;
 public class AutoMove extends CommandBase {
   private static DriveSystem driveSystem;
   private double Y;
-
+  private double X;
   private double Z;
 
 
   /**
    * Creates a new AutoMove.
    */
-  public AutoMove(double y) {
+  public AutoMove(double x, double y, double z) {
     Y = y;
+    X = x;
+    Z = z;
     driveSystem = Factory.getDrive();
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -29,7 +31,7 @@ public class AutoMove extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveSystem.Drive(0.0, Y, 0.0);
+    driveSystem.Drive(X, Y, Z);
 
   }
 

@@ -18,30 +18,20 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.IntakeWithButton;
 import frc.robot.commands.LaunchWithButton;
-import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.ActivateWinches;
-import frc.robot.commands.Autonomous;
-import frc.robot.commands.DriveWithPercent;
-import frc.robot.commands.ChangeColor;
+//import frc.robot.commands.Autonomous;
 
 import frc.robot.subsystems.ClimbSubsystem;
-import frc.robot.subsystems.ControlPanelSubsystem;
 
 import frc.robot.commands.ActivateTelescopes;
 
-import frc.robot.commands.DriveWithTargeting;
 import frc.robot.commands.LockWinches;
 import frc.robot.commands.ManualControlPanel;
 import frc.robot.commands.MoveArm;
 import frc.robot.commands.ReverseIntake;
-
-
-
-import frc.robot.commands.ShootWithButton;
 
 import frc.robot.subsystems.IntakeAndOutake;
 
@@ -99,13 +89,6 @@ public class RobotContainer {
   private Command op_controlarm;
   private Command op_manual_wheel;
   private Command op_reverse_tele;
-
-  private Command field;
-  private Command slow;
-  private Command turbo;
-  private Command zero;
-  private Command pid;
-  private Command target;
 
   // Autonomous
   private Command auto;
@@ -177,7 +160,7 @@ public class RobotContainer {
     op_reverse_tele = new InstantCommand(climb::setReverse, climb);
 
     // Autonomous
-    auto = new Autonomous();
+    //auto = new Autonomous();
 
     configureButtonBindings();
   }

@@ -20,7 +20,7 @@ public class ActivateTelescopes extends CommandBase {
 
   private final ClimbSubsystem cs;
 
-  private double speed = -0.6;
+  private double speed = -0.9;
 
   public ActivateTelescopes() {
     // Use addRequirements() here to declare subsystem dependencies.

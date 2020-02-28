@@ -28,7 +28,7 @@ public class IntakeAndOutake extends SubsystemBase {
   private DigitalInput sensor3; //shooter
 
   private final double speed = 0.9;
-  private final double speed2 = .75;
+  private final double speed2 = .95;
 
 
   private final int current_limit = 80;
@@ -176,7 +176,7 @@ public class IntakeAndOutake extends SubsystemBase {
     double unitConversion = 819.2/(6.0*Math.PI);
     
     // double velocity = ((inchPerSec*(58.026) + 17434.0) + 155.8) / 0.75;
-    double velocity = (((inchPerSec) + 240.8) / 0.975) * unitConversion;
+    double velocity = (((inchPerSec) + 240.8) / 0.950) * unitConversion;
 
 
     shooter2.follow(shooter1);
@@ -184,8 +184,8 @@ public class IntakeAndOutake extends SubsystemBase {
 
     System.out.println("Velocity: " + shooter1.getSelectedSensorVelocity());
 
-    SmartDashboard.putNumber("Target Velocity", velocity);
-    SmartDashboard.putNumber("Actual LL Dist", adjustedDist);
+    //SmartDashboard.putNumber("Target Velocity", velocity);
+    //SmartDashboard.putNumber("Actual LL Dist", adjustedDist);
 
     if (Math.abs(shooter1.getSelectedSensorVelocity()) + error < velocity && !sensor3.get()){ 
       // Will not shoot if fly wheel isnt up to speed. stops intake if shooter sensor sees cell
@@ -220,16 +220,16 @@ public class IntakeAndOutake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Shooter 1 Percent: ", shooter1.getMotorOutputPercent());
-    SmartDashboard.putNumber("Shooter 1 Voltage: ", shooter1.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Shooter 1 Current: ", shooter1.getSupplyCurrent());
+    //SmartDashboard.putNumber("Shooter 1 Percent: ", shooter1.getMotorOutputPercent());
+    //SmartDashboard.putNumber("Shooter 1 Voltage: ", shooter1.getMotorOutputVoltage());
+    //SmartDashboard.putNumber("Shooter 1 Current: ", shooter1.getSupplyCurrent());
 
 
-    SmartDashboard.putNumber("Shooter 2 Percent: ", shooter2.getMotorOutputPercent());
-    SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
+    //SmartDashboard.putNumber("Shooter 2 Percent: ", shooter2.getMotorOutputPercent());
+    //SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
+    //SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
 
-    SmartDashboard.putNumber("Velocity: ", shooter1.getSelectedSensorVelocity());
+    //SmartDashboard.putNumber("Velocity: ", shooter1.getSelectedSensorVelocity());
     // if (sensor1.get() && sensor2.get() && sensor3.get())
     // intakeStop();
   }
