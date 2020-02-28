@@ -20,11 +20,12 @@ public class Autonomous extends SequentialCommandGroup {
 
 
     super(
-      new AutoMove(0.45).withTimeout(1.35), 
-      new RotateToAngle(-70.0),
-      new AutoMove(0.5).withTimeout(0.8), 
-      new RotateToAngle(-160.0),
-      new AutoMove(0.5).withTimeout(0.4));
+      new AutoMove(0.45).withTimeout(0.8), 
+      new RotateToAngle(-135.0),
+      new AutoTarget().withTimeout(2.0),
+      new LaunchWithButton()
+      ); 
+      
 
 
   }

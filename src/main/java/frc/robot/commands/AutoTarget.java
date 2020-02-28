@@ -7,61 +7,59 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.LimelightSubsystem;
+import edu.wpi.first.wpilibj.Joystick;
 
-public class RotateToAngle extends CommandBase {
+public class AutoTarget extends CommandBase {
+  private final LimelightSubsystem lime;
   private final DriveSystem driveSystem;
-  private double gyro;
-  private double angle;
-
-  private double error = 2.5;
-  private double turnSpeed = 0.6;
+  private double error = 0.5;
   private boolean isDone = false;
 
   /**
    * Creates a new RotateToAngle.
    */
-  public RotateToAngle(double Angle) {
+  public AutoTarget() {
     driveSystem = Factory.getDrive();
-    angle = Angle;
+
+    lime = Factory.getLimelight(); 
+
+
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    lime.visionOn();
+    driveSystem.errorAccumReset();
 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    gyro = driveSystem.getGyro();
-    if (gyro > angle)
-      turnSpeed *= -1.0;
-    if (gyro >= (angle - error) && gyro <= (angle + error)) {
-      driveSystem.Drive(0.0, 0.0, 0.0);
-      isDone = true;
-    } else
-      driveSystem.Drive(0.0, 0.0, turnSpeed);
+    driveSystem.driveWithTargeting(0.0, 0.0, lime.getXOffsetAngle());
 
-    System.out.println(gyro);
+    //if(Math.abs(lime.getXOffsetAngle()) - error < 0.6)
+    //  isDone = true;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveSystem.Drive(0.0, 0.0, 0.0);
+    driveSystem.stopDrive();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (isDone)
-      return true;
-    else
-      return false;
+    return isDone;
+
   }
 }

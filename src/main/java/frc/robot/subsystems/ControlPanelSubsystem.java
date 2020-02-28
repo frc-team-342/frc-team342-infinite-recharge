@@ -37,11 +37,11 @@ public class ControlPanelSubsystem extends SubsystemBase {
   // Encoder encoder = new Encoder(1, 2, false, EncodingType.k1X);
 
   
-  DigitalInput armLimitUp;
-  DigitalInput armLimitDown;
+  //DigitalInput armLimitUp;
+  //DigitalInput armLimitDown;
 
 
-  Encoder encoder = new Encoder(1, 2, false, EncodingType.k1X);
+  //Encoder encoder = new Encoder(1, 2, false, EncodingType.k1X);
 
   public ControlPanelSubsystem() {
 
@@ -50,8 +50,8 @@ public class ControlPanelSubsystem extends SubsystemBase {
     armMotor = new TalonSRX(Constants.CP_ARM);
     armPlacement = true;
 
-    armLimitUp = new DigitalInput(Constants.ARM_LIMIT_UP);
-    armLimitDown = new DigitalInput(Constants.ARM_LIMIT_DOWN);
+    //armLimitUp = new DigitalInput(Constants.ARM_LIMIT_UP);
+    //armLimitDown = new DigitalInput(Constants.ARM_LIMIT_DOWN);
 
 
   }
