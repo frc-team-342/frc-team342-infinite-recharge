@@ -21,7 +21,7 @@ public class AutonomousLine extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-      new AutoMove(0.0, 0.45, 0.0).withTimeout(0.5)
+      new AutoMove(0.0, 0.45, 0.0).withTimeout(0.25)
     );
   }
 }

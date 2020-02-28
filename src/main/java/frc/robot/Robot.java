@@ -66,7 +66,7 @@ public class Robot extends TimedRobot {
     autoChoose.addOption("Drive Off Line", new AutonomousLine());
 
     SmartDashboard.putData("Auto Chooser", autoChoose);
-    autoDrive = autoChoose.getSelected();
+    
     // Commands
 
   }
@@ -109,6 +109,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    lime.visionOff();
+    autoDrive = autoChoose.getSelected();
     driveSystem.zeroGyro();
     autoDrive.schedule();
 

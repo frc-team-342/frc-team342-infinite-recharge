@@ -176,7 +176,7 @@ public class IntakeAndOutake extends SubsystemBase {
     double unitConversion = 819.2/(6.0*Math.PI);
     
     // double velocity = ((inchPerSec*(58.026) + 17434.0) + 155.8) / 0.75;
-    double velocity = (((inchPerSec) + 240.8) / 0.950) * unitConversion;
+    double velocity = (((inchPerSec) + 240.8) / 0.955 ) * unitConversion;
 
 
     shooter2.follow(shooter1);
