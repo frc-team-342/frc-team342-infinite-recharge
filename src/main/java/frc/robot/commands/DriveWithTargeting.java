@@ -51,21 +51,10 @@ public class DriveWithTargeting extends CommandBase {
     X = joy.getX();
     Y = joy.getY();
 
-    if (Math.abs(X) < 0.15) {
+    if (Math.abs(X) < 0.15)
       X = 0.0;
-      //SmartDashboard.putString("X Deadzone", "X is in deadzone!");
-    } else{
-      ;
-    }
-      //SmartDashboard.putString("X Deadzone", "X is not in deadzone!");
-
-    if (Math.abs(Y) < 0.15) {
+    if (Math.abs(Y) < 0.15)
       Y = 0.0;
-      //SmartDashboard.putString("Y Deadzone", "Y is in deadzone!");
-    } else{
-      ;
-    }
-      //SmartDashboard.putString("Y Deadzone", "Y is not in deadzone!");
 
     driveSystem.driveWithTargeting(X, -Y, lime.getXOffsetAngle());
 
