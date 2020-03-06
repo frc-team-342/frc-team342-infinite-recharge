@@ -9,24 +9,13 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.revrobotics.CANDigitalInput.LimitSwitch;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.CounterBase.EncodingType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
-
 
 public class ControlPanelSubsystem extends SubsystemBase {
-  /**
-   * Creates a new ControlPanelSubsystem.
-   */
   // Creating a motor
   private static TalonSRX rotater;
 
@@ -36,13 +25,14 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
   // Encoder encoder = new Encoder(1, 2, false, EncodingType.k1X);
 
-  
-  //DigitalInput armLimitUp;
-  //DigitalInput armLimitDown;
+  // DigitalInput armLimitUp;
+  // DigitalInput armLimitDown;
 
+  // Encoder encoder = new Encoder(1, 2, false, EncodingType.k1X);
 
-  //Encoder encoder = new Encoder(1, 2, false, EncodingType.k1X);
-
+  /**
+   * Creates a new ControlPanelSubsystem.
+   */
   public ControlPanelSubsystem() {
 
     rotater = new TalonSRX(Constants.CP_ROTATE);
@@ -50,13 +40,17 @@ public class ControlPanelSubsystem extends SubsystemBase {
     armMotor = new TalonSRX(Constants.CP_ARM);
     armPlacement = true;
 
-    //armLimitUp = new DigitalInput(Constants.ARM_LIMIT_UP);
-    //armLimitDown = new DigitalInput(Constants.ARM_LIMIT_DOWN);
-
-
+    // armLimitUp = new DigitalInput(Constants.ARM_LIMIT_UP);
+    // armLimitDown = new DigitalInput(Constants.ARM_LIMIT_DOWN);
   }
 
+  /**
+   * Spin the control panel motor
+   * 
+   * @param speed The speed to spin the motor at, between -1 and 1.
+   */
   public void spin(double speed) {
+    MathUtil.clamp(speed, -1.0, 1.0);
     rotater.set(ControlMode.PercentOutput, speed);
 
     // Dividing pulses by 44.4 to find the revolutions
@@ -64,50 +58,62 @@ public class ControlPanelSubsystem extends SubsystemBase {
     // System.out.println(rotations);
   }
 
-  public boolean getLimitFwd() {
-    if (armMotor.isFwdLimitSwitchClosed() == 1)
-      return true;
-    else
-      return false;
+  /**
+   * Returns true if the forward limit switch is closed, or false if open.
+   * 
+   * @return The status of the front limit switch.
+   */
+  public boolean getForwardLimit() {
+    return (armMotor.isFwdLimitSwitchClosed() == 1) ? true : false;
   }
 
-  public boolean getLimitRev() {
-    if (armMotor.isRevLimitSwitchClosed() == 1)
-      return true;
-    else
-      return false;
+  /**
+   * Returns true if the back limit switch is closed, or false if open.
+   * 
+   * @return The status of the back limit switch.
+   */
+  public boolean getReverseLimit() {
+    return (armMotor.isRevLimitSwitchClosed() == 1) ? true : false;
   }
-
-
-  public void setArmBoolean() {
+  
+  /**
+   * Toggles the arm placement to true or false.
+   */
+  public void toggleArmPlacement() {
     armPlacement = !armPlacement;
   }
 
-  public boolean getArmBoolean() {
+  /**
+   * Gets the arm location. True will be folded in, and false will be out.
+   * 
+   * @return The position of the arm, with true as down and false as up.
+   */
+  public boolean getArmPlacement() {
     return armPlacement;
   }
 
+  /**
+   * Moves the arm if it is not hitting one of the limit switches.
+   */
   public void moveArm() {
-    if (armPlacement == true && !getLimitRev()) {
-        armMotor.set(ControlMode.PercentOutput, -1.0);
-    } else if (armPlacement == false && !getLimitFwd()) {
-        armMotor.set(ControlMode.PercentOutput, 1.0);
-    }
-      else
-        stopArm();
-    }
+    if (armPlacement && !getReverseLimit()) {
+      armMotor.set(ControlMode.PercentOutput, -1.0);
+    } else if (!armPlacement && !getForwardLimit()) {
+      armMotor.set(ControlMode.PercentOutput, 1.0);
+    } else
+      stopArm();
+  }
 
+  /**
+   * Sets the arm's output to 0. Behavior will change depending on brake or coast mode.
+   */
   public void stopArm() {
     armMotor.set(ControlMode.PercentOutput, 0.0);
   }
 
-
   @Override
   public void periodic() {
-    //SmartDashboard.putBoolean("Forward Limit Switch", getLimitFwd());
-    //SmartDashboard.putBoolean("Reverse Limit Switch", getLimitRev());
-
-    //SmartDashboard.putBoolean("Arm Placement", getArmBoolean());
     // This method will be called once per scheduler run
+
   }
 }
