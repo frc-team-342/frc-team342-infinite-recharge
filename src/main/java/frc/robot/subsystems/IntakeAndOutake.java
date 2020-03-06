@@ -168,7 +168,7 @@ public class IntakeAndOutake extends SubsystemBase {
 
     // Not even going to try to document this lol. Distance calculation for velocity
     double adjustedDist = (lime.getDistance() * 0.83) + 9.2;
-    double actualDist = adjustedDist + limeToHood + targetDepth;
+    double actualDist = adjustedDist + limeToHood + targetDepth ;
     double numerator = (Math.sqrt(gravity) * Math.sqrt(actualDist) * Math.sqrt(Math.pow(Math.tan(hoodAngle), 2) + 1.0));
     double denominator = Math.sqrt(2 * Math.tan(hoodAngle) - ((2 * height) / actualDist));
 
@@ -176,7 +176,8 @@ public class IntakeAndOutake extends SubsystemBase {
     double unitConversion = 819.2/(6.0*Math.PI);
     
     // double velocity = ((inchPerSec*(58.026) + 17434.0) + 155.8) / 0.75;
-    double velocity = (((inchPerSec) + 240.8) / 0.955 ) * unitConversion;
+    // double velocity = (((inchPerSec) + 240.8) / 0.955 ) * unitConversion;
+    double velocity = ((inchPerSec * unitConversion) * 2.461 + 8103.4) / 2;
 
 
     shooter2.follow(shooter1);
@@ -184,8 +185,8 @@ public class IntakeAndOutake extends SubsystemBase {
 
     System.out.println("Velocity: " + shooter1.getSelectedSensorVelocity());
 
-    //SmartDashboard.putNumber("Target Velocity", velocity);
-    //SmartDashboard.putNumber("Actual LL Dist", adjustedDist);
+    SmartDashboard.putNumber("Target Velocity", velocity);
+    SmartDashboard.putNumber("Actual LL Dist", adjustedDist);
 
     if (Math.abs(shooter1.getSelectedSensorVelocity()) + error < velocity && !sensor3.get()){ 
       // Will not shoot if fly wheel isnt up to speed. stops intake if shooter sensor sees cell
@@ -229,7 +230,7 @@ public class IntakeAndOutake extends SubsystemBase {
     //SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
     //SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
 
-    //SmartDashboard.putNumber("Velocity: ", shooter1.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Velocity: ", shooter1.getSelectedSensorVelocity());
     // if (sensor1.get() && sensor2.get() && sensor3.get())
     // intakeStop();
   }

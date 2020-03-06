@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.IntakeWithButton;
 import frc.robot.commands.LaunchWithButton;
+import frc.robot.commands.ShootWithButton;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.ActivateWinches;
 //import frc.robot.commands.Autonomous;

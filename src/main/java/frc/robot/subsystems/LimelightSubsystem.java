@@ -87,7 +87,7 @@ public class LimelightSubsystem extends SubsystemBase {
     ledMode.setNumber(1);
   }
 
-  /*
+  /** 
    * Returns horizontal angle of target offset from crosshair
    * 
    */
