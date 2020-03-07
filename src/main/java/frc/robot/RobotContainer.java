@@ -36,6 +36,7 @@ import frc.robot.commands.ChangeColor;
 import frc.robot.subsystems.ControlPanelSubsystem;
 import frc.robot.commands.IntakeWithButton;
 import frc.robot.commands.LaunchWithButton;
+import frc.robot.commands.ShootWithButton;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.ActivateWinches;
 import frc.robot.commands.LockWinches;

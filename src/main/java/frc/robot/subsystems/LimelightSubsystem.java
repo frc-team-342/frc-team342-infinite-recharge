@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LimelightSubsystem extends SubsystemBase {
   private NetworkTable table;
@@ -47,15 +48,27 @@ public class LimelightSubsystem extends SubsystemBase {
     //SmartDashboard.putNumber("Limelight Distance", getDistance());
   }
 
-  /*
+  /**
    * Gets distance offset from the robot to the target
    * 
    */
   public double getDistance() {
-    return (90.0 - 21.125) / Math.tan((yOffsetAngle + 15.0) * Math.PI / 180);
+
+    //changed on 3/6/2020 by Mr. Neal.  Changed height to height of actual target old calculation commented
+    //double distance = (90.0 - 21.125) / Math.tan((yOffsetAngle + 15.0) * Math.PI / 180);
+
+    double distance = (90.75 - (21.25)) / Math.tan((yOffsetAngle + 16.5) * Math.PI / 180);
+    
+    //Changed on 3/6/2020 from excel data
+    
+    distance = 0.9327*(distance)+2.0986;
+    SmartDashboard.putNumber("Distance_Distinguished", distance);
+
+    System.out.println(distance);
+    return distance;
   }
 
-  /*
+  /**
    * Returns the offset from the robot to the target
    * 
    */
@@ -63,7 +76,7 @@ public class LimelightSubsystem extends SubsystemBase {
     return getDistance() * (Math.tan(xOffsetAngle * Math.PI / 180));
   }
 
-  /*
+  /**
    * Returns the distance directly from the robot to the target
    * 
    */
@@ -71,7 +84,7 @@ public class LimelightSubsystem extends SubsystemBase {
     return Math.sqrt(Math.pow(getXOffset(), 2) + Math.pow(getDistance(), 2));
   }
 
-  /*
+  /**
    * Changes camera mode and LEDs
    * 
    */
@@ -90,7 +103,7 @@ public class LimelightSubsystem extends SubsystemBase {
     ledMode.setNumber(1);
   }
 
-  /*
+  /** 
    * Returns horizontal angle of target offset from crosshair
    * 
    */
@@ -98,7 +111,7 @@ public class LimelightSubsystem extends SubsystemBase {
       return xOffsetAngle + limeError;
   }
 
-  /*
+  /**
    * Returns vertical angle of target offset from crosshair
    * 
    */

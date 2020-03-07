@@ -32,7 +32,8 @@ public class ShootWithButton extends CommandBase {
 
   @Override
   public void execute() {
-    intakeAndOutake.outake(25000);  
+    // intakeAndOutake.outake(joy.getRawAxis(3)); 
+    intakeAndOutake.outake(joy.getRawAxis(3));
   }
 
   @Override

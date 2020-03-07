@@ -44,7 +44,6 @@ public class AutoTarget extends CommandBase {
   @Override
   public void execute() {
     driveSystem.driveWithTargeting(0.0, 0.0, lime.getXOffsetAngle());
-
     //if(Math.abs(lime.getXOffsetAngle()) - error < 0.6)
     //  isDone = true;
   }
