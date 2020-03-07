@@ -8,35 +8,25 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-<<<<<<< HEAD
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
-=======
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 
 import com.revrobotics.CANSparkMax;
-<<<<<<< HEAD
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-=======
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
 
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-<<<<<<< HEAD
 import edu.wpi.first.wpiutil.math.MathUtil;
-//import frc.robot.commands.DriveWithJoystick;
 import frc.robot.Constants;
 import frc.robot.Robot;
-=======
 
 
 import frc.robot.commands.DriveWithJoystick;
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
 
 public class DriveSystem extends SubsystemBase {
 
@@ -113,20 +103,14 @@ public class DriveSystem extends SubsystemBase {
     setPID(motorRight1);
     setPID(motorRight2);
 
-<<<<<<< HEAD
-=======
     motorLeft1.getEncoder().setPosition(0);
 
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
     encoderL1 = new CANEncoder(motorLeft1);
     encoderL2 = new CANEncoder(motorLeft2);
     encoderR1 = new CANEncoder(motorRight1);
     encoderR2 = new CANEncoder(motorRight2); 
-<<<<<<< HEAD
     motorLeft1.getEncoder().setPosition(0);
-=======
 
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
 
     mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
 
@@ -253,7 +237,6 @@ public class DriveSystem extends SubsystemBase {
     SmartDashboard.putBoolean("Is Targeting", isTargeting);
   }
 
-<<<<<<< HEAD
   public void stopDrive() {
     motorLeft1.stopMotor();
     motorLeft2.stopMotor();
@@ -265,8 +248,7 @@ public class DriveSystem extends SubsystemBase {
     
     MathUtil.clamp(xSpeed, -1.0, 1.0);
     MathUtil.clamp(ySpeed, -1.0, 1.0);
-=======
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
+  }
 
   // Set off toggle for robot start so targeting is always off unless turned on
   public void targetOff() {
@@ -291,16 +273,6 @@ public class DriveSystem extends SubsystemBase {
     return accumError;
   }
 
-<<<<<<< HEAD
-=======
-  public void stopDrive() {
-    motorLeft1.stopMotor();
-    motorLeft2.stopMotor();
-    motorRight1.stopMotor();
-    motorRight2.stopMotor();
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
-  }
-
   @Override
   public void periodic() {
     mecanumDrive.feed();
@@ -309,7 +281,6 @@ public class DriveSystem extends SubsystemBase {
 
   /*public void initDefaultCommand() {
     setDefaultCommand(new DriveWithJoystick());
-<<<<<<< HEAD
   }*/
 
 //TODO: go over these two methods with neal.
@@ -339,8 +310,6 @@ public class DriveSystem extends SubsystemBase {
 
   public void testPrint () {
     System.out.println("hello");
-=======
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
   }
 }
 

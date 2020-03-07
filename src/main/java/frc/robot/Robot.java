@@ -12,13 +12,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-<<<<<<< HEAD
 import frc.robot.RobotContainer;
 /*import frc.robot.commands.ActivateTelescopes;
 import frc.robot.commands.DriveWithJoystick;*/
 import frc.robot.subsystems.DriveSystem;
 //import frc.robot.subsystems.ClimbSubsystem;
-=======
 
 import frc.robot.commands.ActivateTelescopes;
 import frc.robot.commands.AutonomousCommands.AutonomousLine;
@@ -29,7 +27,6 @@ import frc.robot.commands.DriveWithTargeting;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.IntakeAndOutake;
 import frc.robot.subsystems.LimelightSubsystem;
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -39,13 +36,10 @@ import frc.robot.subsystems.LimelightSubsystem;
  * project.
  */
 public class Robot extends TimedRobot {
-<<<<<<< HEAD
   
   private Command m_autonomousCommand;
  
-=======
 
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
   private RobotContainer m_robotContainer;
   private Command driveWithJoy;
   private static DriveSystem driveSystem;
@@ -64,14 +58,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-<<<<<<< HEAD
-    //driveWithPercent = m_robotContainer.getPercent();*/
-    //climb = new ActivateTelescopes();
-    //driveWithJoy = new DriveWithJoystick();
-    driveSystem = Factory.getDrive();
-    //driveWithJoy = m_robotContainer.getDrive();
-    //autoDrive = new Autonomous();
-=======
     
     
     driveSystem = Factory.getDrive();
@@ -90,7 +76,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto Chooser", autoChoose);
     
     // Commands
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
 
   }
 
@@ -132,7 +117,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-<<<<<<< HEAD
     //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -143,13 +127,11 @@ public class Robot extends TimedRobot {
     //autoDrive.schedule();
     
    
-=======
     lime.visionOff();
     autoDrive = autoChoose.getSelected();
     driveSystem.zeroGyro();
     autoDrive.schedule();
 
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
   }
 
   /**

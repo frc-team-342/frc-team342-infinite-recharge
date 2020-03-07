@@ -18,8 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-<<<<<<< HEAD
-/*import frc.robot.commands.RotateToAngle;
+import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.IntakeWithButton;
 import frc.robot.commands.LaunchWithButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,15 +34,11 @@ import frc.robot.commands.ToggleTurboMode;
 import frc.robot.commands.ZeroGyro;
 import frc.robot.commands.ChangeColor;
 import frc.robot.subsystems.ControlPanelSubsystem;
-=======
 import frc.robot.commands.IntakeWithButton;
 import frc.robot.commands.LaunchWithButton;
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.ActivateWinches;
-<<<<<<< HEAD
-import frc.robot.commands.LockWinches;*/
-=======
+import frc.robot.commands.LockWinches;
 //import frc.robot.commands.Autonomous;
 
 import frc.robot.subsystems.ClimbSubsystem;
@@ -57,7 +52,6 @@ import frc.robot.commands.ReverseIntake;
 
 import frc.robot.subsystems.IntakeAndOutake;
 
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -68,7 +62,6 @@ import frc.robot.subsystems.IntakeAndOutake;
  */
 
 public class RobotContainer {
-<<<<<<< HEAD
 
   //remote controls 
   XboxController m_driverController = new XboxController(Constants.driver_joystick);
@@ -91,10 +84,8 @@ public class RobotContainer {
   private static Joystick tele;
   private static JoystickButton winchLock;
   private static JoystickButton winchActivate;
-  /*private final DriveWithJoystick driveWithJoystick;
+  private final DriveWithJoystick driveWithJoystick;
   private final DriveWithPercent driveWithPercent;
-=======
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
   private final DriveSystem driveSystem;
   private final ClimbSubsystem climb;
 
@@ -143,9 +134,8 @@ public class RobotContainer {
   // Autonomous
   private Command auto;
 
-<<<<<<< HEAD
   private final IntakeWithButton m_intakeWithButton = new IntakeWithButton();
-  private final LaunchWithButton m_launchWithButton = new LaunchWithButton(); */
+  private final LaunchWithButton m_launchWithButton = new LaunchWithButton(); 
   
 
   //rotate to amgle 
@@ -163,51 +153,18 @@ public class RobotContainer {
   private final ToggleSlowMode slow = new ToggleSlowMode();
   private final ToggleTurboMode turbo = new ToggleTurboMode();*/
 
-=======
   
 
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-<<<<<<< HEAD
 
-    //establishes joysticks and buttons
-    joy = new Joystick(1);
-    //leftBumper = new JoystickButton(joy, Constants.LEFTBUMPER); 
-    //rightBumper = new JoystickButton(joy, Constants.RIGHTBUMPER); 
-    //xbox_A = new JoystickButton(joy, Constants.XBOX_A); 
-    trigger = new JoystickButton(joy, Constants.TRIGGER); 
-    //control = Factory.getControl();
-    joy = new Joystick(Constants.driver_joystick);
-    //driveSystem = Factory.getDrive();
-    joy = new Joystick(Constants.driver_joystick);
-    //driveWithJoystick = new DriveWithJoystick();
-    //driveWithPercent = new DriveWithPercent();
-    
-    gyrozeroer = new JoystickButton(joy, Constants.zeroGyro);
-    fieldtoggle = new JoystickButton(joy, Constants.fieldToggler);
-    pidtoggle = new JoystickButton(joy, Constants.pidToggler);
-    toggleSlow = new JoystickButton(joy, Constants.toggleSlow);
-    toggleTurbo = new JoystickButton(joy, Constants.toggleTurbo);
-    //changeColor = new ChangeColor();
-    //lockWinch = new LockWinches();
-    //activateWinches = new ActivateWinches();
-
-    colorGetter = new Joystick(Constants.colorBtn);
-    colorBtn = new JoystickButton(colorGetter, Constants.colorBtn);
-
-    tele = new Joystick(1);
-    winchLock = new JoystickButton(tele, 7);
-    winchActivate = new JoystickButton(tele, 8);
-=======
     driveSystem = Factory.getDrive();
     climb = Factory.getClimb();
 
     // Driver controller
     driver = new Joystick(Constants.DRIVER_CONTROLLER);
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
 
     
     driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTO_ALIGN);
@@ -224,19 +181,10 @@ public class RobotContainer {
     driver_zero = new InstantCommand(driveSystem::zeroGyro, driveSystem);
     driver_reverse = new ReverseIntake();
     
-<<<<<<< HEAD
-    // Configure the button bindings
-    configureButtonBindings();
-  }
-  public static Joystick getJoy(){
-    return joy;
-  }
-=======
     driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTO_ALIGN);
     driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELD_ORIENT);
     driver_turboBtn = new JoystickButton(driver, Constants.DRIVER_TURBO);
 
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
 
 
 
@@ -278,7 +226,6 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
-<<<<<<< HEAD
   /*public Command getDrive(){
     return driveWithJoystick; 
   }*/
@@ -286,7 +233,6 @@ public class RobotContainer {
   /*public Command getPercent(){
     return driveWithPercent;
   }*/
-=======
   public static Joystick getJoy(){
     return driver;
   }
@@ -294,7 +240,6 @@ public class RobotContainer {
   public static XboxController getOperator() {
     return operator;
   }
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -303,24 +248,6 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-<<<<<<< HEAD
-    /*leftBumper.whileHeld(m_intakeWithButton);
-    rightBumper.whileHeld(m_launchWithButton); 
-    gyrozeroer.whenPressed(zero);
-    fieldtoggle.whenPressed(togglefield);
-    pidtoggle.whenPressed(pid);
-    toggleSlow.whenPressed(slow);
-    toggleTurbo.whenPressed(turbo);
-    //leftBumper.whileHeld(m_intakeWithButton);
-    //rightBumper.whileHeld(m_launchWithButton); 
-    //xbox_A.whenPressed(RotateToAngle90);
-    trigger.whenPressed(RotateToAngle45); 
-    
-    colorBtn.whenPressed(changeColor);
-    winchLock.whileHeld(lockWinch);
-    winchActivate.whileHeld(activateWinches);*/
-
-=======
     // Driver button bindings
     driver_autoAlignBtn.whenPressed(driver_autoAlign);
     driver_fieldOrientBtn.whenPressed(driver_fieldOrient);
@@ -340,7 +267,6 @@ public class RobotContainer {
     op_controlarmBtn.toggleWhenPressed(op_controlarm);
     op_manual_wheelBtn.whileHeld(op_manual_wheel);
     op_reverse_teleBtn.whenPressed(op_reverse_tele);
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
   }
 
   /**
@@ -348,13 +274,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-<<<<<<< HEAD
-  /*public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-=======
   public Command getAutonomousCommand() {
->>>>>>> 7ec6dc5032d27833556de15f2cceb2dc7f272509
     return auto;
-  }*/
+  }
 
 }
