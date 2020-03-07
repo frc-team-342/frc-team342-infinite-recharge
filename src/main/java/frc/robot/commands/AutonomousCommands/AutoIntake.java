@@ -1,19 +1,26 @@
-package frc.robot.commands;
+package frc.robot.commands.AutonomousCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
+import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.IntakeAndOutake;
 
-public class IntakeWithButton extends CommandBase {
+public class AutoIntake extends CommandBase {
   /**
    * Intakes with left bumper
    */
 
   private final IntakeAndOutake intakeAndOutake;
+  private final DriveSystem drive;
+  private double X, Y, Z;
 
-  public IntakeWithButton() {
+  public AutoIntake(double x, double y, double z) {
     intakeAndOutake = Factory.getIntakeOutake();
+    drive = Factory.getDrive();
 
+    X = x;
+    Y = y;
+    Z = z;
   }
 
   @Override
@@ -23,6 +30,7 @@ public class IntakeWithButton extends CommandBase {
   @Override
   public void execute() {
     intakeAndOutake.intake();
+    drive.Drive(X, Y, Z);
   }
 
   @Override

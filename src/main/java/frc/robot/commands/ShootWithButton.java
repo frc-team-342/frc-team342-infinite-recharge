@@ -7,44 +7,39 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
-import edu.wpi.first.wpilibj.CounterBase.EncodingType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.IntakeAndOutake;
 import frc.robot.Factory;
 import frc.robot.RobotContainer;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ClimbSubsystem;
 
-public class ActivateWinches extends CommandBase {
+public class ShootWithButton extends CommandBase {
   /**
-   * Creates a new ActivateWinchs.
+   * Will shooter the powercells 
    */
-  private final ClimbSubsystem cs;
 
-  public ActivateWinches() {
-    // Use addRequirements() here to declare subsystem dependencies.
-    cs = Factory.getClimb();
+   private final IntakeAndOutake intakeAndOutake; 
+   private final Joystick joy; 
+
+  public ShootWithButton() {
+    intakeAndOutake = Factory.getIntakeOutake();
+    joy = RobotContainer.getJoy(); 
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    cs.spinWinchMotors(0.6);
+    intakeAndOutake.outake(25000);  
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    cs.spinWinchMotors(0.0);
+    intakeAndOutake.shooterStop(); 
   }
 
-  // Returns true when the command should end
   @Override
   public boolean isFinished() {
     return false;

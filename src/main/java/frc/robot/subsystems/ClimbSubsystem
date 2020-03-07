@@ -8,69 +8,79 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class ClimbSubsystem extends SubsystemBase {
   /**
    * Creates a new ClimbSubsystem.
    */
-  //Creating three motors
+  // Creating three motors
   private static TalonSRX teleMotor;
   private static TalonSRX winch1;
+  private static TalonSRX winch2;
 
   private boolean enabled;
   private boolean teleActivated;
+  private boolean isReverse;
 
   public ClimbSubsystem() {
-    teleMotor = new TalonSRX(Constants.telescopeMotor);
-    winch1 = new TalonSRX(Constants.winch1Motor);
+
+    teleMotor = new TalonSRX(Constants.CLIMB_TELESCOPE);
+    winch1 = new TalonSRX(Constants.CLIMB_WINCH_1);
+    winch2 = new TalonSRX(Constants.CLIMB_WINCH_2);
+
 
     enabled = false;
     teleActivated = false;
+    isReverse = false;
 
   }
 
   public void spinTeleMotor(double speed) {
-    teleMotor.set(ControlMode.PercentOutput, Math.abs(speed));
+    teleMotor.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void reverseTeleMotor(double speed){
+    teleMotor.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void setReverse(){
+    isReverse = !isReverse;
+  }
+
+  public boolean isReverse(){
+    return isReverse;
   }
 
   public void spinWinchMotors(double speed) {
     if (enabled) {
       winch1.set(ControlMode.PercentOutput, Math.abs(speed));
-    }
-    else {
-      winch1.set(ControlMode.PercentOutput, 0);
+      winch2.set(ControlMode.PercentOutput, Math.abs(speed));
+    } else {
+      winch1.set(ControlMode.PercentOutput, 0.0);
+      winch2.set(ControlMode.PercentOutput, 0.0);
     }
   }
 
-  public boolean returnEnabler() {
+  public boolean getEnable() {
     return enabled;
   }
 
-  public void setEnablerTrue() {
-    enabled = true;
+  public void setEnable(boolean enable) {
+    enabled = enable;
   }
 
-  public void setEnablerFalse() {
-    enabled = false;
-  }
-
-  public boolean returnAcivated() {
+  public boolean getActivated() {
     return teleActivated;
   }
-  public void setActivatedTrue() {
-    teleActivated = true;
+
+  public void setActivated(boolean active) {
+    teleActivated = active;
   }
-  public void setActivatedFalse() {
-    teleActivated = false;
-  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

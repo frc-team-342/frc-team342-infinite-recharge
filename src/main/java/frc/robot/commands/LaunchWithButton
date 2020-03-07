@@ -15,15 +15,15 @@ import frc.robot.RobotContainer;
 
 public class LaunchWithButton extends CommandBase {
   /**
-   * Will launch the powercells 
+   * Will shooter the powercells
    */
 
-   private final IntakeAndOutake intakeAndOutake; 
-   private final Joystick joy; 
+  private final IntakeAndOutake intakeAndOutake;
+  private final Joystick joy;
 
   public LaunchWithButton() {
     intakeAndOutake = Factory.getIntakeOutake();
-    joy = RobotContainer.getJoy(); 
+    joy = RobotContainer.getJoy();
   }
 
   @Override
@@ -32,13 +32,14 @@ public class LaunchWithButton extends CommandBase {
 
   @Override
   public void execute() {
-    //TODO test velocity later 
-    intakeAndOutake.outake(1000.0);  
+    intakeAndOutake.outake();
   }
 
   @Override
   public void end(boolean interrupted) {
-    intakeAndOutake.launchStop(); 
+
+    intakeAndOutake.shooterStop();
+
   }
 
   @Override

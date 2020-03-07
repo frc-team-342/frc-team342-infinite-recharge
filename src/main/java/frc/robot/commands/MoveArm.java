@@ -9,42 +9,46 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
-import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.ControlPanelSubsystem;
 
-public class AutoMove extends CommandBase {
-  private static DriveSystem driveSystem;
-  private double Y;
+public class MoveArm extends CommandBase {
   /**
-   * Creates a new AutoMove.
+   * Creates a new MoveArm.
    */
-  public AutoMove(double y) {
-    Y = y;
-    driveSystem = Factory.getDrive();
+
+  private ControlPanelSubsystem cps;
+
+  public MoveArm() {
     // Use addRequirements() here to declare subsystem dependencies.
+    cps = Factory.getControl();
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveSystem.Drive(0.0, Y, 0.0);
-
+    System.out.println("Bruh Moment");
+    cps.moveArm();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveSystem.stopDrive();
+    cps.setArmBoolean();
+    cps.stopArm();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    // if((cps.getLimitFwd() && cps.getArmBoolean() == false) || (cps.getLimitRev() && cps.getArmBoolean() == true))
+    //   return true;
+    // else
+      return false;
   }
 }

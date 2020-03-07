@@ -1,67 +1,83 @@
-
 package frc.robot;
 
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
-
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants.  This class should not be used for any other purpose.  All constants should be
- * declared globally (i.e. public static).  Do not put anything functional in this class.
+ * The Constants class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean constants. This class should not be used for any other
+ * purpose. All constants should be declared globally (i.e. public static). Do
+ * not put anything functional in this class.
  *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
+ * <p>
+ * It is advised to statically import this class (or one of its inner classes)
+ * wherever the constants are needed, to reduce verbosity.
  */
 
-
 public final class Constants {
-    // all of the names assigned are random. Find reall numbers latter
-   
-    //motors
-    public static final int INTAKE = 9;
-    public static final int LAUNCH1 = 2;
-    public static final int LAUNCH2 = 1;
-    public static final int LOAD1 = 3; 
-    public static final int LOAD2 = 4;
-    //drive motors
-    public static final int motorR1 = 3;
-    public static final int motorR2 = 1;
-    public static final int motorL1 = 4;
-    public static final int motorL2 = 2;
 
+    /*
+     * Follow these variable naming conventions: - Motor names should be named
+     * prefixed by the subsystem they are a part of, followed by its function and
+     * the number of the motor - Buttons should be prefixed by the controller they
+     * are on, followed by the command it is bound to - Sensor names should be
+     * prefixed by subsystem, followed by type or function and number
+     */
 
-  
-    //buttons (NOTE: starts at 1 not 0)
-    public static final int LEFTBUMPER = 5; 
-    public static final int RIGHTBUMPER = 6; 
-    public static final int XBOX_A = 1; 
-    public static final int TRIGGER = 1; 
+    /* Motors */
+    // Intake
+    public static final int INTAKE_PRIMARY = 5;
+    public static final int INTAKE_CONVEYOR_1 = 6;
+    public static final int INTAKE_CONVEYOR_2 = 7;
 
-    //controller stuff
-    public static final int driver_joystick = 1;
-    public static final int LOGITECH = 3; 
-    public static final int driveYAxis = 1;
-    public static final int zeroGyro = 4;
-    public static final int fieldToggler = 3;
-    public static final int pidToggler = 1;
-    public static final int toggleSlow = 5;
-    public static final int toggleTurbo = 6;
+    // Launch
+    public static final int LAUNCH_MOTOR_1 = 8;
+    public static final int LAUNCH_MOTOR_2 = 9;
 
+    // Drive
+    public static final int DRIVE_MOTOR_R1 = 3;
+    public static final int DRIVE_MOTOR_R2 = 1;
+    public static final int DRIVE_MOTOR_L1 = 4;
+    public static final int DRIVE_MOTOR_L2 = 2;
 
-    //sensors
-    public static final int INTAKESENSOR1 = 0; 
-    public static final int INTAKESENSOR2 = 1; 
-    public static final int INTAKESENSOR3 = 2; 
-    public static final int INTAKESENSOR4 = 3; 
-    public static final int INTAKESENSOR5 = 4;
+    // Climb
+    public static final int CLIMB_TELESCOPE = 10;
+    public static final int CLIMB_WINCH_1 = 11;
+    public static final int CLIMB_WINCH_2 = 12;
 
+    // Control Panel
+    public static final int CP_ROTATE = 14;
 
-    //Control Panel Batteries
-    public static final int colorBtn = 1;
-    public static final int rotaterMotor = 9;
+    public static final int CP_ARM = 13;
+
+    /* Buttons */
+    // Driver controller
+    public static final int DRIVER_CONTROLLER = 0;
+    public static final int DRIVER_TURBO = 6; // top right
+    public static final int DRIVER_SLOW = 5; // top left
+    public static final int DRIVER_REVERSE = 2; // side button
+    public static final int DRIVER_AUTO_ALIGN = 1; // trigger
+    public static final int DRIVER_FIELD_ORIENT = 3; // bottom left
+    public static final int DRIVER_ZERO = 4; // bottom right
     
-    //Climb Motors
-    public static final int telescopeMotor = 9;
-    public static final int winch1Motor = 8;
+    // Operator buttons
+    public static final int OPERATOR_CONTROLLER = 1;
+    public static final int OP_LAUNCH = 5; // left bumper
+    public static final int OP_SLOW = 2; // B button
+    public static final int OP_INTAKE = 6; // right bumper
+    public static final int OP_LOCK_WINCH = 7; // menu left
+    public static final int OP_RUN_WINCH = 8; // select right
+    public static final int OP_REVERSE = 3; // X button
+    public static final int OP_CONTROL_ARM = 1; // A button
+    public static final int OP_TELESCOPES = 4; // Y button
+    public static final int OP_REVERSE_TELE = 9; // left joy click
+    public static final int OP_CONTROL_RIGHT = 10; // right joy click
 
+    /* Sensors */
+    // Intake sensors
+    public static final int INTAKE_SENSOR_1 = 1;
+    public static final int INTAKE_SENSOR_2 = 2;
+    public static final int INTAKE_SENSOR_3 = 3;
+
+    /* Limit Switches */
+    public static final int ARM_LIMIT_UP = 5;
+    public static final int ARM_LIMIT_DOWN = 6;
 
 }

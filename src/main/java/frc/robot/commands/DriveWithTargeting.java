@@ -7,46 +7,73 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-
-import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
 import frc.robot.RobotContainer;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.LimelightSubsystem;
+import edu.wpi.first.wpilibj.Joystick;
 
-public class ActivateWinches extends CommandBase {
+public class DriveWithTargeting extends CommandBase {
+  private final LimelightSubsystem lime;
+  private final DriveSystem driveSystem;
+  private final Joystick joy;
+  private double error = 0.5;
+  private boolean isDone = false;
+  private double X;
+  private double Y;
+
   /**
-   * Creates a new ActivateWinchs.
+   * Creates a new RotateToAngle.
    */
-  private final ClimbSubsystem cs;
+  public DriveWithTargeting() {
+    joy = RobotContainer.getJoy();
+    driveSystem = Factory.getDrive();
 
-  public ActivateWinches() {
+    lime = Factory.getLimelight(); 
+
+
     // Use addRequirements() here to declare subsystem dependencies.
-    cs = Factory.getClimb();
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    lime.visionOn();
+    driveSystem.errorAccumReset();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    cs.spinWinchMotors(0.6);
+    X = joy.getX();
+    Y = joy.getY();
+
+    if (Math.abs(X) < 0.15)
+      X = 0.0;
+    if (Math.abs(Y) < 0.15)
+      Y = 0.0;
+
+    driveSystem.driveWithTargeting(X, -Y, lime.getXOffsetAngle());
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    cs.spinWinchMotors(0.0);
+    driveSystem.stopDrive();
+    lime.switchCamMode();
   }
 
-  // Returns true when the command should end
+  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (isDone)
+      return true;
+    else
+      return false;
+
   }
 }

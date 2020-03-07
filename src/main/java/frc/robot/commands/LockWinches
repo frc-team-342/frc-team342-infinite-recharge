@@ -8,12 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Factory;
-import frc.robot.RobotContainer;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClimbSubsystem;
 
 public class LockWinches extends CommandBase {
@@ -21,7 +16,7 @@ public class LockWinches extends CommandBase {
    * Creates a new LockWinches.
    */
 
-   private final ClimbSubsystem cs;
+  private final ClimbSubsystem cs;
 
   public LockWinches() {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -37,19 +32,18 @@ public class LockWinches extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (cs.returnAcivated() == false) {  
-      cs.setEnablerTrue();
-      System.out.println(cs.returnEnabler());
-    }
-    else {
-      cs.setEnablerFalse();
+    if (!cs.getActivated()) {
+      cs.setEnable(true);
+      System.out.println(cs.getEnable());
+    } else {
+      cs.setEnable(false);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    cs.setEnablerFalse();
+    cs.setEnable(false);
   }
 
   // Returns true when the command should end.
