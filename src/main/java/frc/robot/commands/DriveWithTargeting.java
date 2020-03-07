@@ -57,7 +57,7 @@ public class DriveWithTargeting extends CommandBase {
       Y = 0.0;
 
     driveSystem.driveWithTargeting(X, -Y, lime.getXOffsetAngle());
-
+    lime.getDistance();
   }
 
   // Called once the command ends or is interrupted.
