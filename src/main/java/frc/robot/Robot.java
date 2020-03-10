@@ -17,6 +17,9 @@ import frc.robot.commands.ActivateTelescopes;
 import frc.robot.commands.AutonomousCommands.AutonomousLine;
 import frc.robot.commands.AutonomousCommands.AutonomousShoot;
 import frc.robot.commands.AutonomousCommands.AutonomousTrench;
+import frc.robot.commands.AutonomousCommands.AutonomousTrench5Ball;
+import frc.robot.commands.AutonomousCommands.AutonomousTrench6Ball;
+import frc.robot.commands.AutonomousCommands.BeyBlade;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithTargeting;
 import frc.robot.subsystems.DriveSystem;
@@ -62,8 +65,11 @@ public class Robot extends TimedRobot {
 
     autoChoose = new SendableChooser<>();
     autoChoose.setDefaultOption("Turn and Shoot", new AutonomousShoot());
-    autoChoose.addOption("Trench Intake", new AutonomousTrench());
+    autoChoose.addOption("Trench FIVE Ball", new AutonomousTrench5Ball());
+    autoChoose.addOption("Trench SIX Ball", new AutonomousTrench6Ball());
     autoChoose.addOption("Drive Off Line", new AutonomousLine());
+    autoChoose.addOption("Let It Rip", new BeyBlade());
+    
 
     SmartDashboard.putData("Auto Chooser", autoChoose);
     
