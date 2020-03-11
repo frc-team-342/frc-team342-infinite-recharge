@@ -23,7 +23,7 @@ public class AutonomousTrench5Ball extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-      new AutoIntake(0.0, 0.4, 0.0).withTimeout(2.0),
+      new AutoIntake().withTimeout(2.0),
       new RotateToAngle(-160),
       new AutoTarget().withTimeout(2.0),
       new LaunchWithButton().withTimeout(6.0)

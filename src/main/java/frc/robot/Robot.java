@@ -116,6 +116,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     lime.visionOff();
     autoDrive = autoChoose.getSelected();
+    intakeAndOutake.setCellCount(3);
     driveSystem.zeroGyro();
     autoDrive.schedule();
 
@@ -133,6 +134,8 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     driveSystem.targetOff();
     lime.visionOff();
+    intakeAndOutake.resetCellCount(); // REPLACE LATER - just for testing now
+    
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

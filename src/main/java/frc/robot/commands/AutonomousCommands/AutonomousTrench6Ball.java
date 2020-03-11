@@ -18,6 +18,8 @@ public class AutonomousTrench6Ball extends SequentialCommandGroup {
 
   //THEORITICAL JAMES CAN'T CALL ME STUPID
 
+  // YES I CAN
+
   /**
    * Creates a new AutonomousTrench6Ball.
    */
@@ -29,7 +31,7 @@ public class AutonomousTrench6Ball extends SequentialCommandGroup {
       new AutoTarget().withTimeout(1.0),
       new LaunchWithButton().withTimeout(4.0),
       new RotateToAngle(180),
-      new AutoIntake(0.0, 0.4, 0.0).withTimeout(2.5),
+      new AutoIntake().withTimeout(2.5),
       new RotateToAngle(-160),
       new AutoTarget().withTimeout(1.0),
       new LaunchWithButton().withTimeout(6.0)

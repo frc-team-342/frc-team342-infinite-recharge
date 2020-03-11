@@ -27,9 +27,11 @@ public class IntakeAndOutake extends SubsystemBase {
   private DigitalInput sensor2; //hopper
   private DigitalInput sensor3; //shooter
 
-  private final double speed = 0.75;
-  private final double speed2 = .95;
+  private final double speed = 0.8;
+  private final double speed2 = 0.95;
 
+  private boolean holding1 = false;
+  private boolean holding2 = false; 
 
   private final int current_limit = 80;
   private final int current_limit_duration = 2000;
@@ -96,32 +98,41 @@ public class IntakeAndOutake extends SubsystemBase {
 
   }
 
+  /** Counts the number of power cells currently held so no more than 5 are allowed to be carried at a time */
   public void powerCellCount(){
     // counts power cells in and out so we dont get more than 5
     boolean isTriggered1 = !sensor1.get(); 
     boolean isTriggered2 = !sensor3.get(); 
-    boolean holding1 = false;
-    boolean holding2 = false; 
+    
 
-    if(!holding1){
-      if(isTriggered1){
-        holding1 = false;
-      }
-    } else {
-      if(!isTriggered1){
-        holding1 = false;
-        powerCellCount++; 
+    if(holding1 == true)
+    {
+        if(isTriggered1 == false){
+          System.out.println("O O O");
+          holding1 = false;
+          powerCellCount++;
+        }
+    }
+    else
+    {
+      if(isTriggered1 == true){
+        System.out.println("W W W");
+        holding1 = true;
       }
     }
 
-    if(!holding2){
-      if(isTriggered2){
+
+    if(holding2 == true)
+    {
+      if(isTriggered2 == false){
         holding2 = false;
+        powerCellCount--;
       }
-    } else {
-      if(!isTriggered2){
-        holding2 = false;
-        powerCellCount++; 
+    }
+    else
+    {
+      if(isTriggered2 == true){
+        holding2 = true;
       }
     }
 
@@ -129,6 +140,23 @@ public class IntakeAndOutake extends SubsystemBase {
     
   }
 
+  /** Sets the cell count for the intake counter to zero */
+  public void resetCellCount(){
+    powerCellCount = 0;
+  }
+
+  /** Sets the cell count for the intake counter to parameter cells
+   * @param cells : how many power cells to set
+   */
+  public void setCellCount(int cells){
+    powerCellCount = cells;
+  }
+
+  /**
+   * Moves intake roller and belts. Checks if cell is sensed at pre-shooter sensor and stops
+   * shooter intake to make sure the cell does not jam into the shooter fly-wheel. Also checks
+   * cells that come in and go out to make sure we do not intake more than 5 at a time.
+   */
   public void intake() {
     powerCellCount(); 
     intake.set(ControlMode.PercentOutput, speed2);
@@ -143,26 +171,32 @@ public class IntakeAndOutake extends SubsystemBase {
     }
   }
 
+  /** Reverses the intake so if a cell gets stuck we can un-stick it */
   public void reverseIntake(){
     // If cell gets stuck in the intake
     intake.set(ControlMode.PercentOutput, -speed2);
     load1.set(ControlMode.PercentOutput, -speed);
 
-    boolean isTriggered = !sensor1.get(); 
-    boolean holding = false;
-    if(!holding){
-      if(isTriggered){
-        holding = false;
-      }
-    } else {
-      if(!isTriggered){
-        holding = false;
-        powerCellCount--; 
+    boolean isTriggered1 = !sensor1.get(); 
+    if(holding1 == true){
+        if(isTriggered1 == false){
+          System.out.println("O O O");
+          holding1 = false;
+          powerCellCount--;
+        }
+    }
+    else{
+      if(isTriggered1 == true){
+        System.out.println("W W W");
+        holding1 = true;
       }
     }
     SmartDashboard.putNumber("Power Cell Count: ", powerCellCount); 
   }
 
+  /** Method for shooting power cells based on limelight targeting distance and a solved math formula for velocity.
+   * <p><font color="green">(If the limelight cannot see a target then the velocity will be calculated to the limelights default distance).
+   */
   public void outake() {
     powerCellCount();
 
@@ -211,7 +245,7 @@ public class IntakeAndOutake extends SubsystemBase {
   public void outake(double velocity){
     shooter2.follow(shooter1);
 
-    shooter1.set(ControlMode.PercentOutput, velocity);
+    shooter1.set(ControlMode.Velocity, velocity);
 
     System.out.println("Velocity: " + shooter1.getSelectedSensorVelocity());
 
@@ -228,6 +262,7 @@ public class IntakeAndOutake extends SubsystemBase {
 
   @Override
   public void periodic() {
+    //powerCellCount();
     //SmartDashboard.putNumber("Shooter 1 Percent: ", shooter1.getMotorOutputPercent());
     SmartDashboard.putNumber("Shooter 1 Voltage: ", shooter1.getMotorOutputVoltage());
     SmartDashboard.putNumber("Shooter 1 Current: ", shooter1.getSupplyCurrent());
@@ -237,7 +272,7 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
     SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
 
-    //SmartDashboard.putNumber("Velocity: ", shooter1.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Velocity: ", shooter1.getSelectedSensorVelocity());
     // if (sensor1.get() && sensor2.get() && sensor3.get())
     // intakeStop();
   }

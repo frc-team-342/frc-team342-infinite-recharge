@@ -1,45 +1,25 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
 package frc.robot.commands.AutonomousCommands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Factory;
-import frc.robot.subsystems.DriveSystem;
-import frc.robot.subsystems.IntakeAndOutake;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.commands.IntakeWithButton;
 
-public class AutoIntake extends CommandBase {
+// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// information, see:
+// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
+public class AutoIntake extends ParallelCommandGroup {
   /**
-   * Intakes with left bumper
+   * Creates a new AutoIntake.
    */
-
-  private final IntakeAndOutake intakeAndOutake;
-  private final DriveSystem drive;
-  private double X, Y, Z;
-
-  public AutoIntake(double x, double y, double z) {
-    intakeAndOutake = Factory.getIntakeOutake();
-    drive = Factory.getDrive();
-
-    X = x;
-    Y = y;
-    Z = z;
-  }
-
-  @Override
-  public void initialize() {
-  }
-
-  @Override
-  public void execute() {
-    intakeAndOutake.intake();
-    drive.Drive(X, Y, Z);
-  }
-
-  @Override
-  public void end(boolean interrupted) {
-    intakeAndOutake.intakeStop();
-  }
-
-  @Override
-  public boolean isFinished() {
-    return false;
+  public AutoIntake() {
+    // Add your commands in the super() call, e.g.
+    // super(new FooCommand(), new BarCommand());super();
+    super(new IntakeWithButton(), new AutoMove(0.0, 0.4, 0.0));
   }
 }
