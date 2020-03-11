@@ -142,7 +142,7 @@ public class RobotContainer {
     op_manual_wheelBtn = new JoystickButton(operator, Constants.OP_CONTROL_RIGHT);
     op_reverse_teleBtn = new JoystickButton(operator, Constants.OP_REVERSE_TELE);
   
-    op_launch = new ShootWithButton();
+    op_launch = new LaunchWithButton();
     op_slow = new InstantCommand(driveSystem::setSlow, driveSystem);
 
     op_lockWinchBtn = new JoystickButton(operator, Constants.OP_LOCK_WINCH);
