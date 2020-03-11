@@ -229,13 +229,13 @@ public class IntakeAndOutake extends SubsystemBase {
   @Override
   public void periodic() {
     //SmartDashboard.putNumber("Shooter 1 Percent: ", shooter1.getMotorOutputPercent());
-    //SmartDashboard.putNumber("Shooter 1 Voltage: ", shooter1.getMotorOutputVoltage());
-    //SmartDashboard.putNumber("Shooter 1 Current: ", shooter1.getSupplyCurrent());
+    SmartDashboard.putNumber("Shooter 1 Voltage: ", shooter1.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Shooter 1 Current: ", shooter1.getSupplyCurrent());
 
 
     //SmartDashboard.putNumber("Shooter 2 Percent: ", shooter2.getMotorOutputPercent());
-    //SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
-    //SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
+    SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
 
     //SmartDashboard.putNumber("Velocity: ", shooter1.getSelectedSensorVelocity());
     // if (sensor1.get() && sensor2.get() && sensor3.get())

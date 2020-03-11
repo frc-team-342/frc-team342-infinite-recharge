@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ActivateTelescopes;
 import frc.robot.commands.AutonomousCommands.AutonomousLine;
 import frc.robot.commands.AutonomousCommands.AutonomousShoot;
-import frc.robot.commands.AutonomousCommands.AutonomousTrench;
 import frc.robot.commands.AutonomousCommands.AutonomousTrench5Ball;
 import frc.robot.commands.AutonomousCommands.AutonomousTrench6Ball;
 import frc.robot.commands.AutonomousCommands.BeyBlade;
