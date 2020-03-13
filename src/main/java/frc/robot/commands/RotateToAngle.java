@@ -7,7 +7,6 @@
 
 package frc.robot.commands;
 
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
 import frc.robot.subsystems.DriveSystem;
@@ -18,8 +17,9 @@ public class RotateToAngle extends CommandBase {
   private double angle;
 
   private double error = 2.5;
-  private double turnSpeed = 0.4;
+  private double turnSpeed = 0.6;
   private boolean isDone = false;
+
   /**
    * Creates a new RotateToAngle.
    */
@@ -39,18 +39,16 @@ public class RotateToAngle extends CommandBase {
   @Override
   public void execute() {
     gyro = driveSystem.getGyro();
-    if(gyro > angle)
+    if (gyro > angle)
       turnSpeed *= -1.0;
-    if(gyro >= (angle-error) && gyro <= (angle+error)){
+    if (gyro >= (angle - error) && gyro <= (angle + error)) {
       driveSystem.Drive(0.0, 0.0, 0.0);
       isDone = true;
-    }
-    else
+    } else
       driveSystem.Drive(0.0, 0.0, turnSpeed);
 
     System.out.println(gyro);
-}
-  
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -61,7 +59,7 @@ public class RotateToAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(isDone)
+    if (isDone)
       return true;
     else
       return false;

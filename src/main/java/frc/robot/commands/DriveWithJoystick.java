@@ -8,11 +8,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveSystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveWithJoystick extends CommandBase {
   private final DriveSystem driveSystem;
@@ -20,6 +20,7 @@ public class DriveWithJoystick extends CommandBase {
   private double X;
   private double Y;
   private double Z;
+
   /**
    * Creates a new DriveWithJoystick.
    */
@@ -46,27 +47,26 @@ public class DriveWithJoystick extends CommandBase {
     SmartDashboard.putNumber("Y Axis", Y);
     SmartDashboard.putNumber("Z Axis", Z);
 
-
-    if(Math.abs(X) < 0.15){
+    if (Math.abs(X) < 0.15) {
       X = 0.0;
       SmartDashboard.putString("X Deadzone", "X is in deadzone!");
-    }
-    else  
+    } else {
       SmartDashboard.putString("X Deadzone", "X is not in deadzone!");
-
-    if(Math.abs(Y) < 0.15){
-      Y = 0.0;
-      SmartDashboard.putString("Y Deadzone","Y is in deadzone!");
     }
-    else
+
+    if (Math.abs(Y) < 0.15) {
+      Y = 0.0;
+      SmartDashboard.putString("Y Deadzone", "Y is in deadzone!");
+    } else {
       SmartDashboard.putString("Y Deadzone", "Y is not in deadzone!");
-    
-    if(Math.abs(Z) < 0.15){
+    }
+
+    if (Math.abs(Z) < 0.15) {
       Z = 0.0;
       SmartDashboard.putString("Z Deadzone", "Z is in deadzone!");
-    }
-    else
+    } else {
       SmartDashboard.putString("Z Deadzone", "Z is not in deadzone!");
+    }
 
     driveSystem.Drive(X, -Y, Z);
 

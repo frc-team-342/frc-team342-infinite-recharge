@@ -10,41 +10,56 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.LimelightSubsystem;
+import edu.wpi.first.wpilibj.Joystick;
 
-public class TogglePID extends CommandBase {
-  private static DriveSystem driveSystem;
+public class AutoTarget extends CommandBase {
+  private final LimelightSubsystem lime;
+  private final DriveSystem driveSystem;
+  private double error = 0.5;
+  private boolean isDone = false;
+
   /**
-   * Creates a new togglePID.
+   * Creates a new RotateToAngle.
    */
-  public TogglePID() {
+  public AutoTarget() {
     driveSystem = Factory.getDrive();
+
+    lime = Factory.getLimelight(); 
+
+
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    lime.visionOn();
+    driveSystem.errorAccumReset();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(driveSystem.getPIDLooped())
-      driveSystem.setPIDLooped(false);
-    else
-      driveSystem.setPIDLooped(true);
-    SmartDashboard.putBoolean("isPIDLooped", driveSystem.getPIDLooped());
+    driveSystem.driveWithTargeting(0.0, 0.0, lime.getXOffsetAngle());
+
+    //if(Math.abs(lime.getXOffsetAngle()) - error < 0.6)
+    //  isDone = true;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    driveSystem.stopDrive();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return isDone;
+
   }
 }

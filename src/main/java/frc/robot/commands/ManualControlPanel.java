@@ -7,18 +7,17 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
-import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.ControlPanelSubsystem;
 
-public class ToggleTurboMode extends CommandBase {
-  private static DriveSystem driveSystem;
+public class ManualControlPanel extends CommandBase {
+  private final ControlPanelSubsystem cps;
   /**
-   * Creates a new ToggleTurboMode.
+   * Creates a new ManualControlPanel.
    */
-  public ToggleTurboMode() {
-    driveSystem = Factory.getDrive();
+  public ManualControlPanel() {
+    cps = Factory.getControl();
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -30,24 +29,18 @@ public class ToggleTurboMode extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(driveSystem.getTurbo())
-      driveSystem.setTurbo(false);
-    else{
-      driveSystem.setTurbo(true);
-      driveSystem.setSlow(false);
-    }
-    SmartDashboard.putBoolean("Is Turbo Mode", driveSystem.getTurbo());
-    SmartDashboard.putBoolean("Is Slow Mode", driveSystem.getSlow());
+    cps.spin(0.5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    cps.spin(0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

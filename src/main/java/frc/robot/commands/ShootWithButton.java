@@ -7,49 +7,39 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import frc.robot.subsystems.IntakeAndOutake;
 import frc.robot.Factory;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.ClimbSubsystem;
 
-public class ActivateTelescopes extends CommandBase {
+public class ShootWithButton extends CommandBase {
   /**
-   * Creates a new ActivateTelescopes.
+   * Will shooter the powercells 
    */
 
-  private final ClimbSubsystem cs;
+   private final IntakeAndOutake intakeAndOutake; 
+   private final Joystick joy; 
 
-  private double speed = -0.6;
-
-  public ActivateTelescopes() {
-    // Use addRequirements() here to declare subsystem dependencies.
-    cs = Factory.getClimb();
+  public ShootWithButton() {
+    intakeAndOutake = Factory.getIntakeOutake();
+    joy = RobotContainer.getJoy(); 
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      cs.setActivated(true);
-      if(cs.isReverse())
-        cs.reverseTeleMotor(0.4);
-      else
-        cs.spinTeleMotor(speed);
-    }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    cs.setActivated(false);
-    cs.spinTeleMotor(0.0);
+    intakeAndOutake.outake(25000);  
   }
 
-  // Returns true when the command should end.
+  @Override
+  public void end(boolean interrupted) {
+    intakeAndOutake.shooterStop(); 
+  }
+
   @Override
   public boolean isFinished() {
     return false;

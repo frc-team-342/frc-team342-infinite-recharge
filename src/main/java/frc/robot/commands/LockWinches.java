@@ -16,7 +16,7 @@ public class LockWinches extends CommandBase {
    * Creates a new LockWinches.
    */
 
-   private final ClimbSubsystem cs;
+  private final ClimbSubsystem cs;
 
   public LockWinches() {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -32,7 +32,7 @@ public class LockWinches extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!cs.getActivated()) {  
+    if (!cs.getActivated()) {
       cs.setEnable(true);
       System.out.println(cs.getEnable());
     } else {
