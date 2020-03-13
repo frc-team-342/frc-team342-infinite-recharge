@@ -37,7 +37,7 @@ public class IntakeAndOutake extends SubsystemBase {
   private final int current_limit_duration = 2000;
 
   private double rpmsConverter = 60.0 / 1024.0;
-  private double error = 250.0;
+  private double error = 50.0;
 
   private double hoodAngle = 40.0 * (Math.PI / 180.0);
   private double height = 90.0 - 21.125;
