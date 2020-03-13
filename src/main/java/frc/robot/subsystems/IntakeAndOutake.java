@@ -26,6 +26,7 @@ public class IntakeAndOutake extends SubsystemBase {
   private DigitalInput sensor1; //intake
   private DigitalInput sensor2; //hopper
   private DigitalInput sensor3; //shooter
+  private DigitalInput sensor4; // the new one
 
   private final double speed = 0.9;
   private final double speed2 = .95;
@@ -65,6 +66,7 @@ public class IntakeAndOutake extends SubsystemBase {
     sensor1 = new DigitalInput(Constants.INTAKE_SENSOR_1);
     sensor2 = new DigitalInput(Constants.INTAKE_SENSOR_2);
     sensor3 = new DigitalInput(Constants.INTAKE_SENSOR_3);
+    sensor4 = new DigitalInput(Constants.INTAKE_SENSOR_4); 
 
     // sets shooter to turn in correct direction
     shooter1.setInverted(true);
@@ -247,6 +249,7 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putBoolean("Intake Sensor1: ", !sensor1.get());
     SmartDashboard.putBoolean("Intake Sensor2: ", !sensor2.get());
     SmartDashboard.putBoolean("Intake Sensor3: ", !sensor3.get());
+    SmartDashboard.putBoolean("Intake Sensor4: ", !sensor4.get());
   }
 
 
