@@ -39,8 +39,8 @@ public class IntakeAndOutake extends SubsystemBase {
   private double rpmsConverter = 60.0 / 1024.0;
   private double error = 50.0;
 
-  private double hoodAngle = 40.0 * (Math.PI / 180.0);
-  private double height = 90.0 - 21.125;
+  private double hoodAngle = 50.0 * (Math.PI / 180.0);
+  private double height = 98.25 - 21.125;
   private double targetDepth = 30.0;
   private double limeToHood = 27.0;
 
