@@ -61,7 +61,7 @@ public class DriveWithJoystick extends CommandBase {
       //SmartDashboard.putString("Y Deadzone", "Y is not in deadzone!");
     }
 
-    if (Math.abs(Z) < 0.15) {
+    if (Math.abs(Z) < 0.20) {
       Z = 0.0;
       //SmartDashboard.putString("Z Deadzone", "Z is in deadzone!");
     } else {

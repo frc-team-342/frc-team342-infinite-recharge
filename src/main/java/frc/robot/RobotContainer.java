@@ -35,7 +35,6 @@ import frc.robot.commands.ReverseIntake;
 import frc.robot.commands.ShootWithButton;
 import frc.robot.subsystems.IntakeAndOutake;
 
-
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -59,12 +58,6 @@ public class RobotContainer {
   private JoystickButton driver_zeroBtn;
   private JoystickButton driver_reverseBtn;
 
-  private JoystickButton b_driver_autoAlignBtn; // button 1
-  private JoystickButton b_driver_fieldOrientBtn; // button 2
-  private JoystickButton b_driver_turboBtn; // button 5
-  private JoystickButton b_driver_slowBtn;
-  private JoystickButton b_driver_zeroBtn;
-  private JoystickButton b_driver_reverseBtn;
 
   private Command driver_autoAlign;
   private Command driver_fieldOrient;
@@ -80,7 +73,7 @@ public class RobotContainer {
   private JoystickButton op_slowBtn;
   private JoystickButton op_intakeBtn;
   private JoystickButton op_lockWinchBtn;
-  private JoystickButton op_runWinchBtn; 
+  private JoystickButton op_runWinchBtn;
   private JoystickButton op_telescopesBtn;
   private JoystickButton op_reverseBtn;
   private JoystickButton op_controlarmBtn;
@@ -101,8 +94,6 @@ public class RobotContainer {
   // Autonomous
   private Command auto;
 
-  
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -111,22 +102,24 @@ public class RobotContainer {
     climb = Factory.getClimb();
 
     // Driver controller
-    driver = new Joystick(Constants.DRIVER_CONTROLLER);
-    b_driver = new Joystick(Constants.B_DRIVER_CONTROLLER);
-    
-    driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTO_ALIGN);
-    driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELD_ORIENT);
-    driver_turboBtn = new JoystickButton(driver, Constants.DRIVER_TURBO);
-    driver_slowBtn = new JoystickButton(driver, Constants.DRIVER_SLOW);
-    driver_zeroBtn = new JoystickButton(driver, Constants.DRIVER_ZERO);
-    driver_reverseBtn = new JoystickButton(driver, Constants.DRIVER_REVERSE);
-
-    b_driver_autoAlignBtn = new JoystickButton(b_driver, Constants.B_DRIVER_AUTO_ALIGN);
-    b_driver_fieldOrientBtn = new JoystickButton(b_driver, Constants.B_DRIVER_FIELD_ORIENT);
-    b_driver_turboBtn = new JoystickButton(b_driver, Constants.B_DRIVER_TURBO);
-    b_driver_slowBtn = new JoystickButton(b_driver, Constants.B_DRIVER_SLOW);
-    b_driver_zeroBtn = new JoystickButton(b_driver, Constants.B_DRIVER_ZERO);
-    b_driver_reverseBtn = new JoystickButton(b_driver, Constants.B_DRIVER_REVERSE);
+    if (Robot.getDriver() == 0) {
+      driver = new Joystick(Constants.DRIVER_CONTROLLER);
+      driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTO_ALIGN);
+      driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELD_ORIENT);
+      driver_turboBtn = new JoystickButton(driver, Constants.DRIVER_TURBO);
+      driver_slowBtn = new JoystickButton(driver, Constants.DRIVER_SLOW);
+      driver_zeroBtn = new JoystickButton(driver, Constants.DRIVER_ZERO);
+      driver_reverseBtn = new JoystickButton(driver, Constants.DRIVER_REVERSE);
+    } 
+    else {
+      driver = new Joystick(Constants.B_DRIVER_CONTROLLER);
+      driver_autoAlignBtn = new JoystickButton(driver, Constants.B_DRIVER_AUTO_ALIGN);
+      driver_fieldOrientBtn = new JoystickButton(driver, Constants.B_DRIVER_FIELD_ORIENT);
+      driver_turboBtn = new JoystickButton(driver, Constants.B_DRIVER_TURBO);
+      driver_slowBtn = new JoystickButton(driver, Constants.B_DRIVER_SLOW);
+      driver_zeroBtn = new JoystickButton(driver, Constants.B_DRIVER_ZERO);
+      driver_reverseBtn = new JoystickButton(driver, Constants.B_DRIVER_REVERSE);
+    }
 
     driver_autoAlign = new InstantCommand(driveSystem::toggleTargeting, driveSystem);
     driver_fieldOrient = new InstantCommand(driveSystem::setFieldOriented, driveSystem);
@@ -134,7 +127,6 @@ public class RobotContainer {
     driver_slow = new InstantCommand(driveSystem::setSlow, driveSystem);
     driver_zero = new InstantCommand(driveSystem::zeroGyro, driveSystem);
     driver_reverse = new ReverseIntake();
-
 
     // Operator controller
     operator = new XboxController(Constants.OPERATOR_CONTROLLER);
@@ -150,14 +142,14 @@ public class RobotContainer {
     op_controlarmBtn = new JoystickButton(operator, Constants.OP_CONTROL_ARM);
     op_manual_wheelBtn = new JoystickButton(operator, Constants.OP_CONTROL_RIGHT);
     op_reverse_teleBtn = new JoystickButton(operator, Constants.OP_REVERSE_TELE);
-  
+
     op_launch = new LaunchWithButton();
     op_slow = new InstantCommand(driveSystem::setSlow, driveSystem);
 
     op_lockWinchBtn = new JoystickButton(operator, Constants.OP_LOCK_WINCH);
     op_runWinchBtn = new JoystickButton(operator, Constants.OP_RUN_WINCH);
 
-    //op_slow = new ToggleSlowMode();
+    // op_slow = new ToggleSlowMode();
 
     op_intake = new IntakeWithButton();
     op_lockWinch = new LockWinches();
@@ -169,12 +161,12 @@ public class RobotContainer {
     op_reverse_tele = new InstantCommand(climb::setReverse, climb);
 
     // Autonomous
-    //auto = new Autonomous();
+    // auto = new Autonomous();
 
     configureButtonBindings();
   }
 
-  public static Joystick getJoy(){
+  public static Joystick getJoy() {
     return driver;
   }
 
@@ -196,13 +188,6 @@ public class RobotContainer {
     driver_slowBtn.whenPressed(driver_slow);
     driver_zeroBtn.whenPressed(driver_zero);
     driver_reverseBtn.whileHeld(driver_reverse);
-
-    b_driver_autoAlignBtn.whenPressed(driver_autoAlign);
-    b_driver_fieldOrientBtn.whenPressed(driver_fieldOrient);
-    b_driver_turboBtn.whenPressed(driver_turbo);
-    b_driver_slowBtn.whenPressed(driver_slow);
-    b_driver_zeroBtn.whenPressed(driver_zero);
-    b_driver_reverseBtn.whileHeld(driver_reverse);
 
     // Operator button bindings
     op_launchBtn.toggleWhenPressed(op_launch);

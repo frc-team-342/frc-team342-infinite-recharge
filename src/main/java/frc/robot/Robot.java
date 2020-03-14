@@ -41,8 +41,10 @@ public class Robot extends TimedRobot {
   private Command autoDrive;
   private Command driveWithTargeting;
   private LimelightSubsystem lime;
+  private static int driver;
 
   private SendableChooser<Command> autoChoose;
+  private SendableChooser<Integer> driverChoose;
 
 
   /**
@@ -62,18 +64,27 @@ public class Robot extends TimedRobot {
     autoDrive = new AutonomousShoot();
     driveWithTargeting = new DriveWithTargeting();
 
+
     autoChoose = new SendableChooser<>();
     autoChoose.setDefaultOption("Turn and Shoot", new AutonomousShoot());
     autoChoose.addOption("Trench FIVE Ball", new AutonomousTrench5Ball());
     autoChoose.addOption("Trench SIX Ball", new AutonomousTrench6Ball());
     autoChoose.addOption("Drive Off Line", new AutonomousLine());
     autoChoose.addOption("Let It Rip", new BeyBlade());
-    
+
+    driverChoose = new SendableChooser<>();
+    driverChoose.setDefaultOption("Davon Beaton", 0);
+    driverChoose.addOption("Jalen Evans", 1);
 
     SmartDashboard.putData("Auto Chooser", autoChoose);
+    SmartDashboard.putData("Driver Chooser", driverChoose);
     
     // Commands
 
+  }
+
+  public static int getDriver(){
+    return driver;
   }
 
   /**
@@ -132,6 +143,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    driver = driverChoose.getSelected();
     driveSystem.targetOff();
     lime.visionOff();
     intakeAndOutake.resetCellCount(); // REPLACE LATER - just for testing now
