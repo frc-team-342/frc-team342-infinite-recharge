@@ -48,7 +48,7 @@ public final class Constants {
     public static final int CP_ARM = 13;
 
     /* Buttons */
-    // Driver controller
+    // A Team Driver Buttons
     public static final int DRIVER_CONTROLLER = 0;
     public static final int DRIVER_TURBO = 6; // top right
     public static final int DRIVER_SLOW = 5; // top left
@@ -57,7 +57,7 @@ public final class Constants {
     public static final int DRIVER_FIELD_ORIENT = 3; // bottom left
     public static final int DRIVER_ZERO = 4; // bottom right
     
-    // Operator buttons
+    // A Team Operator buttons
     public static final int OPERATOR_CONTROLLER = 1;
     public static final int OP_LAUNCH = 5; // left bumper
     public static final int OP_SLOW = 2; // B button
@@ -70,6 +70,15 @@ public final class Constants {
     public static final int OP_REVERSE_TELE = 9; // left joy click
     public static final int OP_CONTROL_RIGHT = 10; // right joy click
 
+    // B Team Driver Buttons
+    public static final int B_DRIVER_CONTROLLER = 2;
+    public static final int B_DRIVER_TURBO = 7; // top right
+    public static final int B_DRIVER_SLOW = 6; // top left
+    public static final int B_DRIVER_REVERSE = 14; // side button
+    public static final int B_DRIVER_AUTO_ALIGN = 1; // trigger
+    public static final int B_DRIVER_FIELD_ORIENT = 5; // bottom left
+    public static final int B_DRIVER_ZERO = 13; // bottom right
+    
     /* Sensors */
     // Intake sensors
     public static final int INTAKE_SENSOR_1 = 1;

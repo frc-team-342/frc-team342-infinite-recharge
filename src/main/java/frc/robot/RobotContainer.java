@@ -50,6 +50,7 @@ public class RobotContainer {
 
   // Driver controller
   private static Joystick driver; // port 0
+  private static Joystick b_driver; // port 2
 
   private JoystickButton driver_autoAlignBtn; // button 1
   private JoystickButton driver_fieldOrientBtn; // button 2
@@ -57,6 +58,13 @@ public class RobotContainer {
   private JoystickButton driver_slowBtn;
   private JoystickButton driver_zeroBtn;
   private JoystickButton driver_reverseBtn;
+
+  private JoystickButton b_driver_autoAlignBtn; // button 1
+  private JoystickButton b_driver_fieldOrientBtn; // button 2
+  private JoystickButton b_driver_turboBtn; // button 5
+  private JoystickButton b_driver_slowBtn;
+  private JoystickButton b_driver_zeroBtn;
+  private JoystickButton b_driver_reverseBtn;
 
   private Command driver_autoAlign;
   private Command driver_fieldOrient;
@@ -66,7 +74,7 @@ public class RobotContainer {
   private Command driver_reverse;
 
   // Operator controller
-  private static XboxController operator;
+  private static XboxController operator; // port 1
 
   private JoystickButton op_launchBtn;
   private JoystickButton op_slowBtn;
@@ -104,7 +112,7 @@ public class RobotContainer {
 
     // Driver controller
     driver = new Joystick(Constants.DRIVER_CONTROLLER);
-
+    b_driver = new Joystick(Constants.B_DRIVER_CONTROLLER);
     
     driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTO_ALIGN);
     driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELD_ORIENT);
@@ -113,18 +121,19 @@ public class RobotContainer {
     driver_zeroBtn = new JoystickButton(driver, Constants.DRIVER_ZERO);
     driver_reverseBtn = new JoystickButton(driver, Constants.DRIVER_REVERSE);
 
+    b_driver_autoAlignBtn = new JoystickButton(b_driver, Constants.B_DRIVER_AUTO_ALIGN);
+    b_driver_fieldOrientBtn = new JoystickButton(b_driver, Constants.B_DRIVER_FIELD_ORIENT);
+    b_driver_turboBtn = new JoystickButton(b_driver, Constants.B_DRIVER_TURBO);
+    b_driver_slowBtn = new JoystickButton(b_driver, Constants.B_DRIVER_SLOW);
+    b_driver_zeroBtn = new JoystickButton(b_driver, Constants.B_DRIVER_ZERO);
+    b_driver_reverseBtn = new JoystickButton(b_driver, Constants.B_DRIVER_REVERSE);
+
     driver_autoAlign = new InstantCommand(driveSystem::toggleTargeting, driveSystem);
     driver_fieldOrient = new InstantCommand(driveSystem::setFieldOriented, driveSystem);
     driver_turbo = new InstantCommand(driveSystem::setTurbo, driveSystem);
     driver_slow = new InstantCommand(driveSystem::setSlow, driveSystem);
     driver_zero = new InstantCommand(driveSystem::zeroGyro, driveSystem);
     driver_reverse = new ReverseIntake();
-    
-    driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTO_ALIGN);
-    driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELD_ORIENT);
-    driver_turboBtn = new JoystickButton(driver, Constants.DRIVER_TURBO);
-
-
 
 
     // Operator controller
@@ -187,6 +196,13 @@ public class RobotContainer {
     driver_slowBtn.whenPressed(driver_slow);
     driver_zeroBtn.whenPressed(driver_zero);
     driver_reverseBtn.whileHeld(driver_reverse);
+
+    b_driver_autoAlignBtn.whenPressed(driver_autoAlign);
+    b_driver_fieldOrientBtn.whenPressed(driver_fieldOrient);
+    b_driver_turboBtn.whenPressed(driver_turbo);
+    b_driver_slowBtn.whenPressed(driver_slow);
+    b_driver_zeroBtn.whenPressed(driver_zero);
+    b_driver_reverseBtn.whileHeld(driver_reverse);
 
     // Operator button bindings
     op_launchBtn.toggleWhenPressed(op_launch);
