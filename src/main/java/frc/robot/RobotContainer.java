@@ -112,7 +112,7 @@ public class RobotContainer {
       driver_reverseBtn = new JoystickButton(driver, Constants.DRIVER_REVERSE);
     } 
     else {
-      driver = new Joystick(Constants.B_DRIVER_CONTROLLER);
+      driver = new Joystick(Constants.DRIVER_CONTROLLER);
       driver_autoAlignBtn = new JoystickButton(driver, Constants.B_DRIVER_AUTO_ALIGN);
       driver_fieldOrientBtn = new JoystickButton(driver, Constants.B_DRIVER_FIELD_ORIENT);
       driver_turboBtn = new JoystickButton(driver, Constants.B_DRIVER_TURBO);
