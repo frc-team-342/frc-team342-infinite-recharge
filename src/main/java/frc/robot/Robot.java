@@ -8,15 +8,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import frc.robot.commands.ActivateTelescopes;
-import frc.robot.commands.AutonomousCommands.AutonomousLine;
-import frc.robot.commands.AutonomousCommands.AutonomousShoot;
-import frc.robot.commands.AutonomousCommands.AutonomousTrench;
+
+import frc.robot.commands.Autonomous;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithTargeting;
 import frc.robot.subsystems.DriveSystem;
@@ -39,9 +36,10 @@ public class Robot extends TimedRobot {
   private Command autoDrive;
   private Command driveWithTargeting;
   private LimelightSubsystem lime;
+  private Command climb;
 
-  private SendableChooser<Command> autoChoose;
 
+  private Command driveWithPercent;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -57,17 +55,15 @@ public class Robot extends TimedRobot {
     intakeAndOutake = Factory.getIntakeOutake();
 
     driveWithJoy = new DriveWithJoystick();
-    autoDrive = new AutonomousShoot();
+    autoDrive = new Autonomous();
     driveWithTargeting = new DriveWithTargeting();
 
-    autoChoose = new SendableChooser<>();
-    autoChoose.setDefaultOption("Turn and Shoot", new AutonomousShoot());
-    autoChoose.addOption("Trench Intake", new AutonomousTrench());
-    autoChoose.addOption("Drive Off Line", new AutonomousLine());
 
-    SmartDashboard.putData("Auto Chooser", autoChoose);
-    
+
+
     // Commands
+    climb = new ActivateTelescopes();
+
 
   }
 
@@ -109,8 +105,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    lime.visionOff();
-    autoDrive = autoChoose.getSelected();
     driveSystem.zeroGyro();
     autoDrive.schedule();
 

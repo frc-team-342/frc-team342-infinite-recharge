@@ -5,59 +5,64 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.AutonomousCommands;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.LimelightSubsystem;
-import edu.wpi.first.wpilibj.Joystick;
 
-public class AutoTarget extends CommandBase {
-  private final LimelightSubsystem lime;
-  private final DriveSystem driveSystem;
-  private double error = 0.5;
-  private boolean isDone = false;
-
+public class MoveToCenter extends CommandBase {
   /**
-   * Creates a new RotateToAngle.
+   * Creates a new MoveToCenter.
    */
-  public AutoTarget() {
-    driveSystem = Factory.getDrive();
-
-    lime = Factory.getLimelight(); 
-
-
+  private LimelightSubsystem lime;
+  private DriveSystem drive;
+  private double X;
+  public MoveToCenter() {
     // Use addRequirements() here to declare subsystem dependencies.
+    lime = Factory.getLimelight();
+    drive = Factory.getDrive();
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    lime.visionOn();
-    driveSystem.errorAccumReset();
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveSystem.driveWithTargeting(0.0, 0.0, lime.getXOffsetAngle());
-    //if(Math.abs(lime.getXOffsetAngle()) - error < 0.6)
-    //  isDone = true;
+    X = lime.getXOffsetAngle();
+    System.out.println(X);
+    System.out.println(lime.getXOffsetAngle());
+    if (X < -1) { 
+      drive.Drive(-0.2, 0.0, 0.0);
+      System.out.println("Bruh Moment");
+    }
+    else if (X > 1) {
+      drive.Drive(0.2, 0.0, 0.0);
+      System.out.println("Bruh Moment");
+    }
+    else if (X > -1 && X < 1) {
+      drive.Drive(0.0, 0.0, 0.0);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveSystem.stopDrive();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return isDone;
-
+    /*if (X > -1 && X < 1) {
+      return false;
+    }
+    else {
+      return true;
+    }*/
+    return true;
   }
 }

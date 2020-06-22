@@ -9,7 +9,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 //import edu.wpi.first.wpilibj2.command.Subsystem;
-//import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ControlPanelSubsystem;
 import frc.robot.subsystems.JetsonSubsystem;
@@ -27,10 +26,10 @@ public class Factory {
     private static ControlPanelSubsystem control = null;
     private static JetsonSubsystem js = null;
     private static ClimbSubsystem cs = null;
-
-    public static IntakeAndOutake getIntakeOutake() {
-        if (intakeOutake == null) {
-            intakeOutake = new IntakeAndOutake();
+    
+    public static IntakeAndOutake getIntakeOutake(){
+        if(intakeOutake == null){
+            intakeOutake = new IntakeAndOutake(); 
         }
         return intakeOutake;
     }
