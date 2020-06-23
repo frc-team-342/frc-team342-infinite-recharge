@@ -1,6 +1,8 @@
-# Requires pip modules pynetworktables, flask, and opencv-python
+# Requires pip modules pynetworktables, numpy, flask, and opencv-python
 from flask import Flask, Response
 from networktables import NetworkTables
+
+import numpy as np
 
 import time
 import threading
@@ -14,9 +16,11 @@ def generate():
     while True:
         if camera_switch:
             # Insert grab frame code here
-            yield "1"
-        else:
-            yield "2"
+            yield (b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n\r\n' + bytearray(np.zeros((480, 360, 3), np.uint8)) + b'\r\n\r\n') 
+        else:            
+            yield (b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n\r\n' + bytearray(np.zeros((480, 360, 3), np.uint8)) + b'\r\n\r\n') 
 
 
 @app.before_first_request
@@ -37,10 +41,7 @@ def nt_thread():
 
 @app.route('/')
 def camera_switcher():
-    if not (next(generate()) == "1" or next(generate()) == "2"):
         return Response(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
-    else:
-        return Response(generate())
 
 
 # Run using "python3 app.py" instead of the Flask module
