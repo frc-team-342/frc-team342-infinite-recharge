@@ -27,10 +27,10 @@ def generate():
         if camera_switch:
             # Insert grab frame code here
             yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + bytearray(np.zeros((480, 360, 3), np.uint8)) + b'\r\n\r\n') 
+                    b'Content-Type: image/jpeg\r\n\r\n' + cv2.imencode("jpg", cam1.read()) + b'\r\n\r\n') 
         else:            
             yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + bytearray(np.zeros((480, 360, 3), np.uint8)) + b'\r\n\r\n') 
+                    b'Content-Type: image/jpeg\r\n\r\n' + bytearray(np.zeros((480, 360, 3), np.uint8) if cam2 is None else cv2.imencode("jpg", cam2.read())) + b'\r\n\r\n') 
 
 
 @app.before_first_request
