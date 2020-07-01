@@ -4,12 +4,22 @@ from networktables import NetworkTables
 
 import numpy as np
 
+import cv2
 import time
+import glob
 import threading
 
 app = Flask(__name__)
 camera_switch = False
 
+# Grab first two cameras
+sources = glob.glob("/dev/video*")
+if len(sources) < 1:
+    print("No cameras detected")
+    exit()
+
+cam1 = cv2.VideoCapture(int(sources[0].split("/dev/video")[1]))
+cam2 = cv2.VideoCapture(int(sources[1].split("/dev/video")[1])) if len(sources) > 1 else None
 
 # Continually returns frames grabbed from the correct camera
 def generate():
