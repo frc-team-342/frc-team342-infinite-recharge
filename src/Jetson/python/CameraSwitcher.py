@@ -51,7 +51,7 @@ def nt_thread():
 
 @app.route('/')
 def camera_switcher():
-        return Response(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 # Run using "python3 app.py" instead of the Flask module
