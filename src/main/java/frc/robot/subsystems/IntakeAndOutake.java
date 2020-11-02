@@ -56,9 +56,9 @@ public class IntakeAndOutake extends SubsystemBase {
   private int powerCellCount = 0; 
 
   public IntakeAndOutake() {
+    configureShooter();
+
     intake = new TalonSRX(Constants.INTAKE_PRIMARY);
-    shooter1 = new TalonSRX(Constants.LAUNCH_MOTOR_1);
-    shooter2 = new TalonSRX(Constants.LAUNCH_MOTOR_2);
     load1 = new VictorSPX(Constants.INTAKE_CONVEYOR_1);
     load2 = new VictorSPX(Constants.INTAKE_CONVEYOR_2);
 
@@ -66,11 +66,17 @@ public class IntakeAndOutake extends SubsystemBase {
     sensor2 = new DigitalInput(Constants.INTAKE_SENSOR_2);
     sensor3 = new DigitalInput(Constants.INTAKE_SENSOR_3);
 
+    lime = Factory.getLimelight();
+  }
+
+  public void configureShooter(){
+    shooter1 = new TalonSRX(Constants.LAUNCH_MOTOR_1);
+    shooter2 = new TalonSRX(Constants.LAUNCH_MOTOR_2);
+
     // sets shooter to turn in correct direction
     shooter1.setInverted(true);
     shooter2.setInverted(true);
   
-
     shooter1.enableCurrentLimit(true);
     shooter1.configPeakCurrentLimit(current_limit);
     shooter1.configPeakCurrentDuration(current_limit_duration);
@@ -82,19 +88,13 @@ public class IntakeAndOutake extends SubsystemBase {
     shooter1.configAllowableClosedloopError(0, 0, 25);
     shooter1.selectProfileSlot(0, 0);
     shooter1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-
     shooter1.setSensorPhase(false);
 
     // PID loop values for shooter
-
     shooter1.config_kF(0, 0.015);
     shooter1.config_kP(0, 0.03);
     shooter1.config_kI(0, 0.0);
     shooter1.config_kD(0, 0.0);
-
-    lime = Factory.getLimelight();
-
-
   }
 
   public void powerCellCount(){
@@ -189,16 +189,16 @@ public class IntakeAndOutake extends SubsystemBase {
     System.out.println("Velocity Calculated: " + velocity);
 
     shooter2.follow(shooter1);
-    shooter1.set(ControlMode.Velocity, velocity);
+    setShooterVelocity(velocity);
 
-    System.out.println("Velocity: " + shooter1.getSelectedSensorVelocity());
+    System.out.println("Velocity: " + getShooterVelocity());
 
     SmartDashboard.putNumber("Target Velocity", velocity);
     SmartDashboard.putNumber("Actual LL Dist", adjustedDist);
     SmartDashboard.putNumber("Distance Travelled", actualDist);
 
 
-    if (Math.abs(shooter1.getSelectedSensorVelocity()) + error < velocity && !sensor3.get()){ 
+    if (Math.abs(getShooterVelocity()) + error < velocity && !sensor3.get()){ 
       // Will not shoot if fly wheel isnt up to speed. stops intake if shooter sensor sees cell
       //sensor.get() returns true if nothing is sensed. ! it to make it work
       load2.set(ControlMode.PercentOutput, 0.0);
@@ -209,6 +209,14 @@ public class IntakeAndOutake extends SubsystemBase {
       load1.set(ControlMode.PercentOutput, 0.9);
     }
 
+  }
+
+  private void setShooterVelocity(double velocity){
+    shooter1.set(ControlMode.Velocity, velocity);
+  }
+
+  private double getShooterVelocity(){
+    return shooter1.getSelectedSensorVelocity();
   }
 
   public void outake(double velocity){

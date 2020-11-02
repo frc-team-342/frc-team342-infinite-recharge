@@ -15,11 +15,15 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LimelightSubsystem extends SubsystemBase {
-  private NetworkTable table;
+  private NetworkTable table; // Network table for limelight values
   private NetworkTableEntry tv, ty, tx, camMode, ledMode;
-  private double yOffsetAngle, xOffsetAngle;
+  private double yOffsetAngle, xOffsetAngle; // Field of view of the limelight
   private int cameraMode, lightMode, validTarget;
-  private double limeError = 2.5;
+  private double limeError = 2.5; // Acceptable error from the limelight
+  private double limelightAngleOffset = 9.5; // Angle of the limelight from flat ground
+  private double targetHeight = 90.0;
+  private double robotHeight = 21.125;
+  private double radiansToDegrees = Math.PI / 180;
 
   /**
    * Creates a new LimelightSubsystem.
@@ -50,7 +54,7 @@ public class LimelightSubsystem extends SubsystemBase {
    * 
    */
   public double getDistance() {
-    return (90.0 - 21.125) / Math.tan((yOffsetAngle + 15.0) * Math.PI / 180);
+    return (targetHeight - robotHeight) / Math.tan((yOffsetAngle + limelightAngleOffset) * radiansToDegrees);
   }
 
   /*
@@ -58,7 +62,7 @@ public class LimelightSubsystem extends SubsystemBase {
    * 
    */
   public double getXOffset() {
-    return getDistance() * (Math.tan(xOffsetAngle * Math.PI / 180));
+    return getDistance() * (Math.tan(xOffsetAngle * radiansToDegrees));
   }
 
   /*
