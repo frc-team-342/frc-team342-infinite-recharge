@@ -7,6 +7,10 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,10 +22,11 @@ public class IntakeAndOutake extends SubsystemBase {
    */
 
   private TalonSRX intake;
-  private TalonSRX shooter1;
-  private TalonSRX shooter2;
+  private CANSparkMax shooter1;
   private VictorSPX load1;
   private VictorSPX load2;
+
+  private CANEncoder shooterEncoder;
 
   private DigitalInput sensor1; //intake
   private DigitalInput sensor2; //hopper
@@ -30,9 +35,11 @@ public class IntakeAndOutake extends SubsystemBase {
   private final double speed = 0.9;
   private final double speed2 = .95;
 
+  public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
 
-  private final int current_limit = 80;
-  private final int current_limit_duration = 2000;
+  private static final double ramp_rate = 0.2;
+  private static final double voltage_comp = 12.0;
+  private static final int current_limit = 60;
 
   private double rpmsConverter = 60.0 / 1024.0;
   //Changed from 250 on 3/6/2020
@@ -70,31 +77,31 @@ public class IntakeAndOutake extends SubsystemBase {
   }
 
   public void configureShooter(){
-    shooter1 = new TalonSRX(Constants.LAUNCH_MOTOR_1);
-    shooter2 = new TalonSRX(Constants.LAUNCH_MOTOR_2);
+    shooter1 = new CANSparkMax(Constants.LAUNCH_MOTOR_1, MotorType.kBrushless);
+    shooterEncoder = new CANEncoder(shooter1);
+    CANPIDController pid = shooter1.getPIDController();
+    
+    shooter1.setSmartCurrentLimit(current_limit);
+    shooter1.enableVoltageCompensation(voltage_comp);
+    shooter1.setOpenLoopRampRate(ramp_rate);
 
-    // sets shooter to turn in correct direction
-    shooter1.setInverted(true);
-    shooter2.setInverted(true);
-  
-    shooter1.enableCurrentLimit(true);
-    shooter1.configPeakCurrentLimit(current_limit);
-    shooter1.configPeakCurrentDuration(current_limit_duration);
+    kP = 5e-5;
+    kI = 1e-6;
+    kD = 0;
+    kIz = 0;
+    kFF = 0.000156;
+    kMaxOutput = 1;
+    kMinOutput = -1;
+    maxRPM = 5700;
 
-    shooter2.enableCurrentLimit(true);
-    shooter2.configPeakCurrentLimit(current_limit);
-    shooter2.configPeakCurrentDuration(current_limit_duration);
+    pid.setP(kP);
+    pid.setI(kI);
+    pid.setD(kD);
+    pid.setIZone(kIz);
+    pid.setFF(kFF);
+    pid.setOutputRange(kMinOutput, kMaxOutput);
 
-    shooter1.configAllowableClosedloopError(0, 0, 25);
-    shooter1.selectProfileSlot(0, 0);
-    shooter1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    shooter1.setSensorPhase(false);
-
-    // PID loop values for shooter
-    shooter1.config_kF(0, 0.015);
-    shooter1.config_kP(0, 0.03);
-    shooter1.config_kI(0, 0.0);
-    shooter1.config_kD(0, 0.0);
+    //shooter1.setInverted(true);
   }
 
   public void powerCellCount(){
@@ -188,7 +195,6 @@ public class IntakeAndOutake extends SubsystemBase {
     double velocity = ((inchPerSec * unitConversion) * 2.451 + 8231.1);
     System.out.println("Velocity Calculated: " + velocity);
 
-    shooter2.follow(shooter1);
     setShooterVelocity(velocity);
 
     System.out.println("Velocity: " + getShooterVelocity());
@@ -212,21 +218,19 @@ public class IntakeAndOutake extends SubsystemBase {
   }
 
   private void setShooterVelocity(double velocity){
-    shooter1.set(ControlMode.Velocity, velocity);
+    shooter1.set(velocity);
   }
 
   private double getShooterVelocity(){
-    return shooter1.getSelectedSensorVelocity();
+    return shooter1.getEncoder().getVelocity();
   }
 
   public void outake(double velocity){
-    shooter2.follow(shooter1);
+    shooter1.set(velocity);
 
-    shooter1.set(ControlMode.PercentOutput, velocity);
+    System.out.println("Velocity: " + shooter1.getEncoder().getVelocity());
 
-    System.out.println("Velocity: " + shooter1.getSelectedSensorVelocity());
-
-    if (shooter1.getSelectedSensorVelocity() + error < velocity && !sensor3.get()){
+    if (shooter1.getEncoder().getVelocity() + error < velocity && !sensor3.get()){
       load2.set(ControlMode.PercentOutput, 0.0);
       load1.set(ControlMode.PercentOutput, 0.0);
   }
@@ -243,12 +247,7 @@ public class IntakeAndOutake extends SubsystemBase {
     //SmartDashboard.putNumber("Shooter 1 Voltage: ", shooter1.getMotorOutputVoltage());
     //SmartDashboard.putNumber("Shooter 1 Current: ", shooter1.getSupplyCurrent());
 
-
-    //SmartDashboard.putNumber("Shooter 2 Percent: ", shooter2.getMotorOutputPercent());
-    //SmartDashboard.putNumber("Shooter 2 Voltage: ", shooter2.getMotorOutputVoltage());
-    //SmartDashboard.putNumber("Shooter 2 Current: ", shooter2.getSupplyCurrent());
-
-    SmartDashboard.putNumber("Velocity: ", shooter1.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Velocity: ", shooter1.getEncoder().getVelocity());
     // if (sensor1.get() && sensor2.get() && sensor3.get())
     // intakeStop();
   }
@@ -270,8 +269,7 @@ public class IntakeAndOutake extends SubsystemBase {
     // intake.set(ControlMode.PercentOutput, 0.0);
     load1.set(ControlMode.PercentOutput, 0.0);
     load2.set(ControlMode.PercentOutput, 0.0);
-    shooter1.set(ControlMode.PercentOutput, 0.0);
-    shooter2.set(ControlMode.PercentOutput, 0.0);
+    shooter1.set(0.0);
   }
 
   public double rpmsToCode(double rpms) {
