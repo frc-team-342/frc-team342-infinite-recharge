@@ -9,7 +9,7 @@ targetCompatibility = JavaVersion.VERSION_11
 deploy {
 	targets {
 		roboRIO("roborio") {
-			team = frc.getTeamNumber ?: 342
+			team = frc.getTeamOrDefault(342)
 		}
 
 		target("rpi") {
