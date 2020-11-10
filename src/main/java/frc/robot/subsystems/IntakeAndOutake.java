@@ -84,6 +84,7 @@ public class IntakeAndOutake extends SubsystemBase {
     shooter1.setSmartCurrentLimit(current_limit);
     shooter1.enableVoltageCompensation(voltage_comp);
     shooter1.setOpenLoopRampRate(ramp_rate);
+    shooter1.setInverted(true);
 
     kP = 5e-5;
     kI = 1e-6;
@@ -226,11 +227,11 @@ public class IntakeAndOutake extends SubsystemBase {
   }
 
   public void outake(double velocity){
-    shooter1.set(velocity);
+    setShooterVelocity(velocity);
 
     System.out.println("Velocity: " + shooter1.getEncoder().getVelocity());
 
-    if (shooter1.getEncoder().getVelocity() + error < velocity && !sensor3.get()){
+    if (Math.abs(getShooterVelocity()) + error < velocity && !sensor3.get()){
       load2.set(ControlMode.PercentOutput, 0.0);
       load1.set(ControlMode.PercentOutput, 0.0);
   }
