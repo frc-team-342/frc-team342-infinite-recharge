@@ -23,10 +23,12 @@ public class IntakeAndOutake extends SubsystemBase {
 
   private TalonSRX intake;
   private CANSparkMax shooter1;
+  private CANSparkMax shooter2;
   private VictorSPX load1;
   private VictorSPX load2;
 
-  private CANEncoder shooterEncoder;
+  private CANEncoder shooterEncoder1;
+  private CANEncoder shooterEncoder2;
 
   private DigitalInput sensor1; //intake
   private DigitalInput sensor2; //hopper
@@ -78,13 +80,16 @@ public class IntakeAndOutake extends SubsystemBase {
 
   public void configureShooter(){
     shooter1 = new CANSparkMax(Constants.LAUNCH_MOTOR_1, MotorType.kBrushless);
-    shooterEncoder = new CANEncoder(shooter1);
-    CANPIDController pid = shooter1.getPIDController();
-    
-    shooter1.setSmartCurrentLimit(current_limit);
-    shooter1.enableVoltageCompensation(voltage_comp);
-    shooter1.setOpenLoopRampRate(ramp_rate);
+    shooter2 = new CANSparkMax(Constants.LAUNCH_MOTOR_2, MotorType.kBrushless);
+
+    shooterEncoder1 = new CANEncoder(shooter1);
+    shooterEncoder2 = new CANEncoder(shooter2);
+  
+    setPID(shooter1);
+    setPID(shooter2);
     shooter1.setInverted(true);
+    shooter2.setInverted(true);
+    shooter2.follow(shooter1);
 
     kP = 5e-5;
     kI = 1e-6;
@@ -94,6 +99,10 @@ public class IntakeAndOutake extends SubsystemBase {
     kMaxOutput = 1;
     kMinOutput = -1;
     maxRPM = 5700;
+  }
+
+  public void setPID(CANSparkMax motor) {
+    CANPIDController pid = motor.getPIDController();
 
     pid.setP(kP);
     pid.setI(kI);
@@ -102,7 +111,9 @@ public class IntakeAndOutake extends SubsystemBase {
     pid.setFF(kFF);
     pid.setOutputRange(kMinOutput, kMaxOutput);
 
-    //shooter1.setInverted(true);
+    motor.setSmartCurrentLimit(current_limit);
+    motor.enableVoltageCompensation(voltage_comp);
+    motor.setOpenLoopRampRate(ramp_rate);
   }
 
   public void powerCellCount(){
@@ -219,6 +230,7 @@ public class IntakeAndOutake extends SubsystemBase {
   }
 
   private void setShooterVelocity(double velocity){
+    shooter2.follow(shooter1);
     shooter1.set(velocity);
   }
 
@@ -271,6 +283,7 @@ public class IntakeAndOutake extends SubsystemBase {
     load1.set(ControlMode.PercentOutput, 0.0);
     load2.set(ControlMode.PercentOutput, 0.0);
     shooter1.set(0.0);
+    shooter2.set(0.0);
   }
 
   public double rpmsToCode(double rpms) {
