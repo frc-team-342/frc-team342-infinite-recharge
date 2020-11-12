@@ -1,0 +1,29 @@
+apply plugin: 'jaci.gradle.EmbeddedTools'
+
+deploy {
+    targets {
+        target("rpi") {
+            directory = "/"
+
+            locations {
+                ssh {
+                   address = "10.3.42.2"
+                   user = "pi" 
+                   password = ""
+                }
+            }
+        }
+    }
+    artifacts {
+        fileTreeArtifact("coprocessorFiles") {
+            targets << "rpi"
+            files = fileTree(dir: "python/")
+        }
+
+        // Run deployed Python code on rpi
+        commandArtifact("coprocessorRun") {
+            targets << "rpi"
+            command = "echo Hello world"
+        }
+    }
+}
