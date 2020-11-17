@@ -201,7 +201,6 @@ public class IntakeAndOutake extends SubsystemBase {
     System.out.println("Velocity: " + getShooterVelocity());
 
     SmartDashboard.putNumber("Target Velocity", velocity);
-    SmartDashboard.putNumber("Actual LL Dist", adjustedDist);
     SmartDashboard.putNumber("Distance Travelled", actualDist);
 
 
