@@ -90,7 +90,7 @@ public class IntakeAndOutake extends SubsystemBase {
     setPID(shooter1);
     setPID(shooter2);
     shooter1.setInverted(true);
-    shooter2.setInverted(true);
+    shooter2.setInverted(false);
     shooter2.follow(shooter1);
 
     kP = 5e-5;
