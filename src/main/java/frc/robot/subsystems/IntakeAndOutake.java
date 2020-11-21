@@ -27,9 +27,6 @@ public class IntakeAndOutake extends SubsystemBase {
   private VictorSPX load1;
   private VictorSPX load2;
 
-  private CANEncoder shooterEncoder1; //encoder for shooter1
-  private CANEncoder shooterEncoder2; // encoder for shooter2
-
   private DigitalInput sensor1; //intake sensor
   private DigitalInput sensor2; //hopper sensor
   private DigitalInput sensor3; //shooter loader sensor
@@ -43,7 +40,6 @@ public class IntakeAndOutake extends SubsystemBase {
   private static final double voltage_comp = 12.0; // amount of voltage allowed to be compensated
   private static final int current_limit = 60; // max amount of current motor can pull
 
-  private double rpmsConverter = 60.0 / 1024.0;
   //Changed from 250 on 3/6/2020
   private double error = 50.0; // allowable error for shooter
 
@@ -83,9 +79,6 @@ public class IntakeAndOutake extends SubsystemBase {
   public void configureShooter(){
     shooter1 = new CANSparkMax(Constants.LAUNCH_MOTOR_1, MotorType.kBrushless);
     shooter2 = new CANSparkMax(Constants.LAUNCH_MOTOR_2, MotorType.kBrushless);
-
-    shooterEncoder1 = new CANEncoder(shooter1);
-    shooterEncoder2 = new CANEncoder(shooter2);
   
     setPID(shooter1);
     setPID(shooter2);
@@ -240,7 +233,7 @@ public class IntakeAndOutake extends SubsystemBase {
     shooter1.set(velocity);
   }
 
-  /***Gets the shooter motor velocity from the encoder*/
+  /***Gets the shooter motor velocity from the encoder in RPMS*/
   private double getShooterVelocity(){
     return shooter1.getEncoder().getVelocity();
   }
@@ -295,13 +288,5 @@ public class IntakeAndOutake extends SubsystemBase {
     load2.set(ControlMode.PercentOutput, 0.0);
     shooter1.set(0.0);
     shooter2.set(0.0);
-  }
-
-  public double rpmsToCode(double rpms) {
-    return rpms / rpmsConverter;
-  }
-
-  public double codeToRpms(double code) {
-    return code * rpmsConverter;
   }
 }
