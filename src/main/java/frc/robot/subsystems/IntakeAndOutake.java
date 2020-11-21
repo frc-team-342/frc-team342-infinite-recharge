@@ -23,34 +23,36 @@ public class IntakeAndOutake extends SubsystemBase {
 
   private TalonSRX intake;
   private CANSparkMax shooter1;
+  private CANSparkMax shooter2;
   private VictorSPX load1;
   private VictorSPX load2;
 
-  private CANEncoder shooterEncoder;
+  private CANEncoder shooterEncoder1; //encoder for shooter1
+  private CANEncoder shooterEncoder2; // encoder for shooter2
 
-  private DigitalInput sensor1; //intake
-  private DigitalInput sensor2; //hopper
-  private DigitalInput sensor3; //shooter
+  private DigitalInput sensor1; //intake sensor
+  private DigitalInput sensor2; //hopper sensor
+  private DigitalInput sensor3; //shooter loader sensor
 
-  private final double speed = 0.9;
-  private final double speed2 = .95;
+  private final double speed = 0.9; // Speed for shooter loader conveyor
+  private final double speed2 = .95; // Speed for intake conveyors
 
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
 
-  private static final double ramp_rate = 0.2;
-  private static final double voltage_comp = 12.0;
-  private static final int current_limit = 60;
+  private static final double ramp_rate = 0.2; // limit in seconds that motor is allowed reach full speed
+  private static final double voltage_comp = 12.0; // amount of voltage allowed to be compensated
+  private static final int current_limit = 60; // max amount of current motor can pull
 
   private double rpmsConverter = 60.0 / 1024.0;
   //Changed from 250 on 3/6/2020
-  private double error = 50.0;
+  private double error = 50.0; // allowable error for shooter
 
-  private double hoodAngle = 50.0 * (Math.PI / 180.0);
-  private double height = 98.25 - 21.125;
-  private double targetDepth = 30.0;
-  private double limeToHood = 27.0;
+  private double hoodAngle = 50.0 * (Math.PI / 180.0); // hood angle in radians
+  private double height = 98.25 - 21.125; // height between robot and middle of target measured in inches
+  private double targetDepth = 30.0; // depth from front of target to back measured in inches
+  private double limeToHood = 27.0; // length from limelight to shooter hood measured in inches
 
-  // Gravity in in/s
+  /**Gravity in inches/second*/ 
   private double gravity = 386.09;
 
   private final LimelightSubsystem lime;
@@ -62,29 +64,33 @@ public class IntakeAndOutake extends SubsystemBase {
  
   private int powerCellCount = 0; 
 
+  /**Constructor for the class*/
   public IntakeAndOutake() {
     configureShooter();
 
-    intake = new TalonSRX(Constants.INTAKE_PRIMARY);
-    load1 = new VictorSPX(Constants.INTAKE_CONVEYOR_1);
-    load2 = new VictorSPX(Constants.INTAKE_CONVEYOR_2);
+    intake = new TalonSRX(Constants.INTAKE_PRIMARY); // intake wheel infront of robot
+    load1 = new VictorSPX(Constants.INTAKE_CONVEYOR_1); // first conveyor motor
+    load2 = new VictorSPX(Constants.INTAKE_CONVEYOR_2); // second conveyor motor
 
-    sensor1 = new DigitalInput(Constants.INTAKE_SENSOR_1);
-    sensor2 = new DigitalInput(Constants.INTAKE_SENSOR_2);
-    sensor3 = new DigitalInput(Constants.INTAKE_SENSOR_3);
+    sensor1 = new DigitalInput(Constants.INTAKE_SENSOR_1); // intake sensor
+    sensor2 = new DigitalInput(Constants.INTAKE_SENSOR_2); // hopper sensor
+    sensor3 = new DigitalInput(Constants.INTAKE_SENSOR_3); // shooter loader sensor
 
     lime = Factory.getLimelight();
   }
 
+  /**Sets all the configuration for the shooter motors. i.e inversion, encoders, instantiation, etc*/
   public void configureShooter(){
     shooter1 = new CANSparkMax(Constants.LAUNCH_MOTOR_1, MotorType.kBrushless);
-    shooterEncoder = new CANEncoder(shooter1);
-    CANPIDController pid = shooter1.getPIDController();
-    
-    shooter1.setSmartCurrentLimit(current_limit);
-    shooter1.enableVoltageCompensation(voltage_comp);
-    shooter1.setOpenLoopRampRate(ramp_rate);
+    shooter2 = new CANSparkMax(Constants.LAUNCH_MOTOR_2, MotorType.kBrushless);
+
+    shooterEncoder1 = new CANEncoder(shooter1);
+    shooterEncoder2 = new CANEncoder(shooter2);
+  
+    setPID(shooter1);
+    setPID(shooter2);
     shooter1.setInverted(true);
+    shooter2.setInverted(true);
 
     kP = 5e-5;
     kI = 1e-6;
@@ -94,6 +100,11 @@ public class IntakeAndOutake extends SubsystemBase {
     kMaxOutput = 1;
     kMinOutput = -1;
     maxRPM = 5700;
+  }
+
+  /***Sets everything needed for closed-loop PID for the motor*/
+  public void setPID(CANSparkMax motor) {
+    CANPIDController pid = motor.getPIDController();
 
     pid.setP(kP);
     pid.setI(kI);
@@ -102,9 +113,12 @@ public class IntakeAndOutake extends SubsystemBase {
     pid.setFF(kFF);
     pid.setOutputRange(kMinOutput, kMaxOutput);
 
-    //shooter1.setInverted(true);
+    motor.setSmartCurrentLimit(current_limit);
+    motor.enableVoltageCompensation(voltage_comp);
+    motor.setOpenLoopRampRate(ramp_rate);
   }
 
+  /**Senses powercells in and out and keeps a running count of powercells currently in the robot*/
   public void powerCellCount(){
     // counts power cells in and out so we dont get more than 5
     boolean isTriggered1 = !sensor1.get(); 
@@ -138,6 +152,7 @@ public class IntakeAndOutake extends SubsystemBase {
     
   }
 
+  /**Moves the intake conveyors and wheel to load powercells into robot*/
   public void intake() {
     powerCellCount(); 
     intake.set(ControlMode.PercentOutput, speed2);
@@ -154,8 +169,8 @@ public class IntakeAndOutake extends SubsystemBase {
     }
   }
 
+  /***Sets the intake to reverse in case of a stuck powercell*/
   public void reverseIntake(){
-    // If cell gets stuck in the intake
     intake.set(ControlMode.PercentOutput, -speed2);
     load1.set(ControlMode.PercentOutput, -speed);
 
@@ -174,6 +189,7 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Power Cell Count: ", powerCellCount); 
   }
 
+  /***Overloaded shooter method using limelight distance calculations*/
   public void outake() {
     powerCellCount();
 
@@ -193,6 +209,7 @@ public class IntakeAndOutake extends SubsystemBase {
     // double velocity = ((inchPerSec*(58.026) + 17434.0) + 155.8) / 0.75;
     // double velocity = (((inchPerSec) + 240.8) / 0.955 ) * unitConversion;
     
+    // Final calculated velocity given to the shooter
     double velocity = ((inchPerSec * unitConversion) * 2.451 + 8231.1);
     System.out.println("Velocity Calculated: " + velocity);
 
@@ -217,14 +234,18 @@ public class IntakeAndOutake extends SubsystemBase {
 
   }
 
+  /**Another layer of abstraction for shooter outake method*/
   private void setShooterVelocity(double velocity){
+    shooter2.follow(shooter1, true);
     shooter1.set(velocity);
   }
 
+  /***Gets the shooter motor velocity from the encoder*/
   private double getShooterVelocity(){
     return shooter1.getEncoder().getVelocity();
   }
 
+  /***Overloaded shooter outake method that takes a parameter for testing purposes*/
   public void outake(double velocity){
     setShooterVelocity(velocity);
 
@@ -252,6 +273,7 @@ public class IntakeAndOutake extends SubsystemBase {
     // intakeStop();
   }
 
+  /**Displays intake and outake sensors on the SmartDashboard*/
   public void getSensors() {
     SmartDashboard.putBoolean("Intake Sensor1: ", !sensor1.get());
     SmartDashboard.putBoolean("Intake Sensor2: ", !sensor2.get());
@@ -259,17 +281,20 @@ public class IntakeAndOutake extends SubsystemBase {
   }
 
 
+  /**Completely stops all intake motors except shooter loader*/
   public void intakeStop() {
     intake.set(ControlMode.PercentOutput, 0.0);
     load1.set(ControlMode.PercentOutput, 0.0);
     load2.set(ControlMode.PercentOutput, 0.0);
   }
 
+  /**Stops shooter loader and all intake motors except the wheel*/
   public void shooterStop() {
     // intake.set(ControlMode.PercentOutput, 0.0);
     load1.set(ControlMode.PercentOutput, 0.0);
     load2.set(ControlMode.PercentOutput, 0.0);
     shooter1.set(0.0);
+    shooter2.set(0.0);
   }
 
   public double rpmsToCode(double rpms) {
