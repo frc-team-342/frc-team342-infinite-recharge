@@ -41,12 +41,13 @@ public class IntakeAndOutake extends SubsystemBase {
   private static final int current_limit = 60; // max amount of current motor can pull
 
   //Changed from 250 on 3/6/2020
-  private double error = 50.0; // allowable error for shooter
+  private double error = 10.0; // allowable error for shooter
 
   private double hoodAngle = 50.0 * (Math.PI / 180.0); // hood angle in radians
   private double height = 98.25 - 21.125; // height between robot and middle of target measured in inches
   private double targetDepth = 30.0; // depth from front of target to back measured in inches
   private double limeToHood = 27.0; // length from limelight to shooter hood measured in inches
+  private double circumferenceOfWheel = (6.0*Math.PI);
 
   /**Gravity in inches/second*/ 
   private double gravity = 386.09;
@@ -186,10 +187,6 @@ public class IntakeAndOutake extends SubsystemBase {
   public void outake() {
     powerCellCount();
 
-    // Not even going to try to document this lol. Distance calculation for velocity
-    
-    //Change on 3/6/2020 by Mr. Neal
-    //double adjustedDist = (lime.getDistance() * 0.83) + 9.2;
     double adjustedDist = lime.getDistance();
 
     double actualDist = adjustedDist + limeToHood + targetDepth;
@@ -197,22 +194,16 @@ public class IntakeAndOutake extends SubsystemBase {
     double denominator = actualDist * Math.sin(2*hoodAngle)-2*height*Math.pow(Math.cos(hoodAngle),2);
 
     double inchPerSec = Math.sqrt((numerator / denominator));
-    double unitConversion = 819.2/(6.0*Math.PI);
-    
-    // double velocity = ((inchPerSec*(58.026) + 17434.0) + 155.8) / 0.75;
-    // double velocity = (((inchPerSec) + 240.8) / 0.955 ) * unitConversion;
+    double unitConversion = 60.0 / circumferenceOfWheel;
     
     // Final calculated velocity given to the shooter
-    double velocity = ((inchPerSec * unitConversion) * 2.451 + 8231.1);
-    System.out.println("Velocity Calculated: " + velocity);
+    //double velocity = ((inchPerSec * unitConversion) * 2.451 + 8231.1);
+    double velocity = (((inchPerSec * 2.451) + 8231.1) * unitConversion);
 
     setShooterVelocity(velocity);
 
-    System.out.println("Velocity: " + getShooterVelocity());
-
+    System.out.println("Shooter Velocity: " + getShooterVelocity());
     SmartDashboard.putNumber("Target Velocity", velocity);
-    SmartDashboard.putNumber("Distance Travelled", actualDist);
-
 
     if (Math.abs(getShooterVelocity()) + error < velocity && !sensor3.get()){ 
       // Will not shoot if fly wheel isnt up to speed. stops intake if shooter sensor sees cell

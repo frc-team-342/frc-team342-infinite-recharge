@@ -46,7 +46,7 @@ public class LimelightSubsystem extends SubsystemBase {
     cameraMode = camMode.getNumber(0).intValue();
     lightMode = ledMode.getNumber(0).intValue();
 
-    SmartDashboard.putNumber("Limelight Distance", getDistance());
+    SmartDashboard.putNumber("Distance from Target", getDistance());
   }
 
   /*
