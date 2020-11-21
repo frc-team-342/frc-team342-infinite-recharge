@@ -197,13 +197,13 @@ public class IntakeAndOutake extends SubsystemBase {
     double denominator = actualDist * Math.sin(2*hoodAngle)-2*height*Math.pow(Math.cos(hoodAngle),2);
 
     double inchPerSec = Math.sqrt((numerator / denominator));
-    double unitConversion = 819.2/(6.0*Math.PI);
+    // double unitConversion = 819.2/(6.0*Math.PI);
     
     // double velocity = ((inchPerSec*(58.026) + 17434.0) + 155.8) / 0.75;
     // double velocity = (((inchPerSec) + 240.8) / 0.955 ) * unitConversion;
     
     // Final calculated velocity given to the shooter
-    double velocity = ((inchPerSec * unitConversion) * 2.451 + 8231.1);
+    double velocity = ((inchPerSec /* unitConversion*/) * 2.451 + 8231.1);
     System.out.println("Velocity Calculated: " + velocity);
 
     setShooterVelocity(velocity);
