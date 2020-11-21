@@ -3,27 +3,28 @@ apply plugin: 'jaci.gradle.EmbeddedTools'
 deploy {
     targets {
         target("rpi") {
-            directory = "/"
+            directory = "/home/pi/deploy"
 
             locations {
                 ssh {
-                   address = "10.3.42.2"
+                   address = "10.3.42.3"
                    user = "pi" 
-                   password = ""
+                   password = "raspberry"
                 }
             }
         }
     }
     artifacts {
         fileTreeArtifact("coprocessorFiles") {
+            // Set filesystem to read-write before deploy
+            predeploy << { execute 'rw' }
+
             targets << "rpi"
             files = fileTree(dir: "python/")
-        }
 
-        // Run deployed Python code on rpi
-        commandArtifact("coprocessorRun") {
-            targets << "rpi"
-            command = "echo Hello world"
+            // Set filesystem back to read-only after deploy
+            postdeploy << { execute 'ro' }
         }
+        
     }
 }
