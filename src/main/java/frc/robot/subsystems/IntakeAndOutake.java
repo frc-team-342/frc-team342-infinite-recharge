@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -26,6 +27,9 @@ public class IntakeAndOutake extends SubsystemBase {
   private CANSparkMax shooter2;
   private VictorSPX load1;
   private VictorSPX load2;
+
+  private CANPIDController shooterController;
+  private CANEncoder shooterEncoder;
 
   private DigitalInput sensor1; //intake sensor
   private DigitalInput sensor2; //hopper sensor
@@ -64,6 +68,7 @@ public class IntakeAndOutake extends SubsystemBase {
   /**Constructor for the class*/
   public IntakeAndOutake() {
     configureShooter();
+    configurePID();
 
     intake = new TalonSRX(Constants.INTAKE_PRIMARY); // intake wheel infront of robot
     load1 = new VictorSPX(Constants.INTAKE_CONVEYOR_1); // first conveyor motor
@@ -77,14 +82,21 @@ public class IntakeAndOutake extends SubsystemBase {
   }
 
   /**Sets all the configuration for the shooter motors. i.e inversion, encoders, instantiation, etc*/
-  public void configureShooter(){
+  private void configureShooter(){
     shooter1 = new CANSparkMax(Constants.LAUNCH_MOTOR_1, MotorType.kBrushless);
     shooter2 = new CANSparkMax(Constants.LAUNCH_MOTOR_2, MotorType.kBrushless);
   
-    setPID(shooter1);
-    setPID(shooter2);
     shooter1.setInverted(true);
     shooter2.setInverted(true);
+
+    shooter1.setSmartCurrentLimit(current_limit);
+    shooter1.enableVoltageCompensation(voltage_comp);
+    shooter1.setOpenLoopRampRate(ramp_rate);
+  }
+
+  /***Sets everything needed for closed-loop PID for the motor*/
+  private void configurePID() {
+    shooterController = shooter1.getPIDController();
 
     kP = 5e-5;
     kI = 1e-6;
@@ -94,26 +106,17 @@ public class IntakeAndOutake extends SubsystemBase {
     kMaxOutput = 1;
     kMinOutput = -1;
     maxRPM = 5700;
-  }
 
-  /***Sets everything needed for closed-loop PID for the motor*/
-  public void setPID(CANSparkMax motor) {
-    CANPIDController pid = motor.getPIDController();
-
-    pid.setP(kP);
-    pid.setI(kI);
-    pid.setD(kD);
-    pid.setIZone(kIz);
-    pid.setFF(kFF);
-    pid.setOutputRange(kMinOutput, kMaxOutput);
-
-    motor.setSmartCurrentLimit(current_limit);
-    motor.enableVoltageCompensation(voltage_comp);
-    motor.setOpenLoopRampRate(ramp_rate);
+    shooterController.setP(kP);
+    shooterController.setI(kI);
+    shooterController.setD(kD);
+    shooterController.setIZone(kIz);
+    shooterController.setFF(kFF);
+    shooterController.setOutputRange(kMinOutput, kMaxOutput);
   }
 
   /**Senses powercells in and out and keeps a running count of powercells currently in the robot*/
-  public void powerCellCount(){
+  private void powerCellCount(){
     // counts power cells in and out so we dont get more than 5
     boolean isTriggered1 = !sensor1.get(); 
     boolean isTriggered2 = !sensor3.get(); 
@@ -221,7 +224,7 @@ public class IntakeAndOutake extends SubsystemBase {
   /**Another layer of abstraction for shooter outake method*/
   private void setShooterVelocity(double velocity){
     shooter2.follow(shooter1, true);
-    shooter1.set(velocity);
+    shooterController.setReference(velocity, ControlType.kVelocity);
   }
 
   /***Gets the shooter motor velocity from the encoder in RPMS*/
@@ -232,6 +235,10 @@ public class IntakeAndOutake extends SubsystemBase {
   /***Overloaded shooter outake method that takes a parameter for testing purposes*/
   public void outake(double velocity){
     setShooterVelocity(velocity);
+
+    while(getShooterVelocity() != velocity){
+      
+    }
 
     System.out.println("Velocity: " + shooter1.getEncoder().getVelocity());
 
@@ -248,13 +255,7 @@ public class IntakeAndOutake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    //SmartDashboard.putNumber("Shooter 1 Percent: ", shooter1.getMotorOutputPercent());
-    //SmartDashboard.putNumber("Shooter 1 Voltage: ", shooter1.getMotorOutputVoltage());
-    //SmartDashboard.putNumber("Shooter 1 Current: ", shooter1.getSupplyCurrent());
-
     SmartDashboard.putNumber("Velocity: ", shooter1.getEncoder().getVelocity());
-    // if (sensor1.get() && sensor2.get() && sensor3.get())
-    // intakeStop();
   }
 
   /**Displays intake and outake sensors on the SmartDashboard*/
