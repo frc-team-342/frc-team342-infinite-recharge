@@ -28,9 +28,6 @@ public class IntakeAndOutake extends SubsystemBase {
   private VictorSPX load1;
   private VictorSPX load2;
 
-  private CANPIDController shooterController;
-  private CANEncoder shooterEncoder;
-
   private DigitalInput sensor1; //intake sensor
   private DigitalInput sensor2; //hopper sensor
   private DigitalInput sensor3; //shooter loader sensor
@@ -96,23 +93,28 @@ public class IntakeAndOutake extends SubsystemBase {
 
   /***Sets everything needed for closed-loop PID for the motor*/
   private void configurePID() {
-    shooterController = shooter1.getPIDController();
-
-    kP = 5e-5;
-    kI = 1e-6;
+    kP = 0;
+    kI = 0;
     kD = 0;
     kIz = 0;
-    kFF = 0.000156;
+    kFF = 0.001;
     kMaxOutput = 1;
     kMinOutput = -1;
     maxRPM = 5700;
 
-    shooterController.setP(kP);
-    shooterController.setI(kI);
-    shooterController.setD(kD);
-    shooterController.setIZone(kIz);
-    shooterController.setFF(kFF);
-    shooterController.setOutputRange(kMinOutput, kMaxOutput);
+    shooter1.getPIDController().setP(kP);
+    shooter1.getPIDController().setI(kI);
+    shooter1.getPIDController().setD(kD);
+    shooter1.getPIDController().setIZone(kIz);
+    shooter1.getPIDController().setFF(kFF);
+    shooter1.getPIDController().setOutputRange(kMinOutput, kMaxOutput);
+
+    shooter2.getPIDController().setP(kP);
+    shooter2.getPIDController().setI(kI);
+    shooter2.getPIDController().setD(kD);
+    shooter2.getPIDController().setIZone(kIz);
+    shooter2.getPIDController().setFF(kFF);
+    shooter2.getPIDController().setOutputRange(kMinOutput, kMaxOutput);
   }
 
   /**Senses powercells in and out and keeps a running count of powercells currently in the robot*/
@@ -221,10 +223,11 @@ public class IntakeAndOutake extends SubsystemBase {
 
   }
 
-  /**Another layer of abstraction for shooter outake method*/
+  /**Another layer of abstraction for shooter outake method.
+   * Sets the shooter1 motor PID controller reference in RPMs.*/
   private void setShooterVelocity(double velocity){
-    shooter2.follow(shooter1, true);
-    shooterController.setReference(velocity, ControlType.kVelocity);
+    shooter1.getPIDController().setReference(velocity, ControlType.kVelocity);
+    shooter2.getPIDController().setReference(velocity, ControlType.kVelocity);
   }
 
   /***Gets the shooter motor velocity from the encoder in RPMS*/
@@ -236,11 +239,7 @@ public class IntakeAndOutake extends SubsystemBase {
   public void outake(double velocity){
     setShooterVelocity(velocity);
 
-    while(getShooterVelocity() != velocity){
-      
-    }
-
-    System.out.println("Velocity: " + shooter1.getEncoder().getVelocity());
+    System.out.println("Velocity: " + getShooterVelocity());
 
     if (Math.abs(getShooterVelocity()) + error < velocity && !sensor3.get()){
       load2.set(ControlMode.PercentOutput, 0.0);
@@ -270,13 +269,10 @@ public class IntakeAndOutake extends SubsystemBase {
   public void intakeStop() {
     intake.set(ControlMode.PercentOutput, 0.0);
     load1.set(ControlMode.PercentOutput, 0.0);
-    load2.set(ControlMode.PercentOutput, 0.0);
   }
 
   /**Stops shooter loader and all intake motors except the wheel*/
   public void shooterStop() {
-    // intake.set(ControlMode.PercentOutput, 0.0);
-    load1.set(ControlMode.PercentOutput, 0.0);
     load2.set(ControlMode.PercentOutput, 0.0);
     shooter1.set(0.0);
     shooter2.set(0.0);
