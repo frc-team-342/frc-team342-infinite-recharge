@@ -237,12 +237,11 @@ public class IntakeAndOutake extends SubsystemBase {
       load2.set(ControlMode.PercentOutput, 0.9);
       load1.set(ControlMode.PercentOutput, 0.9);
     }
-
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Velocity: ", shooter1.getEncoder().getVelocity());
+    SmartDashboard.putNumber("Velocity: ", getShooterVelocity());
   }
 
   /**Displays intake and outake sensors on the SmartDashboard*/
@@ -264,5 +263,5 @@ public class IntakeAndOutake extends SubsystemBase {
     load2.set(ControlMode.PercentOutput, 0.0);
     shooter1.set(0.0); /**/ shooter2.set(0.0);
   }
-  
+
 }
