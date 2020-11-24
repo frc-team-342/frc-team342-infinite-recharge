@@ -99,7 +99,7 @@ public class IntakeAndOutake extends SubsystemBase {
     shooterLeader.setSmartCurrentLimit(current_limit); /**/ shooterFollower.setSmartCurrentLimit(current_limit);
     shooterLeader.enableVoltageCompensation(voltage_comp); /**/ shooterFollower.enableVoltageCompensation(voltage_comp);
     shooterLeader.setOpenLoopRampRate(ramp_rate); /**/ shooterFollower.setOpenLoopRampRate(ramp_rate);
-    shooterFollower.follow(shooterLeader, false);
+    shooterFollower.follow(shooterLeader, false); // Follows shooterLeader without inversion
 
     leaderController.setP(kP); /**/ followerController.setP(kP);
     leaderController.setI(kI); /**/ followerController.setI(kI);
@@ -108,6 +108,15 @@ public class IntakeAndOutake extends SubsystemBase {
     leaderController.setFF(kFF); /**/ followerController.setFF(kFF);
     leaderController.setOutputRange(kMinOutput, kMaxOutput); 
     followerController.setOutputRange(kMinOutput, kMaxOutput);
+    
+    // display PID coefficients on SmartDashboard
+    SmartDashboard.putNumber("P Gain", kP);
+    SmartDashboard.putNumber("I Gain", kI);
+    SmartDashboard.putNumber("D Gain", kD);
+    SmartDashboard.putNumber("I Zone", kIz);
+    SmartDashboard.putNumber("Feed Forward", kFF);
+    SmartDashboard.putNumber("Max Output", kMaxOutput);
+    SmartDashboard.putNumber("Min Output", kMinOutput);
   }
 
   /**Senses powercells in and out and keeps a running count of powercells currently in the robot*/
@@ -228,6 +237,29 @@ public class IntakeAndOutake extends SubsystemBase {
     return shooterLeader.getEncoder().getVelocity();
   }
 
+  private void pidTuner(){
+    // read PID coefficients from SmartDashboard
+    double p = SmartDashboard.getNumber("P Gain", 0);
+    double i = SmartDashboard.getNumber("I Gain", 0);
+    double d = SmartDashboard.getNumber("D Gain", 0);
+    double iz = SmartDashboard.getNumber("I Zone", 0);
+    double ff = SmartDashboard.getNumber("Feed Forward", 0);
+    double max = SmartDashboard.getNumber("Max Output", 0);
+    double min = SmartDashboard.getNumber("Min Output", 0);
+
+    // if PID coefficients on SmartDashboard have changed, write new values to controller
+    if((p != kP)) { leaderController.setP(p); followerController.setP(p); kP = p; }
+    if((i != kI)) { leaderController.setI(i); followerController.setI(i); kI = i; }
+    if((d != kD)) { leaderController.setD(d); followerController.setD(d); kD = d; }
+    if((iz != kIz)) { leaderController.setIZone(iz); followerController.setIZone(iz); kIz = iz; }
+    if((ff != kFF)) { leaderController.setFF(ff); followerController.setFF(ff); kFF = ff; }
+    if((max != kMaxOutput) || (min != kMinOutput)) { 
+      leaderController.setOutputRange(min, max);
+      followerController.setOutputRange(min, max);
+      kMinOutput = min; kMaxOutput = max; 
+    }
+  }
+
   /***Overloaded shooter outake method that takes a parameter for testing purposes*/
   public void outake(double velocity){
     setShooterVelocity(velocity);
@@ -247,6 +279,7 @@ public class IntakeAndOutake extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Velocity: ", getShooterVelocity());
+    pidTuner();
   }
 
   /**Displays intake and outake sensors on the SmartDashboard*/
