@@ -65,7 +65,6 @@ public class IntakeAndOutake extends SubsystemBase {
   /**Constructor for the class*/
   public IntakeAndOutake() {
     configureShooter();
-    configurePID();
 
     intake = new TalonSRX(Constants.INTAKE_PRIMARY); // intake wheel infront of robot
     load1 = new VictorSPX(Constants.INTAKE_CONVEYOR_1); // first conveyor motor
@@ -82,17 +81,7 @@ public class IntakeAndOutake extends SubsystemBase {
   private void configureShooter(){
     shooter1 = new CANSparkMax(Constants.LAUNCH_MOTOR_1, MotorType.kBrushless);
     shooter2 = new CANSparkMax(Constants.LAUNCH_MOTOR_2, MotorType.kBrushless);
-  
-    shooter1.setInverted(true);
-    shooter2.setInverted(true);
 
-    shooter1.setSmartCurrentLimit(current_limit);
-    shooter1.enableVoltageCompensation(voltage_comp);
-    shooter1.setOpenLoopRampRate(ramp_rate);
-  }
-
-  /***Sets everything needed for closed-loop PID for the motor*/
-  private void configurePID() {
     kP = 0;
     kI = 0;
     kD = 0;
@@ -102,18 +91,17 @@ public class IntakeAndOutake extends SubsystemBase {
     kMinOutput = -1;
     maxRPM = 5700;
 
-    shooter1.getPIDController().setP(kP);
-    shooter1.getPIDController().setI(kI);
-    shooter1.getPIDController().setD(kD);
-    shooter1.getPIDController().setIZone(kIz);
-    shooter1.getPIDController().setFF(kFF);
-    shooter1.getPIDController().setOutputRange(kMinOutput, kMaxOutput);
+    shooter1.setInverted(true); /**/ shooter2.setInverted(true);
+    shooter1.setSmartCurrentLimit(current_limit); /**/ shooter2.setSmartCurrentLimit(current_limit);
+    shooter1.enableVoltageCompensation(voltage_comp); /**/ shooter2.enableVoltageCompensation(voltage_comp);
+    shooter1.setOpenLoopRampRate(ramp_rate); /**/ shooter2.setOpenLoopRampRate(ramp_rate);
 
-    shooter2.getPIDController().setP(kP);
-    shooter2.getPIDController().setI(kI);
-    shooter2.getPIDController().setD(kD);
-    shooter2.getPIDController().setIZone(kIz);
-    shooter2.getPIDController().setFF(kFF);
+    shooter1.getPIDController().setP(kP); /**/ shooter2.getPIDController().setP(kP);
+    shooter1.getPIDController().setI(kI); /**/ shooter2.getPIDController().setI(kI);
+    shooter1.getPIDController().setD(kD); /**/ shooter2.getPIDController().setD(kD);
+    shooter1.getPIDController().setIZone(kIz); /**/ shooter2.getPIDController().setIZone(kIz);
+    shooter1.getPIDController().setFF(kFF); /**/ shooter2.getPIDController().setFF(kFF);
+    shooter1.getPIDController().setOutputRange(kMinOutput, kMaxOutput); 
     shooter2.getPIDController().setOutputRange(kMinOutput, kMaxOutput);
   }
 
@@ -274,7 +262,7 @@ public class IntakeAndOutake extends SubsystemBase {
   /**Stops shooter loader and all intake motors except the wheel*/
   public void shooterStop() {
     load2.set(ControlMode.PercentOutput, 0.0);
-    shooter1.set(0.0);
-    shooter2.set(0.0);
+    shooter1.set(0.0); /**/ shooter2.set(0.0);
   }
+  
 }
