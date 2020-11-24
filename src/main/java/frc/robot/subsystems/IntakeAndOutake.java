@@ -23,10 +23,13 @@ public class IntakeAndOutake extends SubsystemBase {
    */
 
   private TalonSRX intake;
-  private CANSparkMax shooter1;
-  private CANSparkMax shooter2;
+  private CANSparkMax shooterLeader;
+  private CANSparkMax shooterFollower;
   private VictorSPX load1;
   private VictorSPX load2;
+
+  private CANPIDController leaderController;
+  private CANPIDController followerController;
 
   private DigitalInput sensor1; //intake sensor
   private DigitalInput sensor2; //hopper sensor
@@ -42,16 +45,15 @@ public class IntakeAndOutake extends SubsystemBase {
   private static final int current_limit = 60; // max amount of current motor can pull
 
   //Changed from 250 on 3/6/2020
-  private double error = 10.0; // allowable error for shooter
-
+  private double error = 5.0; // allowable error for shooter in RPMs
   private double hoodAngle = 50.0 * (Math.PI / 180.0); // hood angle in radians
   private double height = 98.25 - 21.125; // height between robot and middle of target measured in inches
   private double targetDepth = 30.0; // depth from front of target to back measured in inches
   private double limeToHood = 27.0; // length from limelight to shooter hood measured in inches
-  private double circumferenceOfWheel = (6.0*Math.PI);
+  private double circumferenceOfWheel = (6.0*Math.PI); // 2*pi*r to get circumference
 
   /**Gravity in inches/second*/ 
-  private double gravity = 386.09;
+  private double gravity = 386.09; //gravity in in/s
 
   private final LimelightSubsystem lime;
 
@@ -79,8 +81,10 @@ public class IntakeAndOutake extends SubsystemBase {
 
   /**Sets all the configuration for the shooter motors. i.e inversion, encoders, instantiation, etc*/
   private void configureShooter(){
-    shooter1 = new CANSparkMax(Constants.LAUNCH_MOTOR_1, MotorType.kBrushless);
-    shooter2 = new CANSparkMax(Constants.LAUNCH_MOTOR_2, MotorType.kBrushless);
+    shooterLeader = new CANSparkMax(Constants.LAUNCH_MOTOR_1, MotorType.kBrushless);
+    shooterFollower = new CANSparkMax(Constants.LAUNCH_MOTOR_2, MotorType.kBrushless);
+    leaderController = shooterLeader.getPIDController();
+    followerController = shooterFollower.getPIDController();
 
     kP = 0;
     kI = 0;
@@ -91,18 +95,19 @@ public class IntakeAndOutake extends SubsystemBase {
     kMinOutput = -1;
     maxRPM = 5700;
 
-    shooter1.setInverted(true); /**/ shooter2.setInverted(true);
-    shooter1.setSmartCurrentLimit(current_limit); /**/ shooter2.setSmartCurrentLimit(current_limit);
-    shooter1.enableVoltageCompensation(voltage_comp); /**/ shooter2.enableVoltageCompensation(voltage_comp);
-    shooter1.setOpenLoopRampRate(ramp_rate); /**/ shooter2.setOpenLoopRampRate(ramp_rate);
+    shooterLeader.setInverted(true); // shooterFollower.setInverted(true);
+    shooterLeader.setSmartCurrentLimit(current_limit); /**/ shooterFollower.setSmartCurrentLimit(current_limit);
+    shooterLeader.enableVoltageCompensation(voltage_comp); /**/ shooterFollower.enableVoltageCompensation(voltage_comp);
+    shooterLeader.setOpenLoopRampRate(ramp_rate); /**/ shooterFollower.setOpenLoopRampRate(ramp_rate);
+    shooterFollower.follow(shooterLeader, false);
 
-    shooter1.getPIDController().setP(kP); /**/ shooter2.getPIDController().setP(kP);
-    shooter1.getPIDController().setI(kI); /**/ shooter2.getPIDController().setI(kI);
-    shooter1.getPIDController().setD(kD); /**/ shooter2.getPIDController().setD(kD);
-    shooter1.getPIDController().setIZone(kIz); /**/ shooter2.getPIDController().setIZone(kIz);
-    shooter1.getPIDController().setFF(kFF); /**/ shooter2.getPIDController().setFF(kFF);
-    shooter1.getPIDController().setOutputRange(kMinOutput, kMaxOutput); 
-    shooter2.getPIDController().setOutputRange(kMinOutput, kMaxOutput);
+    leaderController.setP(kP); /**/ followerController.setP(kP);
+    leaderController.setI(kI); /**/ followerController.setI(kI);
+    leaderController.setD(kD); /**/ followerController.setD(kD);
+    leaderController.setIZone(kIz); /**/ followerController.setIZone(kIz);
+    leaderController.setFF(kFF); /**/ followerController.setFF(kFF);
+    leaderController.setOutputRange(kMinOutput, kMaxOutput); 
+    followerController.setOutputRange(kMinOutput, kMaxOutput);
   }
 
   /**Senses powercells in and out and keeps a running count of powercells currently in the robot*/
@@ -212,15 +217,15 @@ public class IntakeAndOutake extends SubsystemBase {
   }
 
   /**Another layer of abstraction for shooter outake method.
-   * Sets the shooter1 motor PID controller reference in RPMs.*/
+   * Sets the shooterLeader motor PID controller reference in RPMs.*/
   private void setShooterVelocity(double velocity){
-    shooter1.getPIDController().setReference(velocity, ControlType.kVelocity);
-    shooter2.getPIDController().setReference(velocity, ControlType.kVelocity);
+    leaderController.setReference(velocity, ControlType.kVelocity);
+    //followerController.setReference(velocity, ControlType.kVelocity);
   }
 
   /***Gets the shooter motor velocity from the encoder in RPMS*/
   private double getShooterVelocity(){
-    return shooter1.getEncoder().getVelocity();
+    return shooterLeader.getEncoder().getVelocity();
   }
 
   /***Overloaded shooter outake method that takes a parameter for testing purposes*/
@@ -261,7 +266,7 @@ public class IntakeAndOutake extends SubsystemBase {
   /**Stops shooter loader and all intake motors except the wheel*/
   public void shooterStop() {
     load2.set(ControlMode.PercentOutput, 0.0);
-    shooter1.set(0.0); /**/ shooter2.set(0.0);
+    shooterLeader.set(0.0); // shooterFollower.set(0.0);
   }
 
 }
