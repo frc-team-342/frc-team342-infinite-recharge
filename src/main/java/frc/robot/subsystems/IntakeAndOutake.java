@@ -51,6 +51,7 @@ public class IntakeAndOutake extends SubsystemBase {
   private double targetDepth = 30.0; // depth from front of target to back measured in inches
   private double limeToHood = 27.0; // length from limelight to shooter hood measured in inches
   private double circumferenceOfWheel = (6.0*Math.PI); // 2*pi*r to get circumference
+  private double setPoint = 0.0;
 
   /**Gravity in inches/second*/ 
   private double gravity = 386.09; //gravity in in/s
@@ -86,11 +87,11 @@ public class IntakeAndOutake extends SubsystemBase {
     leaderController = shooterLeader.getPIDController();
     followerController = shooterFollower.getPIDController();
 
-    kP = 0;
+    kP = 0.00002;
     kI = 0;
     kD = 0;
     kIz = 0;
-    kFF = 0.001;
+    kFF = 0.000182;
     kMaxOutput = 1;
     kMinOutput = -1;
     maxRPM = 5700;
@@ -99,7 +100,7 @@ public class IntakeAndOutake extends SubsystemBase {
     shooterLeader.setSmartCurrentLimit(current_limit); /**/ shooterFollower.setSmartCurrentLimit(current_limit);
     shooterLeader.enableVoltageCompensation(voltage_comp); /**/ shooterFollower.enableVoltageCompensation(voltage_comp);
     shooterLeader.setOpenLoopRampRate(ramp_rate); /**/ shooterFollower.setOpenLoopRampRate(ramp_rate);
-    shooterFollower.follow(shooterLeader, false); // Follows shooterLeader without inversion
+    shooterFollower.follow(shooterLeader, true); // Follows shooterLeader without inversion
 
     leaderController.setP(kP); /**/ followerController.setP(kP);
     leaderController.setI(kI); /**/ followerController.setI(kI);
@@ -117,6 +118,7 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Feed Forward", kFF);
     SmartDashboard.putNumber("Max Output", kMaxOutput);
     SmartDashboard.putNumber("Min Output", kMinOutput);
+    SmartDashboard.putNumber("Set RPM Point", setPoint);
   }
 
   /**Senses powercells in and out and keeps a running count of powercells currently in the robot*/
@@ -228,7 +230,7 @@ public class IntakeAndOutake extends SubsystemBase {
   /**Another layer of abstraction for shooter outake method.
    * Sets the shooterLeader motor PID controller reference in RPMs.*/
   private void setShooterVelocity(double velocity){
-    leaderController.setReference(velocity, ControlType.kVelocity);
+    leaderController.setReference(setPoint, ControlType.kVelocity);
     //followerController.setReference(velocity, ControlType.kVelocity);
   }
 
@@ -246,6 +248,7 @@ public class IntakeAndOutake extends SubsystemBase {
     double ff = SmartDashboard.getNumber("Feed Forward", 0);
     double max = SmartDashboard.getNumber("Max Output", 0);
     double min = SmartDashboard.getNumber("Min Output", 0);
+    double set = SmartDashboard.getNumber("Set RPM Point", 0);
 
     // if PID coefficients on SmartDashboard have changed, write new values to controller
     if((p != kP)) { leaderController.setP(p); followerController.setP(p); kP = p; }
@@ -258,6 +261,7 @@ public class IntakeAndOutake extends SubsystemBase {
       followerController.setOutputRange(min, max);
       kMinOutput = min; kMaxOutput = max; 
     }
+    if (set != setPoint) setPoint = set;
   }
 
   /***Overloaded shooter outake method that takes a parameter for testing purposes*/
@@ -298,6 +302,7 @@ public class IntakeAndOutake extends SubsystemBase {
 
   /**Stops shooter loader and all intake motors except the wheel*/
   public void shooterStop() {
+    load1.set(ControlMode.PercentOutput, 0.0);
     load2.set(ControlMode.PercentOutput, 0.0);
     shooterLeader.set(0.0); // shooterFollower.set(0.0);
   }

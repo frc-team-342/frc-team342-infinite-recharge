@@ -19,7 +19,7 @@ public class LimelightSubsystem extends SubsystemBase {
   private NetworkTableEntry tv, ty, tx, camMode, ledMode;
   private double yOffsetAngle, xOffsetAngle; // Field of view of the limelight
   private int cameraMode, lightMode, validTarget;
-  private double limeError = 2.5; // Acceptable error from the limelight
+  private double limeError = .5; // Acceptable error from the limelight
   private double limelightAngleOffset = 15.0; // Angle of the limelight from flat ground
   private double targetHeight = 90.5;
   private double robotHeight = 21.125;
