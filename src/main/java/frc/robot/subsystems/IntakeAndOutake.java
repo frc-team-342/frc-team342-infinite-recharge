@@ -52,6 +52,8 @@ public class IntakeAndOutake extends SubsystemBase {
   private double limeToHood = 27.0; // length from limelight to shooter hood measured in inches
   private double circumferenceOfWheel = (6.0*Math.PI); // 2*pi*r to get circumference
   private double setPoint = 0.0;
+  //private double rpmScalar = 1.0322;
+  //private double rpmAddition = 54.8;
 
   /**Gravity in inches/second*/ 
   private double gravity = 386.09; //gravity in in/s
@@ -87,11 +89,11 @@ public class IntakeAndOutake extends SubsystemBase {
     leaderController = shooterLeader.getPIDController();
     followerController = shooterFollower.getPIDController();
 
-    kP = 0.00002;
+    kP = 0.0;
     kI = 0;
     kD = 0;
     kIz = 0;
-    kFF = 0.000182;
+    kFF = 0.0001826;
     kMaxOutput = 1;
     kMinOutput = -1;
     maxRPM = 5700;
@@ -196,7 +198,7 @@ public class IntakeAndOutake extends SubsystemBase {
   public void outake() {
     powerCellCount();
 
-    double adjustedDist = lime.getDistance();
+    /*double adjustedDist = lime.getDistance();
 
     double actualDist = adjustedDist + limeToHood + targetDepth;
     double numerator = Math.pow(actualDist,2) * gravity;
@@ -207,14 +209,15 @@ public class IntakeAndOutake extends SubsystemBase {
     
     // Final calculated velocity given to the shooter
     //double velocity = ((inchPerSec * unitConversion) * 2.451 + 8231.1);
-    double velocity = (((inchPerSec * 2.451) + 8231.1) * unitConversion);
+    double velocity = (((inchPerSec * 2.451) + 8231.1) * unitConversion);*/
 
-    setShooterVelocity(velocity);
+    setShooterVelocity();
+    load2.set(ControlMode.PercentOutput, speed2);
 
     System.out.println("Shooter Velocity: " + getShooterVelocity());
-    SmartDashboard.putNumber("Target Velocity", velocity);
+    //SmartDashboard.putNumber("Target Velocity", velocity);
 
-    if (Math.abs(getShooterVelocity()) + error < velocity && !sensor3.get()){ 
+    /*if (Math.abs(getShooterVelocity()) + error < velocity && !sensor3.get()){ 
       // Will not shoot if fly wheel isnt up to speed. stops intake if shooter sensor sees cell
       //sensor.get() returns true if nothing is sensed. ! it to make it work
       load2.set(ControlMode.PercentOutput, 0.0);
@@ -223,13 +226,14 @@ public class IntakeAndOutake extends SubsystemBase {
     else{
       load2.set(ControlMode.PercentOutput, 0.9);
       load1.set(ControlMode.PercentOutput, 0.9);
-    }
+    }*/
 
   }
 
   /**Another layer of abstraction for shooter outake method.
    * Sets the shooterLeader motor PID controller reference in RPMs.*/
-  private void setShooterVelocity(double velocity){
+  private void setShooterVelocity(){
+    //leaderController.setReference(((lime.getDistance() * 3.4967) + 1908), ControlType.kVelocity);
     leaderController.setReference(setPoint, ControlType.kVelocity);
     //followerController.setReference(velocity, ControlType.kVelocity);
   }
@@ -266,7 +270,7 @@ public class IntakeAndOutake extends SubsystemBase {
 
   /***Overloaded shooter outake method that takes a parameter for testing purposes*/
   public void outake(double velocity){
-    setShooterVelocity(velocity);
+    setShooterVelocity();
 
     System.out.println("Velocity: " + getShooterVelocity());
 

@@ -19,10 +19,10 @@ public class LimelightSubsystem extends SubsystemBase {
   private NetworkTableEntry tv, ty, tx, camMode, ledMode;
   private double yOffsetAngle, xOffsetAngle; // Field of view of the limelight
   private int cameraMode, lightMode, validTarget;
-  private double limeError = .5; // Acceptable error from the limelight
-  private double limelightAngleOffset = 15.0; // Angle of the limelight from flat ground
+  private double limeError = 0.1; // Acceptable error from the limelight
+  private double limelightAngleOffset = 15.0 /*12.95*/; // Angle of the limelight from flat ground
   private double targetHeight = 90.5;
-  private double robotHeight = 21.125;
+  private double robotHeight = 21.0;
   private double degreesToRadians = Math.PI / 180;
 
   /**
@@ -55,6 +55,11 @@ public class LimelightSubsystem extends SubsystemBase {
    */
   public double getDistance() {
     return (targetHeight - robotHeight) / Math.tan((yOffsetAngle + limelightAngleOffset) * degreesToRadians);
+    //return yOffsetAngle;
+  }
+
+  public double getLimelightOffsetAngle(double distance){
+    return Math.atan((targetHeight - robotHeight) / distance) - yOffsetAngle;
   }
 
   /*

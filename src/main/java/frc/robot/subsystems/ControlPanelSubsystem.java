@@ -104,10 +104,10 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Forward Limit Switch", getLimitFwd());
-    SmartDashboard.putBoolean("Reverse Limit Switch", getLimitRev());
+    //SmartDashboard.putBoolean("Forward Limit Switch", getLimitFwd());
+    //SmartDashboard.putBoolean("Reverse Limit Switch", getLimitRev());
 
-    SmartDashboard.putBoolean("Arm Placement", getArmBoolean());
+    //SmartDashboard.putBoolean("Arm Placement", getArmBoolean());
     // This method will be called once per scheduler run
   }
 }
