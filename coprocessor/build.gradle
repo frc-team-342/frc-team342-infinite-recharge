@@ -14,17 +14,23 @@ deploy {
             }
         }
     }
-    artifacts {
-        fileTreeArtifact("coprocessorFiles") {
-            // Set filesystem to read-write before deploy
-            predeploy << { execute 'rw' }
 
+    artifacts {
+        all {
             targets << "rpi"
+        }
+
+        // Deploy python files to pi
+        fileTreeArtifact("pythonFileDeploy") {
+            // Set filesystem to read-write pre-deploy
+            predeploy << { execute '/usr/bin/sudo /bin/mount -o remount,rw /boot ' }
+            predeploy << { execute '/usr/bin/sudo /bin/mount -o remount,rw / ' }
+
             files = fileTree(dir: "python/")
 
             // Set filesystem back to read-only after deploy
-            postdeploy << { execute 'ro' }
+            postdeploy << { execute '/usr/bin/sudo /bin/mount -o remount,ro / ' }
+            postdeploy << { execute '/usr/bin/sudo /bin/mount -o remount,ro /boot ' }
         }
-        
-    }
+    }    
 }
