@@ -16,14 +16,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LimelightSubsystem extends SubsystemBase {
   private NetworkTable table; // Network table for limelight values
-  private NetworkTableEntry tv, ty, tx, camMode, ledMode;
+  private NetworkTableEntry tv, ty, tx, ts, camMode, ledMode;
   private double yOffsetAngle, xOffsetAngle; // Field of view of the limelight
   private int cameraMode, lightMode, validTarget;
+  private double targetSkew; // Skew of the limelight target from 0
   private double limeError = 0.1; // Acceptable error from the limelight
   private double limelightAngleOffset = 15.0 /*12.95*/; // Angle of the limelight from flat ground
   private double targetHeight = 90.5;
   private double robotHeight = 21.0;
   private double degreesToRadians = Math.PI / 180;
+  private double leftMax, leftMin, rightMax, rightMin;
 
   /**
    * Creates a new LimelightSubsystem.
@@ -33,8 +35,11 @@ public class LimelightSubsystem extends SubsystemBase {
     tv = table.getEntry("tv");
     ty = table.getEntry("ty");
     tx = table.getEntry("tx");
+    ts = table.getEntry("ts");
     camMode = table.getEntry("camMode");
     ledMode = table.getEntry("ledMode");
+
+    leftMin = -90.0; leftMax = -65.0; rightMax = -35; rightMin = 0;
   }
 
   @Override
@@ -43,10 +48,13 @@ public class LimelightSubsystem extends SubsystemBase {
     validTarget = tv.getNumber(0).intValue();
     yOffsetAngle = ty.getDouble(0.0);
     xOffsetAngle = tx.getDouble(0.0);
+    targetSkew = ts.getDouble(0.0);
     cameraMode = camMode.getNumber(0).intValue();
     lightMode = ledMode.getNumber(0).intValue();
 
-    SmartDashboard.putNumber("Distance from Target", getDistance());
+    SmartDashboard.putNumber("Distance from Target: ", getDistance());
+    SmartDashboard.putNumber("Target Skew: ", getTargetSkew());
+    SmartDashboard.putNumber("X Offset: ", getXOffsetAngle());
   }
 
   /*
@@ -60,6 +68,20 @@ public class LimelightSubsystem extends SubsystemBase {
 
   public double getLimelightOffsetAngle(double distance){
     return Math.atan((targetHeight - robotHeight) / distance) - yOffsetAngle;
+  }
+
+  public double getTargetSkew(){
+    return targetSkew;
+  }
+
+  public boolean isRight(){
+    double ts = getTargetSkew();
+    return ts <= rightMax && ts >= rightMin;
+  }
+
+  public boolean isLeft(){
+    double ts = getTargetSkew();
+    return ts >= leftMax && ts <= leftMin;
   }
 
   /*

@@ -231,7 +231,8 @@ public class DriveSystem extends SubsystemBase {
     accumError += Error;
     double kI = 1.0e-3;
     double kP = 4.0;
-    mecanumDrive.driveCartesian(x / 2, y / 2, ((Error * kP) + (accumError * kI)) / 300);
+    double targetError = ((Error * kP) + (accumError * kI)) / 300;
+    mecanumDrive.driveCartesian(x / 2, y / 2, targetError);
 
   }
 
