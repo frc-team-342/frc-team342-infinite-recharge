@@ -21,7 +21,7 @@ public class LimelightSubsystem extends SubsystemBase {
   private int cameraMode, lightMode, validTarget;
   private double targetSkew; // Skew of the limelight target from 0
   private double limeError = 0.1; // Acceptable error from the limelight
-  private double limelightAngleOffset = 15.0 /*12.95*/; // Angle of the limelight from flat ground
+  private double limelightAngleOffset = 13.0 /*12.95*/; // Angle of the limelight from flat ground
   private double targetHeight = 90.5;
   private double robotHeight = 21.0;
   private double degreesToRadians = Math.PI / 180;
@@ -55,6 +55,8 @@ public class LimelightSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Distance from Target: ", getDistance());
     SmartDashboard.putNumber("Target Skew: ", getTargetSkew());
     SmartDashboard.putNumber("X Offset: ", getXOffsetAngle());
+    SmartDashboard.putBoolean("Skew Left", isLeft());
+    SmartDashboard.putBoolean("Skew Right", isRight());
   }
 
   /*
@@ -74,14 +76,28 @@ public class LimelightSubsystem extends SubsystemBase {
     return targetSkew;
   }
 
+  public double getLeftSkew(){
+    return 90 - Math.abs(getTargetSkew());
+  }
+
   public boolean isRight(){
-    double ts = getTargetSkew();
-    return ts <= rightMax && ts >= rightMin;
+    double ts = Math.abs(getTargetSkew());
+    if (ts < 45.0 && ts > 0.0) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
   public boolean isLeft(){
     double ts = getTargetSkew();
-    return ts >= leftMax && ts <= leftMin;
+    if (ts > -90 && ts < -45) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
   /*
