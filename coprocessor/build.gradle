@@ -32,5 +32,22 @@ deploy {
             postdeploy << { execute '/usr/bin/sudo /bin/mount -o remount,ro / ' }
             postdeploy << { execute '/usr/bin/sudo /bin/mount -o remount,ro /boot ' }
         }
+
+        commandArtifact("killPrevious") {
+            command = "p=\$(pidof python3);" + // Get PID of last python3 process
+            "if [ ! -z \"\$p\" ] then" + // Make sure p is not empty
+            "kill \$p;" + // Kill process
+            "fi"
+        }
+
+        commandArtifact("pythonFileRun") {
+            // Requires files to be deployed and previous code killed to run
+            // run ./gradlew coprocessor:tasks --all to see task names
+            dependsOn("deployPythonFileDeployRpi")
+            dependsOn("deployKillPreviousRpi")
+            
+            // Run the code
+            command = "echo Hello &"
+        }
     }    
 }
