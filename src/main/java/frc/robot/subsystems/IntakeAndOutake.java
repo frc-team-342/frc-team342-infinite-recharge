@@ -198,7 +198,7 @@ public class IntakeAndOutake extends SubsystemBase {
   public void outake() {
     powerCellCount();
 
-    /*double adjustedDist = lime.getDistance();
+    double adjustedDist = lime.getDistance();
 
     double actualDist = adjustedDist + limeToHood + targetDepth;
     double numerator = Math.pow(actualDist,2) * gravity;
@@ -209,7 +209,8 @@ public class IntakeAndOutake extends SubsystemBase {
     
     // Final calculated velocity given to the shooter
     //double velocity = ((inchPerSec * unitConversion) * 2.451 + 8231.1);
-    double velocity = (((inchPerSec * 2.451) + 8231.1) * unitConversion);*/
+    double velocity = (((inchPerSec * 2.451) + 8231.1) * unitConversion);
+    setPoint = velocity;
 
     setShooterVelocity();
     load2.set(ControlMode.PercentOutput, speed2);
@@ -217,7 +218,7 @@ public class IntakeAndOutake extends SubsystemBase {
     System.out.println("Shooter Velocity: " + getShooterVelocity());
     //SmartDashboard.putNumber("Target Velocity", velocity);
 
-    /*if (Math.abs(getShooterVelocity()) + error < velocity && !sensor3.get()){ 
+    if (Math.abs(getShooterVelocity()) + error < velocity && !sensor3.get()){ 
       // Will not shoot if fly wheel isnt up to speed. stops intake if shooter sensor sees cell
       //sensor.get() returns true if nothing is sensed. ! it to make it work
       load2.set(ControlMode.PercentOutput, 0.0);
@@ -226,7 +227,7 @@ public class IntakeAndOutake extends SubsystemBase {
     else{
       load2.set(ControlMode.PercentOutput, 0.9);
       load1.set(ControlMode.PercentOutput, 0.9);
-    }*/
+    }
 
   }
 
@@ -237,6 +238,7 @@ public class IntakeAndOutake extends SubsystemBase {
 
     /*code below allows us to poll from SMARt dashboard*/
     leaderController.setReference(setPoint, ControlType.kVelocity);
+    SmartDashboard.putNumber("Set RPM Point", setPoint);
     //followerController.setReference(velocity, ControlType.kVelocity);
   }
 
