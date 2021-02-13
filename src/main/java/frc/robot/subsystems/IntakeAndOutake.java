@@ -116,6 +116,7 @@ public class IntakeAndOutake extends SubsystemBase {
     sensor2 = new DigitalInput(Constants.INTAKE_SENSOR_2); // hopper sensor
     sensor3 = new DigitalInput(Constants.INTAKE_SENSOR_3); // shooter loader sensor
 
+    
     lime = Factory.getLimelight();
   }
 
