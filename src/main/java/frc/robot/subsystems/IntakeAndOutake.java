@@ -79,6 +79,7 @@ public class IntakeAndOutake extends SubsystemBase {
     sensor2 = new DigitalInput(Constants.INTAKE_SENSOR_2); // hopper sensor
     sensor3 = new DigitalInput(Constants.INTAKE_SENSOR_3); // shooter loader sensor
 
+    
     lime = Factory.getLimelight();
   }
 
@@ -197,49 +198,14 @@ public class IntakeAndOutake extends SubsystemBase {
   /***Overloaded shooter method using limelight distance calculations*/
   public void outake() {
     powerCellCount();
-
-    double adjustedDist = lime.getDistance();
-
-    double actualDist = adjustedDist + limeToHood + targetDepth;
-    double numerator = Math.pow(actualDist,2) * gravity;
-    double denominator = actualDist * Math.sin(2*hoodAngle)-2*height*Math.pow(Math.cos(hoodAngle),2);
-
-    double inchPerSec = Math.sqrt((numerator / denominator));
-    double unitConversion = 60.0 / circumferenceOfWheel;
-    
-    // Final calculated velocity given to the shooter
-    //double velocity = ((inchPerSec * unitConversion) * 2.451 + 8231.1);
-    double velocity = (((inchPerSec * 2.451) + 8231.1) * unitConversion);
-    setPoint = velocity;
-
     setShooterVelocity();
-    load2.set(ControlMode.PercentOutput, speed2);
-
-    System.out.println("Shooter Velocity: " + getShooterVelocity());
-    //SmartDashboard.putNumber("Target Velocity", velocity);
-
-    if (Math.abs(getShooterVelocity()) + error < velocity && !sensor3.get()){ 
-      // Will not shoot if fly wheel isnt up to speed. stops intake if shooter sensor sees cell
-      //sensor.get() returns true if nothing is sensed. ! it to make it work
-      load2.set(ControlMode.PercentOutput, 0.0);
-      load1.set(ControlMode.PercentOutput, 0.0);
-    }
-    else{
-      load2.set(ControlMode.PercentOutput, 0.9);
-      load1.set(ControlMode.PercentOutput, 0.9);
-    }
-
   }
 
   /**Another layer of abstraction for shooter outake method.
    * Sets the shooterLeader motor PID controller reference in RPMs.*/
   private void setShooterVelocity(){
-    //leaderController.setReference(((lime.getDistance() * 3.4967) + 1908), ControlType.kVelocity);
-
-    /*code below allows us to poll from SMARt dashboard*/
-    leaderController.setReference(setPoint, ControlType.kVelocity);
-    SmartDashboard.putNumber("Set RPM Point", setPoint);
-    //followerController.setReference(velocity, ControlType.kVelocity);
+    leaderController.setReference(((lime.getDistance() * 3.4967) + 1908), ControlType.kVelocity);
+    //leaderController.setReference(setPoint, ControlType.kVelocity);
   }
 
   /***Gets the shooter motor velocity from the encoder in RPMS*/
