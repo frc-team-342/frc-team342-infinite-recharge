@@ -135,12 +135,19 @@ public class DriveSystem extends SubsystemBase {
 
       mecanumDrive.driveCartesian(0.0, 0.0, ((target - current) * kP) / 300);
 
-    } else if(isSlowMode) 
-        mecanumDrive.driveCartesian((xSpeed * 0.8) / 2, (ySpeed * 0.8) / 2, (zRotation * 0.8) / 4, -NavX.getAngle());
-      else if (isTurbo)
-        mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation, -NavX.getAngle());
-      else {
+    } else if(isSlowMode){ 
+        mecanumDrive.driveCartesian((xSpeed * 0.8) / 2, (ySpeed * 0.8) / 2, (zRotation * 0.8) / 4/*, -NavX.getAngle()*/);
+        isFieldOriented = false;
+        isTurbo = false;
+    } else if (isTurbo){
+        mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation/*, -NavX.getAngle()*/);
+        isFieldOriented = false;
+        isSlowMode = false;
+  }   else {
         mecanumDrive.driveCartesian(xSpeed * 0.8, ySpeed * 0.8, (zRotation * 0.8) / 2);
+        isFieldOriented = false;
+        isSlowMode = false;
+        isTurbo = false;
     }
   }
 
