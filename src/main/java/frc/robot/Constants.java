@@ -75,6 +75,8 @@ public final class Constants {
     public static final int INTAKE_SENSOR_1 = 1;
     public static final int INTAKE_SENSOR_2 = 2;
     public static final int INTAKE_SENSOR_3 = 3;
+    public static final int INTAKE_SENSOR_4 = 4;    // check this
+
 
     /* Limit Switches */
     public static final int ARM_LIMIT_UP = 5;
