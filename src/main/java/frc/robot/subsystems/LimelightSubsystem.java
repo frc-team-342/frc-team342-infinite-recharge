@@ -21,7 +21,7 @@ public class LimelightSubsystem extends SubsystemBase {
   private int cameraMode, lightMode, validTarget;
   private double targetSkew; // Skew of the limelight target from 0
   private double limeError = 0.1; // Acceptable error from the limelight
-  private double limelightAngleOffset = 28.0 /*12.95*/; // Angle of the limelight from flat ground
+  private double limelightAngleOffset = 27.0 /*12.95*/; // Angle of the limelight from flat ground
   private double targetHeight = 90.5;
   private double robotHeight = 21.0;
   private double degreesToRadians = Math.PI / 180;
