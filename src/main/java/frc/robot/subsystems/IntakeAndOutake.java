@@ -45,13 +45,14 @@ public class IntakeAndOutake extends SubsystemBase {
   private static final int current_limit = 60; // max amount of current motor can pull
 
   //Changed from 250 on 3/6/2020
-  private double error = 5.0; // allowable error for shooter in RPMs
+  private double error = 10.0; // allowable error for shooter in RPMs
   private double hoodAngle = 50.0 * (Math.PI / 180.0); // hood angle in radians
   private double height = 98.25 - 21.125; // height between robot and middle of target measured in inches
   private double targetDepth = 30.0; // depth from front of target to back measured in inches
   private double limeToHood = 27.0; // length from limelight to shooter hood measured in inches
   private double circumferenceOfWheel = (6.0*Math.PI); // 2*pi*r to get circumference
   private double setPoint = 0.0;
+  private double targetVelocity = 0.0;
   //private double rpmScalar = 1.0322;
   //private double rpmAddition = 54.8;
 
@@ -199,12 +200,21 @@ public class IntakeAndOutake extends SubsystemBase {
   public void outake() {
     powerCellCount();
     setShooterVelocity();
+
+    if(Math.abs(getShooterVelocity()) + error < targetVelocity && !sensor3.get()){
+      load2.set(ControlMode.PercentOutput, 0.0);
+      load1.set(ControlMode.PercentOutput, 0.0);
+    }
+    else{
+      load2.set(ControlMode.PercentOutput, speed2);
+      load1.set(ControlMode.PercentOutput, speed2);
+    }
   }
 
   /**Another layer of abstraction for shooter outake method.
    * Sets the shooterLeader motor PID controller reference in RPMs.*/
   private void setShooterVelocity(){
-    leaderController.setReference(((lime.getDistance() * 3.4967) + 1908), ControlType.kVelocity);
+    leaderController.setReference(targetVelocity, ControlType.kVelocity);
     //leaderController.setReference(setPoint, ControlType.kVelocity);
   }
 
@@ -256,8 +266,11 @@ public class IntakeAndOutake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Velocity: ", getShooterVelocity());
+    SmartDashboard.putNumber("Shooter Velocity: ", getShooterVelocity());
+    SmartDashboard.putNumber("Target Velocity", targetVelocity);
+
     pidTuner();
+    targetVelocity = ((lime.getDistance() * 3.4967) + 1908);
   }
 
   /**Displays intake and outake sensors on the SmartDashboard*/
