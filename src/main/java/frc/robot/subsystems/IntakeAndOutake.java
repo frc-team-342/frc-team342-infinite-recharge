@@ -209,7 +209,7 @@ public class IntakeAndOutake extends SubsystemBase {
     
     // Final calculated velocity given to the shooter
     //double velocity = ((inchPerSec * unitConversion) * 2.451 + 8231.1);
-    double velocity = (((inchPerSec * 2.451) + 8231.1) * unitConversion);*/
+    double velocity = (((inchPerSec * 2.451) + 8231.1) * unitConversion);
 
     setShooterVelocity();
     load2.set(ControlMode.PercentOutput, speed2);
@@ -233,10 +233,10 @@ public class IntakeAndOutake extends SubsystemBase {
   /**Another layer of abstraction for shooter outake method.
    * Sets the shooterLeader motor PID controller reference in RPMs.*/
   private void setShooterVelocity(){
-    //leaderController.setReference(((lime.getDistance() * 3.4967) + 1908), ControlType.kVelocity);
+    leaderController.setReference(((lime.getDistance() * 3.4967) + 1908), ControlType.kVelocity);
 
     /*code below allows us to poll from SMARt dashboard*/
-    leaderController.setReference(setPoint, ControlType.kVelocity);
+    //leaderController.setReference(setPoint, ControlType.kVelocity);
     //followerController.setReference(velocity, ControlType.kVelocity);
   }
 
