@@ -31,12 +31,6 @@ public class IntakeAndOutake extends SubsystemBase {
   private CANPIDController leaderController;
   private CANPIDController followerController;
 
-  private DigitalInput sensor1; //intake
-  private DigitalInput sensor2; //hopper
-  private DigitalInput sensor3; //shooter
-  private DigitalInput sensor4; // the new one
-
-
   private DigitalInput sensor1; //intake sensor
   private DigitalInput sensor2; //hopper sensor
   private DigitalInput sensor3; //shooter loader sensor
@@ -75,38 +69,7 @@ public class IntakeAndOutake extends SubsystemBase {
 
   /**Constructor for the class*/
   public IntakeAndOutake() {
-
     configureShooter();
-
-    intake = new TalonSRX(Constants.INTAKE_PRIMARY);
-    shooter1 = new TalonSRX(Constants.LAUNCH_MOTOR_1);
-    shooter2 = new TalonSRX(Constants.LAUNCH_MOTOR_2);
-    load1 = new VictorSPX(Constants.INTAKE_CONVEYOR_1);
-    load2 = new VictorSPX(Constants.INTAKE_CONVEYOR_2);
-
-    sensor1 = new DigitalInput(Constants.INTAKE_SENSOR_1);
-    sensor2 = new DigitalInput(Constants.INTAKE_SENSOR_2);
-    sensor3 = new DigitalInput(Constants.INTAKE_SENSOR_3);
-    sensor4 = new DigitalInput(Constants.INTAKE_SENSOR_4); 
-
-    // sets shooter to turn in correct direction
-    shooter1.setInverted(true);
-    shooter2.setInverted(true);
-  
-
-    shooter1.enableCurrentLimit(true);
-    shooter1.configPeakCurrentLimit(current_limit);
-    shooter1.configPeakCurrentDuration(current_limit_duration);
-
-    shooter2.enableCurrentLimit(true);
-    shooter2.configPeakCurrentLimit(current_limit);
-    shooter2.configPeakCurrentDuration(current_limit_duration);
-
-    shooter1.configAllowableClosedloopError(0, 0, 25);
-    shooter1.selectProfileSlot(0, 0);
-    shooter1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-
-    shooter1.setSensorPhase(false);
 
     intake = new TalonSRX(Constants.INTAKE_PRIMARY); // intake wheel infront of robot
     load1 = new VictorSPX(Constants.INTAKE_CONVEYOR_1); // first conveyor motor
@@ -335,7 +298,6 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putBoolean("Intake Sensor1: ", !sensor1.get());
     SmartDashboard.putBoolean("Intake Sensor2: ", !sensor2.get());
     SmartDashboard.putBoolean("Intake Sensor3: ", !sensor3.get());
-    SmartDashboard.putBoolean("Intake Sensor4: ", !sensor4.get());
   }
 
 
