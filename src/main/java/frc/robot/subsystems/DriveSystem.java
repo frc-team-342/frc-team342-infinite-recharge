@@ -12,25 +12,14 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 
 import com.revrobotics.CANSparkMax;
-
-import com.revrobotics.ControlType;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants;
-import frc.robot.Robot;
 
 import frc.robot.commands.DriveWithJoystick;
 
 public class DriveSystem extends SubsystemBase {
-
-
   private CANSparkMax motorRight1;
   private CANSparkMax motorRight2;
   private CANSparkMax motorLeft1;
@@ -90,11 +79,11 @@ public class DriveSystem extends SubsystemBase {
     motorRight1.setOpenLoopRampRate(ramp_rate);
     motorRight2.setOpenLoopRampRate(ramp_rate);
 
-    kP = 5e-5;
-    kI = 1e-6;
-    kD = 0;
-    kIz = 0;
-    kFF = 0.000156;
+    kP = 0.00294;
+    kI = 0.0;
+    kD = 0.0;
+    kIz = 0.0;
+    kFF = 0.0; //0.000156
     kMaxOutput = 1;
     kMinOutput = -1;
     maxRPM = 5700;
@@ -104,13 +93,10 @@ public class DriveSystem extends SubsystemBase {
     setPID(motorRight1);
     setPID(motorRight2);
 
-    motorLeft1.getEncoder().setPosition(0);
-
     encoderL1 = new CANEncoder(motorLeft1);
     encoderL2 = new CANEncoder(motorLeft2);
     encoderR1 = new CANEncoder(motorRight1);
     encoderR2 = new CANEncoder(motorRight2); 
-
 
     mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
 
@@ -169,13 +155,6 @@ public class DriveSystem extends SubsystemBase {
     motor.enableVoltageCompensation(voltage_comp);
   }
 
-  public void PercentOut(double yAxis) {
-    motorLeft1.set(yAxis);
-    motorLeft2.set(yAxis);
-    motorRight1.set(yAxis);
-    motorRight2.set(yAxis);
-  }
-
   public void setPIDLooped() {
     isPID = !isPID;
 
@@ -206,31 +185,6 @@ public class DriveSystem extends SubsystemBase {
     double current = NavX.getAngle();
     double kP = 2.0;
     mecanumDrive.driveCartesian(0.0, 0.0, ((target - current) * kP) / 300);
-  }
-
-  public void autoStrafe(double distance) {
-    motorLeft1.getEncoder().setPosition(0.0);
-    double conversion = 1.0; // will change meters to encoders ticks
-    double target = distance * conversion;
-    double current = motorLeft1.getEncoder().getPosition();
-    double kP = 2.0;
-    mecanumDrive.driveCartesian(((target - current) * kP) / 300.0, 0.0, 0.0);
-  }
-
-  public void autoDrive(double distance) {
-    motorLeft1.getEncoder().setPosition(0.0);
-    double conversion = 1.0; // will change meters to encoder ticks
-    double target = distance * conversion;
-    double current = motorLeft1.getEncoder().getPosition();
-    double kP = 2.0;
-    mecanumDrive.driveCartesian(0.0, ((target - current) * kP) / 300, 0.0);
-  }
-
-  public void rotateByError(double Error) {
-    accumError += Error;
-    double kI = 1.0e-3;
-    double kP = 4.0;
-    mecanumDrive.driveCartesian(0.0, 0.0, ((Error * kP) + (accumError * kI)) / 300);
   }
 
   // PID Loop for driving the robot while also targeting with limelgiht

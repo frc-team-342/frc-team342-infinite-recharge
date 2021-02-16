@@ -10,7 +10,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.Factory;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.ClimbSubsystem;
 
 public class ActivateTelescopes extends CommandBase {

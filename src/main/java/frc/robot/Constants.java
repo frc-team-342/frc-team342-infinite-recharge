@@ -1,5 +1,8 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.kinematics.MecanumDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -21,6 +24,29 @@ public final class Constants {
      * prefixed by subsystem, followed by type or function and number
      */
 
+    // Drive Characterization Values
+    public static final double ksVolts = 0.19;
+    public static final double kvVoltsSecondsPerMeter = 2.47;
+    public static final double kaVoltsSecondsSquaredPerMeter = 0.381;
+    public static final double kPDriveVel = 0.00294;
+    public static final double kTrackwidthMeters = (21.25 / 12.0) / 3.28;
+    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+
+    // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
+    public static final double kRamseteB = 2;
+    public static final double kRamseteZeta = 0.7;
+
+    // Mecanum Kinematics Values
+    private static final double translationXMeters = 0.2604; // Distance of wheel from center of robot moving to the front
+    private static final double translationYMeters = 0.2668; // Distance of wheel from center of robot moving to the left
+    private static final Translation2d m_frontLeft = new Translation2d(translationXMeters, translationYMeters);
+    private static final Translation2d m_frontRight = new Translation2d(translationXMeters, -translationYMeters);
+    private static final Translation2d m_backLeft = new Translation2d(-translationXMeters, translationYMeters);
+    private static final Translation2d m_backRight = new Translation2d(-translationXMeters, -translationYMeters);
+    public static final MecanumDriveKinematics kDriveKinematics = 
+        new MecanumDriveKinematics(m_frontLeft, m_frontRight, m_backLeft, m_backRight);
+    
     /* Motors */
     // Intake
     public static final int INTAKE_PRIMARY = 5;

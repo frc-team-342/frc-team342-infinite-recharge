@@ -7,12 +7,9 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.JetsonSubsystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-
-import edu.wpi.first.wpilibj.XboxController.Button;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -25,7 +22,6 @@ import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.ActivateWinches;
 import frc.robot.commands.Autonomous;
-import frc.robot.commands.DriveWithPercent;
 import frc.robot.commands.ChangeColor;
 
 import frc.robot.subsystems.ClimbSubsystem;

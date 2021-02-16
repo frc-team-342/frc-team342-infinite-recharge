@@ -7,13 +7,10 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Factory;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.LimelightSubsystem;
-import edu.wpi.first.wpilibj.Joystick;
 
 public class AutoTarget extends CommandBase {
   private final LimelightSubsystem lime;

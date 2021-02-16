@@ -4,10 +4,8 @@ import frc.robot.Constants;
 import frc.robot.Factory;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
@@ -122,7 +120,7 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Feed Forward", kFF);
     SmartDashboard.putNumber("Max Output", kMaxOutput);
     SmartDashboard.putNumber("Min Output", kMinOutput);
-    SmartDashboard.putNumber("Set RPM Point", setPoint);
+    SmartDashboard.putNumber("Set Velocity", setPoint);
   }
 
   /**Senses powercells in and out and keeps a running count of powercells currently in the robot*/
@@ -214,8 +212,8 @@ public class IntakeAndOutake extends SubsystemBase {
   /**Another layer of abstraction for shooter outake method.
    * Sets the shooterLeader motor PID controller reference in RPMs.*/
   private void setShooterVelocity(){
-    leaderController.setReference(targetVelocity, ControlType.kVelocity);
-    //leaderController.setReference(setPoint, ControlType.kVelocity);
+    //leaderController.setReference(targetVelocity, ControlType.kVelocity);
+    leaderController.setReference(setPoint, ControlType.kVelocity);
   }
 
   /***Gets the shooter motor velocity from the encoder in RPMS*/
@@ -232,7 +230,7 @@ public class IntakeAndOutake extends SubsystemBase {
     double ff = SmartDashboard.getNumber("Feed Forward", 0);
     double max = SmartDashboard.getNumber("Max Output", 0);
     double min = SmartDashboard.getNumber("Min Output", 0);
-    double set = SmartDashboard.getNumber("Set RPM Point", 0);
+    double set = SmartDashboard.getNumber("Set Velocity", 0);
 
     // if PID coefficients on SmartDashboard have changed, write new values to controller
     if((p != kP)) { leaderController.setP(p); followerController.setP(p); kP = p; }
