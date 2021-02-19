@@ -172,7 +172,10 @@ public class DriveSystem extends SubsystemBase {
   }
 
   public void resetOdometry(Pose2d pose) {
-    // reset encoders
+    encoderL1.setPosition(0);
+    encoderL2.setPosition(0);
+    encoderR1.setPosition(0);
+    encoderR2.setPosition(0);
     m_odometry.resetPosition(pose, rotation2d);
   }
 
