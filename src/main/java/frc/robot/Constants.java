@@ -38,6 +38,7 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;
 
     // Mecanum Kinematics Values
+    public static final MecanumDriveKinematics kDriveKinematics = new MecanumDriveKinematics(Constants.m_frontLeft, Constants.m_frontRight, Constants.m_backLeft, Constants.m_backRight);
     private static final double translationXMeters = 0.2604; // Distance of wheel from center of robot moving to the front
     private static final double translationYMeters = 0.2668; // Distance of wheel from center of robot moving to the left
     public static final Translation2d m_frontLeft = new Translation2d(translationXMeters, translationYMeters);

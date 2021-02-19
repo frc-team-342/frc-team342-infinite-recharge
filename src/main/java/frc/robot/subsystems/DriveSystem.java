@@ -107,10 +107,8 @@ public class DriveSystem extends SubsystemBase {
     encoderR2 = new CANEncoder(motorRight2); 
 
     mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
-    kDriveKinematics = 
-      new MecanumDriveKinematics(Constants.m_frontLeft, Constants.m_frontRight, Constants.m_backLeft, Constants.m_backRight);
     NavX = new AHRS();
-    rotation2d = new Rotation2d(NavX.getPitch(), NavX.getRoll());
+    rotation2d = new Rotation2d(NavX.getAngle() * (Math.PI / 180));
     m_odometry = new MecanumDriveOdometry(kDriveKinematics, rotation2d);
   }
 
@@ -171,6 +169,11 @@ public class DriveSystem extends SubsystemBase {
     motorRight2.setVoltage(rightVolts);
 
     mecanumDrive.feed();
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    // reset encoders
+    m_odometry.resetPosition(pose, rotation2d);
   }
 
   public void setPID(CANSparkMax motor) {
