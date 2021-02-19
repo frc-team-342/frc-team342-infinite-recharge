@@ -7,10 +7,14 @@
 
 package frc.robot;
 
+import java.util.List;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -224,13 +228,13 @@ public class RobotContainer {
       Constants.kMaxAccelerationMetersPerSecondSquared
     ).setKinematics(Constants.kDriveKinematics);
 
-    /*
+    // TODO: add actual waypoints for the trajectory
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      initial, 
-      interiorWaypoints, 
-      end, 
+      new Pose2d(0, 0, new Rotation2d(0)), 
+      List.of(), 
+      new Pose2d(0, 0, new Rotation2d(0)), 
       config
-    ); */
+    ); 
     
     // TODO: figure out magic numbers for the PID controllers and add them to constants
     /*
