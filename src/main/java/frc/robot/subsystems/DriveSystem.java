@@ -13,6 +13,11 @@ import com.revrobotics.CANPIDController;
 
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.MecanumDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.MecanumDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -45,6 +50,9 @@ public class DriveSystem extends SubsystemBase {
 
   private AHRS NavX;
   private MecanumDrive mecanumDrive;
+  private MecanumDriveKinematics kDriveKinematics;
+  private final MecanumDriveOdometry m_odometry;
+  private Rotation2d rotation2d;
 
   /**
    * Creates a new DriveSystem.
@@ -99,9 +107,11 @@ public class DriveSystem extends SubsystemBase {
     encoderR2 = new CANEncoder(motorRight2); 
 
     mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
-
+    kDriveKinematics = 
+      new MecanumDriveKinematics(Constants.m_frontLeft, Constants.m_frontRight, Constants.m_backLeft, Constants.m_backRight);
     NavX = new AHRS();
-
+    rotation2d = new Rotation2d(NavX.getPitch(), NavX.getRoll());
+    m_odometry = new MecanumDriveOdometry(kDriveKinematics, rotation2d);
   }
 
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
@@ -137,8 +147,30 @@ public class DriveSystem extends SubsystemBase {
     }
   }
 
+  public MecanumDriveWheelSpeeds getWheelSpeeds(){
+    return new MecanumDriveWheelSpeeds(encoderL1.getVelocity(), encoderR1.getVelocity(),
+       encoderL2.getVelocity(), encoderR2.getVelocity());
+  }
+
   public void zeroGyro() {
     NavX.zeroYaw();
+  }
+
+  public double getHeading(){
+    return rotation2d.getDegrees();
+  }
+
+  public Pose2d getPose2d(){
+    return m_odometry.getPoseMeters();
+  }
+
+  public void mecanumDriveVolts(double leftVolts, double rightVolts){
+    motorLeft1.setVoltage(leftVolts);
+    motorLeft2.setVoltage(leftVolts);
+    motorRight1.setVoltage(rightVolts);
+    motorRight2.setVoltage(rightVolts);
+
+    mecanumDrive.feed();
   }
 
   public void setPID(CANSparkMax motor) {
@@ -237,6 +269,7 @@ public class DriveSystem extends SubsystemBase {
   @Override
   public void periodic() {
     mecanumDrive.feed();
+    m_odometry.update(rotation2d, getWheelSpeeds());
     // This method will be called once per scheduler run
   }
 

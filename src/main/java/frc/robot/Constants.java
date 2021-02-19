@@ -25,11 +25,11 @@ public final class Constants {
      */
 
     // Drive Characterization Values
-    public static final double ksVolts = 0.19;
-    public static final double kvVoltsSecondsPerMeter = 2.47;
-    public static final double kaVoltsSecondsSquaredPerMeter = 0.381;
-    public static final double kPDriveVel = 0.00294;
-    public static final double kTrackwidthMeters = (21.25 / 12.0) / 3.28;
+    public static final double ksVolts = 0.143;
+    public static final double kvVoltsSecondsPerMeter = 2.57;
+    public static final double kaVoltsSecondsSquaredPerMeter = 0.389;
+    public static final double kPDriveVel = 0.00289;
+    public static final double kTrackwidthMeters = (23.0 / 12.0) / 3.28;
     public static final double kMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
 
@@ -40,12 +40,10 @@ public final class Constants {
     // Mecanum Kinematics Values
     private static final double translationXMeters = 0.2604; // Distance of wheel from center of robot moving to the front
     private static final double translationYMeters = 0.2668; // Distance of wheel from center of robot moving to the left
-    private static final Translation2d m_frontLeft = new Translation2d(translationXMeters, translationYMeters);
-    private static final Translation2d m_frontRight = new Translation2d(translationXMeters, -translationYMeters);
-    private static final Translation2d m_backLeft = new Translation2d(-translationXMeters, translationYMeters);
-    private static final Translation2d m_backRight = new Translation2d(-translationXMeters, -translationYMeters);
-    public static final MecanumDriveKinematics kDriveKinematics = 
-        new MecanumDriveKinematics(m_frontLeft, m_frontRight, m_backLeft, m_backRight);
+    public static final Translation2d m_frontLeft = new Translation2d(translationXMeters, translationYMeters);
+    public static final Translation2d m_frontRight = new Translation2d(translationXMeters, -translationYMeters);
+    public static final Translation2d m_backLeft = new Translation2d(-translationXMeters, translationYMeters);
+    public static final Translation2d m_backRight = new Translation2d(-translationXMeters, -translationYMeters);
     
     /* Motors */
     // Intake
