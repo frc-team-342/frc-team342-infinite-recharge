@@ -275,7 +275,7 @@ public class DriveSystem extends SubsystemBase {
   @Override
   public void periodic() {
     mecanumDrive.feed();
-    m_odometry.update(rotation2d, getWheelSpeeds());
+    //m_odometry.update(rotation2d, getWheelSpeeds());
     // This method will be called once per scheduler run
   }
 

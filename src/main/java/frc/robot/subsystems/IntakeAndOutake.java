@@ -122,6 +122,7 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Max Output", kMaxOutput);
     SmartDashboard.putNumber("Min Output", kMinOutput);
     SmartDashboard.putNumber("Set Velocity", setPoint);
+    SmartDashboard.putBoolean("Testing Velocity?", false);
   }
 
   /**Senses powercells in and out and keeps a running count of powercells currently in the robot*/
@@ -213,8 +214,14 @@ public class IntakeAndOutake extends SubsystemBase {
   /**Another layer of abstraction for shooter outake method.
    * Sets the shooterLeader motor PID controller reference in RPMs.*/
   private void setShooterVelocity(){
-    //leaderController.setReference(targetVelocity, ControlType.kVelocity);
-    leaderController.setReference(setPoint, ControlType.kVelocity);
+    if (SmartDashboard.getBoolean("Testing Velocity?", false) == false) {
+      leaderController.setReference(targetVelocity, ControlType.kVelocity);
+      System.out.println("Bruh");
+    }
+    else {
+      leaderController.setReference(setPoint, ControlType.kVelocity);
+      System.out.println("Bruuuuuuuuuuuuuuuuuuuuuuh");
+    }
   }
 
   /***Gets the shooter motor velocity from the encoder in RPMS*/
