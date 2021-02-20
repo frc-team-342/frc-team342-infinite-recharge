@@ -11,5 +11,7 @@
     "**/.project": true,
     "**/.settings": true,
     "**/.factorypath": true
-  }
+  },
+  "java.checkstyle.version": "8.40",
+  "java.checkstyle.configuration": "/sun_checks.xml"
 }
