@@ -88,10 +88,11 @@ public class IntakeAndOutake extends SubsystemBase {
     shooterFollower = new CANSparkMax(Constants.LAUNCH_MOTOR_2, MotorType.kBrushless);
     leaderController = shooterLeader.getPIDController();
     followerController = shooterFollower.getPIDController();
-
-    kP = 0.0;
-    kI = 0;
-    kD = 0;
+    
+    //changed to consitantly get the target RPM (changed 2-20-21)
+    kP = 0.0003;
+    kI = 0.00000001;
+    kD = 0.005;
     kIz = 0;
     kFF = 0.0001826;
     kMaxOutput = 1;
@@ -223,9 +224,10 @@ public class IntakeAndOutake extends SubsystemBase {
 
   private void pidTuner(){
     // read PID coefficients from SmartDashboard
-    double p = SmartDashboard.getNumber("P Gain", 0);
-    double i = SmartDashboard.getNumber("I Gain", 0);
-    double d = SmartDashboard.getNumber("D Gain", 0);
+    // changed PID numbers to get consitantly within 1% of the target value (changed: 2-20-21)
+    double p = SmartDashboard.getNumber("P Gain", 0.0003);
+    double i = SmartDashboard.getNumber("I Gain", 0.00000001);
+    double d = SmartDashboard.getNumber("D Gain", 0.005);
     double iz = SmartDashboard.getNumber("I Zone", 0);
     double ff = SmartDashboard.getNumber("Feed Forward", 0);
     double max = SmartDashboard.getNumber("Max Output", 0);
