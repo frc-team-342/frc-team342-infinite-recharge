@@ -44,7 +44,6 @@ import frc.robot.commands.MoveArm;
 import frc.robot.commands.ReverseIntake;
 import frc.robot.subsystems.IntakeAndOutake;
 
-
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -81,7 +80,7 @@ public class RobotContainer {
   private JoystickButton op_slowBtn;
   private JoystickButton op_intakeBtn;
   private JoystickButton op_lockWinchBtn;
-  private JoystickButton op_runWinchBtn; 
+  private JoystickButton op_runWinchBtn;
   private JoystickButton op_telescopesBtn;
   private JoystickButton op_reverseBtn;
   private JoystickButton op_controlarmBtn;
@@ -109,8 +108,6 @@ public class RobotContainer {
   // Autonomous
   private Command auto;
 
-  
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -121,7 +118,6 @@ public class RobotContainer {
     // Driver controller
     driver = new Joystick(Constants.DRIVER_CONTROLLER);
 
-    
     driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTO_ALIGN);
     driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELD_ORIENT);
     driver_turboBtn = new JoystickButton(driver, Constants.DRIVER_TURBO);
@@ -135,13 +131,10 @@ public class RobotContainer {
     driver_slow = new InstantCommand(driveSystem::setSlow, driveSystem);
     driver_zero = new InstantCommand(driveSystem::zeroGyro, driveSystem);
     driver_reverse = new ReverseIntake();
-    
+
     driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTO_ALIGN);
     driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELD_ORIENT);
     driver_turboBtn = new JoystickButton(driver, Constants.DRIVER_TURBO);
-
-
-
 
     // Operator controller
     operator = new XboxController(Constants.OPERATOR_CONTROLLER);
@@ -157,14 +150,14 @@ public class RobotContainer {
     op_controlarmBtn = new JoystickButton(operator, Constants.OP_CONTROL_ARM);
     op_manual_wheelBtn = new JoystickButton(operator, Constants.OP_CONTROL_RIGHT);
     op_reverse_teleBtn = new JoystickButton(operator, Constants.OP_REVERSE_TELE);
-  
+
     op_launch = new LaunchWithButton();
     op_slow = new InstantCommand(driveSystem::setSlow, driveSystem);
 
     op_lockWinchBtn = new JoystickButton(operator, Constants.OP_LOCK_WINCH);
     op_runWinchBtn = new JoystickButton(operator, Constants.OP_RUN_WINCH);
 
-    //op_slow = new ToggleSlowMode();
+    // op_slow = new ToggleSlowMode();
 
     op_intake = new IntakeWithButton();
     op_lockWinch = new LockWinches();
@@ -181,7 +174,7 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
-  public static Joystick getJoy(){
+  public static Joystick getJoy() {
     return driver;
   }
 
@@ -223,38 +216,24 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    TrajectoryConfig config = new TrajectoryConfig(
-      Constants.kMaxSpeedMetersPerSecond, 
-      Constants.kMaxAccelerationMetersPerSecondSquared
-    ).setKinematics(Constants.kDriveKinematics);
+    TrajectoryConfig config = new TrajectoryConfig(Constants.kMaxSpeedMetersPerSecond,
+        Constants.kMaxAccelerationMetersPerSecondSquared).setKinematics(Constants.kDriveKinematics);
 
     // TODO: add actual waypoints for the trajectory
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, new Rotation2d(0)), 
-      List.of(), 
-      new Pose2d(0, 0, new Rotation2d(0)), 
-      config
-    ); 
-    
-    // TODO: figure out magic numbers for the PID controllers and add them to constants
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(),
+        new Pose2d(0, 0, new Rotation2d(0)), config);
+
+    // TODO: figure out magic numbers for the PID controllers and add them to
+    // constants
     /*
-    MecanumControllerCommand trajectoryCommand = new MecanumControllerCommand(
-      trajectory, 
-      driveSystem::getPose2d, 
-      feedforward, 
-      Constants.kDriveKinematics, 
-      xController, 
-      yController, 
-      thetaController, 
-      Constants.kMaxSpeedMetersPerSecond, 
-      new PIDController(0.00294, 0, 0), 
-      new PIDController(0.00294, 0, 0), 
-      new PIDController(0.00294, 0, 0), 
-      new PIDController(0.00294, 0, 0), 
-      driveSystem::getWheelSpeeds, 
-      driveSystem::mecanumDriveVolts, 
-      driveSystem
-    ); */
+     * MecanumControllerCommand trajectoryCommand = new MecanumControllerCommand(
+     * trajectory, driveSystem::getPose2d, feedforward, Constants.kDriveKinematics,
+     * xController, yController, thetaController,
+     * Constants.kMaxSpeedMetersPerSecond, new PIDController(0.00294, 0, 0), new
+     * PIDController(0.00294, 0, 0), new PIDController(0.00294, 0, 0), new
+     * PIDController(0.00294, 0, 0), driveSystem::getWheelSpeeds,
+     * driveSystem::mecanumDriveVolts, driveSystem );
+     */
 
     return auto;
     // return trajectoryCommand.andThen(() -> driveSystem.stopDrive());

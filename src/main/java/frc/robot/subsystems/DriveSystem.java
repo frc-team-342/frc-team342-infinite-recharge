@@ -91,7 +91,7 @@ public class DriveSystem extends SubsystemBase {
     kI = 0.0;
     kD = 0.0;
     kIz = 0.0;
-    kFF = 0.0; //0.000156
+    kFF = 0.0; // 0.000156
     kMaxOutput = 1;
     kMinOutput = -1;
     maxRPM = 5700;
@@ -104,7 +104,7 @@ public class DriveSystem extends SubsystemBase {
     encoderL1 = new CANEncoder(motorLeft1);
     encoderL2 = new CANEncoder(motorLeft2);
     encoderR1 = new CANEncoder(motorRight1);
-    encoderR2 = new CANEncoder(motorRight2); 
+    encoderR2 = new CANEncoder(motorRight2);
 
     mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
     NavX = new AHRS();
@@ -129,40 +129,41 @@ public class DriveSystem extends SubsystemBase {
 
       mecanumDrive.driveCartesian(0.0, 0.0, ((target - current) * kP) / 300);
 
-    } else if(isSlowMode){ 
-        mecanumDrive.driveCartesian((xSpeed * 0.8) / 2, (ySpeed * 0.8) / 2, (zRotation * 0.8) / 4/*, -NavX.getAngle()*/);
-        isFieldOriented = false;
-        isTurbo = false;
-    } else if (isTurbo){
-        mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation/*, -NavX.getAngle()*/);
-        isFieldOriented = false;
-        isSlowMode = false;
-  }   else {
-        mecanumDrive.driveCartesian(xSpeed * 0.8, ySpeed * 0.8, (zRotation * 0.8) / 2);
-        isFieldOriented = false;
-        isSlowMode = false;
-        isTurbo = false;
+    } else if (isSlowMode) {
+      mecanumDrive.driveCartesian((xSpeed * 0.8) / 2, (ySpeed * 0.8) / 2,
+          (zRotation * 0.8) / 4/* , -NavX.getAngle() */);
+      isFieldOriented = false;
+      isTurbo = false;
+    } else if (isTurbo) {
+      mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation/* , -NavX.getAngle() */);
+      isFieldOriented = false;
+      isSlowMode = false;
+    } else {
+      mecanumDrive.driveCartesian(xSpeed * 0.8, ySpeed * 0.8, (zRotation * 0.8) / 2);
+      isFieldOriented = false;
+      isSlowMode = false;
+      isTurbo = false;
     }
   }
 
-  public MecanumDriveWheelSpeeds getWheelSpeeds(){
-    return new MecanumDriveWheelSpeeds(encoderL1.getVelocity(), encoderR1.getVelocity(),
-       encoderL2.getVelocity(), encoderR2.getVelocity());
+  public MecanumDriveWheelSpeeds getWheelSpeeds() {
+    return new MecanumDriveWheelSpeeds(encoderL1.getVelocity(), encoderR1.getVelocity(), encoderL2.getVelocity(),
+        encoderR2.getVelocity());
   }
 
   public void zeroGyro() {
     NavX.zeroYaw();
   }
 
-  public double getHeading(){
+  public double getHeading() {
     return rotation2d.getDegrees();
   }
 
-  public Pose2d getPose2d(){
+  public Pose2d getPose2d() {
     return m_odometry.getPoseMeters();
   }
 
-  public void mecanumDriveVolts(double leftVolts, double rightVolts){
+  public void mecanumDriveVolts(double leftVolts, double rightVolts) {
     motorLeft1.setVoltage(leftVolts);
     motorLeft2.setVoltage(leftVolts);
     motorRight1.setVoltage(rightVolts);
@@ -241,7 +242,6 @@ public class DriveSystem extends SubsystemBase {
     SmartDashboard.putBoolean("Is Targeting", isTargeting);
   }
 
-
   // Set off toggle for robot start so targeting is always off unless turned on
   public void targetOff() {
     isTargeting = false;
@@ -275,7 +275,7 @@ public class DriveSystem extends SubsystemBase {
   @Override
   public void periodic() {
     mecanumDrive.feed();
-    //m_odometry.update(rotation2d, getWheelSpeeds());
+    // m_odometry.update(rotation2d, getWheelSpeeds());
     // This method will be called once per scheduler run
   }
 
@@ -283,4 +283,3 @@ public class DriveSystem extends SubsystemBase {
     setDefaultCommand(new DriveWithJoystick());
   }
 }
-

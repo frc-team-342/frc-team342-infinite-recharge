@@ -33,19 +33,23 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
 
-    // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
+    // Reasonable baseline values for a RAMSETE follower in units of meters and
+    // seconds
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
 
     // Mecanum Kinematics Values
-    public static final MecanumDriveKinematics kDriveKinematics = new MecanumDriveKinematics(Constants.m_frontLeft, Constants.m_frontRight, Constants.m_backLeft, Constants.m_backRight);
-    private static final double translationXMeters = 0.2604; // Distance of wheel from center of robot moving to the front
-    private static final double translationYMeters = 0.2668; // Distance of wheel from center of robot moving to the left
+    public static final MecanumDriveKinematics kDriveKinematics = new MecanumDriveKinematics(Constants.m_frontLeft,
+            Constants.m_frontRight, Constants.m_backLeft, Constants.m_backRight);
+    private static final double translationXMeters = 0.2604;
+    // Distance of wheel from center of robot moving to the front
+    private static final double translationYMeters = 0.2668;
+    // Distance of wheel from center of robot moving to the left
     public static final Translation2d m_frontLeft = new Translation2d(translationXMeters, translationYMeters);
     public static final Translation2d m_frontRight = new Translation2d(translationXMeters, -translationYMeters);
     public static final Translation2d m_backLeft = new Translation2d(-translationXMeters, translationYMeters);
     public static final Translation2d m_backRight = new Translation2d(-translationXMeters, -translationYMeters);
-    
+
     /* Motors */
     // Intake
     public static final int INTAKE_PRIMARY = 5;
@@ -81,7 +85,7 @@ public final class Constants {
     public static final int DRIVER_AUTO_ALIGN = 1; // trigger
     public static final int DRIVER_FIELD_ORIENT = 3; // bottom left
     public static final int DRIVER_ZERO = 4; // bottom right
-    
+
     // Operator buttons
     public static final int OPERATOR_CONTROLLER = 1;
     public static final int OP_LAUNCH = 5; // left bumper

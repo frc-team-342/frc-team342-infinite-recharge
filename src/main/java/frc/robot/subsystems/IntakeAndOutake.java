@@ -51,6 +51,7 @@ public class IntakeAndOutake extends SubsystemBase {
   private double circumferenceOfWheel = (6.0*Math.PI); // 2*pi*r to get circumference
   private double setPoint = 0.0;
   private double targetVelocity = 0.0;
+  private double errorReference = 0.0;
   //private double rpmScalar = 1.0322;
   //private double rpmAddition = 54.8;
 
@@ -201,7 +202,8 @@ public class IntakeAndOutake extends SubsystemBase {
     powerCellCount();
     setShooterVelocity();
 
-    if(Math.abs(getShooterVelocity()) + error < targetVelocity && !sensor3.get()){
+    //if(Math.abs(getShooterVelocity()) + error < targetVelocity && !sensor3.get()){
+    if(Math.abs(getShooterVelocity()) + error < errorReference && !sensor3.get()){
       load2.set(ControlMode.PercentOutput, 0.0);
       load1.set(ControlMode.PercentOutput, 0.0);
     }
@@ -216,10 +218,12 @@ public class IntakeAndOutake extends SubsystemBase {
   private void setShooterVelocity(){
     if (SmartDashboard.getBoolean("Testing Velocity?", false) == false) {
       leaderController.setReference(targetVelocity, ControlType.kVelocity);
+      errorReference = targetVelocity;
       System.out.println("Bruh");
     }
     else {
       leaderController.setReference(setPoint, ControlType.kVelocity);
+      errorReference = setPoint;
       System.out.println("Bruuuuuuuuuuuuuuuuuuuuuuh");
     }
   }

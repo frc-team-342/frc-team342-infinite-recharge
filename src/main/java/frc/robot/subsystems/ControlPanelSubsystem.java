@@ -25,12 +25,10 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
   // Encoder encoder = new Encoder(1, 2, false, EncodingType.k1X);
 
-  
-  //DigitalInput armLimitUp;
-  //DigitalInput armLimitDown;
+  // DigitalInput armLimitUp;
+  // DigitalInput armLimitDown;
 
-
-  //Encoder encoder = new Encoder(1, 2, false, EncodingType.k1X);
+  // Encoder encoder = new Encoder(1, 2, false, EncodingType.k1X);
 
   public ControlPanelSubsystem() {
 
@@ -39,9 +37,8 @@ public class ControlPanelSubsystem extends SubsystemBase {
     armMotor = new TalonSRX(Constants.CP_ARM);
     armPlacement = true;
 
-    //armLimitUp = new DigitalInput(Constants.ARM_LIMIT_UP);
-    //armLimitDown = new DigitalInput(Constants.ARM_LIMIT_DOWN);
-
+    // armLimitUp = new DigitalInput(Constants.ARM_LIMIT_UP);
+    // armLimitDown = new DigitalInput(Constants.ARM_LIMIT_DOWN);
 
   }
 
@@ -67,7 +64,6 @@ public class ControlPanelSubsystem extends SubsystemBase {
       return false;
   }
 
-
   public void setArmBoolean() {
     armPlacement = !armPlacement;
   }
@@ -78,25 +74,23 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
   public void moveArm() {
     if (armPlacement == true && !getLimitRev()) {
-        armMotor.set(ControlMode.PercentOutput, -1.0);
+      armMotor.set(ControlMode.PercentOutput, -1.0);
     } else if (armPlacement == false && !getLimitFwd()) {
-        armMotor.set(ControlMode.PercentOutput, 1.0);
-    }
-      else
-        stopArm();
-    }
+      armMotor.set(ControlMode.PercentOutput, 1.0);
+    } else
+      stopArm();
+  }
 
   public void stopArm() {
     armMotor.set(ControlMode.PercentOutput, 0.0);
   }
 
-
   @Override
   public void periodic() {
-    //SmartDashboard.putBoolean("Forward Limit Switch", getLimitFwd());
-    //SmartDashboard.putBoolean("Reverse Limit Switch", getLimitRev());
+    // SmartDashboard.putBoolean("Forward Limit Switch", getLimitFwd());
+    // SmartDashboard.putBoolean("Reverse Limit Switch", getLimitRev());
 
-    //SmartDashboard.putBoolean("Arm Placement", getArmBoolean());
+    // SmartDashboard.putBoolean("Arm Placement", getArmBoolean());
     // This method will be called once per scheduler run
   }
 }

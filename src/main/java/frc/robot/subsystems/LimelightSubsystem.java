@@ -21,7 +21,7 @@ public class LimelightSubsystem extends SubsystemBase {
   private int cameraMode, lightMode, validTarget;
   private double targetSkew; // Skew of the limelight target from 0
   private double limeError = 0.1; // Acceptable error from the limelight
-  private double limelightAngleOffset = 27.5 /*12.95*/; // Angle of the limelight from flat ground
+  private double limelightAngleOffset = 27.5 /* 12.95 */; // Angle of the limelight from flat ground
   private double targetHeight = 90.5;
   private double robotHeight = 21.0;
   private double degreesToRadians = Math.PI / 180;
@@ -39,7 +39,10 @@ public class LimelightSubsystem extends SubsystemBase {
     camMode = table.getEntry("camMode");
     ledMode = table.getEntry("ledMode");
 
-    leftMin = -90.0; leftMax = -65.0; rightMax = -35; rightMin = 0;
+    leftMin = -90.0;
+    leftMax = -65.0;
+    rightMax = -35;
+    rightMin = 0;
   }
 
   @Override
@@ -65,37 +68,35 @@ public class LimelightSubsystem extends SubsystemBase {
    */
   public double getDistance() {
     return (targetHeight - robotHeight) / Math.tan((yOffsetAngle + limelightAngleOffset) * degreesToRadians);
-    //return yOffsetAngle;
+    // return yOffsetAngle;
   }
 
-  public double getLimelightOffsetAngle(double distance){
+  public double getLimelightOffsetAngle(double distance) {
     return Math.atan((targetHeight - robotHeight) / distance) - yOffsetAngle;
   }
 
-  public double getTargetSkew(){
+  public double getTargetSkew() {
     return targetSkew;
   }
 
-  public double getLeftSkew(){
+  public double getLeftSkew() {
     return 90 - Math.abs(getTargetSkew());
   }
 
-  public boolean isRight(){
+  public boolean isRight() {
     double ts = Math.abs(getTargetSkew());
     if (ts < 45.0 && ts > 0.0) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
 
-  public boolean isLeft(){
+  public boolean isLeft() {
     double ts = getTargetSkew();
     if (ts > -90 && ts < -45) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
@@ -140,7 +141,7 @@ public class LimelightSubsystem extends SubsystemBase {
    * 
    */
   public double getXOffsetAngle() {
-      return xOffsetAngle + limeError;
+    return xOffsetAngle + limeError;
   }
 
   /*
@@ -156,4 +157,3 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
 }
-
