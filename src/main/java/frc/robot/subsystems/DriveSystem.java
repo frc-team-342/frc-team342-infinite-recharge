@@ -149,15 +149,13 @@ public class DriveSystem extends SubsystemBase {
     }
   }
 
-  /**
-   * please dont use this yet.
-   * 
-   * @return certainly not what you want it to
-   */
   public MecanumDriveWheelSpeeds getWheelSpeeds(){
     return new MecanumDriveWheelSpeeds(
-      encoderL1.getVelocity(), encoderR1.getVelocity(),
-      encoderL2.getVelocity(), encoderR2.getVelocity());
+      (encoderL1.getVelocity() * (Math.PI * 0.2032)) / 60,
+      (encoderR1.getVelocity() * (Math.PI * 0.2032)) / 60,
+      (encoderL2.getVelocity() * (Math.PI * 0.2032)) / 60,
+      (encoderR2.getVelocity() * (Math.PI * 0.2032)) / 60
+    );
   }
 
   public DifferentialDriveWheelSpeeds getDifferentialWheelSpeeds() {
