@@ -162,8 +162,8 @@ public class DriveSystem extends SubsystemBase {
 
   public DifferentialDriveWheelSpeeds getDifferentialWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(
-      (encoderL2.getVelocity() * (Math.PI * 0.2032) / 60), // uhh oof ouch owie 
-      (encoderR2.getVelocity() * (Math.PI * 0.2032) / 60) // converts rpm to m/s by multiplying by circumference and dividing by 60
+      (encoderL2.getVelocity() * (Math.PI * 0.2032)) / 60, // uhh oof ouch owie 
+      (encoderR2.getVelocity() * (Math.PI * 0.2032)) / 60 // converts rpm to m/s by multiplying by circumference and dividing by 60
     );
   }
 
