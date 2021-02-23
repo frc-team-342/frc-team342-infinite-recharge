@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -227,19 +228,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    TrajectoryConfig config = new TrajectoryConfig(
-      Constants.kMaxSpeedMetersPerSecond, 
-      Constants.kMaxAccelerationMetersPerSecondSquared
-    ).setKinematics(Constants.kDriveKinematics);
-
-    // TODO: add actual waypoints for the trajectory
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, new Rotation2d(0)), 
-      List.of(), 
-      new Pose2d(0, 0, new Rotation2d(0)), 
-      config
-    ); 
-
     DifferentialDriveVoltageConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
       new SimpleMotorFeedforward(
         Constants.ksVolts, 
@@ -250,6 +238,24 @@ public class RobotContainer {
       10 // magic numbers babey
     );
 
+    TrajectoryConfig config = new TrajectoryConfig(
+      Constants.kMaxSpeedMetersPerSecond, 
+      Constants.kMaxAccelerationMetersPerSecondSquared
+    ).setKinematics(Constants.kDriveKinematics)
+    .addConstraint(voltageConstraint);
+
+    // TODO: add actual waypoints for the trajectory
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0, 0, new Rotation2d(0)), 
+      List.of(
+        new Translation2d(1, 1),
+        new Translation2d(2, -1)
+      ), 
+      new Pose2d(3, 0, new Rotation2d(0)), 
+      config
+    ); 
+
+    
     RamseteCommand ramsete = new RamseteCommand(
       trajectory, 
       driveSystem::getPose2d, 
@@ -287,7 +293,8 @@ public class RobotContainer {
       driveSystem
     ); */
 
-    return ramsete;
+    driveSystem.resetOdometry(trajectory.getInitialPose());
+    return ramsete.andThen(() -> driveSystem.mecanumDriveVolts(0, 0));
     // return trajectoryCommand.andThen(() -> driveSystem.stopDrive());
   }
 
