@@ -31,15 +31,15 @@ public final class Constants {
     public static final double kaVoltsSecondsSquaredPerMeter = 0.389;
     public static final double kPDriveVel = 0.00289;
     public static final double kTrackWidthMeters = (23.0 / 12.0) / 3.28;
-    public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+    public static final double kMaxSpeedMetersPerSecond = 1;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 1;
 
     // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
 
     // Mecanum Kinematics Values
-    public static final MecanumDriveKinematics kDriveKinematics = new MecanumDriveKinematics(Constants.m_frontLeft, Constants.m_frontRight, Constants.m_backLeft, Constants.m_backRight);
+    //public static final MecanumDriveKinematics kDriveKinematics = new MecanumDriveKinematics(Constants.m_frontLeft, Constants.m_frontRight, Constants.m_backLeft, Constants.m_backRight);
     public static final DifferentialDriveKinematics kDifferentialKinematics = new DifferentialDriveKinematics(kTrackWidthMeters);
     private static final double translationXMeters = 0.2604; // Distance of wheel from center of robot moving to the front
     private static final double translationYMeters = 0.2668; // Distance of wheel from center of robot moving to the left

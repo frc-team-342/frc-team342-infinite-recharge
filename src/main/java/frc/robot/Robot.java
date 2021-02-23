@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
     intakeAndOutake = Factory.getIntakeOutake();
 
     driveWithJoy = new DriveWithJoystick();
-    autoDrive = new Autonomous();
+    autoDrive = m_robotContainer.getAutonomousCommand();
     driveWithTargeting = new DriveWithTargeting();
 
 

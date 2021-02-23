@@ -241,7 +241,7 @@ public class RobotContainer {
     TrajectoryConfig config = new TrajectoryConfig(
       Constants.kMaxSpeedMetersPerSecond, 
       Constants.kMaxAccelerationMetersPerSecondSquared
-    ).setKinematics(Constants.kDriveKinematics)
+    ).setKinematics(Constants.kDifferentialKinematics)
     .addConstraint(voltageConstraint);
 
     // TODO: add actual waypoints for the trajectory

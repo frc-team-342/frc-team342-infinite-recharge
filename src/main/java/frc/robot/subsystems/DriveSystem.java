@@ -180,8 +180,8 @@ public class DriveSystem extends SubsystemBase {
   public void mecanumDriveVolts(double leftVolts, double rightVolts){
     motorLeft1.setVoltage(leftVolts);
     motorLeft2.setVoltage(leftVolts);
-    motorRight1.setVoltage(rightVolts);
-    motorRight2.setVoltage(rightVolts);
+    motorRight1.setVoltage(-rightVolts);
+    motorRight2.setVoltage(-rightVolts);
 
     mecanumDrive.feed();
   }
