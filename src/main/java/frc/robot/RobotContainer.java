@@ -13,14 +13,18 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.RotateToAngle;
@@ -235,6 +239,33 @@ public class RobotContainer {
       new Pose2d(0, 0, new Rotation2d(0)), 
       config
     ); 
+
+    DifferentialDriveVoltageConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
+      new SimpleMotorFeedforward(
+        Constants.ksVolts, 
+        Constants.kvVoltsSecondsPerMeter, 
+        Constants.kaVoltsSecondsSquaredPerMeter
+      ), 
+      Constants.kDifferentialKinematics, 
+      10 // magic numbers babey
+    );
+
+    RamseteCommand ramsete = new RamseteCommand(
+      trajectory, 
+      driveSystem::getPose2d, 
+      new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta), 
+      new SimpleMotorFeedforward(
+        Constants.ksVolts, 
+        Constants.kvVoltsSecondsPerMeter, 
+        Constants.kaVoltsSecondsSquaredPerMeter
+      ),
+      Constants.kDifferentialKinematics, 
+      driveSystem::getDifferentialWheelSpeeds, 
+      new PIDController(Constants.kPDriveVel, 0, 0), 
+      new PIDController(Constants.kPDriveVel, 0, 0), 
+      driveSystem::mecanumDriveVolts, 
+      driveSystem
+    );
     
     // TODO: figure out magic numbers for the PID controllers and add them to constants
     /*
@@ -256,7 +287,7 @@ public class RobotContainer {
       driveSystem
     ); */
 
-    return auto;
+    return ramsete;
     // return trajectoryCommand.andThen(() -> driveSystem.stopDrive());
   }
 

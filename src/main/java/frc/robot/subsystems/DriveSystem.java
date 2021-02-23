@@ -7,14 +7,18 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.GroupMotorControllers;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 
 import com.revrobotics.CANSparkMax;
+
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.MecanumDriveWheelSpeeds;
@@ -145,9 +149,22 @@ public class DriveSystem extends SubsystemBase {
     }
   }
 
+  /**
+   * please dont use this yet.
+   * 
+   * @return certainly not what you want it to
+   */
   public MecanumDriveWheelSpeeds getWheelSpeeds(){
-    return new MecanumDriveWheelSpeeds(encoderL1.getVelocity(), encoderR1.getVelocity(),
-       encoderL2.getVelocity(), encoderR2.getVelocity());
+    return new MecanumDriveWheelSpeeds(
+      encoderL1.getVelocity(), encoderR1.getVelocity(),
+      encoderL2.getVelocity(), encoderR2.getVelocity());
+  }
+
+  public DifferentialDriveWheelSpeeds getDifferentialWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(
+      (encoderL2.getVelocity() * (Math.PI * 0.2032) / 60), // uhh oof ouch owie 
+      (encoderR2.getVelocity() * (Math.PI * 0.2032) / 60) // converts rpm to m/s by multiplying by circumference and dividing by 60
+    );
   }
 
   public void zeroGyro() {
