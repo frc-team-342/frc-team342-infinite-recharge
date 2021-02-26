@@ -18,13 +18,28 @@ public class Autonomous extends SequentialCommandGroup {
    */
   public Autonomous() {
 
-
+    
     super(
+    /*  
       new AutoMove(0.45).withTimeout(0.8), 
       new RotateToAngle(-135.0),
       new AutoTarget().withTimeout(2.0),
       new LaunchWithButton()
-      ); 
+    */
+    
+      new AutoMove(0.55).withTimeout(1.4),
+      new RotateToAngle(90.0),
+      new AutoMove(0.55).withTimeout(1.0),
+      new RotateToAngle(180.0),
+      new AutoTarget().withTimeout(0.5),
+      //TODO: figure out how long it take to shoot three
+      new LaunchWithButton().withTimeout(5.0),
+      new RotateToAngle(350.0),
+      new AutoMove(-0.45).withTimeout(0.4)
+    
+      
+
+    ); 
       
 
 
