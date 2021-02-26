@@ -38,6 +38,9 @@ public final class Constants {
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
 
+    // (1, 1) on field is (0.762, 0.762) in meters
+    public static final double fieldUnitsToMeters = 0.762;
+
     // Mecanum Kinematics Values
     //public static final MecanumDriveKinematics kDriveKinematics = new MecanumDriveKinematics(Constants.m_frontLeft, Constants.m_frontRight, Constants.m_backLeft, Constants.m_backRight);
     public static final DifferentialDriveKinematics kDifferentialKinematics = new DifferentialDriveKinematics(kTrackWidthMeters);
