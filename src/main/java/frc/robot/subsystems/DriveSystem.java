@@ -116,7 +116,7 @@ public class DriveSystem extends SubsystemBase {
     NavX = new AHRS();
     rotation2d = new Rotation2d(NavX.getAngle() * (Math.PI / 180));
     m_odometry = new MecanumDriveOdometry(kDriveKinematics, rotation2d);
-    d_odometry = new DifferentialDriveOdometry(rotation2d, getPose2d());
+    d_odometry = new DifferentialDriveOdometry(rotation2d);
   }
 
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
@@ -177,7 +177,7 @@ public class DriveSystem extends SubsystemBase {
   }
 
   public Pose2d getPose2d(){
-    return d_odometry.getPoseMeters();
+    return m_odometry.getPoseMeters();
   }
 
   public void mecanumDriveVolts(double leftVolts, double rightVolts){
@@ -195,7 +195,7 @@ public class DriveSystem extends SubsystemBase {
     encoderR1.setPosition(0);
     encoderR2.setPosition(0);
     m_odometry.resetPosition(pose, rotation2d);
-    d_odometry.resetPosition(pose, rotation2d);
+    //d_odometry.resetPosition(pose, rotation2d);
   }
 
   public void setPID(CANSparkMax motor) {
@@ -295,7 +295,7 @@ public class DriveSystem extends SubsystemBase {
   public void periodic() {
     mecanumDrive.feed();
     //m_odometry.update(rotation2d, getWheelSpeeds());
-    d_odometry.update(rotation2d, encoderL2.getPosition(), encoderR2.getPosition());
+    m_odometry.update(rotation2d, getWheelSpeeds());
     // This method will be called once per scheduler run
   }
 
