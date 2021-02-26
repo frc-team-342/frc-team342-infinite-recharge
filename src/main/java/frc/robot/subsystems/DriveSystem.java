@@ -296,6 +296,10 @@ public class DriveSystem extends SubsystemBase {
     mecanumDrive.feed();
     //m_odometry.update(rotation2d, getWheelSpeeds());
     d_odometry.update(rotation2d, encoderL2.getPosition(), encoderR2.getPosition());
+
+    // updates rotation2d every loop
+    rotation2d = Rotation2d.fromDegrees(NavX.getYaw());
+  
     // This method will be called once per scheduler run
   }
 
