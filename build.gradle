@@ -1,4 +1,4 @@
 plugins {
-	id "edu.wpi.first.GradleRIO" version "2020.2.2" apply false
+	id "edu.wpi.first.GradleRIO" version "2021.2.2" apply false
 	id "java"
 }
