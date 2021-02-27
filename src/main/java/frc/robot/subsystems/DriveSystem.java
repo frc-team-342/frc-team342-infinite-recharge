@@ -14,6 +14,7 @@ import com.revrobotics.CANPIDController;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -39,6 +40,9 @@ public class DriveSystem extends SubsystemBase {
   public CANEncoder encoderL2;
   public CANEncoder encoderR1;
   public CANEncoder encoderR2;
+
+  private SpeedControllerGroup m_leftMotors;
+  private SpeedControllerGroup m_rightMotors;
 
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
 
@@ -111,6 +115,10 @@ public class DriveSystem extends SubsystemBase {
     encoderR1 = motorRight1.getEncoder();
     encoderR2 = motorRight2.getEncoder(); 
 
+    // Motors controller groups to be used for driving the robot as a tank
+    m_leftMotors = new SpeedControllerGroup(motorLeft1, motorLeft2);
+    m_rightMotors = new SpeedControllerGroup(motorRight1, motorRight2);
+
     mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
     NavX = new AHRS();
     m_odometry = new MecanumDriveOdometry(kDriveKinematics, NavX.getRotation2d());
@@ -168,6 +176,7 @@ public class DriveSystem extends SubsystemBase {
 
   public void zeroGyro() {
     NavX.zeroYaw();
+    NavX.reset();
   }
 
   public double getHeading(){
@@ -179,21 +188,22 @@ public class DriveSystem extends SubsystemBase {
   }
 
   public void mecanumDriveVolts(double leftVolts, double rightVolts){
-    motorLeft1.setVoltage(leftVolts);
-    motorLeft2.setVoltage(leftVolts);
-    motorRight1.setVoltage(-rightVolts);
-    motorRight2.setVoltage(-rightVolts);
-
+    m_leftMotors.setVoltage(leftVolts);
+    m_rightMotors.setVoltage(-rightVolts);
     mecanumDrive.feed();
   }
 
   public void resetOdometry(Pose2d pose) {
+    resetEncoders();
+    m_odometry.resetPosition(pose, NavX.getRotation2d());
+    d_odometry.resetPosition(pose, NavX.getRotation2d());
+  }
+
+  public void resetEncoders(){
     encoderL1.setPosition(0);
     encoderL2.setPosition(0);
     encoderR1.setPosition(0);
     encoderR2.setPosition(0);
-    m_odometry.resetPosition(pose, NavX.getRotation2d());
-    d_odometry.resetPosition(pose, NavX.getRotation2d());
   }
 
   public void setPID(CANSparkMax motor) {
@@ -293,7 +303,7 @@ public class DriveSystem extends SubsystemBase {
   public void periodic() {
     mecanumDrive.feed();
     //m_odometry.update(NavX.getRotation2d(), getWheelSpeeds());
-    d_odometry.update(NavX.getRotation2d(), encoderL2.getPosition(), encoderR2.getPosition());
+    d_odometry.update(NavX.getRotation2d(), encoderL1.getPosition(), encoderR1.getPosition());
 
     // updates NavX.getRotation2d() every loop
     //rotation2d = Rotation2d.fromDegrees(NavX.getYaw());
