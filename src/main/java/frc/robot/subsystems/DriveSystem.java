@@ -122,7 +122,7 @@ public class DriveSystem extends SubsystemBase {
     mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
     NavX = new AHRS();
     m_odometry = new MecanumDriveOdometry(kDriveKinematics, NavX.getRotation2d());
-    d_odometry = new DifferentialDriveOdometry(NavX.getRotation2d(), getPose2d());
+    d_odometry = new DifferentialDriveOdometry(NavX.getRotation2d(), new Pose2d(0.0, 0.0, new Rotation2d()));
   }
 
   public void Drive(double xSpeed, double ySpeed, double zRotation) {

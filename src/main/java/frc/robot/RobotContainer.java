@@ -273,7 +273,6 @@ public class RobotContainer {
       driveSystem
     );
     
-    // TODO: figure out magic numbers for the PID controllers and add them to constants
     /*
     MecanumControllerCommand trajectoryCommand = new MecanumControllerCommand(
       trajectory, 
