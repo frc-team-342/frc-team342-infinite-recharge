@@ -15,11 +15,17 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LimelightSubsystem extends SubsystemBase {
-  private NetworkTable table;
-  private NetworkTableEntry tv, ty, tx, camMode, ledMode;
-  private double yOffsetAngle, xOffsetAngle;
+  private NetworkTable table; // Network table for limelight values
+  private NetworkTableEntry tv, ty, tx, ts, camMode, ledMode;
+  private double yOffsetAngle, xOffsetAngle; // Field of view of the limelight
   private int cameraMode, lightMode, validTarget;
-  private double limeError = 2.5;
+  private double targetSkew; // Skew of the limelight target from 0
+  private double limeError = 0.1; // Acceptable error from the limelight
+  private double limelightAngleOffset = 27.0 /*12.95*/; // Angle of the limelight from flat ground
+  private double targetHeight = 90.5;
+  private double robotHeight = 21.0;
+  private double degreesToRadians = Math.PI / 180;
+  private double leftMax, leftMin, rightMax, rightMin;
 
   /**
    * Creates a new LimelightSubsystem.
@@ -29,8 +35,11 @@ public class LimelightSubsystem extends SubsystemBase {
     tv = table.getEntry("tv");
     ty = table.getEntry("ty");
     tx = table.getEntry("tx");
+    ts = table.getEntry("ts");
     camMode = table.getEntry("camMode");
     ledMode = table.getEntry("ledMode");
+
+    leftMin = -90.0; leftMax = -65.0; rightMax = -35; rightMin = 0;
   }
 
   @Override
@@ -39,10 +48,15 @@ public class LimelightSubsystem extends SubsystemBase {
     validTarget = tv.getNumber(0).intValue();
     yOffsetAngle = ty.getDouble(0.0);
     xOffsetAngle = tx.getDouble(0.0);
+    targetSkew = ts.getDouble(0.0);
     cameraMode = camMode.getNumber(0).intValue();
     lightMode = ledMode.getNumber(0).intValue();
 
-    SmartDashboard.putNumber("Limelight Distance", getDistance());
+    SmartDashboard.putNumber("Distance from Target: ", getDistance());
+    SmartDashboard.putNumber("Target Skew: ", getTargetSkew());
+    SmartDashboard.putNumber("X Offset: ", getXOffsetAngle());
+    SmartDashboard.putBoolean("Skew Left", isLeft());
+    SmartDashboard.putBoolean("Skew Right", isRight());
   }
 
   /*
@@ -50,7 +64,40 @@ public class LimelightSubsystem extends SubsystemBase {
    * 
    */
   public double getDistance() {
-    return (90.0 - 21.125) / Math.tan((yOffsetAngle + 15.0) * Math.PI / 180);
+    return (targetHeight - robotHeight) / Math.tan((yOffsetAngle + limelightAngleOffset) * degreesToRadians);
+    //return yOffsetAngle;
+  }
+
+  public double getLimelightOffsetAngle(double distance){
+    return Math.atan((targetHeight - robotHeight) / distance) - yOffsetAngle;
+  }
+
+  public double getTargetSkew(){
+    return targetSkew;
+  }
+
+  public double getLeftSkew(){
+    return 90 - Math.abs(getTargetSkew());
+  }
+
+  public boolean isRight(){
+    double ts = Math.abs(getTargetSkew());
+    if (ts < 45.0 && ts > 0.0) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  public boolean isLeft(){
+    double ts = getTargetSkew();
+    if (ts > -90 && ts < -45) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
   /*
@@ -58,7 +105,7 @@ public class LimelightSubsystem extends SubsystemBase {
    * 
    */
   public double getXOffset() {
-    return getDistance() * (Math.tan(xOffsetAngle * Math.PI / 180));
+    return getDistance() * (Math.tan(xOffsetAngle * degreesToRadians));
   }
 
   /*

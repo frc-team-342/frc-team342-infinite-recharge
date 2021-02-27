@@ -38,11 +38,6 @@ import frc.robot.commands.LockWinches;
 import frc.robot.commands.ManualControlPanel;
 import frc.robot.commands.MoveArm;
 import frc.robot.commands.ReverseIntake;
-
-
-
-import frc.robot.commands.ShootWithButton;
-
 import frc.robot.subsystems.IntakeAndOutake;
 
 
