@@ -58,7 +58,6 @@ public class DriveSystem extends SubsystemBase {
   private MecanumDriveKinematics kDriveKinematics;
   private final MecanumDriveOdometry m_odometry;
   private final DifferentialDriveOdometry d_odometry;
-  private Rotation2d rotation2d;
 
   /**
    * Creates a new DriveSystem.
@@ -107,16 +106,15 @@ public class DriveSystem extends SubsystemBase {
     setPID(motorRight1);
     setPID(motorRight2);
 
-    encoderL1 = new CANEncoder(motorLeft1);
-    encoderL2 = new CANEncoder(motorLeft2);
-    encoderR1 = new CANEncoder(motorRight1);
-    encoderR2 = new CANEncoder(motorRight2); 
+    encoderL1 = motorLeft1.getEncoder();
+    encoderL2 = motorLeft2.getEncoder();
+    encoderR1 = motorRight1.getEncoder();
+    encoderR2 = motorRight2.getEncoder(); 
 
     mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
     NavX = new AHRS();
-    rotation2d = new Rotation2d(NavX.getAngle() * (Math.PI / 180));
-    m_odometry = new MecanumDriveOdometry(kDriveKinematics, rotation2d);
-    d_odometry = new DifferentialDriveOdometry(rotation2d, getPose2d());
+    m_odometry = new MecanumDriveOdometry(kDriveKinematics, NavX.getRotation2d());
+    d_odometry = new DifferentialDriveOdometry(NavX.getRotation2d(), getPose2d());
   }
 
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
@@ -173,7 +171,7 @@ public class DriveSystem extends SubsystemBase {
   }
 
   public double getHeading(){
-    return rotation2d.getDegrees();
+    return NavX.getRotation2d().getDegrees();
   }
 
   public Pose2d getPose2d(){
@@ -194,8 +192,8 @@ public class DriveSystem extends SubsystemBase {
     encoderL2.setPosition(0);
     encoderR1.setPosition(0);
     encoderR2.setPosition(0);
-    m_odometry.resetPosition(pose, rotation2d);
-    d_odometry.resetPosition(pose, rotation2d);
+    m_odometry.resetPosition(pose, NavX.getRotation2d());
+    d_odometry.resetPosition(pose, NavX.getRotation2d());
   }
 
   public void setPID(CANSparkMax motor) {
@@ -294,11 +292,11 @@ public class DriveSystem extends SubsystemBase {
   @Override
   public void periodic() {
     mecanumDrive.feed();
-    //m_odometry.update(rotation2d, getWheelSpeeds());
-    d_odometry.update(rotation2d, encoderL2.getPosition(), encoderR2.getPosition());
+    //m_odometry.update(NavX.getRotation2d(), getWheelSpeeds());
+    d_odometry.update(NavX.getRotation2d(), encoderL2.getPosition(), encoderR2.getPosition());
 
-    // updates rotation2d every loop
-    rotation2d = Rotation2d.fromDegrees(NavX.getYaw());
+    // updates NavX.getRotation2d() every loop
+    //rotation2d = Rotation2d.fromDegrees(NavX.getYaw());
   
     // This method will be called once per scheduler run
   }
