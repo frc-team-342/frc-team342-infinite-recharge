@@ -1,0 +1,48 @@
+apply plugin: "edu.wpi.first.GradleRIO"
+apply plugin: "java"
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+deploy {
+    targets {
+        roboRIO("roborio") {
+            team = frc.getTeamOrDefault(342)
+        }
+    }
+    artifacts {
+        frcJavaArtifact("frcJava") {
+           targets << "roborio"
+           debug = frc.getDebugOrDefault(false)
+        }
+        
+        // Deploy additional files from src/main/deploy
+        fileTreeArtifact('frcStaticFileDeploy') {
+            targets << "roborio"
+            directory = '/home/lvuser/deploy'
+	        
+            files = fileTree(dir: 'src/main/deploy')      
+        }
+    }
+}
+
+def includeDesktopSupport = false
+
+dependencies {
+    implementation wpi.deps.wpilib()
+    nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
+
+    implementation wpi.deps.vendor.java()
+    nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
+
+    testImplementation 'junit:junit:4.12'
+
+    simulation wpi.deps.sim.gui(wpi.platforms.desktop, false)
+}
+
+jar {
+	from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest("frc.robot.Main")
+}

@@ -1,0 +1,54 @@
+apply plugin: 'jaci.gradle.EmbeddedTools'
+
+deploy {
+    targets {
+        target("rpi") {
+            directory = "/home/pi/deploy"
+
+            locations {
+                ssh {
+                   // this language is incomprehensibly stupid
+                   address = findProperty((String) "piAddress") ?: "10.3.42.3"
+                   user = findProperty((String) "piUser") ?: "pi"
+                   password = findProperty((String) "piPassword") ?: "raspberry"
+                }
+            }
+        }
+    }
+
+    artifacts {
+        all {
+            targets << "rpi"
+        }
+
+        // Deploy python files to pi
+        fileTreeArtifact("pythonFileDeploy") {
+            // Set filesystem to read-write pre-deploy
+            predeploy << { execute '/usr/bin/sudo /bin/mount -o remount,rw /boot ' }
+            predeploy << { execute '/usr/bin/sudo /bin/mount -o remount,rw / ' }
+
+            files = fileTree(dir: "python/")
+
+            // Set filesystem back to read-only after deploy
+            postdeploy << { execute '/usr/bin/sudo /bin/mount -o remount,ro / ' }
+            postdeploy << { execute '/usr/bin/sudo /bin/mount -o remount,ro /boot ' }
+        }
+
+        commandArtifact("killPrevious") {
+            command = "p=\$(pidof python3);" + // Get PID of last python3 process
+            "if [ ! -z \"\$p\" ] then" + // Make sure p is not empty
+            "kill \$p;" + // Kill process
+            "fi"
+        }
+
+        commandArtifact("pythonFileRun") {
+            // Requires files to be deployed and previous code killed to run
+            // run ./gradlew coprocessor:tasks --all to see task names
+            dependsOn("deployPythonFileDeployRpi")
+            dependsOn("deployKillPreviousRpi")
+            
+            // Run the code
+            command = "echo Hello &"
+        }
+    }    
+}
