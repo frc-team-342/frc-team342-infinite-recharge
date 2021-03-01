@@ -7,9 +7,10 @@ deploy {
 
             locations {
                 ssh {
-                   address = "10.3.42.3"
-                   user = "pi" 
-                   password = "raspberry"
+                   // this language is incomprehensibly stupid
+                   address = findProperty((String) "piAddress") ?: "10.3.42.3"
+                   user = findProperty((String) "piUser") ?: "pi"
+                   password = findProperty((String) "piPassword") ?: "raspberry"
                 }
             }
         }
