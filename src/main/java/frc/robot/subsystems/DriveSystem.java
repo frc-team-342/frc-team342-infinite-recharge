@@ -162,18 +162,17 @@ public class DriveSystem extends SubsystemBase {
 
   public MecanumDriveWheelSpeeds getWheelSpeeds(){
     return new MecanumDriveWheelSpeeds(
-      (encoderL1.getVelocity() * (Math.PI * 0.2032)) / 60,
-      (encoderR1.getVelocity() * (Math.PI * 0.2032)) / 60,
-      (encoderL2.getVelocity() * (Math.PI * 0.2032)) / 60,
-      (encoderR2.getVelocity() * (Math.PI * 0.2032)) / 60
+      (encoderL1.getVelocity() * (Math.PI * 0.2032)) / (60 * 12.75),
+      (encoderR1.getVelocity() * (Math.PI * 0.2032)) / (60 * 12.75),
+      (encoderL2.getVelocity() * (Math.PI * 0.2032)) / (60 * 12.75),
+      (encoderR2.getVelocity() * (Math.PI * 0.2032)) / (60 * 12.75)
     );
   }
 
   public DifferentialDriveWheelSpeeds getDifferentialWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(
-      (encoderL2.getVelocity() * (Math.PI * 0.2032)) / 60, // uhh oof ouch owie 
-      (encoderR2.getVelocity() * (Math.PI * 0.2032)) / 60 
-      
+      (encoderL2.getVelocity() /** (Math.PI * 0.2032)) / (60 * 12.75*/), // uhh oof ouch owie 
+      (encoderR2.getVelocity() /** (Math.PI * 0.2032)) / (60 * 12.75*/)
       /*encoderL2.getVelocity(), // uhh oof ouch owie 
       encoderR2.getVelocity()*/// converts rpm to m/s by multiplying by circumference and dividing by 60
     );
@@ -186,7 +185,7 @@ public class DriveSystem extends SubsystemBase {
   }
 
   public double getHeading(){
-    return NavX.getRotation2d().getDegrees();
+    return -NavX.getRotation2d().getDegrees();
   }
 
   public Pose2d getPose2d(){

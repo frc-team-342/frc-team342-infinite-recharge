@@ -51,7 +51,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer();
     
-    
     driveSystem = Factory.getDrive();
     lime = Factory.getLimelight();
     intakeAndOutake = Factory.getIntakeOutake();
@@ -60,13 +59,8 @@ public class Robot extends TimedRobot {
     autoDrive = m_robotContainer.getAutonomousCommand();
     driveWithTargeting = new DriveWithTargeting();
 
-
-
-
     // Commands
     climb = new ActivateTelescopes();
-
-
   }
 
   /**
@@ -111,9 +105,9 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     driveSystem.zeroGyro();
-    autoDrive.schedule();
     driveSystem.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d(0)));
 
+    autoDrive.schedule();
   }
 
   /**

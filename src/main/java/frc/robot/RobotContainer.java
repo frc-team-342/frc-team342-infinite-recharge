@@ -228,6 +228,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    double cvrt = Constants.fieldUnitsToMeters;
+
     DifferentialDriveVoltageConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
       new SimpleMotorFeedforward(
         Constants.ksVolts, 
@@ -248,10 +250,10 @@ public class RobotContainer {
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0, 0, new Rotation2d(0)), 
       List.of(
-        new Translation2d(1 * Constants.fieldUnitsToMeters, 1 * Constants.fieldUnitsToMeters),
-        new Translation2d(2 * Constants.fieldUnitsToMeters, -1 * Constants.fieldUnitsToMeters)
+        new Translation2d(1, 0),
+        new Translation2d(2, 0)
       ), 
-      new Pose2d(3 * Constants.fieldUnitsToMeters, 0, new Rotation2d(0)), 
+      new Pose2d(3, 0, new Rotation2d(0)), 
       config
     ); 
 
@@ -267,8 +269,8 @@ public class RobotContainer {
       ),
       Constants.kDifferentialKinematics, 
       driveSystem::getDifferentialWheelSpeeds, 
-      new PIDController(Constants.kPDriveVel, 0, 0), 
-      new PIDController(Constants.kPDriveVel, 0, 0), 
+      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
+      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
       driveSystem::mecanumDriveVolts, 
       driveSystem
     );

@@ -26,13 +26,20 @@ public final class Constants {
      */
 
     // Drive Characterization Values
-    public static final double ksVolts = 0.143;
-    public static final double kvVoltsSecondsPerMeter = 2.57;
-    public static final double kaVoltsSecondsSquaredPerMeter = 0.389;
-    public static final double kPDriveVel = 0.00289;
-    public static final double kTrackWidthMeters = (23.0 / 12.0) / 3.28;
-    public static final double kMaxSpeedMetersPerSecond = 3.0;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3.0;
+    //public static final double ksVolts = 0.143;
+    public static final double ksVolts = 0.167;
+    //public static final double kvVoltsSecondsPerMeter = 2.57;
+    public static final double kvVoltsSecondsPerMeter = 2.63;
+    //public static final double kaVoltsSecondsSquaredPerMeter = 0.389;
+    public static final double kaVoltsSecondsSquaredPerMeter = 0.425;
+    //public static final double kPDriveVel = 0.00289;
+    public static final double kPDriveVel = 0.581;
+    //public static final double kDDriveVel = 0.0;
+    public static final double kDDriveVel = 270.0;
+    //public static final double kTrackWidthMeters = (23.0 / 12.0) / 3.28;
+    public static final double kTrackWidthMeters = 1.772;
+    public static final double kMaxSpeedMetersPerSecond = 0.1;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 0.5;
 
     // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
     public static final double kRamseteB = 2;
