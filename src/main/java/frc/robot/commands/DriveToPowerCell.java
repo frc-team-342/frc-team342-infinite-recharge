@@ -10,21 +10,28 @@ import org.photonvision.PhotonPipelineResult;
 import org.photonvision.PhotonTrackedTarget;
 
 import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.IntakeAndOutake;
 import frc.robot.Factory;
 
 public class DriveToPowerCell extends CommandBase {
-  PhotonCamera camera;
   DriveSystem drive;
-  double angle;
+  IntakeAndOutake intake;
+  
+  PhotonCamera camera;
+  double angle; // degrees from center of robot
+  double distance;
 
   /** Creates a new DriveToPowerCell. */
   public DriveToPowerCell() {
-    camera = new PhotonCamera("photon");
+    camera = new PhotonCamera("photonvision");
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    drive = Factory.getDrive();
+    intake = Factory.getIntakeOutake();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -32,18 +39,27 @@ public class DriveToPowerCell extends CommandBase {
     PhotonPipelineResult result = camera.getLatestResult();
     if (result.hasTargets()) {
       PhotonTrackedTarget target = result.getBestTarget();
+      
+      // turn towards ball
       angle = target.getYaw();
-      // roboto, rotat e.
-      // rotato FASTER roboto
-      drive.autoRotate(angle); // please do not run this
+      drive.autoRotate(drive.getGyro() - angle); // autorotate takes field-relative degree, not robot
+      
+      // drive to ball
+      //drive.Drive(0.0, 0.0, 0.0);
+
+      // intake ball
+
     } else {
       // uhh spin?? uhhhh hm huh uhh
+      
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    drive.stopDrive();
+  }
 
   // Returns true when the command should end.
   @Override
