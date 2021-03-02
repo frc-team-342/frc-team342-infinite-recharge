@@ -123,6 +123,8 @@ public class DriveSystem extends SubsystemBase {
     NavX = new AHRS();
     m_odometry = new MecanumDriveOdometry(kDriveKinematics, NavX.getRotation2d());
     d_odometry = new DifferentialDriveOdometry(NavX.getRotation2d(), new Pose2d(0.0, 0.0, new Rotation2d()));
+
+    resetEncoders();
   }
 
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
@@ -170,13 +172,17 @@ public class DriveSystem extends SubsystemBase {
   public DifferentialDriveWheelSpeeds getDifferentialWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(
       (encoderL2.getVelocity() * (Math.PI * 0.2032)) / 60, // uhh oof ouch owie 
-      (encoderR2.getVelocity() * (Math.PI * 0.2032)) / 60 // converts rpm to m/s by multiplying by circumference and dividing by 60
+      (encoderR2.getVelocity() * (Math.PI * 0.2032)) / 60 
+      
+      /*encoderL2.getVelocity(), // uhh oof ouch owie 
+      encoderR2.getVelocity()*/// converts rpm to m/s by multiplying by circumference and dividing by 60
     );
   }
 
   public void zeroGyro() {
     NavX.zeroYaw();
     NavX.reset();
+    NavX.resetDisplacement();
   }
 
   public double getHeading(){
@@ -292,6 +298,10 @@ public class DriveSystem extends SubsystemBase {
     return accumError;
   }
 
+  public double getAvgEncoderDistance(){
+    return (encoderL1.getPosition() + encoderR1.getPosition()) / 2;
+  }
+
   public void stopDrive() {
     motorLeft1.stopMotor();
     motorLeft2.stopMotor();
@@ -304,6 +314,13 @@ public class DriveSystem extends SubsystemBase {
     mecanumDrive.feed();
     //m_odometry.update(NavX.getRotation2d(), getWheelSpeeds());
     d_odometry.update(NavX.getRotation2d(), encoderL1.getPosition(), encoderR1.getPosition());
+
+    SmartDashboard.putNumber("Heading: ", getHeading());
+    SmartDashboard.putNumber("Avg Encoder Distance: ", getAvgEncoderDistance());
+    SmartDashboard.putNumber("Pose X: ", getPose2d().getX());
+    SmartDashboard.putNumber("Pose Y: ", getPose2d().getY());
+    SmartDashboard.putNumber("Pose Rotation: ", getPose2d().getRotation().getDegrees());
+
 
     // updates NavX.getRotation2d() every loop
     //rotation2d = Rotation2d.fromDegrees(NavX.getYaw());
