@@ -162,17 +162,17 @@ public class DriveSystem extends SubsystemBase {
 
   public MecanumDriveWheelSpeeds getWheelSpeeds(){
     return new MecanumDriveWheelSpeeds(
-      (encoderL1.getVelocity() * (Math.PI * 0.2032)) / (60 * 12.75),
-      (encoderR1.getVelocity() * (Math.PI * 0.2032)) / (60 * 12.75),
-      (encoderL2.getVelocity() * (Math.PI * 0.2032)) / (60 * 12.75),
-      (encoderR2.getVelocity() * (Math.PI * 0.2032)) / (60 * 12.75)
+      (encoderL1.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * 12.75),
+      (encoderR1.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * 12.75),
+      (encoderL2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * 12.75),
+      (encoderR2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * 12.75)
     );
   }
 
   public DifferentialDriveWheelSpeeds getDifferentialWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(
-      (encoderL2.getVelocity() /** (Math.PI * 0.2032)) / (60 * 12.75*/), // uhh oof ouch owie 
-      (encoderR2.getVelocity() /** (Math.PI * 0.2032)) / (60 * 12.75*/)
+      (encoderL2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * 12.75), // uhh oof ouch owie 
+      (encoderR2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * 12.75)
       /*encoderL2.getVelocity(), // uhh oof ouch owie 
       encoderR2.getVelocity()*/// converts rpm to m/s by multiplying by circumference and dividing by 60
     );
@@ -209,6 +209,10 @@ public class DriveSystem extends SubsystemBase {
     encoderL2.setPosition(0);
     encoderR1.setPosition(0);
     encoderR2.setPosition(0);
+  }
+
+  public double getDistance(CANEncoder encoder){
+    return (encoder.getPosition() / Constants.gearRatio) * (Math.PI * Constants.wheelDiameterInMeters);
   }
 
   public void setPID(CANSparkMax motor) {
@@ -298,7 +302,7 @@ public class DriveSystem extends SubsystemBase {
   }
 
   public double getAvgEncoderDistance(){
-    return (encoderL1.getPosition() + encoderR1.getPosition()) / 2;
+    return (getDistance(encoderL1) + getDistance(encoderR1)) / 2;
   }
 
   public void stopDrive() {
@@ -312,7 +316,7 @@ public class DriveSystem extends SubsystemBase {
   public void periodic() {
     mecanumDrive.feed();
     //m_odometry.update(NavX.getRotation2d(), getWheelSpeeds());
-    d_odometry.update(NavX.getRotation2d(), encoderL1.getPosition(), encoderR1.getPosition());
+    d_odometry.update(NavX.getRotation2d(), getDistance(encoderL1), getDistance(encoderR1));
 
     SmartDashboard.putNumber("Heading: ", getHeading());
     SmartDashboard.putNumber("Avg Encoder Distance: ", getAvgEncoderDistance());

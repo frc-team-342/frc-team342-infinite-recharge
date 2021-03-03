@@ -32,12 +32,12 @@ public final class Constants {
     public static final double kvVoltsSecondsPerMeter = 2.63;
     //public static final double kaVoltsSecondsSquaredPerMeter = 0.389;
     public static final double kaVoltsSecondsSquaredPerMeter = 0.425;
-    //public static final double kPDriveVel = 0.00289;
-    public static final double kPDriveVel = 0.581;
-    //public static final double kDDriveVel = 0.0;
-    public static final double kDDriveVel = 270.0;
-    //public static final double kTrackWidthMeters = (23.0 / 12.0) / 3.28;
-    public static final double kTrackWidthMeters = 1.772;
+    public static final double kPDriveVel = 0.00289;
+    //public static final double kPDriveVel = 0.581;
+    public static final double kDDriveVel = 0.0;
+    //public static final double kDDriveVel = 270.0;
+    public static final double kTrackWidthMeters = (23.0 / 12.0) / 3.28;
+    //public static final double kTrackWidthMeters = 1.772;
     public static final double kMaxSpeedMetersPerSecond = 0.1;
     public static final double kMaxAccelerationMetersPerSecondSquared = 0.5;
 
@@ -47,6 +47,8 @@ public final class Constants {
 
     // (1, 1) on field is (0.762, 0.762) in meters
     public static final double fieldUnitsToMeters = 0.762;
+    public static final double gearRatio = 12.75;
+    public static final double wheelDiameterInMeters = 0.196900406504;
 
     // Mecanum Kinematics Values
     //public static final MecanumDriveKinematics kDriveKinematics = new MecanumDriveKinematics(Constants.m_frontLeft, Constants.m_frontRight, Constants.m_backLeft, Constants.m_backRight);
