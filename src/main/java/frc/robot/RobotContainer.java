@@ -225,8 +225,14 @@ public class RobotContainer {
     op_reverse_teleBtn.whenPressed(op_reverse_tele);
   }
 
-  public double getNavPoint(double x){
-    return ( (Math.sqrt( (88910000 * x) + 32469363) - 5681) / 8891);
+  public double getNavPoint(double navpoint){
+    if(Math.signum(navpoint) == -1.0){
+      return -(((Math.sqrt( (88910000 * Math.abs(navpoint)) + 32469363) - 5681) / 8891) * Constants.fieldUnitsToMeters);
+    }
+    else{
+      return ((Math.sqrt( (88910000 * navpoint) + 32469363) - 5681) / 8891) * Constants.fieldUnitsToMeters;
+    }
+    
   }
 
   /**
@@ -257,10 +263,10 @@ public class RobotContainer {
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0, 0, new Rotation2d(0)), 
       List.of(
-        new Translation2d(getNavPoint(1 * Constants.fieldUnitsToMeters), getNavPoint(1 * Constants.fieldUnitsToMeters)),
-        new Translation2d(getNavPoint(2 * Constants.fieldUnitsToMeters), -getNavPoint(1 * Constants.fieldUnitsToMeters))
+        new Translation2d(getNavPoint(1), getNavPoint(1)),
+        new Translation2d(getNavPoint(2), getNavPoint(-1))
       ), 
-      new Pose2d(getNavPoint(3 * Constants.fieldUnitsToMeters), 0, new Rotation2d(0)), 
+      new Pose2d(getNavPoint(3), 0, new Rotation2d(0)), 
       config
     ); 
 
