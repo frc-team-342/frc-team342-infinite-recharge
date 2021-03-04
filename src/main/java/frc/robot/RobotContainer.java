@@ -27,6 +27,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 
 import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.IntakeWithButton;
@@ -48,6 +50,7 @@ import frc.robot.commands.ManualControlPanel;
 import frc.robot.commands.MoveArm;
 import frc.robot.commands.ReverseIntake;
 import frc.robot.subsystems.IntakeAndOutake;
+
 
 
 /**
@@ -299,8 +302,18 @@ public class RobotContainer {
     ); */
 
     driveSystem.resetOdometry(trajectory.getInitialPose());
-    return ramsete.andThen(() -> driveSystem.mecanumDriveVolts(0, 0));
+    //return ramsete.andThen(() -> driveSystem.mecanumDriveVolts(0, 0));
     // return trajectoryCommand.andThen(() -> driveSystem.stopDrive());
+
+    return new ParallelRaceGroup(
+      ramsete.andThen(() -> driveSystem.mecanumDriveVolts(0, 0)),
+      new RunCommand(
+        () -> {
+          Factory.getIntakeOutake().intake();
+        },
+        Factory.getIntakeOutake()
+      )
+    );
   }
 
 }
