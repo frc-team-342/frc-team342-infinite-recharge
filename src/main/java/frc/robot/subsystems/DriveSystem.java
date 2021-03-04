@@ -96,9 +96,9 @@ public class DriveSystem extends SubsystemBase {
     motorRight1.setOpenLoopRampRate(ramp_rate);
     motorRight2.setOpenLoopRampRate(ramp_rate);
 
-    kP = 0.00294;
+    kP = Constants.kPDriveVel;
     kI = 0.0;
-    kD = 0.0;
+    kD = Constants.kDDriveVel;
     kIz = 0.0;
     kFF = 0.0; //0.000156
     kMaxOutput = 1;
@@ -162,17 +162,17 @@ public class DriveSystem extends SubsystemBase {
 
   public MecanumDriveWheelSpeeds getWheelSpeeds(){
     return new MecanumDriveWheelSpeeds(
-      (encoderL1.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * 12.75),
-      (encoderR1.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * 12.75),
-      (encoderL2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * 12.75),
-      (encoderR2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * 12.75)
+      (encoderL1.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio),
+      (encoderR1.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio),
+      (encoderL2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio),
+      (encoderR2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio)
     );
   }
 
   public DifferentialDriveWheelSpeeds getDifferentialWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(
-      (encoderL2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * 12.75), // uhh oof ouch owie 
-      (encoderR2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * 12.75)
+      (encoderL2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio), // uhh oof ouch owie 
+      (encoderR2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio)
       /*encoderL2.getVelocity(), // uhh oof ouch owie 
       encoderR2.getVelocity()*/// converts rpm to m/s by multiplying by circumference and dividing by 60
     );
