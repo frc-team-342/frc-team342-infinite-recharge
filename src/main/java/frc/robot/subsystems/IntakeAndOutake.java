@@ -209,6 +209,21 @@ public class IntakeAndOutake extends SubsystemBase {
     setShooterVelocity();
 
     //if(Math.abs(getShooterVelocity()) + error < targetVelocity && !sensor3.get()){
+    if(Math.abs(getShooterVelocity()) + error < errorReference && !sensor3.get()){
+      load2.set(ControlMode.PercentOutput, 0.0);
+      load1.set(ControlMode.PercentOutput, 0.0);
+    }
+    else{
+      load2.set(ControlMode.PercentOutput, speed2);
+      load1.set(ControlMode.PercentOutput, speed2);
+    }
+  }
+
+  public void outtakeWithDelay() {
+    powerCellCount();
+    setShooterVelocity();
+
+    //if(Math.abs(getShooterVelocity()) + error < targetVelocity && !sensor3.get()){
     if(Math.abs(getShooterVelocity()) + error < errorReference && !sensor3.get() && timer.get() < 0.5){
       load2.set(ControlMode.PercentOutput, 0.0);
       load1.set(ControlMode.PercentOutput, 0.0);
