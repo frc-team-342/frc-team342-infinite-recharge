@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.kinematics.MecanumDriveKinematics;
@@ -320,14 +321,15 @@ public class DriveSystem extends SubsystemBase {
   public void periodic() {
     mecanumDrive.feed();
     //m_odometry.update(NavX.getRotation2d(), getWheelSpeeds());
+    Translation2d translation = d_odometry.getPoseMeters().getTranslation();
     gyroAngle = Rotation2d.fromDegrees(getHeading());
     d_odometry.update(gyroAngle, getDistance(encoderL1), -getDistance(encoderR1));
 
     SmartDashboard.putNumber("Avg Encoder Distance: ", getAvgEncoderDistance());
-    SmartDashboard.putNumber("Pose Rotation: ", getPose2d().getRotation().getDegrees());
     SmartDashboard.putNumber("Left Encoder Distance: ", getDistance(encoderL1));
     SmartDashboard.putNumber("Right Encoder Distance: ", -getDistance(encoderR1));
-
+    SmartDashboard.putNumber("Translation X: ", translation.getX());
+    SmartDashboard.putNumber("Translation Y: ", translation.getY());
 
     // updates NavX.getRotation2d() every loop
     //rotation2d = Rotation2d.fromDegrees(NavX.getYaw());
