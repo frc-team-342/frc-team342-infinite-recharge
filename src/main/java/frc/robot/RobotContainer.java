@@ -116,7 +116,7 @@ public class RobotContainer {
 
   // Autonomous
   private Command auto;
-
+  private Trajectory trajectory;
   
 
   /**
@@ -232,7 +232,10 @@ public class RobotContainer {
     else{
       return ((Math.sqrt( (88910000 * navpoint) + 32469363) - 5681) / 8891) * Constants.fieldUnitsToMeters;
     }
-    
+  }
+
+  public Trajectory.State getSample(double time){
+    return trajectory.sample(time);
   }
 
   /**
@@ -260,13 +263,14 @@ public class RobotContainer {
     .addConstraint(voltageConstraint);
 
     // TODO: add actual waypoints for the trajectory
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+    trajectory = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0, 0, new Rotation2d(0)), 
       List.of(
-        new Translation2d(getNavPoint(1), getNavPoint(1)),
-        new Translation2d(getNavPoint(2), getNavPoint(-1))
+        // First point in the translation is the vertical position and second is the horizontal position
+        new Translation2d(getNavPoint(0.5), getNavPoint(0.5)),
+        new Translation2d(getNavPoint(1), getNavPoint(-0.5))
       ), 
-      new Pose2d(getNavPoint(3), 0, new Rotation2d(0)), 
+      new Pose2d(getNavPoint(1.5), 0, new Rotation2d(0)), 
       config
     ); 
 
@@ -288,28 +292,7 @@ public class RobotContainer {
       driveSystem
     );
     
-    /*
-    MecanumControllerCommand trajectoryCommand = new MecanumControllerCommand(
-      trajectory, 
-      driveSystem::getPose2d, 
-      feedforward, 
-      Constants.kDriveKinematics, 
-      xController, 
-      yController, 
-      thetaController, 
-      Constants.kMaxSpeedMetersPerSecond, 
-      new PIDController(0.00294, 0, 0), 
-      new PIDController(0.00294, 0, 0), 
-      new PIDController(0.00294, 0, 0), 
-      new PIDController(0.00294, 0, 0), 
-      driveSystem::getWheelSpeeds, 
-      driveSystem::mecanumDriveVolts, 
-      driveSystem
-    ); */
-
     driveSystem.resetOdometry(trajectory.getInitialPose());
-    //return ramsete.andThen(() -> driveSystem.mecanumDriveVolts(0, 0));
-    // return trajectoryCommand.andThen(() -> driveSystem.stopDrive());
 
     return new ParallelRaceGroup(
       ramsete.andThen(() -> driveSystem.mecanumDriveVolts(0, 0)),
@@ -321,5 +304,4 @@ public class RobotContainer {
       )
     );
   }
-
 }

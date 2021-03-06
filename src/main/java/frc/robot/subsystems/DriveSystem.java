@@ -56,6 +56,7 @@ public class DriveSystem extends SubsystemBase {
   private static final double voltage_comp = 12.0;
   private static final int current_limit = 60;
   private double accumError = 0.0;
+  private Rotation2d gyroAngle;
 
   private AHRS NavX;
   private MecanumDrive mecanumDrive;
@@ -121,10 +122,13 @@ public class DriveSystem extends SubsystemBase {
 
     mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
     NavX = new AHRS();
-    m_odometry = new MecanumDriveOdometry(kDriveKinematics, NavX.getRotation2d());
-    d_odometry = new DifferentialDriveOdometry(NavX.getRotation2d(), new Pose2d(0.0, 0.0, new Rotation2d()));
-
+    gyroAngle = Rotation2d.fromDegrees(-NavX.getAngle());
+    
+    // Encoders must be reset to 0 BEFORE constructing odometry objects.
+    zeroGyro();
     resetEncoders();
+    m_odometry = new MecanumDriveOdometry(kDriveKinematics, gyroAngle);
+    d_odometry = new DifferentialDriveOdometry(gyroAngle, new Pose2d(0.0, 0.0, new Rotation2d()));
   }
 
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
@@ -173,15 +177,15 @@ public class DriveSystem extends SubsystemBase {
     return new DifferentialDriveWheelSpeeds(
       (encoderL2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio), // uhh oof ouch owie 
       (encoderR2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio)
+      /*(encoderL2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio), // uhh oof ouch owie 
+      (encoderR2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio)*/
       /*encoderL2.getVelocity(), // uhh oof ouch owie 
       encoderR2.getVelocity()*/// converts rpm to m/s by multiplying by circumference and dividing by 60
     );
   }
 
   public void zeroGyro() {
-    NavX.zeroYaw();
     NavX.reset();
-    NavX.resetDisplacement();
   }
 
   public double getHeading(){
@@ -302,7 +306,7 @@ public class DriveSystem extends SubsystemBase {
   }
 
   public double getAvgEncoderDistance(){
-    return (getDistance(encoderL1) + getDistance(encoderR1)) / 2;
+    return (getDistance(encoderL1) + (-getDistance(encoderR1))) / 2;
   }
 
   public void stopDrive() {
@@ -316,13 +320,13 @@ public class DriveSystem extends SubsystemBase {
   public void periodic() {
     mecanumDrive.feed();
     //m_odometry.update(NavX.getRotation2d(), getWheelSpeeds());
-    d_odometry.update(NavX.getRotation2d(), getDistance(encoderL1), getDistance(encoderR1));
+    gyroAngle = Rotation2d.fromDegrees(getHeading());
+    d_odometry.update(gyroAngle, getDistance(encoderL1), -getDistance(encoderR1));
 
-    SmartDashboard.putNumber("Heading: ", getHeading());
     SmartDashboard.putNumber("Avg Encoder Distance: ", getAvgEncoderDistance());
-    SmartDashboard.putNumber("Pose X: ", getPose2d().getX());
-    SmartDashboard.putNumber("Pose Y: ", getPose2d().getY());
     SmartDashboard.putNumber("Pose Rotation: ", getPose2d().getRotation().getDegrees());
+    SmartDashboard.putNumber("Left Encoder Distance: ", getDistance(encoderL1));
+    SmartDashboard.putNumber("Right Encoder Distance: ", -getDistance(encoderR1));
 
 
     // updates NavX.getRotation2d() every loop

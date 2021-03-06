@@ -61,8 +61,9 @@ public class Robot extends TimedRobot {
 
     // Commands
     climb = new ActivateTelescopes();
-    driveSystem.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d(0.0)));
+
     driveSystem.zeroGyro();
+    driveSystem.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d()));
   }
 
   /**
@@ -97,7 +98,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     driveSystem.zeroGyro();
-    driveSystem.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d(0.0)));
+    driveSystem.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d()));
   }
 
   /**
@@ -106,6 +107,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    driveSystem.zeroGyro();
+    driveSystem.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d()));
     autoDrive.schedule();
   }
 

@@ -38,7 +38,7 @@ public final class Constants {
     //public static final double kDDriveVel = 270.0;
     public static final double kTrackWidthMeters = (23.0 / 12.0) / 3.28;
     //public static final double kTrackWidthMeters = 1.772;
-    public static final double kMaxSpeedMetersPerSecond = 0.5;
+    public static final double kMaxSpeedMetersPerSecond = 0.25;
     public static final double kMaxAccelerationMetersPerSecondSquared = 1.0;
 
     // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
