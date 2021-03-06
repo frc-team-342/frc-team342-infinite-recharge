@@ -225,6 +225,12 @@ public class RobotContainer {
     op_reverse_teleBtn.whenPressed(op_reverse_tele);
   }
 
+  /**
+   * Performs know calculation on given nav point to convert it from meters to field points in meters and corrects distances. 
+   * Calculation was found by finding the inverse of equation derived from distance tests.
+   * Due to the calculation containing square root mathematics, signum logic is applied to make sure negative nav points can still be calculated.
+   * @param navpoint
+   */
   public double getNavPointVertical(double navpoint){
     if(Math.signum(navpoint) == -1.0){
       return -(((Math.sqrt( (88910000 * Math.abs(navpoint)) + 32469363) - 5681) / 8891) * Constants.fieldUnitsToMeters);
@@ -234,6 +240,12 @@ public class RobotContainer {
     }
   }
 
+  /**
+   * Performs know calculation on given nav point to convert it from meters to field points in meters and corrects distances. 
+   * Calculation was found by finding the inverse of equation derived from distance tests.
+   * Returns the calculated nav point negated due to the trajectory point for the horizontal being naturally inverted by the generator.
+   * @param navpoint
+   */
   public double getNavPointHorizontal(double navpoint){
     return -(((Math.sqrt( (88910000 * Math.abs(navpoint)) + 32469363) - 5681) / 8891) * Constants.fieldUnitsToMeters);
   }
@@ -248,6 +260,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    // Sets a voltage constraint so the trajectory never commands the robot to go faster than it is capable with its given voltage supply
     DifferentialDriveVoltageConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
       new SimpleMotorFeedforward(
         Constants.ksVolts, 
@@ -258,20 +271,24 @@ public class RobotContainer {
       10 // magic numbers babey
     );
 
+    // Wraps together all of the path constraints
     TrajectoryConfig config = new TrajectoryConfig(
       Constants.kMaxSpeedMetersPerSecond, 
       Constants.kMaxAccelerationMetersPerSecondSquared
     ).setKinematics(Constants.kDifferentialKinematics)
     .addConstraint(voltageConstraint);
 
-    // TODO: add actual waypoints for the trajectory
+    // Generates a trajectory to follow that will be used in the RAMSETE command.
     trajectory = TrajectoryGenerator.generateTrajectory(
+      // The starting end point of the trajectory path
       new Pose2d(0, 0, new Rotation2d(0)), 
       List.of(
+        // Here is where you add interior waypoints
         // First point in the translation is the vertical position and second is the horizontal position
         new Translation2d(getNavPointVertical(0.5), getNavPointHorizontal(0.5)),
         new Translation2d(getNavPointVertical(1), getNavPointHorizontal(-0.5))
       ), 
+      // The final end point of the trajectory path
       new Pose2d(getNavPointVertical(1.5), 0, new Rotation2d(0)), 
       config
     ); 
@@ -290,14 +307,16 @@ public class RobotContainer {
       driveSystem::getDifferentialWheelSpeeds, 
       new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
       new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
-      driveSystem::mecanumDriveVolts, 
+      driveSystem::differentialDriveVolts, 
       driveSystem
     );
     
     driveSystem.resetOdometry(trajectory.getInitialPose());
 
+    // Command group that allows us to run to commands simultaneously. 
+    // Applied for using power cell intake while performing autonomous trajectory
     return new ParallelRaceGroup(
-      ramsete.andThen(() -> driveSystem.mecanumDriveVolts(0, 0)),
+      ramsete.andThen(() -> driveSystem.differentialDriveVolts(0, 0)),
       new RunCommand(
         () -> {
           Factory.getIntakeOutake().intake();

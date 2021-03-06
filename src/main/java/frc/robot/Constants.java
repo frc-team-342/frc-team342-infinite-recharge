@@ -27,17 +27,18 @@ public final class Constants {
 
     // Drive Characterization Values
     //public static final double ksVolts = 0.143;
-    public static final double ksVolts = 0.167;
     //public static final double kvVoltsSecondsPerMeter = 2.57;
-    public static final double kvVoltsSecondsPerMeter = 2.63;
     //public static final double kaVoltsSecondsSquaredPerMeter = 0.389;
-    public static final double kaVoltsSecondsSquaredPerMeter = 0.425;
-    public static final double kPDriveVel = 0.00289;
     //public static final double kPDriveVel = 0.581;
-    public static final double kDDriveVel = 0.0;
     //public static final double kDDriveVel = 270.0;
-    public static final double kTrackWidthMeters = (23.0 / 12.0) / 3.28;
     //public static final double kTrackWidthMeters = 1.772;
+
+    public static final double ksVolts = 0.167; // Value obtained from characterization
+    public static final double kvVoltsSecondsPerMeter = 2.63; // Value obtained from characterization
+    public static final double kaVoltsSecondsSquaredPerMeter = 0.425; // Value obtained from characterization
+    public static final double kPDriveVel = 0.00289; // Value obtained from characterization
+    public static final double kDDriveVel = 0.0; // Value obtained from characterization
+    public static final double kTrackWidthMeters = (23.0 / 12.0) / 3.28; 
     public static final double kMaxSpeedMetersPerSecond = 0.5;
     public static final double kMaxAccelerationMetersPerSecondSquared = 1.0;
 

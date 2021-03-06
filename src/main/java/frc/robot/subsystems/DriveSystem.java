@@ -57,7 +57,6 @@ public class DriveSystem extends SubsystemBase {
   private static final double voltage_comp = 12.0;
   private static final int current_limit = 60;
   private double accumError = 0.0;
-  private Rotation2d gyroAngle;
 
   private AHRS NavX;
   private MecanumDrive mecanumDrive;
@@ -123,13 +122,12 @@ public class DriveSystem extends SubsystemBase {
 
     mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
     NavX = new AHRS();
-    gyroAngle = Rotation2d.fromDegrees(-NavX.getAngle());
     
-    // Encoders must be reset to 0 BEFORE constructing odometry objects.
+    // Encoders must be reset to 0 --> BEFORE <-- constructing odometry objects.
     zeroGyro();
     resetEncoders();
-    m_odometry = new MecanumDriveOdometry(kDriveKinematics, gyroAngle);
-    d_odometry = new DifferentialDriveOdometry(gyroAngle, new Pose2d(0.0, 0.0, new Rotation2d()));
+    m_odometry = new MecanumDriveOdometry(kDriveKinematics, NavX.getRotation2d());
+    d_odometry = new DifferentialDriveOdometry(NavX.getRotation2d(), new Pose2d(0.0, 0.0, new Rotation2d()));
   }
 
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
@@ -165,7 +163,10 @@ public class DriveSystem extends SubsystemBase {
     }
   }
 
-  public MecanumDriveWheelSpeeds getWheelSpeeds(){
+  /** Returns the speed of the drive wheels in a DifferentialDriveWheelSpeeds data type to be used later in RAMSETE command for trajectory.
+   *  Multiplies encoder RPM by circumference of wheel and then divides by gear ratio to get wheel speed per minute and divides by 60 to get wheel speed per second.
+   */
+  public MecanumDriveWheelSpeeds getMecanumWheelSpeeds(){
     return new MecanumDriveWheelSpeeds(
       (encoderL1.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio),
       (encoderR1.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio),
@@ -174,14 +175,13 @@ public class DriveSystem extends SubsystemBase {
     );
   }
 
+  /** Returns the speed of the drive wheels in a DifferentialDriveWheelSpeeds data type to be used later in RAMSETE command for trajectory.
+   *  Multiplies encoder RPM by circumference of wheel and then divides by gear ratio to get wheel speed per minute and divides by 60 to get wheel speed per second.
+   */
   public DifferentialDriveWheelSpeeds getDifferentialWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(
       (encoderL2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio), // uhh oof ouch owie 
       (encoderR2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio)
-      /*(encoderL2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio), // uhh oof ouch owie 
-      (encoderR2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio)*/
-      /*encoderL2.getVelocity(), // uhh oof ouch owie 
-      encoderR2.getVelocity()*/// converts rpm to m/s by multiplying by circumference and dividing by 60
     );
   }
 
@@ -189,26 +189,35 @@ public class DriveSystem extends SubsystemBase {
     NavX.reset();
   }
 
+  /** Returns the heading of the NavX negated so it is clockwise positive instead of default counter-clockwise positive */
   public double getHeading(){
-    return -NavX.getRotation2d().getDegrees();
+    return NavX.getRotation2d().getDegrees();
   }
 
   public Pose2d getPose2d(){
     return d_odometry.getPoseMeters();
   }
 
-  public void mecanumDriveVolts(double leftVolts, double rightVolts){
+  /** Sets the voltage of the left and ride motor controller groups for differential drive with voltage and feeds watchdog.
+   * @param leftVolts voltage applied to left side of drive train
+   * @param rightVolts voltage applied to right side of the drive train
+   */
+  public void differentialDriveVolts(double leftVolts, double rightVolts){
     m_leftMotors.setVoltage(leftVolts);
     m_rightMotors.setVoltage(-rightVolts);
     mecanumDrive.feed();
   }
 
+  /** Resets the encoders and resets the pose of the odometry object to the pose parameter.
+   * @param pose pose for the robot to be reset to.
+   */
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
     m_odometry.resetPosition(pose, NavX.getRotation2d());
     d_odometry.resetPosition(pose, NavX.getRotation2d());
   }
 
+  /** Sets all 4 drive train encoders to 0 */
   public void resetEncoders(){
     encoderL1.setPosition(0);
     encoderL2.setPosition(0);
@@ -216,6 +225,9 @@ public class DriveSystem extends SubsystemBase {
     encoderR2.setPosition(0);
   }
 
+  /** Gets the distance the wheel has traveled by dividing the encoders position by gear ratio and multiplying by circumference of wheel
+   * @param encoder encoder to get the wheel distance from.
+  */
   public double getDistance(CANEncoder encoder){
     return (encoder.getPosition() / Constants.gearRatio) * (Math.PI * Constants.wheelDiameterInMeters);
   }
@@ -306,10 +318,12 @@ public class DriveSystem extends SubsystemBase {
     return accumError;
   }
 
+  /** Returns the average of the total wheel distance traveled by the left and right side of the robot */
   public double getAvgEncoderDistance(){
     return (getDistance(encoderL1) + (-getDistance(encoderR1))) / 2;
   }
 
+  /** Stops all 4 drive system motors */
   public void stopDrive() {
     motorLeft1.stopMotor();
     motorLeft2.stopMotor();
@@ -319,20 +333,17 @@ public class DriveSystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    mecanumDrive.feed();
+    mecanumDrive.feed(); // Feeding the Watchdog with the mecanumDrive object so it doesn't cause startCompetition() errors and cause drive to not work.
+
     //m_odometry.update(NavX.getRotation2d(), getWheelSpeeds());
-    Translation2d translation = d_odometry.getPoseMeters().getTranslation();
-    gyroAngle = Rotation2d.fromDegrees(getHeading());
-    d_odometry.update(gyroAngle, getDistance(encoderL1), -getDistance(encoderR1));
+    Translation2d translation = d_odometry.getPoseMeters().getTranslation(); // Getting the pose translation of the odometry object so it can be displayed on SmartDashboard.
+    d_odometry.update(NavX.getRotation2d(), getDistance(encoderL1), getDistance(encoderR1)); // updates the odometry object so it can accurately track robot position for trajectory.
 
     SmartDashboard.putNumber("Avg Encoder Distance: ", getAvgEncoderDistance());
     SmartDashboard.putNumber("Left Encoder Distance: ", getDistance(encoderL1));
     SmartDashboard.putNumber("Right Encoder Distance: ", -getDistance(encoderR1));
     SmartDashboard.putNumber("Translation X: ", translation.getX());
     SmartDashboard.putNumber("Translation Y: ", translation.getY());
-
-    // updates NavX.getRotation2d() every loop
-    //rotation2d = Rotation2d.fromDegrees(NavX.getYaw());
   
     // This method will be called once per scheduler run
   }
