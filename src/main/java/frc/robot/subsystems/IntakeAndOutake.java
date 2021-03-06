@@ -224,7 +224,7 @@ public class IntakeAndOutake extends SubsystemBase {
     setShooterVelocity();
 
     //if(Math.abs(getShooterVelocity()) + error < targetVelocity && !sensor3.get()){
-    if(Math.abs(getShooterVelocity()) + error < errorReference && !sensor3.get() && timer.get() < 0.5){
+    if(Math.abs(getShooterVelocity()) + error < errorReference && !sensor3.get() && timer.get() < 2.0){
       load2.set(ControlMode.PercentOutput, 0.0);
       load1.set(ControlMode.PercentOutput, 0.0);
     }
