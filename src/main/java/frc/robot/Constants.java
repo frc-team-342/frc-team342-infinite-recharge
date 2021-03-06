@@ -95,7 +95,7 @@ public final class Constants {
     public static final int OP_RUN_WINCH = 8; // select right
     public static final int OP_REVERSE = 3; // X button
     public static final int OP_CONTROL_ARM = 1; // A button
-    public static final int OP_TELESCOPES = 4; // Y button
+    public static final int OP_OUTTAKEDELAY = 4; // Y button
     public static final int OP_REVERSE_TELE = 9; // left joy click
     public static final int OP_CONTROL_RIGHT = 10; // right joy click
 

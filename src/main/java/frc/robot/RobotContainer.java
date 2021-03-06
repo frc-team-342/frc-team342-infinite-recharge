@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.RotateToAngle;
+import frc.robot.commands.ShootWithDelay;
 import frc.robot.commands.IntakeWithButton;
 import frc.robot.commands.LaunchWithButton;
 import frc.robot.commands.DriveWithJoystick;
@@ -81,7 +82,7 @@ public class RobotContainer {
   private JoystickButton op_intakeBtn;
   private JoystickButton op_lockWinchBtn;
   private JoystickButton op_runWinchBtn;
-  private JoystickButton op_telescopesBtn;
+  private JoystickButton op_outtakeDelayBtn;
   private JoystickButton op_reverseBtn;
   private JoystickButton op_controlarmBtn;
   private JoystickButton op_manual_wheelBtn;
@@ -97,6 +98,7 @@ public class RobotContainer {
   private Command op_controlarm;
   private Command op_manual_wheel;
   private Command op_reverse_tele;
+  private Command op_outtakeDelay;
 
   private Command field;
   private Command slow;
@@ -145,7 +147,7 @@ public class RobotContainer {
 
     op_lockWinchBtn = new JoystickButton(operator, Constants.OP_LOCK_WINCH);
     op_runWinchBtn = new JoystickButton(operator, Constants.OP_RUN_WINCH);
-    op_telescopesBtn = new JoystickButton(operator, Constants.OP_TELESCOPES);
+    op_outtakeDelayBtn = new JoystickButton(operator, Constants.OP_OUTTAKEDELAY);
     op_reverseBtn = new JoystickButton(operator, Constants.OP_REVERSE);
     op_controlarmBtn = new JoystickButton(operator, Constants.OP_CONTROL_ARM);
     op_manual_wheelBtn = new JoystickButton(operator, Constants.OP_CONTROL_RIGHT);
@@ -163,6 +165,7 @@ public class RobotContainer {
     op_lockWinch = new LockWinches();
     op_runWinch = new ActivateWinches();
     op_telescopes = new ActivateTelescopes();
+    op_outtakeDelay = new ShootWithDelay();
     op_reverse = new ReverseIntake();
     op_controlarm = new MoveArm();
     op_manual_wheel = new ManualControlPanel();
@@ -203,7 +206,7 @@ public class RobotContainer {
     op_intakeBtn.toggleWhenPressed(op_intake);
     op_lockWinchBtn.whenPressed(op_lockWinch);
     op_runWinchBtn.whileHeld(op_runWinch);
-    op_telescopesBtn.whileHeld(op_telescopes);
+    op_outtakeDelayBtn.whileHeld(op_outtakeDelay);
     op_reverseBtn.whileHeld(op_reverse);
     op_controlarmBtn.toggleWhenPressed(op_controlarm);
     op_manual_wheelBtn.whileHeld(op_manual_wheel);
