@@ -12,6 +12,7 @@ import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -67,6 +68,8 @@ public class IntakeAndOutake extends SubsystemBase {
  
   private int powerCellCount = 0; 
 
+  private Timer timer;
+
   /**Constructor for the class*/
   public IntakeAndOutake() {
     configureShooter();
@@ -81,6 +84,9 @@ public class IntakeAndOutake extends SubsystemBase {
 
     
     lime = Factory.getLimelight();
+
+    timer = new Timer();
+    timer.start();
   }
 
   /**Sets all the configuration for the shooter motors. i.e inversion, encoders, instantiation, etc*/
@@ -203,13 +209,16 @@ public class IntakeAndOutake extends SubsystemBase {
     setShooterVelocity();
 
     //if(Math.abs(getShooterVelocity()) + error < targetVelocity && !sensor3.get()){
-    if(Math.abs(getShooterVelocity()) + error < errorReference && !sensor3.get()){
+    if(Math.abs(getShooterVelocity()) + error < errorReference && !sensor3.get() && timer.get() < 0.5){
       load2.set(ControlMode.PercentOutput, 0.0);
       load1.set(ControlMode.PercentOutput, 0.0);
     }
     else{
+      timer.stop();
+      timer.reset();
       load2.set(ControlMode.PercentOutput, speed2);
       load1.set(ControlMode.PercentOutput, speed2);
+      timer.start();
     }
   }
 
@@ -268,8 +277,7 @@ public class IntakeAndOutake extends SubsystemBase {
     if (Math.abs(getShooterVelocity()) + error < velocity && !sensor3.get()){
       load2.set(ControlMode.PercentOutput, 0.0);
       load1.set(ControlMode.PercentOutput, 0.0);
-  }
-    else{
+    } else {
       load2.set(ControlMode.PercentOutput, 0.9);
       load1.set(ControlMode.PercentOutput, 0.9);
     }
