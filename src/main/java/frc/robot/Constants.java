@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.MecanumDriveKinematics;
+import edu.wpi.first.wpilibj.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -31,14 +32,14 @@ public final class Constants {
     //public static final double kaVoltsSecondsSquaredPerMeter = 0.389;
     //public static final double kPDriveVel = 0.581;
     //public static final double kDDriveVel = 270.0;
-    //public static final double kTrackWidthMeters = 1.772;
+    //public static final double kTrackWidthMeters = 1.772; this is so wrong lmao
 
     public static final double ksVolts = 0.167; // Value obtained from characterization
     public static final double kvVoltsSecondsPerMeter = 2.63; // Value obtained from characterization
     public static final double kaVoltsSecondsSquaredPerMeter = 0.425; // Value obtained from characterization
     public static final double kPDriveVel = 0.00289; // Value obtained from characterization
     public static final double kDDriveVel = 0.0; // Value obtained from characterization
-    public static final double kTrackWidthMeters = (23.0 / 12.0) / 3.28; 
+    public static final double kTrackWidthMeters = Units.inchesToMeters(23.0); // value obtained from physically measuring wheel
     public static final double kMaxSpeedMetersPerSecond = 0.5;
     public static final double kMaxAccelerationMetersPerSecondSquared = 1.0;
 
@@ -47,9 +48,9 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;
 
     // (1, 1) on field is (0.762, 0.762) in meters
-    public static final double fieldUnitsToMeters = 0.762;
-    public static final double gearRatio = 12.75;
-    public static final double wheelDiameterInMeters = 0.196900406504;
+    public static final double fieldUnitsToMeters = 0.762; // Conversion from 1 meter to 2.5 ft
+    public static final double gearRatio = 12.75; // 12.75 motor rotations : 1 wheel rotation
+    public static final double wheelDiameterInMeters = Units.inchesToMeters(7.75); // Wheel diameter in meters
 
     // Mecanum Kinematics Values
     //public static final MecanumDriveKinematics kDriveKinematics = new MecanumDriveKinematics(Constants.m_frontLeft, Constants.m_frontRight, Constants.m_backLeft, Constants.m_backRight);
