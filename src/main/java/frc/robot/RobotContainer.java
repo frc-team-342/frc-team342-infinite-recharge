@@ -36,7 +36,7 @@ import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.ActivateWinches;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.ChangeColor;
-
+import frc.robot.commands.DriveToPowerCell;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ControlPanelSubsystem;
 
@@ -71,6 +71,7 @@ public class RobotContainer {
   private JoystickButton driver_slowBtn;
   private JoystickButton driver_zeroBtn;
   private JoystickButton driver_reverseBtn;
+  private JoystickButton driver_powerCellBtn;
 
   private Command driver_autoAlign;
   private Command driver_fieldOrient;
@@ -78,6 +79,7 @@ public class RobotContainer {
   private Command driver_slow;
   private Command driver_zero;
   private Command driver_reverse;
+  private Command driver_powercell;
 
   // Operator controller
   private static XboxController operator;
@@ -140,11 +142,12 @@ public class RobotContainer {
     driver_slow = new InstantCommand(driveSystem::setSlow, driveSystem);
     driver_zero = new InstantCommand(driveSystem::zeroGyro, driveSystem);
     driver_reverse = new ReverseIntake();
+    driver_powercell = new DriveToPowerCell();
     
     driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTO_ALIGN);
     driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELD_ORIENT);
     driver_turboBtn = new JoystickButton(driver, Constants.DRIVER_TURBO);
-
+    driver_powerCellBtn = new JoystickButton(driver, Constants.DRIVER_POWERCELL);
 
 
 
@@ -208,6 +211,7 @@ public class RobotContainer {
     driver_slowBtn.whenPressed(driver_slow);
     driver_zeroBtn.whenPressed(driver_zero);
     driver_reverseBtn.whileHeld(driver_reverse);
+    driver_powerCellBtn.whenPressed(driver_powercell);
 
     // Operator button bindings
     op_launchBtn.toggleWhenPressed(op_launch);

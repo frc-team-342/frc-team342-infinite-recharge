@@ -86,6 +86,7 @@ public final class Constants {
     public static final int DRIVER_AUTO_ALIGN = 1; // trigger
     public static final int DRIVER_FIELD_ORIENT = 3; // bottom left
     public static final int DRIVER_ZERO = 4; // bottom right
+    public static final int DRIVER_POWERCELL = 10;
     
     // Operator buttons
     public static final int OPERATOR_CONTROLLER = 1;
