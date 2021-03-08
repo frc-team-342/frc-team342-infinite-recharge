@@ -51,6 +51,7 @@ public class DriveToPowerCell extends CommandBase {
 
     } else {
       // uhh spin?? uhhhh hm huh uhh
+      System.out.println("Its not working, yo");
       
     }
   }
