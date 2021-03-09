@@ -169,9 +169,9 @@ public class DriveSystem extends SubsystemBase {
   public MecanumDriveWheelSpeeds getMecanumWheelSpeeds(){
     return new MecanumDriveWheelSpeeds(
       (encoderL1.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio),
-      (encoderR1.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio),
+      (-encoderR1.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio),
       (encoderL2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio),
-      (encoderR2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio)
+      (-encoderR2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio)
     );
   }
 
@@ -181,7 +181,7 @@ public class DriveSystem extends SubsystemBase {
   public DifferentialDriveWheelSpeeds getDifferentialWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(
       (encoderL2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio), // uhh oof ouch owie 
-      (encoderR2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio)
+      (-encoderR2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio)
     );
   }
 
@@ -294,7 +294,6 @@ public class DriveSystem extends SubsystemBase {
     SmartDashboard.putBoolean("Is Targeting", isTargeting);
   }
 
-
   // Set off toggle for robot start so targeting is always off unless turned on
   public void targetOff() {
     isTargeting = false;
@@ -337,7 +336,7 @@ public class DriveSystem extends SubsystemBase {
 
     //m_odometry.update(NavX.getRotation2d(), getWheelSpeeds());
     Translation2d translation = d_odometry.getPoseMeters().getTranslation(); // Getting the pose translation of the odometry object so it can be displayed on SmartDashboard.
-    d_odometry.update(NavX.getRotation2d(), getDistance(encoderL1), getDistance(encoderR1)); // updates the odometry object so it can accurately track robot position for trajectory.
+    d_odometry.update(NavX.getRotation2d(), getDistance(encoderL1), -getDistance(encoderR1)); // updates the odometry object so it can accurately track robot position for trajectory.
 
     SmartDashboard.putNumber("Avg Encoder Distance: ", getAvgEncoderDistance());
     SmartDashboard.putNumber("Left Encoder Distance: ", getDistance(encoderL1));
