@@ -42,7 +42,8 @@ public class DriveToPowerCell extends CommandBase {
       
       // turn towards ball
       angle = target.getYaw();
-      drive.autoRotate(drive.getGyro() - angle); // autorotate takes field-relative degree, not robot
+      System.out.println("Yaw of Powercell " + angle + "\nRobot Angle " + drive.getGyro() + "\nRobot Angle - Yaw of Powercell " + (drive.getGyro() - angle));
+      //drive.autoRotate(drive.getGyro() - angle); // autorotate takes field-relative degree, not robot
       
       // drive to ball
       //drive.Drive(0.0, 0.0, 0.0);
