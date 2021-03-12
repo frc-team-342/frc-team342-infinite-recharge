@@ -235,12 +235,9 @@ public class RobotContainer {
     if(navpoint == 0.0){
       return 0;
     }
-    /*else if(Math.signum(navpoint) == -1.0){
-      return -(((Math.sqrt( (88910000 * Math.abs(navpoint)) + 32469363) - 5681) / 8891) * Constants.fieldUnitsToMeters);
+    else if(Math.signum(navpoint) == -1.0){
+      return -navpoint * Constants.fieldUnitsToMeters;
     }
-    else{
-      return ((Math.sqrt( (88910000 * navpoint) + 32469363) - 5681) / 8891) * Constants.fieldUnitsToMeters;
-    }*/
     else{
       return navpoint * Constants.fieldUnitsToMeters;
     }
@@ -296,11 +293,11 @@ public class RobotContainer {
       List.of(
         // Here is where you add interior waypoints
         // First point in the translation is the vertical position and second is the horizontal position
-        new Translation2d(getNavPointVertical(0.33), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(0.66), getNavPointHorizontal(0.0))
+        new Translation2d(getNavPointVertical(2.5), getNavPointHorizontal(0.0)),
+        new Translation2d(getNavPointVertical(5.0), getNavPointHorizontal(0.0))
       ), 
       // The final end point of the trajectory path
-      new Pose2d(getNavPointVertical(1.0), getNavPointHorizontal(0.0), new Rotation2d(0)), 
+      new Pose2d(getNavPointVertical(7.0), getNavPointHorizontal(0.0), new Rotation2d(0)), 
       config
     ); 
 
