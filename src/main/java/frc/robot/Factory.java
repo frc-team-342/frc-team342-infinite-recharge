@@ -17,8 +17,6 @@ import frc.robot.subsystems.JetsonSubsystem;
  * Factories are being used in place of singletons.
  */
 
-
-
 public class Factory {
     private static IntakeAndOutake intakeOutake = null;
     private static DriveSystem driveSystem = null;
@@ -34,16 +32,13 @@ public class Factory {
         return intakeOutake;
     }
 
-    
-    public static DriveSystem getDrive(){
-        if(driveSystem == null){
-            driveSystem = new DriveSystem(
-                new CANSparkMax(Constants.DRIVE_MOTOR_L1, MotorType.kBrushless), 
-                new CANSparkMax(Constants.DRIVE_MOTOR_L2, MotorType.kBrushless),
-                new CANSparkMax(Constants.DRIVE_MOTOR_R1, MotorType.kBrushless), 
-                new CANSparkMax(Constants.DRIVE_MOTOR_R2, MotorType.kBrushless)
-            );
-            
+    public static DriveSystem getDrive() {
+        if (driveSystem == null) {
+            driveSystem = new DriveSystem(new CANSparkMax(Constants.DRIVE_MOTOR_L1, MotorType.kBrushless),
+                    new CANSparkMax(Constants.DRIVE_MOTOR_L2, MotorType.kBrushless),
+                    new CANSparkMax(Constants.DRIVE_MOTOR_R1, MotorType.kBrushless),
+                    new CANSparkMax(Constants.DRIVE_MOTOR_R2, MotorType.kBrushless));
+
         }
         return driveSystem;
     }
@@ -75,5 +70,5 @@ public class Factory {
         }
         return cs;
     }
-    
+
 }

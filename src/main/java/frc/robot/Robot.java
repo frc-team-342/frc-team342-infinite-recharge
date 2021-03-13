@@ -38,7 +38,6 @@ public class Robot extends TimedRobot {
   private LimelightSubsystem lime;
   private Command climb;
 
-
   private Command driveWithPercent;
 
   /**
@@ -48,8 +47,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-    
-    
+
     driveSystem = Factory.getDrive();
     lime = Factory.getLimelight();
     intakeAndOutake = Factory.getIntakeOutake();
@@ -58,12 +56,8 @@ public class Robot extends TimedRobot {
     autoDrive = new Autonomous();
     driveWithTargeting = new DriveWithTargeting();
 
-
-
-
     // Commands
     climb = new ActivateTelescopes();
-
 
   }
 
@@ -139,17 +133,15 @@ public class Robot extends TimedRobot {
 
     intakeAndOutake.getSensors();
 
-    //intakeAndOutake.getSensors();
+    // intakeAndOutake.getSensors();
 
-    if (driveSystem.getTarget()){
+    if (driveSystem.getTarget()) {
       driveWithJoy.cancel();
       driveWithTargeting.schedule();
-    }
-    else{
+    } else {
       driveWithTargeting.cancel();
       driveWithJoy.schedule();
     }
-      
 
     // driveWithPercent.schedule();
   }

@@ -20,6 +20,7 @@ public class DriveWithTargeting extends CommandBase {
   private final DriveSystem driveSystem;
   private final Joystick joy;
   private double error = 0.5;
+  private double leftCorrection = 0.1;
   private boolean isDone = false;
   private double X;
   private double Y;
@@ -56,8 +57,12 @@ public class DriveWithTargeting extends CommandBase {
     if (Math.abs(Y) < 0.15)
       Y = 0.0;
 
-    driveSystem.driveWithTargeting(X, -Y, lime.getXOffsetAngle());
-    lime.getDistance();
+    if(lime.isLeft()){
+      double offset = lime.getXOffsetAngle() + (lime.getLeftSkew() * leftCorrection);
+      driveSystem.driveWithTargeting(X, -Y, offset);
+    } else{
+      driveSystem.driveWithTargeting(X, -Y, lime.getXOffsetAngle());
+    }
   }
 
   // Called once the command ends or is interrupted.

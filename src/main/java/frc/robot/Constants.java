@@ -1,5 +1,8 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.kinematics.MecanumDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -20,6 +23,32 @@ public final class Constants {
      * are on, followed by the command it is bound to - Sensor names should be
      * prefixed by subsystem, followed by type or function and number
      */
+
+    // Drive Characterization Values
+    public static final double ksVolts = 0.143;
+    public static final double kvVoltsSecondsPerMeter = 2.57;
+    public static final double kaVoltsSecondsSquaredPerMeter = 0.389;
+    public static final double kPDriveVel = 0.00289;
+    public static final double kTrackwidthMeters = (23.0 / 12.0) / 3.28;
+    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+
+    // Reasonable baseline values for a RAMSETE follower in units of meters and
+    // seconds
+    public static final double kRamseteB = 2;
+    public static final double kRamseteZeta = 0.7;
+
+    // Mecanum Kinematics Values
+    public static final MecanumDriveKinematics kDriveKinematics = new MecanumDriveKinematics(Constants.m_frontLeft,
+            Constants.m_frontRight, Constants.m_backLeft, Constants.m_backRight);
+    private static final double translationXMeters = 0.2604;
+    // Distance of wheel from center of robot moving to the front
+    private static final double translationYMeters = 0.2668;
+    // Distance of wheel from center of robot moving to the left
+    public static final Translation2d m_frontLeft = new Translation2d(translationXMeters, translationYMeters);
+    public static final Translation2d m_frontRight = new Translation2d(translationXMeters, -translationYMeters);
+    public static final Translation2d m_backLeft = new Translation2d(-translationXMeters, translationYMeters);
+    public static final Translation2d m_backRight = new Translation2d(-translationXMeters, -translationYMeters);
 
     /* Motors */
     // Intake
@@ -56,7 +85,7 @@ public final class Constants {
     public static final int DRIVER_AUTO_ALIGN = 1; // trigger
     public static final int DRIVER_FIELD_ORIENT = 3; // bottom left
     public static final int DRIVER_ZERO = 4; // bottom right
-    
+
     // Operator buttons
     public static final int OPERATOR_CONTROLLER = 1;
     public static final int OP_LAUNCH = 5; // left bumper

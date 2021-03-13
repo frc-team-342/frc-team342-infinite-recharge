@@ -12,25 +12,19 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 
 import com.revrobotics.CANSparkMax;
-
-import com.revrobotics.ControlType;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.MecanumDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.MecanumDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants;
-import frc.robot.Robot;
 
 import frc.robot.commands.DriveWithJoystick;
 
 public class DriveSystem extends SubsystemBase {
-
-
   private CANSparkMax motorRight1;
   private CANSparkMax motorRight2;
   private CANSparkMax motorLeft1;
@@ -56,6 +50,9 @@ public class DriveSystem extends SubsystemBase {
 
   private AHRS NavX;
   private MecanumDrive mecanumDrive;
+  private MecanumDriveKinematics kDriveKinematics;
+  private final MecanumDriveOdometry m_odometry;
+  private Rotation2d rotation2d;
 
   /**
    * Creates a new DriveSystem.
@@ -90,11 +87,11 @@ public class DriveSystem extends SubsystemBase {
     motorRight1.setOpenLoopRampRate(ramp_rate);
     motorRight2.setOpenLoopRampRate(ramp_rate);
 
-    kP = 5e-5;
-    kI = 1e-6;
-    kD = 0;
-    kIz = 0;
-    kFF = 0.000156;
+    kP = 0.00294;
+    kI = 0.0;
+    kD = 0.0;
+    kIz = 0.0;
+    kFF = 0.0; // 0.000156
     kMaxOutput = 1;
     kMinOutput = -1;
     maxRPM = 5700;
@@ -104,18 +101,15 @@ public class DriveSystem extends SubsystemBase {
     setPID(motorRight1);
     setPID(motorRight2);
 
-    motorLeft1.getEncoder().setPosition(0);
-
     encoderL1 = new CANEncoder(motorLeft1);
     encoderL2 = new CANEncoder(motorLeft2);
     encoderR1 = new CANEncoder(motorRight1);
-    encoderR2 = new CANEncoder(motorRight2); 
-
+    encoderR2 = new CANEncoder(motorRight2);
 
     mecanumDrive = new MecanumDrive(motorLeft1, motorLeft2, motorRight1, motorRight2);
-
     NavX = new AHRS();
-
+    rotation2d = new Rotation2d(NavX.getAngle() * (Math.PI / 180));
+    m_odometry = new MecanumDriveOdometry(kDriveKinematics, rotation2d);
   }
 
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
@@ -135,13 +129,55 @@ public class DriveSystem extends SubsystemBase {
 
       mecanumDrive.driveCartesian(0.0, 0.0, ((target - current) * kP) / 300);
 
+    } else if (isSlowMode) {
+      mecanumDrive.driveCartesian((xSpeed * 0.8) / 2, (ySpeed * 0.8) / 2,
+          (zRotation * 0.8) / 4/* , -NavX.getAngle() */);
+      isFieldOriented = false;
+      isTurbo = false;
+    } else if (isTurbo) {
+      mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation/* , -NavX.getAngle() */);
+      isFieldOriented = false;
+      isSlowMode = false;
     } else {
       mecanumDrive.driveCartesian(xSpeed * 0.8, ySpeed * 0.8, (zRotation * 0.8) / 2);
+      isFieldOriented = false;
+      isSlowMode = false;
+      isTurbo = false;
     }
+  }
+
+  public MecanumDriveWheelSpeeds getWheelSpeeds() {
+    return new MecanumDriveWheelSpeeds(encoderL1.getVelocity(), encoderR1.getVelocity(), encoderL2.getVelocity(),
+        encoderR2.getVelocity());
   }
 
   public void zeroGyro() {
     NavX.zeroYaw();
+  }
+
+  public double getHeading() {
+    return rotation2d.getDegrees();
+  }
+
+  public Pose2d getPose2d() {
+    return m_odometry.getPoseMeters();
+  }
+
+  public void mecanumDriveVolts(double leftVolts, double rightVolts) {
+    motorLeft1.setVoltage(leftVolts);
+    motorLeft2.setVoltage(leftVolts);
+    motorRight1.setVoltage(rightVolts);
+    motorRight2.setVoltage(rightVolts);
+
+    mecanumDrive.feed();
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    encoderL1.setPosition(0);
+    encoderL2.setPosition(0);
+    encoderR1.setPosition(0);
+    encoderR2.setPosition(0);
+    m_odometry.resetPosition(pose, rotation2d);
   }
 
   public void setPID(CANSparkMax motor) {
@@ -156,13 +192,6 @@ public class DriveSystem extends SubsystemBase {
 
     motor.setSmartCurrentLimit(current_limit);
     motor.enableVoltageCompensation(voltage_comp);
-  }
-
-  public void PercentOut(double yAxis) {
-    motorLeft1.set(yAxis);
-    motorLeft2.set(yAxis);
-    motorRight1.set(yAxis);
-    motorRight2.set(yAxis);
   }
 
   public void setPIDLooped() {
@@ -197,37 +226,13 @@ public class DriveSystem extends SubsystemBase {
     mecanumDrive.driveCartesian(0.0, 0.0, ((target - current) * kP) / 300);
   }
 
-  public void autoStrafe(double distance) {
-    motorLeft1.getEncoder().setPosition(0.0);
-    double conversion = 1.0; // will change meters to encoders ticks
-    double target = distance * conversion;
-    double current = motorLeft1.getEncoder().getPosition();
-    double kP = 2.0;
-    mecanumDrive.driveCartesian(((target - current) * kP) / 300.0, 0.0, 0.0);
-  }
-
-  public void autoDrive(double distance) {
-    motorLeft1.getEncoder().setPosition(0.0);
-    double conversion = 1.0; // will change meters to encoder ticks
-    double target = distance * conversion;
-    double current = motorLeft1.getEncoder().getPosition();
-    double kP = 2.0;
-    mecanumDrive.driveCartesian(0.0, ((target - current) * kP) / 300, 0.0);
-  }
-
-  public void rotateByError(double Error) {
-    accumError += Error;
-    double kI = 1.0e-3;
-    double kP = 4.0;
-    mecanumDrive.driveCartesian(0.0, 0.0, ((Error * kP) + (accumError * kI)) / 300);
-  }
-
   // PID Loop for driving the robot while also targeting with limelgiht
   public void driveWithTargeting(double x, double y, double Error) {
     accumError += Error;
     double kI = 1.0e-3;
     double kP = 4.0;
-    mecanumDrive.driveCartesian(x / 2, y / 2, ((Error * kP) + (accumError * kI)) / 300);
+    double targetError = ((Error * kP) + (accumError * kI)) / 300;
+    mecanumDrive.driveCartesian(x / 2, y / 2, targetError);
 
   }
 
@@ -236,7 +241,6 @@ public class DriveSystem extends SubsystemBase {
     isTargeting = !isTargeting;
     SmartDashboard.putBoolean("Is Targeting", isTargeting);
   }
-
 
   // Set off toggle for robot start so targeting is always off unless turned on
   public void targetOff() {
@@ -270,8 +274,8 @@ public class DriveSystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Accumulated Error", accumError);
     mecanumDrive.feed();
+    // m_odometry.update(rotation2d, getWheelSpeeds());
     // This method will be called once per scheduler run
   }
 
@@ -279,4 +283,3 @@ public class DriveSystem extends SubsystemBase {
     setDefaultCommand(new DriveWithJoystick());
   }
 }
-
