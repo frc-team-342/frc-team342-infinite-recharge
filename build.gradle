@@ -16,6 +16,14 @@ exec {
 
 def hash = hashStdOut.toString().trim()
 
+def branchStdOut = new ByteArrayOutputStream()
+exec {
+    commandLine "git", "rev-parse", "--abbrev-ref", "HEAD"
+    standardOutput = branchStdOut
+}
+
+def branch = branchStdOut.toString().trim()
+
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project EmbeddedTools.
 deploy {
@@ -37,7 +45,7 @@ deploy {
         // Built in artifact to deploy arbitrary files to the roboRIO.
         fileTreeArtifact('frcStaticFileDeploy') {
             // deploy the commit hash
-            predeploy << { execute "echo ${hash} > /home/lvuser/deploy/commit.txt" }
+            predeploy << { execute "echo ${branch} ${hash} > /home/lvuser/deploy/commit.txt" }
 
             // The directory below is the local directory to deploy
             files = fileTree(dir: 'src/main/deploy')
