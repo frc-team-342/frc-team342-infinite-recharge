@@ -117,6 +117,7 @@ public class RobotContainer {
   // Autonomous
   private Command auto;
   private Trajectory trajectory;
+  private TrajectoryConfig config;
   
 
   /**
@@ -262,6 +263,23 @@ public class RobotContainer {
     return trajectory.sample(trajectory.getTotalTimeSeconds());
   }
 
+  private void redPathA(){
+    trajectory = TrajectoryGenerator.generateTrajectory(
+      // The starting end point of the trajectory path
+      new Pose2d(getNavPointVertical(0.0), getNavPointHorizontal(0.0), new Rotation2d(0)), 
+      List.of(
+        // Here is where you add interior waypoints
+        // First point in the translation is the vertical position and second is the horizontal position
+        new Translation2d(getNavPointVertical(3.0), getNavPointHorizontal(0.0)),
+        new Translation2d(getNavPointVertical(5.0), getNavPointHorizontal(1.0)),
+        new Translation2d(getNavPointVertical(6.0), getNavPointHorizontal(-2.0))
+      ), 
+      // The final end point of the trajectory path
+      new Pose2d(getNavPointVertical(11.0), getNavPointHorizontal(-2.0), new Rotation2d(0)), 
+      config
+    ); 
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -280,27 +298,14 @@ public class RobotContainer {
     );
 
     // Wraps together all of the path constraints
-    TrajectoryConfig config = new TrajectoryConfig(
+    config = new TrajectoryConfig(
       Constants.kMaxSpeedMetersPerSecond, 
       Constants.kMaxAccelerationMetersPerSecondSquared
     ).setKinematics(Constants.kDifferentialKinematics)
     .addConstraint(voltageConstraint);
 
     // Generates a trajectory to follow that will be used in the RAMSETE command.
-    trajectory = TrajectoryGenerator.generateTrajectory(
-      // The starting end point of the trajectory path
-      new Pose2d(0, 0, new Rotation2d(0)), 
-      List.of(
-        // Here is where you add interior waypoints
-        // First point in the translation is the vertical position and second is the horizontal position
-        new Translation2d(getNavPointVertical(2.5), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(5.0), getNavPointHorizontal(0.0))
-      ), 
-      // The final end point of the trajectory path
-      new Pose2d(getNavPointVertical(7.0), getNavPointHorizontal(0.0), new Rotation2d(0)), 
-      config
-    ); 
-
+    redPathA();
     
     RamseteCommand ramsete = new RamseteCommand(
       trajectory, 

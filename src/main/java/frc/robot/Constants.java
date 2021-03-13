@@ -48,7 +48,7 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;
 
     // (1, 1) on field is (0.762, 0.762) in meters
-    public static final double fieldUnitsToMeters = 0.762; // Conversion from 1 meter to 2.5 ft
+    public static final double fieldUnitsToMeters = 2.5 / 3.28; // Conversion from 1 meter to 2.5 ft
     public static final double gearRatio = 12.75; // 12.75 motor rotations : 1 wheel rotation
     public static final double wheelDiameterInMeters = Units.inchesToMeters(7.75); // Wheel diameter in meters
 
