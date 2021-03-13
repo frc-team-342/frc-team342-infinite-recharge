@@ -270,12 +270,12 @@ public class RobotContainer {
       List.of(
         // Here is where you add interior waypoints
         // First point in the translation is the vertical position and second is the horizontal position
-        new Translation2d(getNavPointVertical(3.0), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(5.0), getNavPointHorizontal(1.0)),
-        new Translation2d(getNavPointVertical(6.0), getNavPointHorizontal(-2.0))
+        new Translation2d(getNavPointVertical(2.0), getNavPointHorizontal(0.0)),
+        new Translation2d(getNavPointVertical(4.5), getNavPointHorizontal(1.0)),
+        new Translation2d(getNavPointVertical(5.0), getNavPointHorizontal(-2.0))
       ), 
       // The final end point of the trajectory path
-      new Pose2d(getNavPointVertical(11.0), getNavPointHorizontal(-2.0), new Rotation2d(0)), 
+      new Pose2d(getNavPointVertical(10.0), getNavPointHorizontal(-2.0), new Rotation2d(0)), 
       config
     ); 
   }
