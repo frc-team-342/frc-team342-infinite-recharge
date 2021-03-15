@@ -280,6 +280,58 @@ public class RobotContainer {
     ); 
   }
 
+  private void redPathB(){
+    trajectory = TrajectoryGenerator.generateTrajectory(
+      // The starting end point of the trajectory path
+      new Pose2d(getNavPointVertical(0.0), getNavPointHorizontal(0.0), new Rotation2d(0)), 
+      List.of(
+        // Here is where you add interior waypoints
+        // First point in the translation is the vertical position and second is the horizontal position
+        new Translation2d(getNavPointVertical(2.0), getNavPointHorizontal(0.0)),
+        new Translation2d(getNavPointVertical(4.5), getNavPointHorizontal(2.0)),
+        new Translation2d(getNavPointVertical(6.0), getNavPointHorizontal(0.0)),
+        new Translation2d(getNavPointVertical(7.0), getNavPointHorizontal(-1.0))
+      ), 
+      // The final end point of the trajectory path
+      new Pose2d(getNavPointVertical(10.0), getNavPointHorizontal(-1.0), new Rotation2d(0)), 
+      config
+    ); 
+  }
+
+  private void bluePathA(){
+    trajectory = TrajectoryGenerator.generateTrajectory(
+      // The starting end point of the trajectory path
+      new Pose2d(getNavPointVertical(0.0), getNavPointHorizontal(0.0), new Rotation2d(0)), 
+      List.of(
+        // Here is where you add interior waypoints
+        // First point in the translation is the vertical position and second is the horizontal position
+        new Translation2d(getNavPointVertical(5.0), getNavPointHorizontal(0.0)),
+        new Translation2d(getNavPointVertical(6.0), getNavPointHorizontal(-3.0)),
+        new Translation2d(getNavPointVertical(8.0), getNavPointHorizontal(-2.0))
+      ), 
+      // The final end point of the trajectory path
+      new Pose2d(getNavPointVertical(10.0), getNavPointHorizontal(-2.0), new Rotation2d(0)), 
+      config
+    );
+  }
+
+  private void bluePathB(){
+    trajectory = TrajectoryGenerator.generateTrajectory(
+      // The starting end point of the trajectory path
+      new Pose2d(getNavPointVertical(0.0), getNavPointHorizontal(0.0), new Rotation2d(0)), 
+      List.of(
+        // Here is where you add interior waypoints
+        // First point in the translation is the vertical position and second is the horizontal position
+        new Translation2d(getNavPointVertical(5.0), getNavPointHorizontal(0.0)),
+        new Translation2d(getNavPointVertical(7.0), getNavPointHorizontal(-2.0)),
+        new Translation2d(getNavPointVertical(9.0), getNavPointHorizontal(0.0))
+      ), 
+      // The final end point of the trajectory path
+      new Pose2d(getNavPointVertical(10.0), getNavPointHorizontal(1.0), new Rotation2d(0)), 
+      config
+    );
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
