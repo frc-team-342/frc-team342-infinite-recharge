@@ -278,7 +278,7 @@ public class RobotContainer {
       new Pose2d(getNavPointVertical(10.0), getNavPointHorizontal(-2.0), new Rotation2d(0)), 
       config
     ); 
-  } 
+  }
 
   private void redPathB(){
     trajectory = TrajectoryGenerator.generateTrajectory(
