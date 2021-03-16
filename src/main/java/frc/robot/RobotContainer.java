@@ -238,11 +238,11 @@ public class RobotContainer {
     }
     else if(Math.signum(navpoint) == -1.0){
       //return -navpoint * Constants.fieldUnitsToMeters;
-      return (-navpoint - Constants.centerRobotToIntakeMeters) * Constants.fieldUnitsToMeters;
+      return (-navpoint * Constants.fieldUnitsToMeters) - Constants.centerRobotToIntakeMeters;
     }
     else{
       //return navpoint * Constants.fieldUnitsToMeters;
-      return (navpoint + Constants.centerRobotToIntakeMeters) * Constants.fieldUnitsToMeters;
+      return (navpoint * Constants.fieldUnitsToMeters) + Constants.centerRobotToIntakeMeters;
       
     }
   }
