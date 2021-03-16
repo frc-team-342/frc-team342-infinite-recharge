@@ -275,7 +275,7 @@ public class RobotContainer {
         new Translation2d(getNavPointVertical(5.0), getNavPointHorizontal(-2.0))
       ), 
       // The final end point of the trajectory path
-      new Pose2d(getNavPointVertical(10.0), getNavPointHorizontal(-2.0), new Rotation2d(0)), 
+      new Pose2d(getNavPointVertical(10.5), getNavPointHorizontal(-2.0), new Rotation2d(0)), 
       config
     ); 
   }
@@ -287,13 +287,13 @@ public class RobotContainer {
       List.of(
         // Here is where you add interior waypoints
         // First point in the translation is the vertical position and second is the horizontal position
-        new Translation2d(getNavPointVertical(2.0), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(4.5), getNavPointHorizontal(2.0)),
+        new Translation2d(getNavPointVertical(2.5), getNavPointHorizontal(0.0)),
+        new Translation2d(getNavPointVertical(4.0), getNavPointHorizontal(2.0)),
         new Translation2d(getNavPointVertical(6.0), getNavPointHorizontal(0.0)),
         new Translation2d(getNavPointVertical(7.0), getNavPointHorizontal(-1.0))
       ), 
       // The final end point of the trajectory path
-      new Pose2d(getNavPointVertical(10.0), getNavPointHorizontal(-1.0), new Rotation2d(0)), 
+      new Pose2d(getNavPointVertical(10.75), getNavPointHorizontal(-1.0), new Rotation2d(0)), 
       config
     ); 
   }
@@ -310,7 +310,7 @@ public class RobotContainer {
         new Translation2d(getNavPointVertical(8.0), getNavPointHorizontal(-2.0))
       ), 
       // The final end point of the trajectory path
-      new Pose2d(getNavPointVertical(10.0), getNavPointHorizontal(-2.0), new Rotation2d(0)), 
+      new Pose2d(getNavPointVertical(10.5), getNavPointHorizontal(-2.0), new Rotation2d(0)), 
       config
     );
   }
@@ -327,7 +327,7 @@ public class RobotContainer {
         new Translation2d(getNavPointVertical(9.0), getNavPointHorizontal(0.0))
       ), 
       // The final end point of the trajectory path
-      new Pose2d(getNavPointVertical(10.0), getNavPointHorizontal(1.0), new Rotation2d(0)), 
+      new Pose2d(getNavPointVertical(10.5), getNavPointHorizontal(1.0), new Rotation2d(0)), 
       config
     );
   }
@@ -357,7 +357,8 @@ public class RobotContainer {
     .addConstraint(voltageConstraint);
 
     // Generates a trajectory to follow that will be used in the RAMSETE command.
-    redPathA();
+    //redPathA();
+    redPathB();
     
     RamseteCommand ramsete = new RamseteCommand(
       trajectory, 
