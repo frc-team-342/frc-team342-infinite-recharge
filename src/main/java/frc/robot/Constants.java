@@ -51,6 +51,7 @@ public final class Constants {
     public static final double fieldUnitsToMeters = 2.5 / 3.28; // Conversion from 1 meter to 2.5 ft
     public static final double gearRatio = 12.75; // 12.75 motor rotations : 1 wheel rotation
     public static final double wheelDiameterInMeters = Units.inchesToMeters(7.75); // Wheel diameter in meters
+    public static final double centerRobotToIntakeMeters = Units.inchesToMeters(15.5);
 
     // Mecanum Kinematics Values
     //public static final MecanumDriveKinematics kDriveKinematics = new MecanumDriveKinematics(Constants.m_frontLeft, Constants.m_frontRight, Constants.m_backLeft, Constants.m_backRight);

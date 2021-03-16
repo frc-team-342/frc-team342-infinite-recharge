@@ -237,10 +237,13 @@ public class RobotContainer {
       return 0;
     }
     else if(Math.signum(navpoint) == -1.0){
-      return -navpoint * Constants.fieldUnitsToMeters;
+      //return -navpoint * Constants.fieldUnitsToMeters;
+      return (-navpoint - Constants.centerRobotToIntakeMeters) * Constants.fieldUnitsToMeters;
     }
     else{
-      return navpoint * Constants.fieldUnitsToMeters;
+      //return navpoint * Constants.fieldUnitsToMeters;
+      return (navpoint + Constants.centerRobotToIntakeMeters) * Constants.fieldUnitsToMeters;
+      
     }
   }
 
@@ -252,7 +255,6 @@ public class RobotContainer {
    */
   public double getNavPointHorizontal(double navpoint){
     if(navpoint != 0.0){
-      //return -(((Math.sqrt( (88910000 * Math.abs(navpoint)) + 32469363) - 5681) / 8891) * Constants.fieldUnitsToMeters);
       return -navpoint * Constants.fieldUnitsToMeters;
     }
     else
