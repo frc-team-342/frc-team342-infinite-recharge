@@ -38,7 +38,8 @@ public class DriveToPowerCell extends CommandBase {
   public void execute() {
     PhotonPipelineResult result = camera.getLatestResult();
     if (result.hasTargets()) {
-      PhotonTrackedTarget target = result.getBestTarget();
+      System.out.println("Has Target")
+      /*PhotonTrackedTarget target = result.getBestTarget();
       
       // turn towards ball
       angle = target.getYaw();
@@ -48,7 +49,7 @@ public class DriveToPowerCell extends CommandBase {
       // drive to ball
       //drive.Drive(0.0, 0.0, 0.0);
 
-      // intake ball
+      // intake ball*/
 
     } else {
       // uhh spin?? uhhhh hm huh uhh
