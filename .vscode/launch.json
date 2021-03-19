@@ -4,18 +4,24 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-
+    {
+      "type": "java",
+      "name": "Launch Main",
+      "request": "launch",
+      "mainClass": "frc.robot.Main",
+      "projectName": "frc-team342-infinite-recharge"
+    },
     {
       "type": "wpilib",
       "name": "WPILib Desktop Debug",
       "request": "shooter",
-      "desktop": true,
+      "desktop": true
     },
     {
       "type": "wpilib",
       "name": "WPILib roboRIO Debug",
       "request": "shooter",
-      "desktop": false,
+      "desktop": false
     }
   ]
 }

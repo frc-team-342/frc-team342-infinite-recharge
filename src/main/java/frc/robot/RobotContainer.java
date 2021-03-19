@@ -86,6 +86,7 @@ public class RobotContainer {
   private JoystickButton op_controlarmBtn;
   private JoystickButton op_manual_wheelBtn;
   private JoystickButton op_reverse_teleBtn;
+  private JoystickButton op_drivecycle_btn;
 
   private Command op_launch;
   private Command op_slow;
@@ -97,6 +98,7 @@ public class RobotContainer {
   private Command op_controlarm;
   private Command op_manual_wheel;
   private Command op_reverse_tele;
+  private Command op_drivecycle_cmd; 
 
   private Command field;
   private Command slow;
@@ -150,6 +152,7 @@ public class RobotContainer {
     op_controlarmBtn = new JoystickButton(operator, Constants.OP_CONTROL_ARM);
     op_manual_wheelBtn = new JoystickButton(operator, Constants.OP_CONTROL_RIGHT);
     op_reverse_teleBtn = new JoystickButton(operator, Constants.OP_REVERSE_TELE);
+    op_drivecycle_btn = new JoystickButton(operator, Constants.OP_DRIVECYCLE_BTN);
 
     op_launch = new LaunchWithButton();
     op_slow = new InstantCommand(driveSystem::setSlow, driveSystem);
@@ -208,6 +211,7 @@ public class RobotContainer {
     op_controlarmBtn.toggleWhenPressed(op_controlarm);
     op_manual_wheelBtn.whileHeld(op_manual_wheel);
     op_reverse_teleBtn.whenPressed(op_reverse_tele);
+    op_drivecycle_btn.toggleWhenPressed(op_drivecycle_cmd); 
   }
 
   /**
