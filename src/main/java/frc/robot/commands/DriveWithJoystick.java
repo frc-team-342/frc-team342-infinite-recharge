@@ -68,7 +68,13 @@ public class DriveWithJoystick extends CommandBase {
       SmartDashboard.putString("Z Deadzone", "Z is not in deadzone!");
     }
 
-    driveSystem.Drive(X, -Y, Z);
+    if(driveSystem.getCanRotate()){
+      driveSystem.Drive(X, -Y, Z);
+    }
+    else{
+      driveSystem.Drive(X, -Y, 0.0);
+    }
+    
 
   }
 

@@ -74,6 +74,7 @@ public class RobotContainer {
   private JoystickButton driver_slowBtn;
   private JoystickButton driver_zeroBtn;
   private JoystickButton driver_reverseBtn;
+  private JoystickButton driver_rotationBtn;
 
   private Command driver_autoAlign;
   private Command driver_fieldOrient;
@@ -81,6 +82,7 @@ public class RobotContainer {
   private Command driver_slow;
   private Command driver_zero;
   private Command driver_reverse;
+  private Command driver_rotation;
 
   // Operator controller
   private static XboxController operator;
@@ -137,6 +139,7 @@ public class RobotContainer {
     driver_slowBtn = new JoystickButton(driver, Constants.DRIVER_SLOW);
     driver_zeroBtn = new JoystickButton(driver, Constants.DRIVER_ZERO);
     driver_reverseBtn = new JoystickButton(driver, Constants.DRIVER_REVERSE);
+    driver_rotationBtn = new JoystickButton(driver, Constants.DRIVER_ROTATE_LOCK);
 
     driver_autoAlign = new InstantCommand(driveSystem::toggleTargeting, driveSystem);
     driver_fieldOrient = new InstantCommand(driveSystem::setFieldOriented, driveSystem);
@@ -144,6 +147,7 @@ public class RobotContainer {
     driver_slow = new InstantCommand(driveSystem::setSlow, driveSystem);
     driver_zero = new InstantCommand(driveSystem::zeroGyro, driveSystem);
     driver_reverse = new ReverseIntake();
+    driver_rotation = new InstantCommand(driveSystem::setCanRotate, driveSystem);
     
     driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTO_ALIGN);
     driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELD_ORIENT);
@@ -212,6 +216,7 @@ public class RobotContainer {
     driver_slowBtn.whenPressed(driver_slow);
     driver_zeroBtn.whenPressed(driver_zero);
     driver_reverseBtn.whileHeld(driver_reverse);
+    driver_rotationBtn.whenPressed(driver_rotation);
 
     // Operator button bindings
     op_launchBtn.toggleWhenPressed(op_launch);
@@ -238,11 +243,11 @@ public class RobotContainer {
     }
     else if(Math.signum(navpoint) == -1.0){
       //return -navpoint * Constants.fieldUnitsToMeters;
-      return (-navpoint * Constants.fieldUnitsToMeters) - Constants.centerRobotToIntakeMeters;
+      return (-navpoint * Constants.fieldUnitsToMeters) /*- Constants.centerRobotToIntakeMeters*/;
     }
     else{
       //return navpoint * Constants.fieldUnitsToMeters;
-      return (navpoint * Constants.fieldUnitsToMeters) + Constants.centerRobotToIntakeMeters;
+      return (navpoint * Constants.fieldUnitsToMeters) /*+ Constants.centerRobotToIntakeMeters*/;
       
     }
   }

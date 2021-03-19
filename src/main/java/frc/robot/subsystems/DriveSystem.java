@@ -52,6 +52,7 @@ public class DriveSystem extends SubsystemBase {
   private boolean isSlowMode = false;
   private boolean isTurbo = false;
   private boolean isTargeting = false;
+  private boolean canRotate = true;
 
   private static final double ramp_rate = 0.2;
   private static final double voltage_comp = 12.0;
@@ -255,6 +256,15 @@ public class DriveSystem extends SubsystemBase {
   public void setFieldOriented() {
     isFieldOriented = !isFieldOriented;
     SmartDashboard.putBoolean("Is Field Oriented", isFieldOriented);
+  }
+
+  public void setCanRotate(){
+    canRotate = !canRotate;
+    SmartDashboard.putBoolean("Can Rotate: ", canRotate);
+  }
+
+  public boolean getCanRotate(){
+    return canRotate;
   }
 
   public void setSlow() {
