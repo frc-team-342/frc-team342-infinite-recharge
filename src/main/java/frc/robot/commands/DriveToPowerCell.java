@@ -23,7 +23,7 @@ public class DriveToPowerCell extends CommandBase {
 
   /** Creates a new DriveToPowerCell. */
   public DriveToPowerCell() {
-    camera = new PhotonCamera("photonvision");
+    camera = new PhotonCamera("camera1");
   }
 
   // Called when the command is initially scheduled.
