@@ -29,13 +29,14 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.IntakeWithButton;
 import frc.robot.commands.LaunchWithButton;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.ActivateWinches;
+import frc.robot.commands.AutoTarget;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.ChangeColor;
 
@@ -117,6 +118,7 @@ public class RobotContainer {
   // Autonomous
   private Command auto;
   private Trajectory trajectory;
+  private Trajectory trajectory2;
   private TrajectoryConfig config;
   
 
@@ -360,7 +362,25 @@ public class RobotContainer {
 
     // Generates a trajectory to follow that will be used in the RAMSETE command.
     //redPathA();
-    redPathB();
+    //redPathB();
+
+    trajectory = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(), 
+      List.of(
+        new Translation2d(1, 0)
+      ), 
+      new Pose2d(), 
+      config
+    );
+
+    trajectory2 = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(), 
+      List.of(
+        new Translation2d(-1, 0)
+      ), 
+      new Pose2d(), 
+      config
+    );
     
     RamseteCommand ramsete = new RamseteCommand(
       trajectory, 
@@ -383,14 +403,30 @@ public class RobotContainer {
 
     // Command group that allows us to run to commands simultaneously. 
     // Applied for using power cell intake while performing autonomous trajectory
-    return new ParallelRaceGroup(
-      ramsete.andThen(() -> driveSystem.differentialDriveVolts(0, 0)),
-      new RunCommand(
-        () -> {
-          Factory.getIntakeOutake().intake();
-        },
-        Factory.getIntakeOutake()
-      )
+    return new SequentialCommandGroup(
+      ramsete,
+      //new AutoTarget().withTimeout(2.0),
+      //new LaunchWithButton(),
+      (true) ? (new SequentialCommandGroup(
+        new AutoTarget().withTimeout(2.0),
+        new LaunchWithButton()
+      )) : new InstantCommand(),
+      new RamseteCommand(
+        trajectory2, 
+        driveSystem::getPose2d, 
+        new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta), 
+        new SimpleMotorFeedforward(
+          Constants.ksVolts, 
+          Constants.kvVoltsSecondsPerMeter, 
+          Constants.kaVoltsSecondsSquaredPerMeter
+        ),
+        Constants.kDifferentialKinematics, 
+        driveSystem::getDifferentialWheelSpeeds, 
+        new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
+        new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
+        driveSystem::differentialDriveVolts, 
+        driveSystem
+    )
     );
   }
 }
