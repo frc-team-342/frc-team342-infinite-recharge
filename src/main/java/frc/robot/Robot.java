@@ -65,6 +65,8 @@ public class Robot extends TimedRobot {
 
     driveSystem.zeroGyro();
     driveSystem.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d()));
+
+    m_robotContainer.redPathA();
   }
 
   /**
