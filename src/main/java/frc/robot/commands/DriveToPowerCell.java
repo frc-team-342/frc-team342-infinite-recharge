@@ -38,7 +38,7 @@ public class DriveToPowerCell extends CommandBase {
   public void execute() {
     PhotonPipelineResult result = camera.getLatestResult();
     if (result.hasTargets()) {
-      System.out.println("Has Target")
+      System.out.println("Has Target");
       /*PhotonTrackedTarget target = result.getBestTarget();
       
       // turn towards ball
