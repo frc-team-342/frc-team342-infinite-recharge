@@ -12,6 +12,7 @@ import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -29,9 +30,9 @@ public class IntakeAndOutake extends SubsystemBase {
   private CANPIDController leaderController;
   private CANPIDController followerController;
 
-  private DigitalInput sensor1; // intake sensor
-  private DigitalInput sensor2; // hopper sensor
-  private DigitalInput sensor3; // shooter loader sensor
+  private DigitalInput sensor1; //intake sensor
+  private DigitalInput sensor2; //hopper sensor
+  private DigitalInput sensor3; //shooter loader sensor
 
   private final double speed = 0.9; // Speed for shooter loader conveyor
   private final double speed2 = .95; // Speed for intake conveyors
@@ -42,31 +43,38 @@ public class IntakeAndOutake extends SubsystemBase {
   private static final double voltage_comp = 12.0; // amount of voltage allowed to be compensated
   private static final int current_limit = 60; // max amount of current motor can pull
 
-  // Changed from 250 on 3/6/2020
+  //Changed from 250 on 3/6/2020
   private double error = 45.0; // allowable error for shooter in RPMs
   private double hoodAngle = 50.0 * (Math.PI / 180.0); // hood angle in radians
   private double height = 98.25 - 21.125; // height between robot and middle of target measured in inches
   private double targetDepth = 30.0; // depth from front of target to back measured in inches
   private double limeToHood = 27.0; // length from limelight to shooter hood measured in inches
-  private double circumferenceOfWheel = (6.0 * Math.PI); // 2*pi*r to get circumference
+  private double circumferenceOfWheel = (6.0*Math.PI); // 2*pi*r to get circumference
   private double setPoint = 0.0;
   private double targetVelocity = 0.0;
-  // private double rpmScalar = 1.0322;
-  // private double rpmAddition = 54.8;
+  private double errorReference = 0.0;
+  //private double rpmScalar = 1.0322;
+  //private double rpmAddition = 54.8;
 
-  /** Gravity in inches/second */
-  private double gravity = 386.09; // gravity in in/s
+  /**Gravity in inches/second*/ 
+  private double gravity = 386.09; //gravity in in/s
 
   private final LimelightSubsystem lime;
 
-  // measures how many cells are in
+  // measures how many cells are in 
   // returns 0 if there is nothing in basket
-  // returns 1 if
-  // returns 3 if
+  // returns 1 if 
+  // returns 3 if 
+ 
+  private int powerCellCount = 0; 
 
-  private int powerCellCount = 0;
+  private Timer timer;
+  private double[] rpms = {
 
-  /** Constructor for the class */
+  };
+  int index = -1;
+
+  /**Constructor for the class*/
   public IntakeAndOutake() {
     configureShooter();
 
@@ -78,20 +86,21 @@ public class IntakeAndOutake extends SubsystemBase {
     sensor2 = new DigitalInput(Constants.INTAKE_SENSOR_2); // hopper sensor
     sensor3 = new DigitalInput(Constants.INTAKE_SENSOR_3); // shooter loader sensor
 
+    
     lime = Factory.getLimelight();
+
+    timer = new Timer();
+    timer.start();
   }
 
-  /**
-   * Sets all the configuration for the shooter motors. i.e inversion, encoders,
-   * instantiation, etc
-   */
-  private void configureShooter() {
+  /**Sets all the configuration for the shooter motors. i.e inversion, encoders, instantiation, etc*/
+  private void configureShooter(){
     shooterLeader = new CANSparkMax(Constants.LAUNCH_MOTOR_1, MotorType.kBrushless);
     shooterFollower = new CANSparkMax(Constants.LAUNCH_MOTOR_2, MotorType.kBrushless);
     leaderController = shooterLeader.getPIDController();
     followerController = shooterFollower.getPIDController();
-
-    // changed to consitantly get the target RPM (changed 2-20-21)
+    
+    //changed to consitantly get the target RPM (changed 2-20-21)
     kP = 0.0003;
     kI = 0.00000001;
     kD = 0.005;
@@ -102,27 +111,19 @@ public class IntakeAndOutake extends SubsystemBase {
     maxRPM = 5700;
 
     shooterLeader.setInverted(true); // shooterFollower.setInverted(true);
-    shooterLeader.setSmartCurrentLimit(current_limit);
-    /**/ shooterFollower.setSmartCurrentLimit(current_limit);
-    shooterLeader.enableVoltageCompensation(voltage_comp);
-    /**/ shooterFollower.enableVoltageCompensation(voltage_comp);
-    shooterLeader.setOpenLoopRampRate(ramp_rate);
-    /**/ shooterFollower.setOpenLoopRampRate(ramp_rate);
+    shooterLeader.setSmartCurrentLimit(current_limit); /**/ shooterFollower.setSmartCurrentLimit(current_limit);
+    shooterLeader.enableVoltageCompensation(voltage_comp); /**/ shooterFollower.enableVoltageCompensation(voltage_comp);
+    shooterLeader.setOpenLoopRampRate(ramp_rate); /**/ shooterFollower.setOpenLoopRampRate(ramp_rate);
     shooterFollower.follow(shooterLeader, true); // Follows shooterLeader without inversion
 
-    leaderController.setP(kP);
-    /**/ followerController.setP(kP);
-    leaderController.setI(kI);
-    /**/ followerController.setI(kI);
-    leaderController.setD(kD);
-    /**/ followerController.setD(kD);
-    leaderController.setIZone(kIz);
-    /**/ followerController.setIZone(kIz);
-    leaderController.setFF(kFF);
-    /**/ followerController.setFF(kFF);
-    leaderController.setOutputRange(kMinOutput, kMaxOutput);
+    leaderController.setP(kP); /**/ followerController.setP(kP);
+    leaderController.setI(kI); /**/ followerController.setI(kI);
+    leaderController.setD(kD); /**/ followerController.setD(kD);
+    leaderController.setIZone(kIz); /**/ followerController.setIZone(kIz);
+    leaderController.setFF(kFF); /**/ followerController.setFF(kFF);
+    leaderController.setOutputRange(kMinOutput, kMaxOutput); 
     followerController.setOutputRange(kMinOutput, kMaxOutput);
-
+    
     // display PID coefficients on SmartDashboard
     SmartDashboard.putNumber("P Gain", kP);
     SmartDashboard.putNumber("I Gain", kI);
@@ -135,117 +136,134 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putBoolean("Testing Velocity?", false);
   }
 
-  /**
-   * Senses powercells in and out and keeps a running count of powercells
-   * currently in the robot
-   */
-  private void powerCellCount() {
+  /**Senses powercells in and out and keeps a running count of powercells currently in the robot*/
+  private void powerCellCount(){
     // counts power cells in and out so we dont get more than 5
-    boolean isTriggered1 = !sensor1.get();
-    boolean isTriggered2 = !sensor3.get();
+    boolean isTriggered1 = !sensor1.get(); 
+    boolean isTriggered2 = !sensor3.get(); 
     boolean holding1 = false;
-    boolean holding2 = false;
+    boolean holding2 = false; 
 
-    if (!holding1) {
-      if (isTriggered1) {
+    if(!holding1){
+      if(isTriggered1){
         holding1 = false;
       }
     } else {
-      if (!isTriggered1) {
+      if(!isTriggered1){
         holding1 = false;
-        powerCellCount++;
+        powerCellCount++; 
       }
     }
 
-    if (!holding2) {
-      if (isTriggered2) {
+    if(!holding2){
+      if(isTriggered2){
         holding2 = false;
       }
     } else {
-      if (!isTriggered2) {
+      if(!isTriggered2){
         holding2 = false;
-        powerCellCount++;
+        powerCellCount++; 
       }
     }
 
-    SmartDashboard.putNumber("Power Cell Count: ", powerCellCount);
-
+  SmartDashboard.putNumber("Power Cell Count: ", powerCellCount); 
+    
   }
 
-  /** Moves the intake conveyors and wheel to load powercells into robot */
+  /**Moves the intake conveyors and wheel to load powercells into robot*/
   public void intake() {
-    powerCellCount();
+    powerCellCount(); 
     intake.set(ControlMode.PercentOutput, speed2);
     load1.set(ControlMode.PercentOutput, speed);
 
     // stops shooter loader if cell is sensed to prevent jamming of shooter
-    if (!sensor3.get()) {
-      // occurs when hopper is full
+    if (!sensor3.get()){
+      //occurs when hopper is full
       load2.set(ControlMode.PercentOutput, speed);
-      // load2.set(ControlMode.PercentOutput, 0.0);
+      //load2.set(ControlMode.PercentOutput, 0.0); 
     } else {
-      // load2.set(ControlMode.PercentOutput, speed);
+      //load2.set(ControlMode.PercentOutput, speed);
       load2.set(ControlMode.PercentOutput, 0.0);
     }
   }
 
-  /*** Sets the intake to reverse in case of a stuck powercell */
-  public void reverseIntake() {
+  /***Sets the intake to reverse in case of a stuck powercell*/
+  public void reverseIntake(){
     intake.set(ControlMode.PercentOutput, -speed2);
     load1.set(ControlMode.PercentOutput, -speed);
 
-    boolean isTriggered = !sensor1.get();
+    boolean isTriggered = !sensor1.get(); 
     boolean holding = false;
-    if (!holding) {
-      if (isTriggered) {
+    if(!holding){
+      if(isTriggered){
         holding = false;
       }
     } else {
-      if (!isTriggered) {
+      if(!isTriggered){
         holding = false;
-        powerCellCount--;
+        powerCellCount--; 
       }
     }
-    SmartDashboard.putNumber("Power Cell Count: ", powerCellCount);
+    SmartDashboard.putNumber("Power Cell Count: ", powerCellCount); 
   }
 
-  /*** Overloaded shooter method using limelight distance calculations */
+  /***Overloaded shooter method using limelight distance calculations*/
   public void outake() {
     powerCellCount();
     setShooterVelocity();
 
-    if (Math.abs(getShooterVelocity()) + error < targetVelocity && !sensor3.get()) {
+    //if(Math.abs(getShooterVelocity()) + error < targetVelocity && !sensor3.get()){
+    if(Math.abs(getShooterVelocity()) + error < errorReference && !sensor3.get()){
       load2.set(ControlMode.PercentOutput, 0.0);
       load1.set(ControlMode.PercentOutput, 0.0);
-    } else {
+    }
+    else{
       load2.set(ControlMode.PercentOutput, speed2);
       load1.set(ControlMode.PercentOutput, speed2);
     }
   }
 
-  /**
-   * Another layer of abstraction for shooter outake method. Sets the
-   * shooterLeader motor PID controller reference in RPMs.
-   */
-  private void setShooterVelocity() {
+  public void outtakeWithDelay() {
+    powerCellCount();
+    setShooterVelocity();
+
+    //if(Math.abs(getShooterVelocity()) + error < targetVelocity && !sensor3.get()){
+    if(Math.abs(getShooterVelocity()) + error < errorReference && !sensor3.get() && timer.get() < 2.0){
+      load2.set(ControlMode.PercentOutput, 0.0);
+      load1.set(ControlMode.PercentOutput, 0.0);
+    }
+    else{
+      timer.stop();
+      timer.reset();
+      load2.set(ControlMode.PercentOutput, speed2);
+      load1.set(ControlMode.PercentOutput, speed2);
+      timer.start();
+    }
+  }
+
+  /**Another layer of abstraction for shooter outake method.
+   * Sets the shooterLeader motor PID controller reference in RPMs.*/
+  private void setShooterVelocity(){
     if (SmartDashboard.getBoolean("Testing Velocity?", false) == false) {
       leaderController.setReference(targetVelocity, ControlType.kVelocity);
+      errorReference = targetVelocity;
       System.out.println("Bruh");
-    } else {
+    }
+    else {
       leaderController.setReference(setPoint, ControlType.kVelocity);
+      errorReference = setPoint;
       System.out.println("Bruuuuuuuuuuuuuuuuuuuuuuh");
     }
   }
 
-  /*** Gets the shooter motor velocity from the encoder in RPMS */
-  private double getShooterVelocity() {
+  /***Gets the shooter motor velocity from the encoder in RPMS*/
+  private double getShooterVelocity(){
     return shooterLeader.getEncoder().getVelocity();
   }
 
-  private void pidTuner() {
+  private void pidTuner(){
     // read PID coefficients from SmartDashboard
-    // changed PID numbers to get consitantly within 1% of the target value
-    // (changed: 2-20-21)
+    // changed PID numbers to get consitantly within 1% of the target value (changed: 2-20-21)
     double p = SmartDashboard.getNumber("P Gain", 0.0003);
     double i = SmartDashboard.getNumber("I Gain", 0.00000001);
     double d = SmartDashboard.getNumber("D Gain", 0.005);
@@ -255,52 +273,27 @@ public class IntakeAndOutake extends SubsystemBase {
     double min = SmartDashboard.getNumber("Min Output", 0);
     double set = SmartDashboard.getNumber("Set Velocity", 0);
 
-    // if PID coefficients on SmartDashboard have changed, write new values to
-    // controller
-    if ((p != kP)) {
-      leaderController.setP(p);
-      followerController.setP(p);
-      kP = p;
-    }
-    if ((i != kI)) {
-      leaderController.setI(i);
-      followerController.setI(i);
-      kI = i;
-    }
-    if ((d != kD)) {
-      leaderController.setD(d);
-      followerController.setD(d);
-      kD = d;
-    }
-    if ((iz != kIz)) {
-      leaderController.setIZone(iz);
-      followerController.setIZone(iz);
-      kIz = iz;
-    }
-    if ((ff != kFF)) {
-      leaderController.setFF(ff);
-      followerController.setFF(ff);
-      kFF = ff;
-    }
-    if ((max != kMaxOutput) || (min != kMinOutput)) {
+    // if PID coefficients on SmartDashboard have changed, write new values to controller
+    if((p != kP)) { leaderController.setP(p); followerController.setP(p); kP = p; }
+    if((i != kI)) { leaderController.setI(i); followerController.setI(i); kI = i; }
+    if((d != kD)) { leaderController.setD(d); followerController.setD(d); kD = d; }
+    if((iz != kIz)) { leaderController.setIZone(iz); followerController.setIZone(iz); kIz = iz; }
+    if((ff != kFF)) { leaderController.setFF(ff); followerController.setFF(ff); kFF = ff; }
+    if((max != kMaxOutput) || (min != kMinOutput)) { 
       leaderController.setOutputRange(min, max);
       followerController.setOutputRange(min, max);
-      kMinOutput = min;
-      kMaxOutput = max;
+      kMinOutput = min; kMaxOutput = max; 
     }
-    if (set != setPoint)
-      setPoint = set;
+    if (set != setPoint) setPoint = set;
   }
 
-  /***
-   * Overloaded shooter outake method that takes a parameter for testing purposes
-   */
-  public void outake(double velocity) {
+  /***Overloaded shooter outake method that takes a parameter for testing purposes*/
+  public void outake(double velocity){
     setShooterVelocity();
 
     System.out.println("Velocity: " + getShooterVelocity());
 
-    if (Math.abs(getShooterVelocity()) + error < velocity && !sensor3.get()) {
+    if (Math.abs(getShooterVelocity()) + error < velocity && !sensor3.get()){
       load2.set(ControlMode.PercentOutput, 0.0);
       load1.set(ControlMode.PercentOutput, 0.0);
     } else {
@@ -315,23 +308,28 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Target Velocity", targetVelocity);
 
     pidTuner();
-    targetVelocity = ((lime.getDistance() * 3.4967) + 1908);
+    //targetVelocity = ((lime.getDistance() * 3.4967) + 1908);
+    //targetVelocity = ((lime.getDistance() * 3.4806) + 1766.9);
+
+    targetVelocity = (lime.getDistance() * 2.2532) + 2065.4;
+
   }
 
-  /** Displays intake and outake sensors on the SmartDashboard */
+  /**Displays intake and outake sensors on the SmartDashboard*/
   public void getSensors() {
     SmartDashboard.putBoolean("Intake Sensor1: ", !sensor1.get());
     SmartDashboard.putBoolean("Intake Sensor2: ", !sensor2.get());
     SmartDashboard.putBoolean("Intake Sensor3: ", !sensor3.get());
   }
 
-  /** Completely stops all intake motors except shooter loader */
+
+  /**Completely stops all intake motors except shooter loader*/
   public void intakeStop() {
     intake.set(ControlMode.PercentOutput, 0.0);
     load1.set(ControlMode.PercentOutput, 0.0);
   }
 
-  /** Stops shooter loader and all intake motors except the wheel */
+  /**Stops shooter loader and all intake motors except the wheel*/
   public void shooterStop() {
     load1.set(ControlMode.PercentOutput, 0.0);
     load2.set(ControlMode.PercentOutput, 0.0);

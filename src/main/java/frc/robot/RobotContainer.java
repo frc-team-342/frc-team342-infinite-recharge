@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.IntakeWithButton;
 import frc.robot.commands.LaunchWithButton;
@@ -96,6 +97,7 @@ public class RobotContainer {
   private JoystickButton op_controlarmBtn;
   private JoystickButton op_manual_wheelBtn;
   private JoystickButton op_reverse_teleBtn;
+  private JoystickButton op_drivecycle; 
 
   private Command op_launch;
   private Command op_slow;
@@ -121,7 +123,9 @@ public class RobotContainer {
   private Trajectory trajectory2;
   private TrajectoryConfig config;
   
-
+  //Sensors 
+  private DigitalInput sensor; //shooter loader sensor
+  private Command driveCycleBtn; 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -168,6 +172,8 @@ public class RobotContainer {
     op_controlarmBtn = new JoystickButton(operator, Constants.OP_CONTROL_ARM);
     op_manual_wheelBtn = new JoystickButton(operator, Constants.OP_CONTROL_RIGHT);
     op_reverse_teleBtn = new JoystickButton(operator, Constants.OP_REVERSE_TELE);
+    op_drivecycle = new JoystickButton(operator, Constants.OP_DRIVECYCLE); 
+
   
     op_launch = new LaunchWithButton();
     op_slow = new InstantCommand(driveSystem::setSlow, driveSystem);
@@ -186,10 +192,81 @@ public class RobotContainer {
     op_manual_wheel = new ManualControlPanel();
     op_reverse_tele = new InstantCommand(climb::setReverse, climb);
 
+    //Sensor
+    sensor = new DigitalInput(Constants.INTAKE_SENSOR_3); //shoot load sensor 
+
     // Autonomous
     auto = new Autonomous();
 
     configureButtonBindings();
+
+    trajectory = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(), 
+      List.of(
+        new Translation2d(1, 0)
+      ), 
+      new Pose2d(), 
+      config
+    );
+
+    trajectory2 = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(), 
+      List.of(
+        new Translation2d(-1, 0)
+      ), 
+      new Pose2d(), 
+      config
+    );
+    
+    RamseteCommand ramsete = new RamseteCommand(
+      trajectory, 
+      driveSystem::getPose2d, 
+      new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta), 
+      new SimpleMotorFeedforward(
+        Constants.ksVolts, 
+        Constants.kvVoltsSecondsPerMeter, 
+        Constants.kaVoltsSecondsSquaredPerMeter
+      ),
+      Constants.kDifferentialKinematics, 
+      driveSystem::getDifferentialWheelSpeeds, 
+      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
+      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
+      driveSystem::differentialDriveVolts, 
+      driveSystem
+    );
+    
+    driveSystem.resetOdometry(trajectory.getInitialPose());
+
+    // Command group that allows us to run to commands simultaneously. 
+    // Applied for using power cell intake while performing autonomous trajectory
+    
+    boolean isTriggered = !sensor.get(); 
+    driveCycleBtn = new SequentialCommandGroup(
+      ramsete,
+      //new AutoTarget().withTimeout(2.0),
+      //new LaunchWithButton(),
+       
+      (isTriggered) ? (new SequentialCommandGroup(
+        new AutoTarget().withTimeout(2.0),
+        new LaunchWithButton()
+      )) : new InstantCommand(),
+      new RamseteCommand(
+        trajectory2, 
+        driveSystem::getPose2d, 
+        new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta), 
+        new SimpleMotorFeedforward(
+          Constants.ksVolts, 
+          Constants.kvVoltsSecondsPerMeter, 
+          Constants.kaVoltsSecondsSquaredPerMeter
+        ),
+        Constants.kDifferentialKinematics, 
+        driveSystem::getDifferentialWheelSpeeds, 
+        new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
+        new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
+        driveSystem::differentialDriveVolts, 
+        driveSystem
+    )
+    );
   }
 
   public static Joystick getJoy(){
@@ -226,6 +303,7 @@ public class RobotContainer {
     op_controlarmBtn.toggleWhenPressed(op_controlarm);
     op_manual_wheelBtn.whileHeld(op_manual_wheel);
     op_reverse_teleBtn.whenPressed(op_reverse_tele);
+    op_drivecycle.toggleWhenPressed(driveCycleBtn);
   }
 
   /**
@@ -363,26 +441,7 @@ public class RobotContainer {
     // Generates a trajectory to follow that will be used in the RAMSETE command.
     //redPathA();
     //redPathB();
-
-    trajectory = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(), 
-      List.of(
-        new Translation2d(1, 0)
-      ), 
-      new Pose2d(), 
-      config
-    );
-
-    trajectory2 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(), 
-      List.of(
-        new Translation2d(-1, 0)
-      ), 
-      new Pose2d(), 
-      config
-    );
-    
-    RamseteCommand ramsete = new RamseteCommand(
+    return new RamseteCommand(
       trajectory, 
       driveSystem::getPose2d, 
       new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta), 
@@ -397,36 +456,6 @@ public class RobotContainer {
       new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
       driveSystem::differentialDriveVolts, 
       driveSystem
-    );
-    
-    driveSystem.resetOdometry(trajectory.getInitialPose());
-
-    // Command group that allows us to run to commands simultaneously. 
-    // Applied for using power cell intake while performing autonomous trajectory
-    return new SequentialCommandGroup(
-      ramsete,
-      //new AutoTarget().withTimeout(2.0),
-      //new LaunchWithButton(),
-      (true) ? (new SequentialCommandGroup(
-        new AutoTarget().withTimeout(2.0),
-        new LaunchWithButton()
-      )) : new InstantCommand(),
-      new RamseteCommand(
-        trajectory2, 
-        driveSystem::getPose2d, 
-        new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta), 
-        new SimpleMotorFeedforward(
-          Constants.ksVolts, 
-          Constants.kvVoltsSecondsPerMeter, 
-          Constants.kaVoltsSecondsSquaredPerMeter
-        ),
-        Constants.kDifferentialKinematics, 
-        driveSystem::getDifferentialWheelSpeeds, 
-        new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
-        new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
-        driveSystem::differentialDriveVolts, 
-        driveSystem
-    )
     );
   }
 }
