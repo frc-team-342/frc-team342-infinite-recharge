@@ -193,19 +193,33 @@ public class RobotContainer {
     op_reverse_tele = new InstantCommand(climb::setReverse, climb);
 
     //Sensor
-    sensor = new DigitalInput(Constants.INTAKE_SENSOR_3); //shoot load sensor 
+    //ensor = new DigitalInput(Constants.INTAKE_SENSOR_3); //shoot load sensor 
 
     // Autonomous
     auto = new Autonomous();
 
-    configureButtonBindings();
+    DifferentialDriveVoltageConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
+      new SimpleMotorFeedforward(
+        Constants.ksVolts, 
+        Constants.kvVoltsSecondsPerMeter, 
+        Constants.kaVoltsSecondsSquaredPerMeter
+      ), 
+      Constants.kDifferentialKinematics, 
+      10 // magic numbers babey
+    );
+
+    config = new TrajectoryConfig(
+      Constants.kMaxSpeedMetersPerSecond, 
+      Constants.kMaxAccelerationMetersPerSecondSquared
+    ).setKinematics(Constants.kDifferentialKinematics)
+    .addConstraint(voltageConstraint);
 
     trajectory = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(), 
+      new Pose2d(0,0,Rotation2d(0)), 
       List.of(
         new Translation2d(1, 0)
       ), 
-      new Pose2d(), 
+      new Pose2d(1,0,Rotation2d(0)), 
       config
     );
 
@@ -240,13 +254,13 @@ public class RobotContainer {
     // Command group that allows us to run to commands simultaneously. 
     // Applied for using power cell intake while performing autonomous trajectory
     
-    boolean isTriggered = !sensor.get(); 
+    //boolean isTriggered = !sensor.get(); 
     driveCycleBtn = new SequentialCommandGroup(
       ramsete,
       //new AutoTarget().withTimeout(2.0),
       //new LaunchWithButton(),
        
-      (isTriggered) ? (new SequentialCommandGroup(
+      (true) ? (new SequentialCommandGroup(
         new AutoTarget().withTimeout(2.0),
         new LaunchWithButton()
       )) : new InstantCommand(),
@@ -267,6 +281,8 @@ public class RobotContainer {
         driveSystem
     )
     );
+
+    configureButtonBindings();
   }
 
   public static Joystick getJoy(){
@@ -432,11 +448,11 @@ public class RobotContainer {
     );
 
     // Wraps together all of the path constraints
-    config = new TrajectoryConfig(
+    /*config = new TrajectoryConfig(
       Constants.kMaxSpeedMetersPerSecond, 
       Constants.kMaxAccelerationMetersPerSecondSquared
     ).setKinematics(Constants.kDifferentialKinematics)
-    .addConstraint(voltageConstraint);
+    .addConstraint(voltageConstraint);*/
 
     // Generates a trajectory to follow that will be used in the RAMSETE command.
     //redPathA();

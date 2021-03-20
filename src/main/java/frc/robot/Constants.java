@@ -102,7 +102,7 @@ public final class Constants {
     // Operator buttons
     public static final int OPERATOR_CONTROLLER = 1;
     public static final int OP_LAUNCH = 5; // left bumper
-    public static final int OP_SLOW = 2; // B button
+   public static final int OP_SLOW = 342; // B button
     public static final int OP_INTAKE = 6; // right bumper
     public static final int OP_LOCK_WINCH = 7; // menu left
     public static final int OP_RUN_WINCH = 8; // select right
@@ -111,7 +111,7 @@ public final class Constants {
     public static final int OP_TELESCOPES = 4; // Y button
     public static final int OP_REVERSE_TELE = 9; // left joy click
     public static final int OP_CONTROL_RIGHT = 10; // right joy click
-    public static final int OP_DRIVECYCLE = 342; 
+    public static final int OP_DRIVECYCLE = 2; 
 
     /* Sensors */
     // Intake sensors
