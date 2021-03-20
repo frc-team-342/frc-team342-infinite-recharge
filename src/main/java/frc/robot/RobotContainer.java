@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -214,22 +215,25 @@ public class RobotContainer {
     ).setKinematics(Constants.kDifferentialKinematics)
     .addConstraint(voltageConstraint);
 
+    TrajectoryConfig config2 = new TrajectoryConfig(
+      Constants.kMaxSpeedMetersPerSecond / 3, 
+      Constants.kMaxAccelerationMetersPerSecondSquared / 2
+    ).setKinematics(Constants.kDifferentialKinematics)
+    .addConstraint(voltageConstraint)
+    .setReversed(true);
+
     trajectory = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0,new Rotation2d(0)), 
-      List.of(
-        new Translation2d(1, 0)
-      ), 
-      new Pose2d(1,0,new Rotation2d(0)), 
+      List.of(), 
+      new Pose2d(4,0,new Rotation2d(0)), 
       config
     );
 
     trajectory2 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(1, 0, new Rotation2d(0)), 
-      List.of(
-        new Translation2d(-1, 0)
-      ), 
       new Pose2d(0, 0, new Rotation2d(0)), 
-      config
+      List.of(), 
+      new Pose2d(-4, 0, new Rotation2d(0)), 
+      config2
     );
     
     RamseteCommand ramsete = new RamseteCommand(
@@ -260,10 +264,18 @@ public class RobotContainer {
       //new AutoTarget().withTimeout(2.0),
       //new LaunchWithButton(),
        
-      (true) ? (new SequentialCommandGroup(
+      ((true) ? (new SequentialCommandGroup(
         new AutoTarget().withTimeout(2.0),
-        new LaunchWithButton()
-      )) : new InstantCommand(),
+        new LaunchWithButton().withTimeout(2.0)
+      )) : new InstantCommand()).withTimeout(4.0),
+      new PrintCommand("before liemlight"),
+      new InstantCommand(
+        () -> {
+          Factory.getLimelight().visionOff();
+        },
+        Factory.getLimelight()
+      ),
+      new PrintCommand("after limelight"),
       new RamseteCommand(
         trajectory2, 
         driveSystem::getPose2d, 
@@ -279,8 +291,9 @@ public class RobotContainer {
         new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
         driveSystem::differentialDriveVolts, 
         driveSystem
-    )
-    );
+    ),
+    new PrintCommand("after trajectory")
+  );
 
     configureButtonBindings();
   }
