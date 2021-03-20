@@ -265,9 +265,9 @@ public class RobotContainer {
       //new LaunchWithButton(),
        
       ((true) ? (new SequentialCommandGroup(
-        new AutoTarget().withTimeout(2.0),
-        new LaunchWithButton().withTimeout(2.0)
-      )) : new InstantCommand()).withTimeout(4.0),
+        new AutoTarget().withTimeout(0.5),
+        new LaunchWithButton().withTimeout(1.5)
+      )) : new InstantCommand()).withTimeout(2.0),
       new PrintCommand("before liemlight"),
       new InstantCommand(
         () -> {
