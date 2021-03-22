@@ -267,18 +267,26 @@ public class RobotContainer {
     return trajectory.sample(trajectory.getTotalTimeSeconds());
   }
 
+  /** 
+   * Finds the X-component of the vector created with the magnitude of the center to intake and angle of robot heading
+   * @param angle robot heading in radians
+   */
   public double centerRobotToIntakeX(double angle){
     return Constants.centerRobotToIntakeMeters * Math.cos(angle);
   }
 
+  /** 
+   * Finds the Y-component of the vector created with the magnitude of the center to intake and angle of robot heading
+   * @param angle robot heading in radians
+   */
   public double centerRobotToIntakeY(double angle){
     return Constants.centerRobotToIntakeMeters * Math.sin(angle);
   }
 
   public void redPathA(){
-    double firstPointAngle = 0.0;
-    double secondPointAngle = -0.470255442341;
-    double thirdPointAngle = 1.25571844584;
+    double firstPointAngle = 0.0; // Heading of robot to first nav point in radians
+    double secondPointAngle = -0.470255442341; // Heading of robot to second nav point in radians
+    double thirdPointAngle = 1.25571844584; // Heading of robot to third nav point in radians
 
     trajectory = TrajectoryGenerator.generateTrajectory(
       // The starting end point of the trajectory path
@@ -286,6 +294,7 @@ public class RobotContainer {
       List.of(
         // Here is where you add interior waypoints
         // First point in the translation is the vertical position and second is the horizontal position
+        // use of centerRobotToIntake methods is to make the intake of the robot the "center" to make galactic search cell intake better
         new Translation2d(getNavPointVertical(2.0) - centerRobotToIntakeX(firstPointAngle), getNavPointHorizontal(0.0) - centerRobotToIntakeY(firstPointAngle)),
         new Translation2d(getNavPointVertical(4.0) - centerRobotToIntakeX(secondPointAngle), getNavPointHorizontal(1.0) - centerRobotToIntakeY(secondPointAngle)),
         new Translation2d(getNavPointVertical(5.0) - centerRobotToIntakeX(thirdPointAngle), getNavPointHorizontal(-2.0) - centerRobotToIntakeY(thirdPointAngle))
