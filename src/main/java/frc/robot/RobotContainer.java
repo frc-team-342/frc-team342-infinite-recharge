@@ -267,94 +267,35 @@ public class RobotContainer {
     return trajectory.sample(trajectory.getTotalTimeSeconds());
   }
 
-  /** 
-   * Finds the X-component of the vector created with the magnitude of the center to intake and angle of robot heading
-   * @param angle robot heading in radians
-   */
-  public double centerRobotToIntakeX(double angle){
-    return Constants.centerRobotToIntakeMeters * Math.cos(angle);
-  }
-
-  /** 
-   * Finds the Y-component of the vector created with the magnitude of the center to intake and angle of robot heading
-   * @param angle robot heading in radians
-   */
-  public double centerRobotToIntakeY(double angle){
-    return Constants.centerRobotToIntakeMeters * Math.sin(angle);
-  }
-
-  public void redPathA(){
-    double firstPointAngle = 0.0; // Heading of robot to first nav point in radians
-    double secondPointAngle = -0.470255442341; // Heading of robot to second nav point in radians
-    double thirdPointAngle = 1.25571844584; // Heading of robot to third nav point in radians
-
+  public void slalomPath(){
     trajectory = TrajectoryGenerator.generateTrajectory(
       // The starting end point of the trajectory path
       new Pose2d(getNavPointVertical(0.0), getNavPointHorizontal(0.0), new Rotation2d(0)), 
       List.of(
         // Here is where you add interior waypoints
         // First point in the translation is the vertical position and second is the horizontal position
-        // use of centerRobotToIntake methods is to make the intake of the robot the "center" to make galactic search cell intake better
-        new Translation2d(getNavPointVertical(2.0) - centerRobotToIntakeX(firstPointAngle), getNavPointHorizontal(0.0) - centerRobotToIntakeY(firstPointAngle)),
-        new Translation2d(getNavPointVertical(4.0) - centerRobotToIntakeX(secondPointAngle), getNavPointHorizontal(1.0) - centerRobotToIntakeY(secondPointAngle)),
-        new Translation2d(getNavPointVertical(5.0) - centerRobotToIntakeX(thirdPointAngle), getNavPointHorizontal(-2.0) - centerRobotToIntakeY(thirdPointAngle))
-      ), 
-      // The final end point of the trajectory path
-      new Pose2d(getNavPointVertical(10.0), getNavPointHorizontal(-2.0), new Rotation2d(0)), 
-      config
-    ); 
-  }
-
-  public void redPathB(){
-    trajectory = TrajectoryGenerator.generateTrajectory(
-      // The starting end point of the trajectory path
-      new Pose2d(getNavPointVertical(0.0), getNavPointHorizontal(0.0), new Rotation2d(0)), 
-      List.of(
-        // Here is where you add interior waypoints
-        // First point in the translation is the vertical position and second is the horizontal position
-        new Translation2d(getNavPointVertical(2.5), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(4.0), getNavPointHorizontal(2.0)),
+        new Translation2d(getNavPointVertical(0.5), getNavPointHorizontal(-0.5)),
+        new Translation2d(getNavPointVertical(1.0), getNavPointHorizontal(-1.0)),
+        new Translation2d(getNavPointVertical(2.0), getNavPointHorizontal(-2.0)),
+        new Translation2d(getNavPointVertical(4.0), getNavPointHorizontal(-2.0)),
+        new Translation2d(getNavPointVertical(6.2), getNavPointHorizontal(-1.5)),
+        new Translation2d(getNavPointVertical(7.0), getNavPointHorizontal(-1.0)),
+        new Translation2d(getNavPointVertical(8.0), getNavPointHorizontal(0.0)),
+        new Translation2d(getNavPointVertical(9.0), getNavPointHorizontal(-1.0)),
+        new Translation2d(getNavPointVertical(8.0), getNavPointHorizontal(-2.0)),
+        new Translation2d(getNavPointVertical(7.0), getNavPointHorizontal(-1.0)),
         new Translation2d(getNavPointVertical(6.0), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(7.0), getNavPointHorizontal(-1.0))
+        new Translation2d(getNavPointVertical(5.0), getNavPointHorizontal(0.0)),
+        new Translation2d(getNavPointVertical(4.0), getNavPointHorizontal(0.0)),
+        new Translation2d(getNavPointVertical(3.0), getNavPointHorizontal(0.0)),
+        new Translation2d(getNavPointVertical(2.0), getNavPointHorizontal(-0.5)),
+        new Translation2d(getNavPointVertical(1.0), getNavPointHorizontal(-1.0)),
+        new Translation2d(getNavPointVertical(0.0), getNavPointHorizontal(-2.0))
       ), 
       // The final end point of the trajectory path
-      new Pose2d(getNavPointVertical(10.75), getNavPointHorizontal(-1.0), new Rotation2d(0)), 
+      new Pose2d(getNavPointVertical(-1.0), getNavPointHorizontal(-2.0), new Rotation2d(0)), 
       config
     ); 
-  }
-
-  public void bluePathA(){
-    trajectory = TrajectoryGenerator.generateTrajectory(
-      // The starting end point of the trajectory path
-      new Pose2d(getNavPointVertical(0.0), getNavPointHorizontal(0.0), new Rotation2d(0)), 
-      List.of(
-        // Here is where you add interior waypoints
-        // First point in the translation is the vertical position and second is the horizontal position
-        new Translation2d(getNavPointVertical(5.0), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(6.0), getNavPointHorizontal(-3.0)),
-        new Translation2d(getNavPointVertical(8.0), getNavPointHorizontal(-2.0))
-      ), 
-      // The final end point of the trajectory path
-      new Pose2d(getNavPointVertical(10.5), getNavPointHorizontal(-2.0), new Rotation2d(0)), 
-      config
-    );
-  }
-
-  public void bluePathB(){
-    trajectory = TrajectoryGenerator.generateTrajectory(
-      // The starting end point of the trajectory path
-      new Pose2d(getNavPointVertical(0.0), getNavPointHorizontal(0.0), new Rotation2d(0)), 
-      List.of(
-        // Here is where you add interior waypoints
-        // First point in the translation is the vertical position and second is the horizontal position
-        new Translation2d(getNavPointVertical(5.0), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(7.0), getNavPointHorizontal(-2.0)),
-        new Translation2d(getNavPointVertical(9.0), getNavPointHorizontal(0.0))
-      ), 
-      // The final end point of the trajectory path
-      new Pose2d(getNavPointVertical(10.5), getNavPointHorizontal(1.0), new Rotation2d(0)), 
-      config
-    );
   }
 
   /**
@@ -380,6 +321,8 @@ public class RobotContainer {
       Constants.kMaxAccelerationMetersPerSecondSquared
     ).setKinematics(Constants.kDifferentialKinematics)
     .addConstraint(voltageConstraint);
+
+    slalomPath();
     
     RamseteCommand ramsete = new RamseteCommand(
       trajectory, 
@@ -399,17 +342,6 @@ public class RobotContainer {
     );
     
     driveSystem.resetOdometry(trajectory.getInitialPose());
-
-    // Command group that allows us to run to commands simultaneously. 
-    // Applied for using power cell intake while performing autonomous trajectory
-    return new ParallelRaceGroup(
-      ramsete.andThen(() -> driveSystem.differentialDriveVolts(0, 0)),
-      new RunCommand(
-        () -> {
-          Factory.getIntakeOutake().intake();
-        },
-        Factory.getIntakeOutake()
-      )
-    );
+    return ramsete.andThen(() -> driveSystem.differentialDriveVolts(0, 0));
   }
 }
