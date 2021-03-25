@@ -196,7 +196,7 @@ public class RobotContainer {
 
     configureButtonBindings();
 
-    camera = new PhotonCamera("camera1");
+    camera = new PhotonCamera("HD_USB_Camera");
   }
 
   public static Joystick getJoy(){
@@ -358,9 +358,10 @@ public class RobotContainer {
   //Uses the angle of the Powercells to identify which path to use
   //Does stuff *thumbs up*
   public void galacticSearchWithPC() {
-    PhotonTrackedTarget target = camera.getLatestResult().getTargets().get(0);
+    //PhotonTrackedTarget target = camera.getLatestResult().getTargets().get(0);
 
     if (camera.getLatestResult().hasTargets()) {
+      PhotonTrackedTarget target = camera.getLatestResult().getTargets().get(0);
       double angle = target.getYaw();
 
       if (angle < -0.81 && angle > -6.81) {
@@ -409,9 +410,13 @@ public class RobotContainer {
     .addConstraint(voltageConstraint);
     
     //Autonomous Goes Here
-    galacticSearchWithPC();
+    //galacticSearchWithPC();
 
-    RamseteCommand ramsete = new RamseteCommand(
+    return new RunCommand(() -> {
+      galacticSearchWithPC();
+    });
+
+    /*RamseteCommand ramsete = new RamseteCommand(
       trajectory, 
       driveSystem::getPose2d, 
       new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta), 
@@ -440,6 +445,6 @@ public class RobotContainer {
         },
         Factory.getIntakeOutake()
       )
-    );
+    );*/
   }
 }
