@@ -267,7 +267,7 @@ public class RobotContainer {
     return trajectory.sample(trajectory.getTotalTimeSeconds());
   }
 
-  public void slalomPath(){
+  public void bouncePath(){
     trajectory = TrajectoryGenerator.generateTrajectory(
       // The starting end point of the trajectory path
       new Pose2d(getNavPointVertical(0.0), getNavPointHorizontal(0.0), new Rotation2d(0)), 
@@ -322,7 +322,7 @@ public class RobotContainer {
     ).setKinematics(Constants.kDifferentialKinematics)
     .addConstraint(voltageConstraint);
 
-    slalomPath();
+    bouncePath();
     
     RamseteCommand ramsete = new RamseteCommand(
       trajectory, 
