@@ -34,13 +34,14 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.RotateToAngle;
 import frc.robot.commands.IntakeWithButton;
 import frc.robot.commands.LaunchWithButton;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.ActivateWinches;
+import frc.robot.commands.AutoMove;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.ChangeColor;
 
@@ -363,25 +364,21 @@ public class RobotContainer {
     if (camera.getLatestResult().hasTargets()) {
       PhotonTrackedTarget target = camera.getLatestResult().getTargets().get(0);
       double angle = target.getYaw();
-
-      if (angle < -0.81 && angle > -6.81) {
-        //redPathA();
-        System.out.println("red path a");
+      if (target.getPitch() < 6) {
+        if (angle < -0.81 && angle > -6.81) {
+          //redPathA();
+          System.out.println("red path a");
+        } else if (angle < -7.75 && angle > -13.75) {
+          //redPathB();
+          System.out.println("red path b");
+        } else if (angle < 12.5 && angle > 7.5) {
+          //bluePathA();
+          System.out.println("blue path a has target");
+        } else if (angle > 0.81 && angle < 6.81) {
+          // bluePathB();
+          System.out.println("blue path BBB");
+        }
       }
-      else if (angle < -7.75 && angle > -13.75) {
-        //redPathB();
-        System.out.println("red path b");
-      }
-      else if (angle < 6.36 && angle > 0.36) {
-        //bluePathA();
-        System.out.println("blue path a");
-      } else {
-        // bluePathB();
-        System.out.println("blue path BBB has target");
-      }
-    } else {
-      //bluePathB();
-      System.out.println("blu path BBBBB no targetsss");
     }
   } 
 
@@ -412,10 +409,6 @@ public class RobotContainer {
     //Autonomous Goes Here
     //galacticSearchWithPC();
 
-    return new RunCommand(() -> {
-      galacticSearchWithPC();
-    });
-
     /*RamseteCommand ramsete = new RamseteCommand(
       trajectory, 
       driveSystem::getPose2d, 
@@ -431,13 +424,34 @@ public class RobotContainer {
       new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
       driveSystem::differentialDriveVolts, 
       driveSystem
-    );
+    );*/
     
-    driveSystem.resetOdometry(trajectory.getInitialPose());
+    
+
+    if (camera.getLatestResult().hasTargets() && camera.getLatestResult().getTargets().get(0).getPitch() < 6) {
+      return new RunCommand(() -> {
+        galacticSearchWithPC();
+      });
+    } else {
+      trajectory = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0,0,new Rotation2d(0)), 
+        List.of(new Translation2d(getNa)), 
+        new Pose2d(getNavPointVertical(1.5),0,new Rotation2d(0)), 
+        config
+      );
+      driveSystem.resetOdometry(trajectory.getInitialPose());
+
+      return new SequentialCommandGroup(
+        new AutoMove(0.5).withTimeout(0.5),
+        new RunCommand(() -> {
+          galacticSearchWithPC();
+        })
+      );
+    }
 
     // Command group that allows us to run to commands simultaneously. 
     // Applied for using power cell intake while performing autonomous trajectory
-    return new ParallelRaceGroup(
+    /*return new ParallelRaceGroup(
       ramsete.andThen(() -> driveSystem.differentialDriveVolts(0, 0)),
       new RunCommand(
         () -> {
