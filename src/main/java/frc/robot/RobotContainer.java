@@ -9,6 +9,9 @@ package frc.robot;
 
 import java.util.List;
 
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonTrackedTarget;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -66,6 +69,8 @@ import frc.robot.subsystems.IntakeAndOutake;
 public class RobotContainer {
   private final DriveSystem driveSystem;
   private final ClimbSubsystem climb;
+
+  PhotonCamera camera; // ok
 
   // Driver controller
   private static Joystick driver; // port 0
@@ -190,6 +195,8 @@ public class RobotContainer {
     auto = new Autonomous();
 
     configureButtonBindings();
+
+    camera = new PhotonCamera("camera1");
   }
 
   public static Joystick getJoy(){
@@ -348,6 +355,35 @@ public class RobotContainer {
     );
   }
 
+  //Uses the angle of the Powercells to identify which path to use
+  //Does stuff *thumbs up*
+  public void galacticSearchWithPC() {
+    PhotonTrackedTarget target = camera.getLatestResult().getTargets().get(0);
+
+    if (camera.getLatestResult().hasTargets()) {
+      double angle = target.getYaw();
+
+      if (angle < -0.81 && angle > -6.81) {
+        //redPathA();
+        System.out.println("red path a");
+      }
+      else if (angle < -7.75 && angle > -13.75) {
+        //redPathB();
+        System.out.println("red path b");
+      }
+      else if (angle < 6.36 && angle > 0.36) {
+        //bluePathA();
+        System.out.println("blue path a");
+      } else {
+        // bluePathB();
+        System.out.println("blue path BBB has target");
+      }
+    } else {
+      //bluePathB();
+      System.out.println("blu path BBBBB no targetsss");
+    }
+  } 
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -372,6 +408,9 @@ public class RobotContainer {
     ).setKinematics(Constants.kDifferentialKinematics)
     .addConstraint(voltageConstraint);
     
+    //Autonomous Goes Here
+    galacticSearchWithPC();
+
     RamseteCommand ramsete = new RamseteCommand(
       trajectory, 
       driveSystem::getPose2d, 
