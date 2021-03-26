@@ -41,7 +41,6 @@ import frc.robot.commands.LaunchWithButton;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.ActivateWinches;
-import frc.robot.commands.AutoMove;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.ChangeColor;
 
@@ -434,15 +433,33 @@ public class RobotContainer {
       });
     } else {
       trajectory = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0,0,new Rotation2d(0)), 
-        List.of(), 
-        new Pose2d(getNavPointVertical(1.5),0,new Rotation2d(0)), 
+        new Pose2d(0,0.46,new Rotation2d(0)), 
+        List.of(
+          new Translation2d(getNavPointVertical(0.5), getNavPointHorizontal(0.75))
+        ), 
+        new Pose2d(getNavPointVertical(1.5),getNavPointHorizontal(0.75),new Rotation2d(0)), 
         config
       );
       driveSystem.resetOdometry(trajectory.getInitialPose());
 
       return new SequentialCommandGroup(
-        new AutoMove(0.5).withTimeout(0.5),
+        new RamseteCommand(trajectory, 
+          driveSystem::getPose2d, 
+          new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta), 
+          new SimpleMotorFeedforward(
+            Constants.ksVolts, 
+            Constants.kvVoltsSecondsPerMeter, 
+            Constants.kaVoltsSecondsSquaredPerMeter
+          ),
+          Constants.kDifferentialKinematics, 
+          driveSystem::getDifferentialWheelSpeeds, 
+          new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
+          new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
+          driveSystem::differentialDriveVolts, 
+          driveSystem
+        ).andThen(() -> {
+          driveSystem.stopDrive();
+        }),
         new RunCommand(() -> {
           galacticSearchWithPC();
         })
