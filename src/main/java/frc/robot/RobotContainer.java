@@ -275,25 +275,31 @@ public class RobotContainer {
         // Here is where you add interior waypoints
         // First point in the translation is the vertical position and second is the horizontal position
         new Translation2d(getNavPointVertical(1.0), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(1.5), getNavPointHorizontal(-0.5)),
-        new Translation2d(getNavPointVertical(2.0), getNavPointHorizontal(-2.0)),
-        new Translation2d(getNavPointVertical(2.0), getNavPointHorizontal(-1.0)),
+        //new Translation2d(getNavPointVertical(1.5), getNavPointHorizontal(-0.5)),
+        new Translation2d(getNavPointVertical(1.5), getNavPointHorizontal(-2.5)),
+        new Translation2d(getNavPointVertical(1.5), getNavPointHorizontal(-1.0)),
         new Translation2d(getNavPointVertical(2.5), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(3.5), getNavPointHorizontal(2.0)),
+        new Translation2d(getNavPointVertical(3.0), getNavPointHorizontal(2.0)),
+        new Translation2d(getNavPointVertical(3.5), getNavPointHorizontal(2.5)),
         new Translation2d(getNavPointVertical(4.0), getNavPointHorizontal(2.0)),
-        new Translation2d(getNavPointVertical(4.5), getNavPointHorizontal(1.5)),
-        new Translation2d(getNavPointVertical(5.0), getNavPointHorizontal(1.0)),
-        new Translation2d(getNavPointVertical(5.0), getNavPointHorizontal(-2.0)),
-        new Translation2d(getNavPointVertical(5.0), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(5.0), getNavPointHorizontal(1.0)),
+       // new Translation2d(getNavPointVertical(4.5), getNavPointHorizontal(1.5)),
+        new Translation2d(getNavPointVertical(4.25), getNavPointHorizontal(1.0)),
+        new Translation2d(getNavPointVertical(4.25), getNavPointHorizontal(0.0)),
+        new Translation2d(getNavPointVertical(4.5), getNavPointHorizontal(-1.0)),
+        new Translation2d(getNavPointVertical(4.5), getNavPointHorizontal(-2.0)),
+        new Translation2d(getNavPointVertical(4.75), getNavPointHorizontal(0.0)),
+        new Translation2d(getNavPointVertical(4.75), getNavPointHorizontal(1.0)),
         new Translation2d(getNavPointVertical(5.5), getNavPointHorizontal(2.0)),
         new Translation2d(getNavPointVertical(7.5), getNavPointHorizontal(2.0)),
-        new Translation2d(getNavPointVertical(7.75), getNavPointHorizontal(0.0)),
+        new Translation2d(getNavPointVertical(7.5), getNavPointHorizontal(1.0)),
+        new Translation2d(getNavPointVertical(7.5), getNavPointHorizontal(0.0)),
+        new Translation2d(getNavPointVertical(8.0), getNavPointHorizontal(-1.0)),
         new Translation2d(getNavPointVertical(8.0), getNavPointHorizontal(-2.0)),
-        new Translation2d(getNavPointVertical(8.25), getNavPointHorizontal(0.0))
+        new Translation2d(getNavPointVertical(8.0), getNavPointHorizontal(-1.0)),
+        new Translation2d(getNavPointVertical(8.0), getNavPointHorizontal(-0.4))
       ), 
       // The final end point of the trajectory path
-      new Pose2d(getNavPointVertical(10.0), getNavPointHorizontal(0.0), new Rotation2d(180)), 
+      new Pose2d(getNavPointVertical(10.0), getNavPointHorizontal(-0.5), new Rotation2d(0)), 
       config
     ); 
   }
