@@ -435,7 +435,7 @@ public class RobotContainer {
     } else {
       trajectory = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0,0,new Rotation2d(0)), 
-        List.of(new Translation2d(getNa)), 
+        List.of(), 
         new Pose2d(getNavPointVertical(1.5),0,new Rotation2d(0)), 
         config
       );
