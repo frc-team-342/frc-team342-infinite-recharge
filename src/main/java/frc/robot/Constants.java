@@ -40,7 +40,7 @@ public final class Constants {
     public static final double kPDriveVel = 0.00289; // Value obtained from characterization
     public static final double kDDriveVel = 0.0; // Value obtained from characterization
     public static final double kTrackWidthMeters = Units.inchesToMeters(23.0); // value obtained from physically measuring wheel
-    public static final double kMaxSpeedMetersPerSecond = 1.0;
+    public static final double kMaxSpeedMetersPerSecond = 1.5;
     public static final double kMaxAccelerationMetersPerSecondSquared = 1.0;
 
     // Reasonable baseline values for a RAMSETE follower in units of meters and seconds

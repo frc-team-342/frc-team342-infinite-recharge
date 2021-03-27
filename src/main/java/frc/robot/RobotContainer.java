@@ -277,8 +277,8 @@ public class RobotContainer {
 
         // First barrel
         new Translation2d(getNavPointVertical(3.5), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(4.2), getNavPointHorizontal(-0.3)),
-        new Translation2d(getNavPointVertical(4.5), getNavPointHorizontal(0.0)),
+        new Translation2d(getNavPointVertical(4.2), getNavPointHorizontal(0.3)),
+        new Translation2d(getNavPointVertical(4.5), getNavPointHorizontal(0.5)),
         new Translation2d(getNavPointVertical(4.5), getNavPointHorizontal(1.0)),
         new Translation2d(getNavPointVertical(4.0), getNavPointHorizontal(2.0)),
         new Translation2d(getNavPointVertical(3.5), getNavPointHorizontal(1.0)),
