@@ -10,6 +10,7 @@ package frc.robot;
 import java.util.List;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPipelineResult;
 import org.photonvision.PhotonTrackedTarget;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -359,9 +360,10 @@ public class RobotContainer {
   //Does stuff *thumbs up*
   public void galacticSearchWithPC() {
     //PhotonTrackedTarget target = camera.getLatestResult().getTargets().get(0);
+    List<PhotonTrackedTarget> h = camera.getLatestResult().getTargets();
 
-    if (camera.getLatestResult().hasTargets()) {
-      PhotonTrackedTarget target = camera.getLatestResult().getTargets().get(0);
+    if (h.size() > 0) {
+      PhotonTrackedTarget target = h.get(0);
       double angle = target.getYaw();
       if (target.getPitch() < 6) {
         if (angle < -0.81 && angle > -6.81) {
@@ -370,16 +372,20 @@ public class RobotContainer {
         } else if (angle < -7.75 && angle > -13.75) {
           //redPathB();
           System.out.println("red path b");
-        } else if (angle < 12.5 && angle > 7.5) {
+        } else if (angle < 7.9 && angle > 13.9) {
           //bluePathA();
           System.out.println("blue path a has target");
-        } else if (angle > 0.81 && angle < 6.81) {
+        } else if (angle > 1.70 && angle < 7.7) {
           // bluePathB();
           System.out.println("blue path BBB");
+        } else {
+          System.out.println("It's not working, yo");
         }
       }
-    }
+    } else { System.out.println("its nto workingn"); }
   } 
+
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -433,11 +439,13 @@ public class RobotContainer {
       });
     } else {
       trajectory = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0,0.46,new Rotation2d(0)), 
-        List.of(
-          new Translation2d(getNavPointVertical(0.5), getNavPointHorizontal(0.75))
+        new Pose2d(0,getNavPointHorizontal(0),new Rotation2d(0)), 
+        List. of(),
+        new Pose2d(getNavPointVertical(1.5), getNavPointHorizontal(0), new Rotation2d(0)),
+        /*List.of(
+          new Translation2d(getNavPointVertical(0.5), getNavPointHorizontal(0.5))
         ), 
-        new Pose2d(getNavPointVertical(1.5),getNavPointHorizontal(0.75),new Rotation2d(0)), 
+        new Pose2d(getNavPointVertical(1.75),getNavPointHorizontal(0.75),new Rotation2d(0)),*/
         config
       );
       driveSystem.resetOdometry(trajectory.getInitialPose());
@@ -462,6 +470,7 @@ public class RobotContainer {
         }),
         new RunCommand(() -> {
           galacticSearchWithPC();
+          System.out.println("This is running");
         })
       );
     }
