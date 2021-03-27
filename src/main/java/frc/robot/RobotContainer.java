@@ -277,17 +277,23 @@ public class RobotContainer {
 
         // First barrel
         new Translation2d(getNavPointVertical(3.5), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(4.2), getNavPointHorizontal(0.3)),
-        new Translation2d(getNavPointVertical(4.5), getNavPointHorizontal(0.5)),
-        new Translation2d(getNavPointVertical(4.5), getNavPointHorizontal(1.0)),
-        new Translation2d(getNavPointVertical(4.0), getNavPointHorizontal(2.0)),
-        new Translation2d(getNavPointVertical(3.5), getNavPointHorizontal(1.0)),
+        //new Translation2d(getNavPointVertical(4.2), getNavPointHorizontal(0.3)),
+        new Translation2d(getNavPointVertical(4.75), getNavPointHorizontal(0.5)),
+        new Translation2d(getNavPointVertical(4.75), getNavPointHorizontal(1.0)),
+        new Translation2d(getNavPointVertical(4.75), getNavPointHorizontal(1.5)),
+        new Translation2d(getNavPointVertical(4.5), getNavPointHorizontal(2.0)),
+        new Translation2d(getNavPointVertical(4.0), getNavPointHorizontal(2.8)),
+        new Translation2d(getNavPointVertical(3.5), getNavPointHorizontal(2.8)),
+        new Translation2d(getNavPointVertical(2.5), getNavPointHorizontal(2.5)),
+        new Translation2d(getNavPointVertical(2.0), getNavPointHorizontal(1.5)),
+        new Translation2d(getNavPointVertical(2.5), getNavPointHorizontal(1.0)),
+        new Translation2d(getNavPointVertical(2.5), getNavPointHorizontal(0.0)),
         new Translation2d(getNavPointVertical(4.0), getNavPointHorizontal(0.0)),
 
         // Second barrel
         new Translation2d(getNavPointVertical(6.5), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(7.5), getNavPointHorizontal(-1.0)),
-        new Translation2d(getNavPointVertical(8.0), getNavPointHorizontal(-2.0)),
+        new Translation2d(getNavPointVertical(8.0), getNavPointHorizontal(-0.5)),
+        new Translation2d(getNavPointVertical(8.5), getNavPointHorizontal(-2.0)),
         new Translation2d(getNavPointVertical(7.0), getNavPointHorizontal(-3.0)),
         new Translation2d(getNavPointVertical(6.0), getNavPointHorizontal(-2.0)),
         new Translation2d(getNavPointVertical(6.5), getNavPointHorizontal(0.0)),
@@ -297,10 +303,13 @@ public class RobotContainer {
         new Translation2d(getNavPointVertical(9.0), getNavPointHorizontal(2.0)),
         new Translation2d(getNavPointVertical(10.0), getNavPointHorizontal(1.0)),
         new Translation2d(getNavPointVertical(9.0), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(6.5), getNavPointHorizontal(0.0))
+        new Translation2d(getNavPointVertical(6.5), getNavPointHorizontal(0.0)),
+        new Translation2d(getNavPointVertical(4.0), getNavPointHorizontal(-0.25)),
+        new Translation2d(getNavPointVertical(2.0), getNavPointHorizontal(-0.25)),
+        new Translation2d(getNavPointVertical(1.0), getNavPointHorizontal(-0.25))
       ), 
       // The final end point of the trajectory path
-      new Pose2d(getNavPointVertical(0.0), getNavPointHorizontal(0.0), new Rotation2d(180)), 
+      new Pose2d(getNavPointVertical(0.0), getNavPointHorizontal(-0.5), new Rotation2d(180)), 
       config
     ); 
   }
