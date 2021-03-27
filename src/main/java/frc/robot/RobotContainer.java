@@ -458,7 +458,7 @@ public class RobotContainer {
           driveSystem::differentialDriveVolts, 
           driveSystem
         ).andThen(() -> {
-          driveSystem.stopDrive();
+          driveSystem.differentialDriveVolts(0,0);
         }),
         new RunCommand(() -> {
           galacticSearchWithPC();
