@@ -1,5 +1,8 @@
 package frc.robot;
 
+import java.io.File;
+import java.io.IOException;
+
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.MecanumDriveKinematics;
 
@@ -15,6 +18,18 @@ import edu.wpi.first.wpilibj.kinematics.MecanumDriveKinematics;
  */
 
 public final class Constants {
+    /**
+     * Never touch this. Ever.
+     */
+    private static int getRobot() {
+        File a = new File("/home/lvuser/robot");
+        return (a.exists()) ? 0 : 1;
+    }
+    /**
+     * 0 for a bot 
+     * 1 for anything else
+     */
+    public static final int robot = getRobot();
 
     /*
      * Follow these variable naming conventions: - Motor names should be named
