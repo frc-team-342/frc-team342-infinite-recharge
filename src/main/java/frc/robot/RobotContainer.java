@@ -253,23 +253,20 @@ public class RobotContainer {
     
     //boolean isTriggered = !sensor.get(); 
     driveCycleBtn = new SequentialCommandGroup(
-      ramsete,
-      //new AutoTarget().withTimeout(2.0),
-      //new LaunchWithButton(),
-       
-      ((true) ? (new SequentialCommandGroup(
+      ramsete, // drive forwards       
+      ((true) ? (new SequentialCommandGroup( // if condition, target and shoot
         new AutoTarget().withTimeout(0.5),
         new LaunchWithButton().withTimeout(1.5)
-      )) : new InstantCommand()).withTimeout(2.0),
+      )) : new InstantCommand()).withTimeout(2.0), // if not condition, do nothing for two seconds
       new PrintCommand("before liemlight"),
       new InstantCommand(
         () -> {
-          Factory.getLimelight().visionOff();
+          Factory.getLimelight().visionOff(); // turn targeting off 
         },
         Factory.getLimelight()
       ),
       new PrintCommand("after limelight"),
-      new RamseteCommand(
+      new RamseteCommand( // drive backwards
         trajectory2, 
         driveSystem::getPose2d, 
         new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta), 
