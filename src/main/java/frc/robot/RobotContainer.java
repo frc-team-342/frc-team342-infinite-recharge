@@ -410,64 +410,22 @@ public class RobotContainer {
       Constants.kMaxAccelerationMetersPerSecondSquared
     ).setKinematics(Constants.kDifferentialKinematics)
     .addConstraint(voltageConstraint);
-    
-    //Autonomous Goes Here
-    //galacticSearchWithPC();
 
-    /*RamseteCommand ramsete = new RamseteCommand(
-      trajectory, 
-      driveSystem::getPose2d, 
-      new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta), 
-      new SimpleMotorFeedforward(
-        Constants.ksVolts, 
-        Constants.kvVoltsSecondsPerMeter, 
-        Constants.kaVoltsSecondsSquaredPerMeter
-      ),
-      Constants.kDifferentialKinematics, 
-      driveSystem::getDifferentialWheelSpeeds, 
-      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
-      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
-      driveSystem::differentialDriveVolts, 
-      driveSystem
-    );*/
-    
-    
+    Command moveForwards = new InstantCommand();
 
-    if (camera.getLatestResult().hasTargets() && camera.getLatestResult().getTargets().get(0).getPitch() < 6) {
-      return new InstantCommand(() -> {
-        galacticSearchWithPC();
-      }).andThen(new RamseteCommand(trajectory, 
-      driveSystem::getPose2d, 
-      new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta), 
-      new SimpleMotorFeedforward(
-        Constants.ksVolts, 
-        Constants.kvVoltsSecondsPerMeter, 
-        Constants.kaVoltsSecondsSquaredPerMeter
-      ),
-      Constants.kDifferentialKinematics, 
-      driveSystem::getDifferentialWheelSpeeds, 
-      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
-      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
-      driveSystem::differentialDriveVolts, 
-      driveSystem
-    ).andThen(() -> {
-      driveSystem.differentialDriveVolts(0,0);
-    }));
-    } else {
-      trajectory = TrajectoryGenerator.generateTrajectory(
+    if (!(camera.getLatestResult().hasTargets() && camera.getLatestResult().getTargets().get(0).getPitch() < 6)) {
+      // doesnt see a target
+      var trajectory1 = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)), 
-        List. of(),
-        /*new Pose2d(getNavPointVertical(2.0), getNavPointHorizontal(0.25), new Rotation2d(0)),
-        List.of(
-          new Translation2d(getNavPointVertical(0.5), getNavPointHorizontal(0.5))
-        ), */
-        new Pose2d(getNavPointVertical(3.0),getNavPointHorizontal(0),new Rotation2d(0)),
+        List.of(),
+        new Pose2d(getNavPointVertical(3.0), getNavPointHorizontal(0), new Rotation2d(0)), // move forward 3 navpoints
         config
       );
       driveSystem.resetOdometry(trajectory.getInitialPose());
 
-      return new SequentialCommandGroup(
-        new RamseteCommand(trajectory, 
+      moveForwards = new SequentialCommandGroup(
+        new RamseteCommand( // drive forward following trajectory1
+          trajectory1, 
           driveSystem::getPose2d, 
           new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta), 
           new SimpleMotorFeedforward(
@@ -481,26 +439,45 @@ public class RobotContainer {
           new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
           driveSystem::differentialDriveVolts, 
           driveSystem
-        ).andThen(() -> {
-          driveSystem.differentialDriveVolts(0,0);
-        }),
-        new RunCommand(() -> {
-          galacticSearchWithPC();
-          System.out.println("This is running");
-        })
+        ),
+        new InstantCommand(() -> { // stop drive
+            driveSystem.differentialDriveVolts(0, 0);
+          }, 
+          driveSystem
+        )
       );
     }
+    // sets trajectory based on power cells location
+    galacticSearchWithPC();
 
-    // Command group that allows us to run to commands simultaneously. 
-    // Applied for using power cell intake while performing autonomous trajectory
-    /*return new ParallelRaceGroup(
-      ramsete.andThen(() -> driveSystem.differentialDriveVolts(0, 0)),
-      new RunCommand(
+    // trajectory command using set path
+    var selectedPath = new RamseteCommand(
+      trajectory, // set to the path we need to do based on power cells
+      driveSystem::getPose2d, 
+      new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta), 
+      new SimpleMotorFeedforward(
+        Constants.ksVolts, 
+        Constants.kvVoltsSecondsPerMeter, 
+        Constants.kaVoltsSecondsSquaredPerMeter
+      ), 
+      Constants.kDifferentialKinematics, 
+      driveSystem::getDifferentialWheelSpeeds, 
+      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
+      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
+      driveSystem::differentialDriveVolts, 
+      driveSystem
+    );
+
+
+    return new SequentialCommandGroup(
+      moveForwards,
+      selectedPath,
+      new InstantCommand(
         () -> {
-          Factory.getIntakeOutake().intake();
+          driveSystem.differentialDriveVolts(0, 0);
         },
-        Factory.getIntakeOutake()
+        driveSystem
       )
-    );*/
+    );
   }
 }

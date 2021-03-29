@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
     intakeAndOutake = Factory.getIntakeOutake();
 
     driveWithJoy = new DriveWithJoystick();
-    autoDrive = m_robotContainer.getAutonomousCommand();
+    
     driveWithTargeting = new DriveWithTargeting();
 
     // Commands
@@ -110,6 +110,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    autoDrive = m_robotContainer.getAutonomousCommand();
+
     driveSystem.zeroGyro();
     driveSystem.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d()));
     autoDrive.schedule();
