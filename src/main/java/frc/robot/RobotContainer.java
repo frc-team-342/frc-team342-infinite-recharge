@@ -248,11 +248,11 @@ public class RobotContainer {
     }
     else if(Math.signum(navpoint) == -1.0){
       //return -navpoint * Constants.fieldUnitsToMeters;
-      return (-navpoint * Constants.fieldUnitsToMeters) - Constants.centerRobotToIntakeMeters;
+      return (-navpoint * Constants.fieldUnitsToMeters)/* - Constants.centerRobotToIntakeMeters*/;
     }
     else{
       //return navpoint * Constants.fieldUnitsToMeters;
-      return (navpoint * Constants.fieldUnitsToMeters) + Constants.centerRobotToIntakeMeters;
+      return (navpoint * Constants.fieldUnitsToMeters)/* + Constants.centerRobotToIntakeMeters*/;
       
     }
   }
@@ -360,23 +360,23 @@ public class RobotContainer {
   //Does stuff *thumbs up*
   public void galacticSearchWithPC() {
     //PhotonTrackedTarget target = camera.getLatestResult().getTargets().get(0);
-    List<PhotonTrackedTarget> h = camera.getLatestResult().getTargets();
+    List<PhotonTrackedTarget> arrayOfTargets = camera.getLatestResult().getTargets();
 
-    if (h.size() > 0) {
-      PhotonTrackedTarget target = h.get(0);
+    if (arrayOfTargets.size() > 0) {
+      PhotonTrackedTarget target = arrayOfTargets.get(0);
       double angle = target.getYaw();
       if (target.getPitch() < 6) {
         if (angle < -0.81 && angle > -6.81) {
-          //redPathA();
+          redPathA();
           System.out.println("red path a");
         } else if (angle < -7.75 && angle > -13.75) {
-          //redPathB();
+          redPathB();
           System.out.println("red path b");
-        } else if (angle < 7.9 && angle > 13.9) {
-          //bluePathA();
+        } else if (angle < 16.65 && angle > 10.65) {
+          bluePathA();
           System.out.println("blue path a has target");
-        } else if (angle > 1.70 && angle < 7.7) {
-          // bluePathB();
+        } else if (angle < 9.0 && angle > 3.0) {
+           bluePathB();
           System.out.println("blue path BBB");
         } else {
           System.out.println("It's not working, yo");
@@ -434,18 +434,34 @@ public class RobotContainer {
     
 
     if (camera.getLatestResult().hasTargets() && camera.getLatestResult().getTargets().get(0).getPitch() < 6) {
-      return new RunCommand(() -> {
+      return new InstantCommand(() -> {
         galacticSearchWithPC();
-      });
+      }).andThen(new RamseteCommand(trajectory, 
+      driveSystem::getPose2d, 
+      new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta), 
+      new SimpleMotorFeedforward(
+        Constants.ksVolts, 
+        Constants.kvVoltsSecondsPerMeter, 
+        Constants.kaVoltsSecondsSquaredPerMeter
+      ),
+      Constants.kDifferentialKinematics, 
+      driveSystem::getDifferentialWheelSpeeds, 
+      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
+      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
+      driveSystem::differentialDriveVolts, 
+      driveSystem
+    ).andThen(() -> {
+      driveSystem.differentialDriveVolts(0,0);
+    }));
     } else {
       trajectory = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0,getNavPointHorizontal(0),new Rotation2d(0)), 
+        new Pose2d(0, 0, new Rotation2d(0)), 
         List. of(),
-        new Pose2d(getNavPointVertical(1.5), getNavPointHorizontal(0), new Rotation2d(0)),
-        /*List.of(
+        /*new Pose2d(getNavPointVertical(2.0), getNavPointHorizontal(0.25), new Rotation2d(0)),
+        List.of(
           new Translation2d(getNavPointVertical(0.5), getNavPointHorizontal(0.5))
-        ), 
-        new Pose2d(getNavPointVertical(1.75),getNavPointHorizontal(0.75),new Rotation2d(0)),*/
+        ), */
+        new Pose2d(getNavPointVertical(3.0),getNavPointHorizontal(0),new Rotation2d(0)),
         config
       );
       driveSystem.resetOdometry(trajectory.getInitialPose());
