@@ -126,7 +126,7 @@ public class RobotContainer {
   private Command auto;
   private Trajectory trajectory;
   private TrajectoryConfig config;
-  
+  private DifferentialDriveVoltageConstraint voltageConstraint;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -138,7 +138,6 @@ public class RobotContainer {
     // Driver controller
     driver = new Joystick(Constants.DRIVER_CONTROLLER);
 
-    
     driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTO_ALIGN);
     driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELD_ORIENT);
     driver_turboBtn = new JoystickButton(driver, Constants.DRIVER_TURBO);
@@ -156,9 +155,6 @@ public class RobotContainer {
     driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTO_ALIGN);
     driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELD_ORIENT);
     driver_turboBtn = new JoystickButton(driver, Constants.DRIVER_TURBO);
-
-
-
 
     // Operator controller
     operator = new XboxController(Constants.OPERATOR_CONTROLLER);
@@ -198,6 +194,23 @@ public class RobotContainer {
     configureButtonBindings();
 
     camera = new PhotonCamera("HD_USB_Camera");
+
+    // Sets a voltage constraint so the trajectory never commands the robot to go faster than it is capable with its given voltage supply
+    voltageConstraint = new DifferentialDriveVoltageConstraint(
+      new SimpleMotorFeedforward(
+        Constants.ksVolts, 
+        Constants.kvVoltsSecondsPerMeter, 
+        Constants.kaVoltsSecondsSquaredPerMeter
+      ), 
+      Constants.kDifferentialKinematics, 
+      10 // magic numbers babey
+    );
+
+    config = new TrajectoryConfig(
+      Constants.kMaxSpeedMetersPerSecond, 
+      Constants.kMaxAccelerationMetersPerSecondSquared
+    ).setKinematics(Constants.kDifferentialKinematics)
+    .addConstraint(voltageConstraint);    
   }
 
   public static Joystick getJoy(){
@@ -376,7 +389,7 @@ public class RobotContainer {
           bluePathA();
           System.out.println("blue path a has target");
         } else if (angle < 9.0 && angle > 3.0) {
-           bluePathB();
+          bluePathB();
           System.out.println("blue path BBB");
         } else {
           System.out.println("It's not working, yo");
@@ -393,24 +406,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Sets a voltage constraint so the trajectory never commands the robot to go faster than it is capable with its given voltage supply
-    DifferentialDriveVoltageConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
-      new SimpleMotorFeedforward(
-        Constants.ksVolts, 
-        Constants.kvVoltsSecondsPerMeter, 
-        Constants.kaVoltsSecondsSquaredPerMeter
-      ), 
-      Constants.kDifferentialKinematics, 
-      10 // magic numbers babey
-    );
-
-    // Wraps together all of the path constraints
-    config = new TrajectoryConfig(
-      Constants.kMaxSpeedMetersPerSecond, 
-      Constants.kMaxAccelerationMetersPerSecondSquared
-    ).setKinematics(Constants.kDifferentialKinematics)
-    .addConstraint(voltageConstraint);
-
     Command moveForwards = new InstantCommand();
 
     if (!(camera.getLatestResult().hasTargets() && camera.getLatestResult().getTargets().get(0).getPitch() < 6)) {
@@ -471,6 +466,11 @@ public class RobotContainer {
 
     return new SequentialCommandGroup(
       moveForwards,
+      new InstantCommand(
+        () -> {
+          galacticSearchWithPC();
+        }
+      ),
       selectedPath,
       new InstantCommand(
         () -> {
