@@ -19,6 +19,7 @@ import frc.robot.commands.ActivateTelescopes;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithTargeting;
+import frc.robot.commands.IntakeWithButton;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.IntakeAndOutake;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -110,6 +111,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    new IntakeWithButton().schedule();
+    lime.visionOff();
     autoDrive = m_robotContainer.getAutonomousCommand();
 
     driveSystem.zeroGyro();

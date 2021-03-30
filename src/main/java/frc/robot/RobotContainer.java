@@ -35,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.RotateToAngle;
@@ -328,17 +329,22 @@ public class RobotContainer {
       List.of(
         // Here is where you add interior waypoints
         // First point in the translation is the vertical position and second is the horizontal position
-        new Translation2d(getNavPointVertical(2.5), getNavPointHorizontal(0.0)),
+        /*new Translation2d(getNavPointVertical(2.5), getNavPointHorizontal(0.0)),
         new Translation2d(getNavPointVertical(4.0), getNavPointHorizontal(2.0)),
         new Translation2d(getNavPointVertical(6.0), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(7.0), getNavPointHorizontal(-1.0))
+        new Translation2d(getNavPointVertical(7.0), getNavPointHorizontal(-1.0))*/
+        new Translation2d(getNavPointVertical(1.0), getNavPointHorizontal(0.25)),
+        new Translation2d(getNavPointVertical(2.75), getNavPointHorizontal(-1.46)),
+        new Translation2d(getNavPointVertical(4.75), getNavPointHorizontal(1.94)),
+        new Translation2d(getNavPointVertical(6.2), getNavPointHorizontal(-0.46)),
+        new Translation2d(getNavPointVertical(7.0), getNavPointHorizontal(-1.46))
       ), 
       // The final end point of the trajectory path
-      new Pose2d(getNavPointVertical(10.75), getNavPointHorizontal(-1.0), new Rotation2d(0)), 
+      new Pose2d(getNavPointVertical(10.75), getNavPointHorizontal(-1.46), new Rotation2d(0)), 
       config
     ).transformBy(new Transform2d(
-      new Pose2d(0, getNavPointHorizontal(0.46), new Rotation2d()), // initial pose
-      new Pose2d(0, 0, new Rotation2d()) // after transform
+      new Pose2d(0, getNavPointHorizontal(0.46), new Rotation2d(0)), // initial pose
+      new Pose2d(0, 0, new Rotation2d(0)) // after transform
     )); 
   }
 
@@ -453,6 +459,8 @@ public class RobotContainer {
           }, 
           driveSystem
         )
+      ).andThen(
+        new PrintCommand("mOVE FORWARDS")
       );
     }
     // sets trajectory based on power cells location
