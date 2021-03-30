@@ -357,7 +357,7 @@ public class RobotContainer {
       new Pose2d(getNavPointVertical(10.5), getNavPointHorizontal(-2.0), new Rotation2d(0)), 
       config
     ).transformBy(new Transform2d(
-      new Pose2d(getNavPointVertical(1), getNavPointHorizontal(0.46), new Rotation2d()), // initial pose
+      new Pose2d(getNavPointVertical(3), getNavPointHorizontal(0.46), new Rotation2d()), // initial pose
       new Pose2d(0, 0, new Rotation2d()) // after transform
     ));
   }
@@ -377,7 +377,7 @@ public class RobotContainer {
       new Pose2d(getNavPointVertical(10.5), getNavPointHorizontal(1.0), new Rotation2d(0)), 
       config
     ).transformBy(new Transform2d(
-      new Pose2d(getNavPointVertical(1), getNavPointHorizontal(0.46), new Rotation2d()), // initial pose
+      new Pose2d(getNavPointVertical(3), getNavPointHorizontal(0.46), new Rotation2d()), // initial pose
       new Pose2d(0, 0, new Rotation2d()) // after transform
     ));
   }
