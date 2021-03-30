@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Transform2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
@@ -314,7 +315,10 @@ public class RobotContainer {
       // The final end point of the trajectory path
       new Pose2d(getNavPointVertical(10.0), getNavPointHorizontal(-2.0), new Rotation2d(0)), 
       config
-    ); 
+    ).transformBy(new Transform2d(
+      new Pose2d(0, getNavPointHorizontal(0.46), new Rotation2d()), // initial pose
+      new Pose2d(0, 0, new Rotation2d()) // after transform
+    )); 
   }
 
   public void redPathB(){
@@ -332,7 +336,10 @@ public class RobotContainer {
       // The final end point of the trajectory path
       new Pose2d(getNavPointVertical(10.75), getNavPointHorizontal(-1.0), new Rotation2d(0)), 
       config
-    ); 
+    ).transformBy(new Transform2d(
+      new Pose2d(0, getNavPointHorizontal(0.46), new Rotation2d()), // initial pose
+      new Pose2d(0, 0, new Rotation2d()) // after transform
+    )); 
   }
 
   public void bluePathA(){
@@ -349,7 +356,10 @@ public class RobotContainer {
       // The final end point of the trajectory path
       new Pose2d(getNavPointVertical(10.5), getNavPointHorizontal(-2.0), new Rotation2d(0)), 
       config
-    );
+    ).transformBy(new Transform2d(
+      new Pose2d(getNavPointVertical(1), getNavPointHorizontal(0.46), new Rotation2d()), // initial pose
+      new Pose2d(0, 0, new Rotation2d()) // after transform
+    ));
   }
 
   public void bluePathB(){
@@ -366,7 +376,10 @@ public class RobotContainer {
       // The final end point of the trajectory path
       new Pose2d(getNavPointVertical(10.5), getNavPointHorizontal(1.0), new Rotation2d(0)), 
       config
-    );
+    ).transformBy(new Transform2d(
+      new Pose2d(getNavPointVertical(1), getNavPointHorizontal(0.46), new Rotation2d()), // initial pose
+      new Pose2d(0, 0, new Rotation2d()) // after transform
+    ));
   }
 
   //Uses the angle of the Powercells to identify which path to use
