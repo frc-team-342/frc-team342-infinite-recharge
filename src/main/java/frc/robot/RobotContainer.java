@@ -309,12 +309,14 @@ public class RobotContainer {
       List.of(
         // Here is where you add interior waypoints
         // First point in the translation is the vertical position and second is the horizontal position
-        new Translation2d(getNavPointVertical(2.0) - centerRobotToIntakeX(firstPointAngle), getNavPointHorizontal(0.0) - centerRobotToIntakeY(firstPointAngle)),
-        new Translation2d(getNavPointVertical(4.0) - centerRobotToIntakeX(secondPointAngle), getNavPointHorizontal(1.0) - centerRobotToIntakeY(secondPointAngle)),
-        new Translation2d(getNavPointVertical(5.0) - centerRobotToIntakeX(thirdPointAngle), getNavPointHorizontal(-2.0) - centerRobotToIntakeY(thirdPointAngle))
+        new Translation2d(getNavPointVertical(2.25), getNavPointHorizontal(-0.23)),
+        new Translation2d(getNavPointVertical(4.1), getNavPointHorizontal(1.4)),
+        new Translation2d(getNavPointVertical(4.65), getNavPointHorizontal(1.4)),
+        new Translation2d(getNavPointVertical(5.45), getNavPointHorizontal(0.5)),
+        new Translation2d(getNavPointVertical(5.47), getNavPointHorizontal(-2.0))
       ), 
       // The final end point of the trajectory path
-      new Pose2d(getNavPointVertical(10.0), getNavPointHorizontal(-2.0), new Rotation2d(0)), 
+      new Pose2d(getNavPointVertical(10.15), getNavPointHorizontal(-2.0), new Rotation2d(0)), 
       config
     ).transformBy(new Transform2d(
       new Pose2d(0, getNavPointHorizontal(0.46), new Rotation2d()), // initial pose
@@ -335,7 +337,7 @@ public class RobotContainer {
         new Translation2d(getNavPointVertical(7.0), getNavPointHorizontal(-1.0))*/
         new Translation2d(getNavPointVertical(1.0), getNavPointHorizontal(0.25)),
         new Translation2d(getNavPointVertical(2.75), getNavPointHorizontal(-1.46)),
-        new Translation2d(getNavPointVertical(4.75), getNavPointHorizontal(1.94)),
+        new Translation2d(getNavPointVertical(4.85), getNavPointHorizontal(1.94)),
         new Translation2d(getNavPointVertical(6.2), getNavPointHorizontal(-0.46)),
         new Translation2d(getNavPointVertical(7.0), getNavPointHorizontal(-1.46))
       ), 
@@ -349,23 +351,25 @@ public class RobotContainer {
   }
 
   public void bluePathA(){
+    System.out.println("Running Blue Path A");
     trajectory = TrajectoryGenerator.generateTrajectory(
       // The starting end point of the trajectory path
-      new Pose2d(getNavPointVertical(0.0), getNavPointHorizontal(0.0), new Rotation2d(0)), 
+      new Pose2d(getNavPointVertical(3.0), getNavPointHorizontal(0.0), new Rotation2d(0)), 
       List.of(
         // Here is where you add interior waypoints
         // First point in the translation is the vertical position and second is the horizontal position
-        new Translation2d(getNavPointVertical(5.0), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(6.0), getNavPointHorizontal(-3.0)),
-        new Translation2d(getNavPointVertical(8.0), getNavPointHorizontal(-2.0))
+        new Translation2d(getNavPointVertical(5.5), getNavPointHorizontal(1.0)),
+        new Translation2d(getNavPointVertical(6.5), getNavPointHorizontal(-2.0)),
+        new Translation2d(getNavPointVertical(8.0), getNavPointHorizontal(0.0))
       ), 
       // The final end point of the trajectory path
-      new Pose2d(getNavPointVertical(10.5), getNavPointHorizontal(-2.0), new Rotation2d(0)), 
+      new Pose2d(getNavPointVertical(10.5), getNavPointHorizontal(0.0), new Rotation2d(0)), 
       config
-    ).transformBy(new Transform2d(
-      new Pose2d(getNavPointVertical(3), getNavPointHorizontal(0.46), new Rotation2d()), // initial pose
+    );/*.transformBy(new Transform2d(
+      new Pose2d(getNavPointVertical(0.0), getNavPointHorizontal(0.46), new Rotation2d()), // initial pose
       new Pose2d(0, 0, new Rotation2d()) // after transform
-    ));
+    ));*/
+    System.out.println("Finished Blue Path A");
   }
 
   public void bluePathB(){
@@ -453,12 +457,12 @@ public class RobotContainer {
           new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
           driveSystem::differentialDriveVolts, 
           driveSystem
-        ),
-        new InstantCommand(() -> { // stop drive
+        )
+        /* new InstantCommand(() -> { // stop drive
             driveSystem.differentialDriveVolts(0, 0);
           }, 
           driveSystem
-        )
+        ) */
       ).andThen(
         new PrintCommand("mOVE FORWARDS")
       );
@@ -467,7 +471,7 @@ public class RobotContainer {
     galacticSearchWithPC();
 
     // trajectory command using set path
-    var selectedPath = new RamseteCommand(
+    RamseteCommand selectedPath = new RamseteCommand(
       trajectory, // set to the path we need to do based on power cells
       driveSystem::getPose2d, 
       new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta), 

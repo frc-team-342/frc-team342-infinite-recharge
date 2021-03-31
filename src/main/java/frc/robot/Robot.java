@@ -96,12 +96,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-
+    driveSystem.zeroGyro();
   }
 
   @Override
   public void disabledPeriodic() {
-    driveSystem.zeroGyro();
+    
     driveSystem.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d()));
   }
 
