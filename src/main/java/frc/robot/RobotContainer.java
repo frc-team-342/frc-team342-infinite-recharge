@@ -354,13 +354,13 @@ public class RobotContainer {
     System.out.println("Running Blue Path A");
     trajectory = TrajectoryGenerator.generateTrajectory(
       // The starting end point of the trajectory path
-      new Pose2d(getNavPointVertical(3.0), getNavPointHorizontal(0.0), new Rotation2d(0)), 
+      new Pose2d(getNavPointVertical(3.0 - 3), getNavPointHorizontal(0.0), new Rotation2d(0)), 
       List.of(
         // Here is where you add interior waypoints
         // First point in the translation is the vertical position and second is the horizontal position
-        new Translation2d(getNavPointVertical(5.5), getNavPointHorizontal(1.0)),
-        new Translation2d(getNavPointVertical(6.5), getNavPointHorizontal(-2.0)),
-        new Translation2d(getNavPointVertical(8.0), getNavPointHorizontal(0.0))
+        new Translation2d(getNavPointVertical(15.5 - 3), getNavPointHorizontal(1.0)),
+        new Translation2d(getNavPointVertical(6.5 - 3), getNavPointHorizontal(-2.0)),
+        new Translation2d(getNavPointVertical(8.0 - 3), getNavPointHorizontal(0.0))
       ), 
       // The final end point of the trajectory path
       new Pose2d(getNavPointVertical(10.5), getNavPointHorizontal(0.0), new Rotation2d(0)), 
@@ -421,7 +421,7 @@ public class RobotContainer {
     } else { System.out.println("its nto workingn"); }
   } 
 
-  private RamseteCommand generatePathTrajectory(){
+  private Command generatePathTrajectory(){
     RamseteCommand selectedPath = new RamseteCommand(
       trajectory, // set to the path we need to do based on power cells
       driveSystem::getPose2d, 
@@ -438,8 +438,12 @@ public class RobotContainer {
       driveSystem::differentialDriveVolts, 
       driveSystem
     );
-
-    return selectedPath;
+    //$%System.out.println("gEENerat e       pahth");
+    return new SequentialCommandGroup(
+      new PrintCommand("starte"),
+      selectedPath,
+      new PrintCommand("finsieh generato")
+    );
   }
 
   /**
@@ -501,9 +505,9 @@ public class RobotContainer {
 
     return help.andThen(
       new SequentialCommandGroup(
-        new InstantCommand(
-          () -> { help.addCommands(generatePathTrajectory()); }
-        ),
+        
+          generatePathTrajectory(),
+        
         new InstantCommand(
           () -> {
             driveSystem.differentialDriveVolts(0, 0);
