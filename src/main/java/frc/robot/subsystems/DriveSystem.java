@@ -62,7 +62,7 @@ public class DriveSystem extends SubsystemBase {
   private MecanumDrive mecanumDrive;
   private MecanumDriveKinematics kDriveKinematics;
   private final MecanumDriveOdometry m_odometry;
-  private final DifferentialDriveOdometry d_odometry;
+  private DifferentialDriveOdometry d_odometry;
 
   /**
    * Creates a new DriveSystem.
@@ -196,6 +196,10 @@ public class DriveSystem extends SubsystemBase {
 
   public Pose2d getPose2d(){
     return d_odometry.getPoseMeters();
+  }
+
+  public void hardResetOdometry(){
+    d_odometry = new DifferentialDriveOdometry(NavX.getRotation2d(), new Pose2d(0, 0, new Rotation2d()));
   }
 
   /** Sets the voltage of the left and ride motor controller groups for differential drive with voltage and feeds watchdog.
