@@ -240,11 +240,11 @@ public class RobotContainer {
     }
     else if(Math.signum(navpoint) == -1.0){
       //return -navpoint * Constants.fieldUnitsToMeters;
-      return (-navpoint * Constants.fieldUnitsToMeters) - Constants.centerRobotToIntakeMeters;
+      return -navpoint;
     }
     else{
       //return navpoint * Constants.fieldUnitsToMeters;
-      return (navpoint * Constants.fieldUnitsToMeters) + Constants.centerRobotToIntakeMeters;
+      return navpoint;
       
     }
   }
@@ -257,7 +257,7 @@ public class RobotContainer {
    */
   public double getNavPointHorizontal(double navpoint){
     if(navpoint != 0.0){
-      return -navpoint * Constants.fieldUnitsToMeters;
+      return -navpoint;
     }
     else
       return 0.0;
@@ -267,36 +267,14 @@ public class RobotContainer {
     return trajectory.sample(trajectory.getTotalTimeSeconds());
   }
 
-  public void bouncePath(){
+  public void scrapFirstPath(){
     trajectory = TrajectoryGenerator.generateTrajectory(
       // The starting end point of the trajectory path
       new Pose2d(getNavPointVertical(0.0), getNavPointHorizontal(0.0), new Rotation2d(0)), 
       List.of(
         // Here is where you add interior waypoints
         // First point in the translation is the vertical position and second is the horizontal position
-        new Translation2d(getNavPointVertical(1.0), getNavPointHorizontal(0.0)),
-        //new Translation2d(getNavPointVertical(1.5), getNavPointHorizontal(-0.5)),
-        new Translation2d(getNavPointVertical(1.5), getNavPointHorizontal(-2.5)),
-        new Translation2d(getNavPointVertical(1.5), getNavPointHorizontal(-1.0)),
-        new Translation2d(getNavPointVertical(2.5), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(3.0), getNavPointHorizontal(2.0)),
-        new Translation2d(getNavPointVertical(3.5), getNavPointHorizontal(2.5)),
-        new Translation2d(getNavPointVertical(4.0), getNavPointHorizontal(2.0)),
-       // new Translation2d(getNavPointVertical(4.5), getNavPointHorizontal(1.5)),
-        new Translation2d(getNavPointVertical(4.25), getNavPointHorizontal(1.0)),
-        new Translation2d(getNavPointVertical(4.25), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(4.5), getNavPointHorizontal(-1.0)),
-        new Translation2d(getNavPointVertical(4.5), getNavPointHorizontal(-2.0)),
-        new Translation2d(getNavPointVertical(4.75), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(4.75), getNavPointHorizontal(1.0)),
-        new Translation2d(getNavPointVertical(5.5), getNavPointHorizontal(2.0)),
-        new Translation2d(getNavPointVertical(7.5), getNavPointHorizontal(2.0)),
-        new Translation2d(getNavPointVertical(7.5), getNavPointHorizontal(1.0)),
-        new Translation2d(getNavPointVertical(7.5), getNavPointHorizontal(0.0)),
-        new Translation2d(getNavPointVertical(8.0), getNavPointHorizontal(-1.0)),
-        new Translation2d(getNavPointVertical(8.0), getNavPointHorizontal(-2.0)),
-        new Translation2d(getNavPointVertical(8.0), getNavPointHorizontal(-1.0)),
-        new Translation2d(getNavPointVertical(8.0), getNavPointHorizontal(-0.4))
+        new Translation2d(getNavPointVertical(1.0), getNavPointHorizontal(0.0))
       ), 
       // The final end point of the trajectory path
       new Pose2d(getNavPointVertical(10.0), getNavPointHorizontal(-0.5), new Rotation2d(0)), 
@@ -328,7 +306,7 @@ public class RobotContainer {
     ).setKinematics(Constants.kDifferentialKinematics)
     .addConstraint(voltageConstraint);
 
-    bouncePath();
+    scrapFirstPath();
     
     RamseteCommand ramsete = new RamseteCommand(
       trajectory, 
