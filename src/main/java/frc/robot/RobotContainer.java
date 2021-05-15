@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
@@ -21,6 +23,8 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.RotateToAngle;
@@ -30,6 +34,7 @@ import frc.robot.commands.LaunchWithButton;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.ActivateWinches;
+import frc.robot.commands.AutoTarget;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.ChangeColor;
 
@@ -147,7 +152,7 @@ public class RobotContainer {
 
     op_lockWinchBtn = new JoystickButton(operator, Constants.OP_LOCK_WINCH);
     op_runWinchBtn = new JoystickButton(operator, Constants.OP_RUN_WINCH);
-    op_outtakeDelayBtn = new JoystickButton(operator, Constants.OP_OUTTAKEDELAY);
+    //op_outtakeDelayBtn = new JoystickButton(operator, Constants.OP_OUTTAKEDELAY);
     op_reverseBtn = new JoystickButton(operator, Constants.OP_REVERSE);
     op_controlarmBtn = new JoystickButton(operator, Constants.OP_CONTROL_ARM);
     op_manual_wheelBtn = new JoystickButton(operator, Constants.OP_CONTROL_RIGHT);
@@ -165,7 +170,7 @@ public class RobotContainer {
     op_lockWinch = new LockWinches();
     op_runWinch = new ActivateWinches();
     op_telescopes = new ActivateTelescopes();
-    op_outtakeDelay = new ShootWithDelay();
+    //op_outtakeDelay = new ShootWithDelay();
     op_reverse = new ReverseIntake();
     op_controlarm = new MoveArm();
     op_manual_wheel = new ManualControlPanel();
@@ -206,7 +211,7 @@ public class RobotContainer {
     op_intakeBtn.toggleWhenPressed(op_intake);
     op_lockWinchBtn.whenPressed(op_lockWinch);
     op_runWinchBtn.whileHeld(op_runWinch);
-    op_outtakeDelayBtn.whileHeld(op_outtakeDelay);
+    //op_outtakeDelayBtn.whileHeld(op_outtakeDelay);
     op_reverseBtn.whileHeld(op_reverse);
     op_controlarmBtn.toggleWhenPressed(op_controlarm);
     op_manual_wheelBtn.whileHeld(op_manual_wheel);
@@ -219,27 +224,43 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    TrajectoryConfig config = new TrajectoryConfig(Constants.kMaxSpeedMetersPerSecond,
-        Constants.kMaxAccelerationMetersPerSecondSquared).setKinematics(Constants.kDriveKinematics);
+    TrajectoryConfig config = new TrajectoryConfig(
+        Constants.kMaxSpeedMetersPerSecond,
+        Constants.kMaxAccelerationMetersPerSecondSquared)
+      .setKinematics(Constants.kDifferentialKinematics)
+      .setReversed(true); // it wont go backwards unless you do this part
 
     // TODO: add actual waypoints for the trajectory
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(),
-        new Pose2d(0, 0, new Rotation2d(0)), config);
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0, 0, new Rotation2d(0)), 
+      List.of(),
+      new Pose2d(-1.524, 0, new Rotation2d(0)), 
+      config
+    );
 
-    // TODO: figure out magic numbers for the PID controllers and add them to
-    // constants
-    /*
-     * MecanumControllerCommand trajectoryCommand = new MecanumControllerCommand(
-     * trajectory, driveSystem::getPose2d, feedforward, Constants.kDriveKinematics,
-     * xController, yController, thetaController,
-     * Constants.kMaxSpeedMetersPerSecond, new PIDController(0.00294, 0, 0), new
-     * PIDController(0.00294, 0, 0), new PIDController(0.00294, 0, 0), new
-     * PIDController(0.00294, 0, 0), driveSystem::getWheelSpeeds,
-     * driveSystem::mecanumDriveVolts, driveSystem );
-     */
+    RamseteCommand ramsete = new RamseteCommand(
+      trajectory,
+      driveSystem::getPose2d,
+      new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta), 
+      new SimpleMotorFeedforward(
+        Constants.ksVolts, 
+        Constants.kvVoltsSecondsPerMeter, 
+        Constants.kaVoltsSecondsSquaredPerMeter
+      ),
+      Constants.kDifferentialKinematics, 
+      driveSystem::getDifferentialWheelSpeeds,
+      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
+      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
+      driveSystem::differentialDriveVolts,
+      driveSystem
+    );
 
-    return auto;
-    // return trajectoryCommand.andThen(() -> driveSystem.stopDrive());
+    return new SequentialCommandGroup(
+      ramsete,
+      new AutoTarget().withTimeout(0.75),
+      new LaunchWithButton()
+    );
+    // hhhhhhhhhh
   }
 
 }

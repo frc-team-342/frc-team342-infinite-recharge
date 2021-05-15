@@ -12,9 +12,12 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 
 import com.revrobotics.CANSparkMax;
+
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.MecanumDriveWheelSpeeds;
@@ -53,6 +56,8 @@ public class DriveSystem extends SubsystemBase {
   private MecanumDriveKinematics kDriveKinematics;
   private final MecanumDriveOdometry m_odometry;
   private Rotation2d rotation2d;
+  
+  private SpeedControllerGroup m_leftMotors, m_rightMotors;
 
   /**
    * Creates a new DriveSystem.
@@ -110,6 +115,9 @@ public class DriveSystem extends SubsystemBase {
     NavX = new AHRS();
     rotation2d = new Rotation2d(NavX.getAngle() * (Math.PI / 180));
     m_odometry = new MecanumDriveOdometry(kDriveKinematics, rotation2d);
+
+    m_leftMotors = new SpeedControllerGroup(motorLeft1, motorLeft2);
+    m_rightMotors = new SpeedControllerGroup(motorRight1, motorRight2);
   }
 
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
@@ -149,6 +157,13 @@ public class DriveSystem extends SubsystemBase {
   public MecanumDriveWheelSpeeds getWheelSpeeds() {
     return new MecanumDriveWheelSpeeds(encoderL1.getVelocity(), encoderR1.getVelocity(), encoderL2.getVelocity(),
         encoderR2.getVelocity());
+  }
+
+  public DifferentialDriveWheelSpeeds getDifferentialWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(
+      (encoderL2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio), // uhh oof ouch owie 
+      (-encoderR2.getVelocity() * (Math.PI * Constants.wheelDiameterInMeters)) / (60 * Constants.gearRatio)
+    );
   }
 
   public void zeroGyro() {
@@ -281,5 +296,11 @@ public class DriveSystem extends SubsystemBase {
 
   public void initDefaultCommand() {
     setDefaultCommand(new DriveWithJoystick());
+  }
+
+  public void differentialDriveVolts(double leftVolts, double rightVolts){
+    m_leftMotors.setVoltage(leftVolts);
+    m_rightMotors.setVoltage(-rightVolts);
+    mecanumDrive.feed();
   }
 }
