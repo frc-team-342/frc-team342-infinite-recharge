@@ -121,14 +121,16 @@ public class IntakeAndOutake extends SubsystemBase {
     leaderController.setI(kI);
     leaderController.setD(kD);
     leaderController.setIZone(kIz);
-    leaderController.setFF(kSMFF.calculate(shooterLeader.getEncoder().getVelocity()));
+    leaderController.setFF(kSMFF.calculate(setPoint)); // For use with testing
+    // leaderController.setFF(kSMFF.calculate(targetVelocity)); // For use with limelight
     leaderController.setOutputRange(kMinOutput, kMaxOutput); 
 
     followerController.setP(kP);
     followerController.setI(kI);
     followerController.setD(kD);
     followerController.setIZone(kIz);
-    followerController.setFF(kSMFF.calculate(shooterFollower.getEncoder().getVelocity()));
+    followerController.setFF(kSMFF.calculate(setPoint)); // For use with testing
+    //followerController.setFF(kSMFF.calculate(targetVelocity)); // For use with limelight
     followerController.setOutputRange(kMinOutput, kMaxOutput);
     
     // display PID coefficients on SmartDashboard
@@ -136,7 +138,8 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("I Gain", kI);
     SmartDashboard.putNumber("D Gain", kD);
     SmartDashboard.putNumber("I Zone", kIz);
-    SmartDashboard.putNumber("Feed Forward", kSMFF.calculate(shooterLeader.getEncoder().getVelocity()));
+    SmartDashboard.putNumber("Feed Forward", kSMFF.calculate(setPoint)); // For use with testing
+    //SmartDashboard.putNumber("Feed Forward", kSMFF.calculate(targetVelocity)); // For use with limelight
     SmartDashboard.putNumber("Max Output", kMaxOutput);
     SmartDashboard.putNumber("Min Output", kMinOutput);
     SmartDashboard.putNumber("Set Velocity", setPoint);
@@ -271,9 +274,9 @@ public class IntakeAndOutake extends SubsystemBase {
   private void pidTuner(){
     // read PID coefficients from SmartDashboard
     // changed PID numbers to get consitantly within 1% of the target value (changed: 2-20-21)
-    double p = SmartDashboard.getNumber("P Gain", 0.0003);
-    double i = SmartDashboard.getNumber("I Gain", 0.00000001);
-    double d = SmartDashboard.getNumber("D Gain", 0.005);
+    double p = SmartDashboard.getNumber("P Gain", 0);
+    double i = SmartDashboard.getNumber("I Gain", 0);
+    double d = SmartDashboard.getNumber("D Gain", 0);
     double iz = SmartDashboard.getNumber("I Zone", 0);
     double ff = SmartDashboard.getNumber("Feed Forward", 0);
     double max = SmartDashboard.getNumber("Max Output", 0);
