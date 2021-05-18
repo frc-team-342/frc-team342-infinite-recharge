@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -37,7 +38,8 @@ public class IntakeAndOutake extends SubsystemBase {
   private final double speed = 0.9; // Speed for shooter loader conveyor
   private final double speed2 = .95; // Speed for intake conveyors
 
-  public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
+  private double kP, kI, kD, kIz, kFF, kS, kV, kA, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
+  private SimpleMotorFeedforward kSMFF;
 
   private static final double ramp_rate = 0.2; // limit in seconds that motor is allowed reach full speed
   private static final double voltage_comp = 12.0; // amount of voltage allowed to be compensated
@@ -97,11 +99,14 @@ public class IntakeAndOutake extends SubsystemBase {
     followerController = shooterFollower.getPIDController();
     
     //changed to consitantly get the target RPM (changed 2-20-21)
-    kP = 0.0003;
-    kI = 0.00000001;
-    kD = 0.005;
+    kP = 3.62e-7; // Value obtained from frc characterization routine performed on robot 05/18/21
+    kI = 0.0;
+    kD = 0.0;
     kIz = 0;
-    kFF = 0.0001826;
+    kS = 0.0886; // Value obtained from frc characterization routine performed on robot 05/18/21
+    kV = 0.0959; // Value obtained from frc characterization routine performed on robot 05/18/21
+    kA = 0.0097; // Value obtained from frc characterization routine performed on robot 05/18/21
+    kSMFF = new SimpleMotorFeedforward(kS, kV, kA);
     kMaxOutput = 1;
     kMinOutput = -1;
     maxRPM = 5700;
@@ -112,12 +117,18 @@ public class IntakeAndOutake extends SubsystemBase {
     shooterLeader.setOpenLoopRampRate(ramp_rate); /**/ shooterFollower.setOpenLoopRampRate(ramp_rate);
     shooterFollower.follow(shooterLeader, true); // Follows shooterLeader without inversion
 
-    leaderController.setP(kP); /**/ followerController.setP(kP);
-    leaderController.setI(kI); /**/ followerController.setI(kI);
-    leaderController.setD(kD); /**/ followerController.setD(kD);
-    leaderController.setIZone(kIz); /**/ followerController.setIZone(kIz);
-    leaderController.setFF(kFF); /**/ followerController.setFF(kFF);
+    leaderController.setP(kP);
+    leaderController.setI(kI);
+    leaderController.setD(kD);
+    leaderController.setIZone(kIz);
+    leaderController.setFF(kSMFF.calculate(shooterLeader.getEncoder().getVelocity()));
     leaderController.setOutputRange(kMinOutput, kMaxOutput); 
+
+    followerController.setP(kP);
+    followerController.setI(kI);
+    followerController.setD(kD);
+    followerController.setIZone(kIz);
+    followerController.setFF(kSMFF.calculate(shooterFollower.getEncoder().getVelocity()));
     followerController.setOutputRange(kMinOutput, kMaxOutput);
     
     // display PID coefficients on SmartDashboard
@@ -125,7 +136,7 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("I Gain", kI);
     SmartDashboard.putNumber("D Gain", kD);
     SmartDashboard.putNumber("I Zone", kIz);
-    SmartDashboard.putNumber("Feed Forward", kFF);
+    SmartDashboard.putNumber("Feed Forward", kSMFF.calculate(shooterLeader.getEncoder().getVelocity()));
     SmartDashboard.putNumber("Max Output", kMaxOutput);
     SmartDashboard.putNumber("Min Output", kMinOutput);
     SmartDashboard.putNumber("Set Velocity", setPoint);
