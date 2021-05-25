@@ -38,7 +38,7 @@ public class IntakeAndOutake extends SubsystemBase {
   private final double speed = 0.9; // Speed for shooter loader conveyor
   private final double speed2 = .95; // Speed for intake conveyors
 
-  private double kP, kI, kD, kIz, kFF, kS, kV, kA, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
+  private double kP, kI, kD, kIz, kS, kV, kA, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
   private SimpleMotorFeedforward kSMFF;
 
   private static final double ramp_rate = 0.2; // limit in seconds that motor is allowed reach full speed
@@ -99,7 +99,8 @@ public class IntakeAndOutake extends SubsystemBase {
     followerController = shooterFollower.getPIDController();
     
     //changed to consitantly get the target RPM (changed 2-20-21)
-    kP = 3.62e-7; // Value obtained from frc characterization routine performed on robot 05/18/21
+    //kP = 3.62e-7; // Value obtained from frc characterization routine performed on robot 05/18/21
+    kP = 0;
     kI = 0.0;
     kD = 0.0;
     kIz = 0;
@@ -255,11 +256,17 @@ public class IntakeAndOutake extends SubsystemBase {
    * Sets the shooterLeader motor PID controller reference in RPMs.*/
   private void setShooterVelocity(){
     if (SmartDashboard.getBoolean("Testing Velocity?", false) == false) {
+      leaderController.setFF(kSMFF.calculate(targetVelocity)); // For use with limelight
+      followerController.setFF(kSMFF.calculate(targetVelocity)); // For use with limelight
+
       leaderController.setReference(targetVelocity, ControlType.kVelocity);
       errorReference = targetVelocity;
       System.out.println("Bruh");
     }
     else {
+      leaderController.setFF(kSMFF.calculate(setPoint)); // For use with testing
+      followerController.setFF(kSMFF.calculate(setPoint)); // For use with testing
+
       leaderController.setReference(setPoint, ControlType.kVelocity);
       errorReference = setPoint;
       System.out.println("Bruuuuuuuuuuuuuuuuuuuuuuh");
@@ -278,7 +285,6 @@ public class IntakeAndOutake extends SubsystemBase {
     double i = SmartDashboard.getNumber("I Gain", 0);
     double d = SmartDashboard.getNumber("D Gain", 0);
     double iz = SmartDashboard.getNumber("I Zone", 0);
-    double ff = SmartDashboard.getNumber("Feed Forward", 0);
     double max = SmartDashboard.getNumber("Max Output", 0);
     double min = SmartDashboard.getNumber("Min Output", 0);
     double set = SmartDashboard.getNumber("Set Velocity", 0);
@@ -288,7 +294,6 @@ public class IntakeAndOutake extends SubsystemBase {
     if((i != kI)) { leaderController.setI(i); followerController.setI(i); kI = i; }
     if((d != kD)) { leaderController.setD(d); followerController.setD(d); kD = d; }
     if((iz != kIz)) { leaderController.setIZone(iz); followerController.setIZone(iz); kIz = iz; }
-    if((ff != kFF)) { leaderController.setFF(ff); followerController.setFF(ff); kFF = ff; }
     if((max != kMaxOutput) || (min != kMinOutput)) { 
       leaderController.setOutputRange(min, max);
       followerController.setOutputRange(min, max);
@@ -316,6 +321,7 @@ public class IntakeAndOutake extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Shooter Velocity: ", getShooterVelocity());
     SmartDashboard.putNumber("Target Velocity", targetVelocity);
+    SmartDashboard.putNumber("Calculated FF", kSMFF.calculate(setPoint));
 
     pidTuner();
     //targetVelocity = ((lime.getDistance() * 3.4967) + 1908);
