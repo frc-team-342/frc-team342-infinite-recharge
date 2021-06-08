@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
 import frc.robot.commands.RotateToAngle;
+import frc.robot.commands.TrajectoryAuto;
 import frc.robot.commands.IntakeWithButton;
 import frc.robot.commands.LaunchWithButton;
 import frc.robot.commands.DriveWithJoystick;
@@ -226,6 +227,8 @@ public class RobotContainer {
     op_controlarmBtn.toggleWhenPressed(op_controlarm);
     op_manual_wheelBtn.whileHeld(op_manual_wheel);
     op_reverse_teleBtn.whenPressed(op_reverse_tele);
+
+    new JoystickButton(operator, 11).whenPressed(new TrajectoryAuto());
   }
 
   /**
