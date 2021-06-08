@@ -228,7 +228,7 @@ public class RobotContainer {
     op_manual_wheelBtn.whileHeld(op_manual_wheel);
     op_reverse_teleBtn.whenPressed(op_reverse_tele);
 
-    new JoystickButton(operator, 11).whenPressed(new TrajectoryAuto());
+    new JoystickButton(driver, 11).whenPressed(new TrajectoryAuto());
   }
 
   /**
