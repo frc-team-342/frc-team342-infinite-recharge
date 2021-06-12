@@ -4,20 +4,13 @@
 
 package frc.robot.commands;
 
-import java.util.List;
-
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-
-import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -56,8 +49,9 @@ public class TrajectoryAuto extends SequentialCommandGroup {
     );
     
     addCommands(
+      new InstantCommand(Factory.getLimelight()::visionOff), // turn off limelight
       ramsete, // move forwards using trajectory defined in robotcontainer
-      new RotateToAngle(-135.0), // rotate so that the limelight can see the target
+      new RotateToAngle(drive.getGyro() + 150.0), // rotate so that the limelight can see the target
       new AutoTarget().withTimeout(1.0), 
       new LaunchWithButton(),
       new RotateToAngle(startAngle) // rotate back to the angle that the robot started autonomous at
