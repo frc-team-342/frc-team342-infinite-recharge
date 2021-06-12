@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -24,12 +25,13 @@ import frc.robot.subsystems.DriveSystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class TrajectoryAuto extends SequentialCommandGroup {
   DriveSystem drive = Factory.getDrive();
+  double startAngle;
   
   /** the competition autonomous using trajectories */
   public TrajectoryAuto(TrajectoryConfig config, Trajectory trajectory) {
      
     // the angle that the robot starts the autonomous at. used to reset to the original angle so that we can continue to run trajectories afterwards.
-    double startAngle = drive.getGyro();
+    startAngle = drive.getGyro();
 
     // ramsete command to follow trajectory
     var ramsete = new RamseteCommand(
@@ -50,15 +52,24 @@ public class TrajectoryAuto extends SequentialCommandGroup {
     );
     
     addCommands(
-      new InstantCommand(Factory.getLimelight()::visionOff), // turn off limelight
+      new InstantCommand(() -> {
+        startAngle = drive.getGyro(); // makes sure the start angle resets every run
+        Factory.getLimelight().visionOff(); // turns the limelight off
+      }), // turn off limelight
       new ParallelRaceGroup( // runs both commands at the same time until one finishes
         ramsete, // drive will finish first because intake does not have an end condition
         new IntakeWithButton() // run the intake while driving
       ),
       new RotateToAngle(drive.getGyro() + 150.0), // rotate so that the limelight can see the target
-      new AutoTarget().withTimeout(1.0), 
-      new LaunchWithButton(),
-      new RotateToAngle(startAngle) // rotate back to the angle that the robot started autonomous at
+      new PrintCommand("First Rotate Successful"),
+      new AutoTarget().withTimeout(1.0),
+      new ParallelRaceGroup( // runs both commands at the same time until one finishes
+        new LaunchWithButton().withTimeout(3.2), // shoot for that amount of time
+        new IntakeWithButton() // run the intake while shooting in case power cell gets stuck
+      ),
+      new RotateToAngle(startAngle), // rotate back to the angle that the robot started autonomous at
+      new PrintCommand("Second Rotate Successful")
+      // line up on a power cell?
     );
   }
 }

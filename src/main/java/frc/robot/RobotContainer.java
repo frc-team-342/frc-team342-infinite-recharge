@@ -277,7 +277,7 @@ public class RobotContainer {
         // First point in the translation is the vertical position and second is the horizontal position
       ), 
       // The final end point of the trajectory path
-      new Pose2d(2.5, 0.0, new Rotation2d(0)), 
+      new Pose2d(2.55, 0.0, new Rotation2d(0)), 
       config
     ); 
   }
