@@ -227,8 +227,6 @@ public class RobotContainer {
     op_controlarmBtn.toggleWhenPressed(op_controlarm);
     op_manual_wheelBtn.whileHeld(op_manual_wheel);
     op_reverse_teleBtn.whenPressed(op_reverse_tele);
-
-    new JoystickButton(driver, 11).whenPressed(new TrajectoryAuto());
   }
 
   /**
@@ -311,24 +309,9 @@ public class RobotContainer {
 
     scrapFirstPath();
     
-    RamseteCommand ramsete = new RamseteCommand(
-      trajectory, 
-      driveSystem::getPose2d, 
-      new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta), 
-      new SimpleMotorFeedforward(
-        Constants.ksVolts, 
-        Constants.kvVoltsSecondsPerMeter, 
-        Constants.kaVoltsSecondsSquaredPerMeter
-      ),
-      Constants.kDifferentialKinematics, 
-      driveSystem::getDifferentialWheelSpeeds, 
-      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
-      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
-      driveSystem::differentialDriveVolts, 
-      driveSystem
-    );
-    
     driveSystem.resetOdometry(trajectory.getInitialPose());
-    return ramsete.andThen(() -> driveSystem.differentialDriveVolts(0, 0));
+    //return ramsete.andThen(() -> driveSystem.differentialDriveVolts(0, 0));
+
+    return new TrajectoryAuto(config, trajectory);
   }
 }
