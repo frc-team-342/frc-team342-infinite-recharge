@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -50,7 +51,10 @@ public class TrajectoryAuto extends SequentialCommandGroup {
     
     addCommands(
       new InstantCommand(Factory.getLimelight()::visionOff), // turn off limelight
-      ramsete, // move forwards using trajectory defined in robotcontainer
+      new ParallelRaceGroup( // runs both commands at the same time until one finishes
+        ramsete, // drive will finish first because intake does not have an end condition
+        new IntakeWithButton() // run the intake while driving
+      ),
       new RotateToAngle(drive.getGyro() + 150.0), // rotate so that the limelight can see the target
       new AutoTarget().withTimeout(1.0), 
       new LaunchWithButton(),
