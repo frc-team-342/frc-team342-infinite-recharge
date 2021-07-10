@@ -43,7 +43,7 @@ public class IntakeAndOutake extends SubsystemBase {
   private static final int current_limit = 60; // max amount of current motor can pull
 
   // Changed from 250 on 3/6/2020
-  private double error = 45.0; // allowable error for shooter in RPMs
+  private double error = 25.0; // allowable error for shooter in RPMs
   private double hoodAngle = 50.0 * (Math.PI / 180.0); // hood angle in radians
   private double height = 98.25 - 21.125; // height between robot and middle of target measured in inches
   private double targetDepth = 30.0; // depth from front of target to back measured in inches
@@ -214,7 +214,7 @@ public class IntakeAndOutake extends SubsystemBase {
     powerCellCount();
     setShooterVelocity();
 
-    if (Math.abs(getShooterVelocity()) + error < targetVelocity && !sensor3.get()) {
+    if (Math.abs(getShooterVelocity()) + error < targetVelocity && Math.abs(getShooterVelocity()) - error > targetVelocity && !sensor3.get()) {
       load2.set(ControlMode.PercentOutput, 0.0);
       load1.set(ControlMode.PercentOutput, 0.0);
     } else {
@@ -230,10 +230,10 @@ public class IntakeAndOutake extends SubsystemBase {
   private void setShooterVelocity() {
     if (SmartDashboard.getBoolean("Testing Velocity?", false) == false) {
       leaderController.setReference(targetVelocity, ControlType.kVelocity);
-      System.out.println("Bruh");
+      System.out.println("Limelight Velocity Mode");
     } else {
       leaderController.setReference(setPoint, ControlType.kVelocity);
-      System.out.println("Bruuuuuuuuuuuuuuuuuuuuuuh");
+      System.out.println("Testing Velocity Mode");
     }
   }
 
@@ -246,11 +246,11 @@ public class IntakeAndOutake extends SubsystemBase {
     // read PID coefficients from SmartDashboard
     // changed PID numbers to get consitantly within 1% of the target value
     // (changed: 2-20-21)
-    double p = SmartDashboard.getNumber("P Gain", 0.0003);
-    double i = SmartDashboard.getNumber("I Gain", 0.00000001);
-    double d = SmartDashboard.getNumber("D Gain", 0.005);
+    double p = SmartDashboard.getNumber("P Gain", kP);
+    double i = SmartDashboard.getNumber("I Gain", 0.0);
+    double d = SmartDashboard.getNumber("D Gain", 0.0);
     double iz = SmartDashboard.getNumber("I Zone", 0);
-    double ff = SmartDashboard.getNumber("Feed Forward", 0);
+    double ff = SmartDashboard.getNumber("Feed Forward", kFF);
     double max = SmartDashboard.getNumber("Max Output", 0);
     double min = SmartDashboard.getNumber("Min Output", 0);
     double set = SmartDashboard.getNumber("Set Velocity", 0);
