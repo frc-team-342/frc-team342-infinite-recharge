@@ -34,7 +34,7 @@ public class IntakeAndOutake extends SubsystemBase {
   private DigitalInput sensor3; // shooter loader sensor
 
   private final double speed = 0.9; // Speed for shooter loader conveyor
-  private final double speed2 = .95; // Speed for intake conveyors
+  private final double speed2 = 0.9; // Speed for intake conveyors
 
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
 
@@ -300,12 +300,12 @@ public class IntakeAndOutake extends SubsystemBase {
 
     System.out.println("Velocity: " + getShooterVelocity());
 
-    if (Math.abs(getShooterVelocity()) + error < velocity && !sensor3.get()) {
+    if (Math.abs(getShooterVelocity()) + error < setPoint && Math.abs(getShooterVelocity()) - error > setPoint && !sensor3.get()) {
       load2.set(ControlMode.PercentOutput, 0.0);
       load1.set(ControlMode.PercentOutput, 0.0);
-    } else {
-      load2.set(ControlMode.PercentOutput, 0.9);
-      load1.set(ControlMode.PercentOutput, 0.9);
+    } else if(Math.abs(getShooterVelocity()) + error > setPoint && Math.abs(getShooterVelocity()) - error < setPoint && sensor3.get()) {
+      load2.set(ControlMode.PercentOutput, speed2);
+      load1.set(ControlMode.PercentOutput, speed2);
     }
   }
 
