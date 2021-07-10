@@ -327,7 +327,7 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Target Velocity", targetVelocity);
 
     pidTuner();
-    targetVelocity = ((lime.getDistance() * 3.4967) + 1908);
+    targetVelocity = ((lime.getDistance() * 5.7636) + 3133.6);
   }
 
   /** Displays intake and outake sensors on the SmartDashboard */
