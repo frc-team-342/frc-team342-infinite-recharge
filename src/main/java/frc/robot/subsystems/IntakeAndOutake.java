@@ -43,7 +43,7 @@ public class IntakeAndOutake extends SubsystemBase {
   private static final int current_limit = 60; // max amount of current motor can pull
 
   // Changed from 250 on 3/6/2020
-  private double error = 25.0; // allowable error for shooter in RPMs
+  private double error = 40.0; // allowable error for shooter in RPMs
   private double hoodAngle = 50.0 * (Math.PI / 180.0); // hood angle in radians
   private double height = 98.25 - 21.125; // height between robot and middle of target measured in inches
   private double targetDepth = 30.0; // depth from front of target to back measured in inches
