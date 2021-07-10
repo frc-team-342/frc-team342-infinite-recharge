@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    autoDrive.schedule();
+    //autoDrive.schedule();
   }
 
   /**
@@ -117,7 +117,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     CommandScheduler.getInstance().run();
-    SmartDashboard.putNumber("Auto Velocity m/s: ", m_robotContainer.getSample().velocityMetersPerSecond);
+    //SmartDashboard.putNumber("Auto Velocity m/s: ", m_robotContainer.getSample().velocityMetersPerSecond);
   }
 
   @Override

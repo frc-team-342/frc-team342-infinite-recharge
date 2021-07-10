@@ -311,6 +311,7 @@ public class RobotContainer {
     driveSystem.resetOdometry(trajectory.getInitialPose());
     //return ramsete.andThen(() -> driveSystem.differentialDriveVolts(0, 0));
 
-    return new TrajectoryAuto(config, trajectory);
+    //return new TrajectoryAuto(config, trajectory);;
+    return new InstantCommand();
   }
 }

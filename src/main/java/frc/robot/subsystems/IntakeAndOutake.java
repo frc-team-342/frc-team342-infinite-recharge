@@ -298,12 +298,15 @@ public class IntakeAndOutake extends SubsystemBase {
   public void outake(double velocity) {
     setShooterVelocity();
 
-    System.out.println("Velocity: " + getShooterVelocity());
-
-    if (Math.abs(getShooterVelocity()) + error < setPoint && Math.abs(getShooterVelocity()) - error > setPoint && !sensor3.get()) {
+    if((Math.abs(getShooterVelocity()) + error < setPoint || Math.abs(getShooterVelocity()) - error > setPoint) && sensor3.get()){
+    //if (Math.abs(getShooterVelocity()) + error < setPoint && Math.abs(getShooterVelocity()) - error > setPoint && !sensor3.get()) {
       load2.set(ControlMode.PercentOutput, 0.0);
       load1.set(ControlMode.PercentOutput, 0.0);
     } else if(Math.abs(getShooterVelocity()) + error > setPoint && Math.abs(getShooterVelocity()) - error < setPoint && sensor3.get()) {
+      load2.set(ControlMode.PercentOutput, speed2);
+      load1.set(ControlMode.PercentOutput, speed2);
+      System.out.println("Velocity: " + getShooterVelocity());
+    } else{
       load2.set(ControlMode.PercentOutput, speed2);
       load1.set(ControlMode.PercentOutput, speed2);
     }
