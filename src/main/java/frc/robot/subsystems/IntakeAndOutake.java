@@ -49,8 +49,8 @@ public class IntakeAndOutake extends SubsystemBase {
   private double targetDepth = 30.0; // depth from front of target to back measured in inches
   private double limeToHood = 27.0; // length from limelight to shooter hood measured in inches
   private double circumferenceOfWheel = (6.0 * Math.PI); // 2*pi*r to get circumference
-  private double setPoint = 0.0;
-  private double targetVelocity = 0.0;
+  private double setPoint = 0.0; // Set point used for velocity testing
+  private double targetVelocity = 0.0; // Target velocity obtained from limelight calculations further down
   // private double rpmScalar = 1.0322;
   // private double rpmAddition = 54.8;
 
@@ -92,11 +92,11 @@ public class IntakeAndOutake extends SubsystemBase {
     followerController = shooterFollower.getPIDController();
 
     // changed to consitantly get the target RPM (changed 2-20-21)
-    kP = 3.62e-7;
+    kP = 3.62e-7; // P value obtained from characterization analysis
     kI = 0.0;
     kD = 0.0;
     kIz = 0;
-    kFF = 0.00017523;
+    kFF = 0.00017523; // FF value obtained from manual testing
     kMaxOutput = 1;
     kMinOutput = -1;
     maxRPM = 5700;
@@ -214,10 +214,17 @@ public class IntakeAndOutake extends SubsystemBase {
     powerCellCount();
     setShooterVelocity();
 
-    if (Math.abs(getShooterVelocity()) + error < targetVelocity && Math.abs(getShooterVelocity()) - error > targetVelocity && !sensor3.get()) {
+    // If shooter is outside of allowable bounds and ball is ready to be shot, dont.
+    if((Math.abs(getShooterVelocity()) + error < targetVelocity || Math.abs(getShooterVelocity()) - error > targetVelocity) && sensor3.get()){
       load2.set(ControlMode.PercentOutput, 0.0);
       load1.set(ControlMode.PercentOutput, 0.0);
-    } else {
+    } // If shooter is inside of allowable bounds and ball is ready to be shot, shoot.
+    else if(Math.abs(getShooterVelocity()) + error > targetVelocity && Math.abs(getShooterVelocity()) - error < targetVelocity && sensor3.get()) {
+      load2.set(ControlMode.PercentOutput, speed2);
+      load1.set(ControlMode.PercentOutput, speed2);
+      System.out.println("Velocity: " + getShooterVelocity());
+    } // Else move conveyors until a ball is ready to be shot.
+    else{
       load2.set(ControlMode.PercentOutput, speed2);
       load1.set(ControlMode.PercentOutput, speed2);
     }
@@ -298,15 +305,17 @@ public class IntakeAndOutake extends SubsystemBase {
   public void outake(double velocity) {
     setShooterVelocity();
 
+    // If shooter is outside of allowable bounds and ball is ready to be shot, dont.
     if((Math.abs(getShooterVelocity()) + error < setPoint || Math.abs(getShooterVelocity()) - error > setPoint) && sensor3.get()){
-    //if (Math.abs(getShooterVelocity()) + error < setPoint && Math.abs(getShooterVelocity()) - error > setPoint && !sensor3.get()) {
       load2.set(ControlMode.PercentOutput, 0.0);
       load1.set(ControlMode.PercentOutput, 0.0);
-    } else if(Math.abs(getShooterVelocity()) + error > setPoint && Math.abs(getShooterVelocity()) - error < setPoint && sensor3.get()) {
+    } // If shooter is inside of allowable bounds and ball is ready to be shot, shoot.
+    else if(Math.abs(getShooterVelocity()) + error > setPoint && Math.abs(getShooterVelocity()) - error < setPoint && sensor3.get()) {
       load2.set(ControlMode.PercentOutput, speed2);
       load1.set(ControlMode.PercentOutput, speed2);
       System.out.println("Velocity: " + getShooterVelocity());
-    } else{
+    } // Else move conveyors until a ball is ready to be shot.
+    else{
       load2.set(ControlMode.PercentOutput, speed2);
       load1.set(ControlMode.PercentOutput, speed2);
     }
