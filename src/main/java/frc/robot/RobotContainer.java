@@ -269,7 +269,7 @@ public class RobotContainer {
   }
 
   public void scrapFirstPath(){
-    trajectory = TrajectoryGenerator.generateTrajectory(
+    startTrajectory = TrajectoryGenerator.generateTrajectory(
       // The starting end point of the trajectory path
       new Pose2d(0.0, 0.0, new Rotation2d(0)), 
       List.of(
@@ -277,11 +277,41 @@ public class RobotContainer {
         // First point in the translation is the vertical position and second is the horizontal position
       ), 
       // The final end point of the trajectory path
-      new Pose2d(2.55, 0.0, new Rotation2d(0)), 
+      new Pose2d(4.05, 0.0, new Rotation2d(0)), 
       config
     ); 
   }
 
+  /* This path is designed to pick up the powercells in the trench run */
+  public void scrapSecondPath() {
+    endTrajectory = TrajectoryGenerator.generateTrajectory(
+      //The starting end point of the trajectory path
+      new Pose2d(4.05, 0.0, new Rotation2d(0)),
+      List.of(
+        // Here is where you add interior waypoints
+        // First point in the translation is the vertical position and second is the horizontal position       
+      ),
+      //The final end point of the trajectory path
+      new Pose2d(0.0, 0.0, new Rotation2d(0)),
+      config
+    );
+  }
+
+  /* This path is designed to drive up so we can shoot from closer */
+  //This was scraped on July 17th 2021
+  /*public void scrapThirdPath() {
+    endTrajectory = TrajectoryGenerator.generateTrajectory(
+      //The starting end point of the trajectory path
+      new Pose2d(4.05, 0.0, new Rotation2d(0)),
+      List.of(
+        // Here is where you add interior waypoints
+        // First point in the translation is the vertical position and second is the horizontal position       
+      ),
+      //The final end point of the trajectory path
+      new Pose2d(0.0, 0.0, new Rotation2d(0)),
+      config
+    );
+  }*/  
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

@@ -45,8 +45,8 @@ public class TrajectoryAuto extends SequentialCommandGroup {
     camera = new PhotonCamera("HD_USB_Camera");
 
     // ramsete command to follow trajectory
-    var ramsete = new RamseteCommand(
-      trajectory, // passed as an argument from robotcontainer
+    var ramseteStart = new RamseteCommand(
+      startTrajectory, // passed as an argument from robotcontainer
       drive::getPose2d, // used to get current position of robot
       new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
       new SimpleMotorFeedforward(
@@ -61,7 +61,41 @@ public class TrajectoryAuto extends SequentialCommandGroup {
       drive::differentialDriveVolts, // function used to drive the robot with volts as input
       drive
     );
-    
+
+    //This was scraped on July 17th 2021
+    /*var ramseteTrench = new RamseteCommand(
+      trenchTrajectory, // passed as an argument from robotcontainer
+      drive::getPose2d, // used to get current position of robot
+      new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
+      new SimpleMotorFeedforward(
+        Constants.ksVolts, 
+        Constants.kvVoltsSecondsPerMeter, 
+        Constants.kaVoltsSecondsSquaredPerMeter
+      ),
+      Constants.kDifferentialKinematics, 
+      drive::getDifferentialWheelSpeeds, // get current wheel speeds of robot
+      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
+      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel),
+      drive::differentialDriveVolts, // function used to drive the robot with volts as input
+      drive
+    );*/    
+
+    var ramseteEnd = new RamseteCommand(
+      endTrajectory, // passed as an argument from robotcontainer
+      drive::getPose2d, // used to get current position of robot
+      new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
+      new SimpleMotorFeedforward(
+        Constants.ksVolts, 
+        Constants.kvVoltsSecondsPerMeter, 
+        Constants.kaVoltsSecondsSquaredPerMeter
+      ),
+      Constants.kDifferentialKinematics, 
+      drive::getDifferentialWheelSpeeds, // get current wheel speeds of robot
+      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel), 
+      new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel),
+      drive::differentialDriveVolts, // function used to drive the robot with volts as input
+      drive
+    );        
     addCommands(
       /* turn off limelight and reset starting angle */
       new InstantCommand(() -> {
@@ -69,14 +103,8 @@ public class TrajectoryAuto extends SequentialCommandGroup {
         Factory.getLimelight().visionOff(); // turns the limelight off
       }), // turn off limelight
 
-      /* drive forwards and intake */
-      new ParallelRaceGroup( // runs both commands at the same time until one finishes
-        ramsete, // drive will finish first because intake does not have an end condition
-        new IntakeWithButton() // run the intake while driving
-      ),
-
       /* rotate to be able to see target */
-      new RotateToAngle(drive.getGyro() + 150.0), 
+      new RotateToAngle(drive.getGyro() - 30.0), 
       new PrintCommand("First Rotate Successful"),
 
       /* target and shoot while intaking */
@@ -86,10 +114,9 @@ public class TrajectoryAuto extends SequentialCommandGroup {
         new IntakeWithButton() // run the intake while shooting in case power cell gets stuck
       ),
 
-      /* rotate back to the angle that it started at */
-      new RotateToAngle(startAngle), // so that the robot can continue and know its angle and position after
-      new PrintCommand("Second Rotate Successful"),
-      
+      /* rotate to face the trench */
+      new RotateToAngle(drive.getGyro() - 150),
+
       /* line up by turning towards a power cell */
       new ConditionalCommand( // runs one command or another based on the boolean expression in the third argument
         // runs if third argument is true
@@ -97,7 +124,33 @@ public class TrajectoryAuto extends SequentialCommandGroup {
         // runs if third argument is false
         new InstantCommand(), // does nothing, 
         camera.getLatestResult()::hasTargets // checks if the camera is seeing powercells
-      )
+      ),      
+
+      /* drive forwards and intake */
+      new ParallelRaceGroup( // runs both commands at the same time until one finishes
+        ramseteStart, // drive will finish first because intake does not have an end condition
+        new IntakeWithButton() // run the intake while driving
+      ),      
+
+      /* rotate back to the angle that it started at */
+      new RotateToAngle(startAngle), // so that the robot can continue and know its angle and position after
+      new PrintCommand("Second Rotate Successful"),
+
+      /* drives to pick up the powercells in the trench run */
+      new ParallelRaceGroup( // runs both commands at the same time until one finishes
+        ramseteEnd, // drive will finish first because intake does not have an end condition
+        new IntakeWithButton() // run the intake while driving
+      ), 
+
+      /* rotate towards powerport */
+      new RotateToAngle(drive.getGyro() - 30),
+
+      /* target and shoot while intaking */
+      new AutoTarget().withTimeout(1.0),
+      new ParallelRaceGroup( // runs both commands at the same time until one finishes
+        new LaunchWithButton().withTimeout(3.2), // shoot for that amount of time
+        new IntakeWithButton() // run the intake while shooting in case power cell gets stuck
+      )      
     );
   }
 }
