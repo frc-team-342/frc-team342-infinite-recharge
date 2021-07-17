@@ -119,7 +119,8 @@ public class RobotContainer {
 
   // Autonomous
   private Command auto;
-  private Trajectory trajectory;
+  private Trajectory startTrajectory;
+  private Trajectory endTrajectory;
   private TrajectoryConfig config;
   
 
@@ -264,9 +265,9 @@ public class RobotContainer {
       return 0.0;
   }
 
-  public Trajectory.State getSample(){
+  /*public Trajectory.State getSample(){
     return trajectory.sample(trajectory.getTotalTimeSeconds());
-  }
+  }*/
 
   public void scrapFirstPath(){
     startTrajectory = TrajectoryGenerator.generateTrajectory(
@@ -337,8 +338,9 @@ public class RobotContainer {
     .addConstraint(voltageConstraint);
 
     scrapFirstPath();
+    scrapSecondPath();
     
-    driveSystem.resetOdometry(trajectory.getInitialPose());
+    driveSystem.resetOdometry(startTrajectory.getInitialPose());
     //return ramsete.andThen(() -> driveSystem.differentialDriveVolts(0, 0));
 
     //return new TrajectoryAuto(config, trajectory);;

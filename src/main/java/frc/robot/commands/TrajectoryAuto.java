@@ -36,7 +36,7 @@ public class TrajectoryAuto extends SequentialCommandGroup {
   PhotonCamera camera;
   
   /** the competition autonomous using trajectories */
-  public TrajectoryAuto(TrajectoryConfig config, Trajectory trajectory) {
+  public TrajectoryAuto(TrajectoryConfig config, Trajectory startTrajectory, Trajectory endTrajectory) {
      
     // the angle that the robot starts the autonomous at. used to reset to the original angle so that we can continue to run trajectories afterwards.
     startAngle = drive.getGyro();
