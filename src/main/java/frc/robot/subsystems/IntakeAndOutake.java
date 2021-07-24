@@ -92,11 +92,11 @@ public class IntakeAndOutake extends SubsystemBase {
     followerController = shooterFollower.getPIDController();
 
     // changed to consitantly get the target RPM (changed 2-20-21)
-    kP = 3.63e-7; // P value obtained from characterization analysis
+    kP = 0.00002; // P value obtained from characterization analysis
     kI = 0.0;
     kD = 0.0;
     kIz = 0;
-    kFF = 0.00017523; // FF value obtained from manual testing
+    kFF = 0.00017245; // FF value obtained from manual testing
     kMaxOutput = 1;
     kMinOutput = -1;
     maxRPM = 5700;
