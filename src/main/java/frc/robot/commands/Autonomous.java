@@ -7,7 +7,9 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Factory;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -21,10 +23,10 @@ public class Autonomous extends SequentialCommandGroup {
 
     super(
       new AutoMove(0.45).withTimeout(0.8), 
-      new RotateToAngle(-135.0),
+      new RotateToAngle(135.0),
       new AutoTarget().withTimeout(2.0),
-      new LaunchWithButton()
-      ); 
+      new LaunchWithButton().withTimeout(5)
+    ); 
       
 
 
