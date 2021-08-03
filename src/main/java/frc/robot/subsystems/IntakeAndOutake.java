@@ -66,6 +66,9 @@ public class IntakeAndOutake extends SubsystemBase {
 
   private int powerCellCount = 0;
 
+  private boolean disabler = false;
+  private boolean reversing = false;
+
   /** Constructor for the class */
   public IntakeAndOutake() {
     configureShooter();
@@ -92,11 +95,12 @@ public class IntakeAndOutake extends SubsystemBase {
     followerController = shooterFollower.getPIDController();
 
     // changed to consitantly get the target RPM (changed 2-20-21)
-    kP = 0.00002; // P value obtained from characterization analysis
-    kI = 0.0;
+    kP = 0.00006; // P value obtained from characterization analysis
+    kI = 0.00000035;
     kD = 0.0;
     kIz = 0;
-    kFF = 0.00017245; // FF value obtained from manual testing
+    kFF = 0.0;
+    //kFF = 0.00017245; // FF value obtained from manual testing
     kMaxOutput = 1;
     kMinOutput = -1;
     maxRPM = 5700;
@@ -139,7 +143,7 @@ public class IntakeAndOutake extends SubsystemBase {
    * Senses powercells in and out and keeps a running count of powercells
    * currently in the robot
    */
-  private void powerCellCount() {
+  /*private void powerCellCount() {
     // counts power cells in and out so we dont get more than 5
     boolean isTriggered1 = !sensor1.get();
     boolean isTriggered2 = !sensor3.get();
@@ -170,6 +174,31 @@ public class IntakeAndOutake extends SubsystemBase {
 
     SmartDashboard.putNumber("Power Cell Count: ", powerCellCount);
 
+  }*/
+
+  public void powerCellCount(){
+    // counts power cells in and out so we dont get more than 5
+    boolean isTriggered = !sensor1.get(); 
+    
+    if(!disabler) {
+      if(isTriggered) {
+	      if(!reversing) {
+	        powerCellCount++;
+	      }
+	      else {
+	      powerCellCount--;
+	      }
+	      disabler  = true;
+      }
+    }
+    else if(disabler) {
+        if(!isTriggered) {
+	        disabler = false;
+	      }
+    }
+
+  SmartDashboard.putNumber("Power Cell Count: ", powerCellCount); 
+    
   }
 
   /** Moves the intake conveyors and wheel to load powercells into robot */
@@ -179,6 +208,7 @@ public class IntakeAndOutake extends SubsystemBase {
     load1.set(ControlMode.PercentOutput, speed);
 
     // stops shooter loader if cell is sensed to prevent jamming of shooter
+    //Giraffe Bruh
     if (!sensor3.get()) {
       // occurs when hopper is full
       load2.set(ControlMode.PercentOutput, speed);
@@ -327,7 +357,7 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Target Velocity", targetVelocity);
 
     pidTuner();
-    targetVelocity = ((lime.getDistance() * 5.7636) + 3133.6);
+    targetVelocity = ((lime.getDistance() * 5.7636) + 3433.6);
   }
 
   /** Displays intake and outake sensors on the SmartDashboard */

@@ -129,6 +129,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    intakeAndOutake.shooterStop();
     driveSystem.targetOff();
     lime.visionOff();
     // This makes sure that the autonomous stops running when
