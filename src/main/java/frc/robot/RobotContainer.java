@@ -158,7 +158,7 @@ public class RobotContainer {
     driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELD_ORIENT);
     driver_turboBtn = new JoystickButton(driver, Constants.DRIVER_TURBO);
 
-    driver_rpmIncrease = new JoystickButton(driver, Constants.DRIVER_RPM_DECREASE);
+    driver_rpmIncrease = new JoystickButton(driver, Constants.DRIVER_RPM_INCREASE);
     driver_rpmDecrease = new JoystickButton(driver, Constants.DRIVER_RPM_DECREASE);
 
 

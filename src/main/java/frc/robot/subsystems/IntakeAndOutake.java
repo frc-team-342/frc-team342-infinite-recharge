@@ -358,7 +358,6 @@ public class IntakeAndOutake extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Shooter Velocity: ", getShooterVelocity());
     SmartDashboard.putNumber("Target Velocity", targetVelocity);
-    SmartDashboard.putString("scaler", (rpmScaler * 100) + "%");
 
     pidTuner();
     targetVelocity = ((lime.getDistance() * 5.7636) + 3433.6);
@@ -385,10 +384,14 @@ public class IntakeAndOutake extends SubsystemBase {
   }
 
   public void increaseRpmScale() {
+    System.out.println("increase rpm");
     rpmScaler = MathUtil.clamp(rpmScaler + 0.01, 0.95, 1.05);
+    SmartDashboard.putNumber("scaler", rpmScaler);
   }
 
   public void decreaseRpmScale() {
+    System.out.println("decrease rpm");
     rpmScaler = MathUtil.clamp(rpmScaler - 0.01, 0.95, 1.05);
+    SmartDashboard.putNumber("scaler", rpmScaler);
   }
 }
