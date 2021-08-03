@@ -64,7 +64,7 @@ public class IntakeAndOutake extends SubsystemBase {
   // returns 1 if
   // returns 3 if
 
-  private int powerCellCount = 0;
+  private int powerCellCount = 3;
 
   private boolean disabler = false;
   private boolean reversing = false;
@@ -252,6 +252,7 @@ public class IntakeAndOutake extends SubsystemBase {
     else if(Math.abs(getShooterVelocity()) + error > targetVelocity && Math.abs(getShooterVelocity()) - error < targetVelocity && sensor3.get()) {
       load2.set(ControlMode.PercentOutput, speed2);
       load1.set(ControlMode.PercentOutput, speed2);
+      powerCellCount--;
       System.out.println("Velocity: " + getShooterVelocity());
     } // Else move conveyors until a ball is ready to be shot.
     else{

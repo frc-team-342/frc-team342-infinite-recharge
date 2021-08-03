@@ -39,7 +39,7 @@ import frc.robot.commands.LaunchWithButton;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.ActivateWinches;
-import frc.robot.commands.Autonomous;
+import frc.robot.commands.TurnAroundShootC;
 import frc.robot.commands.ChangeColor;
 
 import frc.robot.subsystems.ClimbSubsystem;
@@ -189,7 +189,7 @@ public class RobotContainer {
     op_reverse_tele = new InstantCommand(climb::setReverse, climb);
 
     // Autonomous
-    auto = new Autonomous();
+    auto = new TurnAroundShootC();
 
     configureButtonBindings();
   }
@@ -344,6 +344,6 @@ public class RobotContainer {
     //return ramsete.andThen(() -> driveSystem.differentialDriveVolts(0, 0));
 
     //return new TrajectoryAuto(config, trajectory);;
-    return new Autonomous();
+    return new TurnAroundShootC();
   }
 }
