@@ -53,6 +53,7 @@ import frc.robot.commands.ManualControlPanel;
 import frc.robot.commands.MoveArm;
 import frc.robot.commands.ReverseIntake;
 import frc.robot.subsystems.IntakeAndOutake;
+import jdk.jshell.execution.FailOverExecutionControlProvider;
 
 
 
@@ -77,6 +78,8 @@ public class RobotContainer {
   private JoystickButton driver_slowBtn;
   private JoystickButton driver_zeroBtn;
   private JoystickButton driver_reverseBtn;
+  private JoystickButton driver_rpmIncrease;
+  private JoystickButton driver_rpmDecrease;
 
   private Command driver_autoAlign;
   private Command driver_fieldOrient;
@@ -117,6 +120,8 @@ public class RobotContainer {
   private Command pid;
   private Command target;
 
+  private Command rpmIncrease, rpmDecrease;
+
   // Autonomous
   private Command auto;
   private Trajectory startTrajectory;
@@ -153,7 +158,8 @@ public class RobotContainer {
     driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELD_ORIENT);
     driver_turboBtn = new JoystickButton(driver, Constants.DRIVER_TURBO);
 
-
+    driver_rpmIncrease = new JoystickButton(driver, Constants.DRIVER_RPM_DECREASE);
+    driver_rpmDecrease = new JoystickButton(driver, Constants.DRIVER_RPM_DECREASE);
 
 
     // Operator controller
@@ -191,6 +197,17 @@ public class RobotContainer {
     // Autonomous
     auto = new Autonomous();
 
+    /* change rpm scaler during match */
+    // increase rpm scaler
+    rpmIncrease = new InstantCommand(() -> {
+      Factory.getIntakeOutake().increaseRpmScale();
+    }, Factory.getIntakeOutake());
+
+    // decrease rpm scaler
+    rpmDecrease = new InstantCommand(() -> {
+      Factory.getIntakeOutake().decreaseRpmScale();
+    }, Factory.getIntakeOutake());
+
     configureButtonBindings();
   }
 
@@ -216,6 +233,8 @@ public class RobotContainer {
     driver_slowBtn.whenPressed(driver_slow);
     driver_zeroBtn.whenPressed(driver_zero);
     driver_reverseBtn.whileHeld(driver_reverse);
+    driver_rpmIncrease.whenPressed(rpmIncrease);
+    driver_rpmDecrease.whenPressed(rpmDecrease);
 
     // Operator button bindings
     op_launchBtn.toggleWhenPressed(op_launch);

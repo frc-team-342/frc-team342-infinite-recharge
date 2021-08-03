@@ -14,6 +14,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
 
 public class IntakeAndOutake extends SubsystemBase {
   /**
@@ -56,6 +57,8 @@ public class IntakeAndOutake extends SubsystemBase {
 
   /** Gravity in inches/second */
   private double gravity = 386.09; // gravity in in/s
+
+  private double rpmScaler = 1.0;
 
   private final LimelightSubsystem lime;
 
@@ -355,6 +358,7 @@ public class IntakeAndOutake extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Shooter Velocity: ", getShooterVelocity());
     SmartDashboard.putNumber("Target Velocity", targetVelocity);
+    SmartDashboard.putString("scaler", (rpmScaler * 100) + "%");
 
     pidTuner();
     targetVelocity = ((lime.getDistance() * 5.7636) + 3433.6);
@@ -380,4 +384,11 @@ public class IntakeAndOutake extends SubsystemBase {
     shooterLeader.set(0.0); // shooterFollower.set(0.0);
   }
 
+  public void increaseRpmScale() {
+    rpmScaler = MathUtil.clamp(rpmScaler + 0.01, 0.95, 1.05);
+  }
+
+  public void decreaseRpmScale() {
+    rpmScaler = MathUtil.clamp(rpmScaler - 0.01, 0.95, 1.05);
+  }
 }
