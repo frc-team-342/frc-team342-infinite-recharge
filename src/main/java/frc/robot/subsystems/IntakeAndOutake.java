@@ -64,7 +64,10 @@ public class IntakeAndOutake extends SubsystemBase {
   // returns 1 if
   // returns 3 if
 
-  private int powerCellCount = 0;
+  private int powerCellCount = 3;
+
+  private boolean disabler = false;
+  private boolean reversing = false;
 
   /** Constructor for the class */
   public IntakeAndOutake() {
@@ -139,7 +142,7 @@ public class IntakeAndOutake extends SubsystemBase {
    * Senses powercells in and out and keeps a running count of powercells
    * currently in the robot
    */
-  private void powerCellCount() {
+  /*private void powerCellCount() {
     // counts power cells in and out so we dont get more than 5
     boolean isTriggered1 = !sensor1.get();
     boolean isTriggered2 = !sensor3.get();
@@ -170,6 +173,31 @@ public class IntakeAndOutake extends SubsystemBase {
 
     SmartDashboard.putNumber("Power Cell Count: ", powerCellCount);
 
+  }*/
+
+  public void powerCellCount(){
+    // counts power cells in and out so we dont get more than 5
+    boolean isTriggered = !sensor1.get(); 
+    
+    if(!disabler) {
+      if(isTriggered) {
+	      if(!reversing) {
+	        powerCellCount++;
+	      }
+	      else {
+	      powerCellCount--;
+	      }
+	      disabler  = true;
+      }
+    }
+    else if(disabler) {
+        if(!isTriggered) {
+	        disabler = false;
+	      }
+    }
+
+  SmartDashboard.putNumber("Power Cell Count: ", powerCellCount); 
+    
   }
 
   /** Moves the intake conveyors and wheel to load powercells into robot */
@@ -179,6 +207,7 @@ public class IntakeAndOutake extends SubsystemBase {
     load1.set(ControlMode.PercentOutput, speed);
 
     // stops shooter loader if cell is sensed to prevent jamming of shooter
+    //Giraffe Bruh
     if (!sensor3.get()) {
       // occurs when hopper is full
       load2.set(ControlMode.PercentOutput, speed);
@@ -222,6 +251,7 @@ public class IntakeAndOutake extends SubsystemBase {
     else if(Math.abs(getShooterVelocity()) + error > targetVelocity && Math.abs(getShooterVelocity()) - error < targetVelocity && sensor3.get()) {
       load2.set(ControlMode.PercentOutput, speed2);
       load1.set(ControlMode.PercentOutput, speed2);
+      powerCellCount--;
       System.out.println("Velocity: " + getShooterVelocity());
     } // Else move conveyors until a ball is ready to be shot.
     else{
@@ -327,7 +357,7 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Target Velocity", targetVelocity);
 
     pidTuner();
-    targetVelocity = ((lime.getDistance() * 5.7636) + 3133.6);
+    targetVelocity = ((lime.getDistance() * 5.7636) + 3433.6);
   }
 
   /** Displays intake and outake sensors on the SmartDashboard */

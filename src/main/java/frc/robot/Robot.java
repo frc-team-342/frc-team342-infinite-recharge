@@ -16,12 +16,14 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import frc.robot.commands.ActivateTelescopes;
 
-import frc.robot.commands.Autonomous;
+import frc.robot.commands.TurnAroundShootC;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.DriveWithTargeting;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.IntakeAndOutake;
 import frc.robot.subsystems.LimelightSubsystem;
+
+import org.photonvision.PhotonCamera;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -44,12 +46,16 @@ public class Robot extends TimedRobot {
 
   private Command driveWithPercent;
 
+  private PhotonCamera camera;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
   @Override
   public void robotInit() {
+    camera = new PhotonCamera("HD_USB_Camera");
+
     m_robotContainer = new RobotContainer();
     
     driveSystem = Factory.getDrive();
@@ -123,6 +129,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    intakeAndOutake.shooterStop();
     driveSystem.targetOff();
     lime.visionOff();
     // This makes sure that the autonomous stops running when
@@ -132,6 +139,8 @@ public class Robot extends TimedRobot {
     if (autoDrive != null) {
       autoDrive.cancel();
     }
+
+    camera.setDriverMode(true); // turns off powercell vision once teleop starts
   }
 
   /**

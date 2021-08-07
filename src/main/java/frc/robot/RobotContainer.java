@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -39,9 +40,10 @@ import frc.robot.commands.LaunchWithButton;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.ActivateWinches;
-import frc.robot.commands.Autonomous;
+import frc.robot.commands.TurnAroundShootC;
+import frc.robot.commands.TurnAroundShootCC;
 import frc.robot.commands.ChangeColor;
-
+import frc.robot.commands.DriveOffLineAuto;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ControlPanelSubsystem;
 
@@ -118,11 +120,9 @@ public class RobotContainer {
   private Command target;
 
   // Autonomous
-  private Command auto;
-  private Trajectory trajectory;
-  private TrajectoryConfig config;
+  private Command turnShootC, turnShootCC, initiationLine;
+  private SendableChooser<Command> chooser;
   
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -133,7 +133,6 @@ public class RobotContainer {
     // Driver controller
     driver = new Joystick(Constants.DRIVER_CONTROLLER);
 
-    
     driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTO_ALIGN);
     driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELD_ORIENT);
     driver_turboBtn = new JoystickButton(driver, Constants.DRIVER_TURBO);
@@ -151,9 +150,6 @@ public class RobotContainer {
     driver_autoAlignBtn = new JoystickButton(driver, Constants.DRIVER_AUTO_ALIGN);
     driver_fieldOrientBtn = new JoystickButton(driver, Constants.DRIVER_FIELD_ORIENT);
     driver_turboBtn = new JoystickButton(driver, Constants.DRIVER_TURBO);
-
-
-
 
     // Operator controller
     operator = new XboxController(Constants.OPERATOR_CONTROLLER);
@@ -188,7 +184,15 @@ public class RobotContainer {
     op_reverse_tele = new InstantCommand(climb::setReverse, climb);
 
     // Autonomous
-    auto = new Autonomous();
+    turnShootC = new TurnAroundShootC();
+    turnShootCC = new TurnAroundShootCC();
+    initiationLine = new DriveOffLineAuto();
+
+    // used to select the autonomous we want to run
+    chooser = new SendableChooser<Command>();
+    chooser.setDefaultOption("Turn clockwise and shoot", turnShootC);
+    chooser.addOption("Turn counterclockwise and shoot", turnShootCC);
+    chooser.addOption("Drive off the initiation line", initiationLine);
 
     configureButtonBindings();
   }
@@ -230,88 +234,11 @@ public class RobotContainer {
   }
 
   /**
-   * Performs know calculation on given nav point to convert it from meters to field points in meters and corrects distances. 
-   * Calculation was found by finding the inverse of equation derived from distance tests.
-   * Due to the calculation containing square root mathematics, signum logic is applied to make sure negative nav points can still be calculated.
-   * @param navpoint
-   */
-  public double getNavPointVertical(double navpoint){
-    if(navpoint == 0.0){
-      return 0;
-    }
-    else if(Math.signum(navpoint) == -1.0){
-      //return -navpoint * Constants.fieldUnitsToMeters;
-      return -navpoint;
-    }
-    else{
-      //return navpoint * Constants.fieldUnitsToMeters;
-      return navpoint;
-      
-    }
-  }
-
-  /**
-   * Performs know calculation on given nav point to convert it from meters to field points in meters and corrects distances. 
-   * Calculation was found by finding the inverse of equation derived from distance tests.
-   * Returns the calculated nav point negated due to the trajectory point for the horizontal being naturally inverted by the generator.
-   * @param navpoint
-   */
-  public double getNavPointHorizontal(double navpoint){
-    if(navpoint != 0.0){
-      return -navpoint;
-    }
-    else
-      return 0.0;
-  }
-
-  public Trajectory.State getSample(){
-    return trajectory.sample(trajectory.getTotalTimeSeconds());
-  }
-
-  public void scrapFirstPath(){
-    trajectory = TrajectoryGenerator.generateTrajectory(
-      // The starting end point of the trajectory path
-      new Pose2d(0.0, 0.0, new Rotation2d(0)), 
-      List.of(
-        // Here is where you add interior waypoints
-        // First point in the translation is the vertical position and second is the horizontal position
-      ), 
-      // The final end point of the trajectory path
-      new Pose2d(2.55, 0.0, new Rotation2d(0)), 
-      config
-    ); 
-  }
-
-  /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Sets a voltage constraint so the trajectory never commands the robot to go faster than it is capable with its given voltage supply
-    DifferentialDriveVoltageConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
-      new SimpleMotorFeedforward(
-        Constants.ksVolts, 
-        Constants.kvVoltsSecondsPerMeter, 
-        Constants.kaVoltsSecondsSquaredPerMeter
-      ), 
-      Constants.kDifferentialKinematics, 
-      10 // magic numbers babey
-    );
-
-    // Wraps together all of the path constraints
-    config = new TrajectoryConfig(
-      Constants.kMaxSpeedMetersPerSecond, 
-      Constants.kMaxAccelerationMetersPerSecondSquared
-    ).setKinematics(Constants.kDifferentialKinematics)
-    .addConstraint(voltageConstraint);
-
-    scrapFirstPath();
-    
-    driveSystem.resetOdometry(trajectory.getInitialPose());
-    //return ramsete.andThen(() -> driveSystem.differentialDriveVolts(0, 0));
-
-    //return new TrajectoryAuto(config, trajectory);;
-    return new Autonomous();
+    return chooser.getSelected();
   }
 }
