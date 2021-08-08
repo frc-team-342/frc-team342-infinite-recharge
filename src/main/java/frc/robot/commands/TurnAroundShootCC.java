@@ -17,7 +17,7 @@ public class TurnAroundShootCC extends SequentialCommandGroup {
     addCommands(
       //Drive Forwards, Turn Around, and Shoot (Counter-Clockwise)
       new AutoMove(0.45).withTimeout(0.8), 
-      new RotateToAngle(-135.0),
+      new RotateToAngle(-135.0).withTimeout(2.5),
       new AutoTarget().withTimeout(2.0),
       new LaunchWithButton().withTimeout(8.5)
     );
