@@ -99,7 +99,7 @@ public class IntakeAndOutake extends SubsystemBase {
     kI = 0.0;
     kD = 0.0;
     kIz = 0;
-    kFF = 0.000171; // FF value obtained from manual testing 0.00017445
+    kFF = 0.0001732; // FF value obtained from manual testing 0.00017445
     kMaxOutput = 1;
     kMinOutput = -1;
     maxRPM = 5700;
@@ -357,7 +357,7 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Target Velocity", targetVelocity);
 
     pidTuner();
-    targetVelocity = ((lime.getDistance() * 5.7636) + 3433.6);
+    targetVelocity = ((lime.getDistance() * 6.7636) + 3233.6);
   }
 
   /** Displays intake and outake sensors on the SmartDashboard */
