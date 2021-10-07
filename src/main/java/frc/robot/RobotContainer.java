@@ -67,6 +67,7 @@ import frc.robot.subsystems.IntakeAndOutake;
 public class RobotContainer {
   private final DriveSystem driveSystem;
   private final ClimbSubsystem climb;
+  private final IntakeAndOutake intakeOuttake;
 
   // Driver controller
   private static Joystick driver; // port 0
@@ -98,6 +99,7 @@ public class RobotContainer {
   private JoystickButton op_controlarmBtn;
   private JoystickButton op_manual_wheelBtn;
   private JoystickButton op_reverse_teleBtn;
+  private JoystickButton op_manualShooterBtn;
 
   private Command op_launch;
   private Command op_slow;
@@ -106,9 +108,8 @@ public class RobotContainer {
   private Command op_runWinch;
   private Command op_telescopes;
   private Command op_reverse;
-  private Command op_controlarm;
-  private Command op_manual_wheel;
   private Command op_reverse_tele;
+  private Command op_manualShooter;
 
   private Command field;
   private Command slow;
@@ -130,6 +131,8 @@ public class RobotContainer {
   public RobotContainer() {
     driveSystem = Factory.getDrive();
     climb = Factory.getClimb();
+    intakeOuttake = Factory.getIntakeOutake();
+
 
     // Driver controller
     driver = new Joystick(Constants.DRIVER_CONTROLLER);
@@ -167,9 +170,8 @@ public class RobotContainer {
     op_runWinchBtn = new JoystickButton(operator, Constants.OP_RUN_WINCH);
     op_telescopesBtn = new JoystickButton(operator, Constants.OP_TELESCOPES);
     op_reverseBtn = new JoystickButton(operator, Constants.OP_REVERSE);
-    op_controlarmBtn = new JoystickButton(operator, Constants.OP_CONTROL_ARM);
-    op_manual_wheelBtn = new JoystickButton(operator, Constants.OP_CONTROL_RIGHT);
     op_reverse_teleBtn = new JoystickButton(operator, Constants.OP_REVERSE_TELE);
+    op_manualShooterBtn = new JoystickButton(operator, Constants.OP_MANUALSHOOTER);
   
     op_launch = new LaunchWithButton();
     op_slow = new InstantCommand(driveSystem::setSlow, driveSystem);
@@ -184,9 +186,8 @@ public class RobotContainer {
     op_runWinch = new ActivateWinches();
     op_telescopes = new ActivateTelescopes();
     op_reverse = new ReverseIntake();
-    op_controlarm = new MoveArm();
-    op_manual_wheel = new ManualControlPanel();
     op_reverse_tele = new InstantCommand(climb::setReverse, climb);
+    op_manualShooter = new InstantCommand(intakeOuttake::toggleOverride, intakeOuttake);
 
     // Autonomous
     auto = new TurnAroundShootC();
@@ -225,9 +226,8 @@ public class RobotContainer {
     op_runWinchBtn.whileHeld(op_runWinch);
     op_telescopesBtn.whileHeld(op_telescopes);
     op_reverseBtn.whileHeld(op_reverse);
-    op_controlarmBtn.toggleWhenPressed(op_controlarm);
-    op_manual_wheelBtn.whileHeld(op_manual_wheel);
     op_reverse_teleBtn.whenPressed(op_reverse_tele);
+    op_manualShooterBtn.whenPressed(op_manualShooter);
   }
 
   /**

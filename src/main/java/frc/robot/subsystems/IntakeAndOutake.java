@@ -68,6 +68,9 @@ public class IntakeAndOutake extends SubsystemBase {
 
   private boolean disabler = false;
   private boolean reversing = false;
+  
+  //Boolean to determine if the override button has been pressed
+  private boolean override = false;
 
   /** Constructor for the class */
   public IntakeAndOutake() {
@@ -358,7 +361,15 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Target Velocity", targetVelocity);
 
     pidTuner();
-    targetVelocity = ((lime.getDistance() * 5.7636) + 3433.6);
+    
+    /** If statement: when the boolean "override" is false then it shoots with the limelight 
+    but, when it is true it shoots manually at the value given */
+    if (!override) {
+      targetVelocity = ((lime.getDistance() * 5.7636) + 3433.6);
+    }
+    else if (override) {
+      targetVelocity = 3800;
+    }
   }
 
   /** Displays intake and outake sensors on the SmartDashboard */
@@ -366,6 +377,11 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putBoolean("Intake Sensor1: ", !sensor1.get());
     SmartDashboard.putBoolean("Intake Sensor2: ", !sensor2.get());
     SmartDashboard.putBoolean("Intake Sensor3: ", !sensor3.get());
+  }
+
+  /** Reverses the value of the boolean "override" */
+  public void toggleOverride() {
+    override = !override;
   }
 
   /** Completely stops all intake motors except shooter loader */
