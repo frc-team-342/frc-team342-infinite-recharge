@@ -271,7 +271,12 @@ public class IntakeAndOutake extends SubsystemBase {
   private void setShooterVelocity() {
     if (SmartDashboard.getBoolean("Testing Velocity?", false) == false) {
       leaderController.setReference(targetVelocity, ControlType.kVelocity);
-      System.out.println("Limelight Velocity Mode");
+      if (!override) {
+        System.out.println("Limelight Velocity Mode");
+      }
+      else if (override) {
+        System.out.println("Manual Shooter Mode");
+      }
     } else {
       leaderController.setReference(setPoint, ControlType.kVelocity);
       System.out.println("Testing Velocity Mode");
@@ -359,6 +364,9 @@ public class IntakeAndOutake extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Shooter Velocity: ", getShooterVelocity());
     SmartDashboard.putNumber("Target Velocity", targetVelocity);
+
+    //Shows the status of the boolean "override" on ShuffleBoard
+    SmartDashboard.putBoolean("Manual Shooting Mode", override);
 
     pidTuner();
     
