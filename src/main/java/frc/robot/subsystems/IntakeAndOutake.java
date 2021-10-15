@@ -14,6 +14,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
 
 public class IntakeAndOutake extends SubsystemBase {
   /**
@@ -85,6 +86,8 @@ public class IntakeAndOutake extends SubsystemBase {
     sensor3 = new DigitalInput(Constants.INTAKE_SENSOR_3); // shooter loader sensor
 
     lime = Factory.getLimelight();
+
+    SmartDashboard.putNumber("Shooter Added Percent", 0);
   }
 
   /**
@@ -214,7 +217,7 @@ public class IntakeAndOutake extends SubsystemBase {
     //Giraffe Bruh
     if (!sensor3.get()) {
       // occurs when hopper is full
-      load2.set(ControlMode.PercentOutput, speed);
+      //load2.set(ControlMode.PercentOutput, speed);
       // load2.set(ControlMode.PercentOutput, 0.0);
     } else {
       // load2.set(ControlMode.PercentOutput, speed);
@@ -300,6 +303,7 @@ public class IntakeAndOutake extends SubsystemBase {
     double max = SmartDashboard.getNumber("Max Output", 0);
     double min = SmartDashboard.getNumber("Min Output", 0);
     double set = SmartDashboard.getNumber("Set Velocity", 0);
+    
 
     // if PID coefficients on SmartDashboard have changed, write new values to
     // controller
@@ -373,11 +377,21 @@ public class IntakeAndOutake extends SubsystemBase {
     /** If statement: when the boolean "override" is false then it shoots with the limelight 
     but, when it is true it shoots manually at the value given */
     if (!override) {
-      targetVelocity = ((lime.getDistance() * 5.7636) + 3433.6);
+      targetVelocity = ((lime.getDistance() * 5.7636) + 3433.6) + (((lime.getDistance() * 5.7636) + 3433.6) * plusOrMinusShooter());
     }
     else if (override) {
-      targetVelocity = 3800;
+      targetVelocity = 3800 + (3800 * plusOrMinusShooter());
     }
+  }
+
+  /** 
+   * Gets the value of "Shooter Added Percent" and clamps it between the values -5 and 5 so our percent isn't too big or small.
+   * Also divdes the percent by 100 and returns the value.
+   * @return a number between -0.05 and 0.05 to scale the shooter output by
+   */
+  public double plusOrMinusShooter() {
+    double shooterPercent = MathUtil.clamp(SmartDashboard.getNumber("Shooter Added Percent", 0), -5, 5);
+    return shooterPercent / 100;
   }
 
   /** Displays intake and outake sensors on the SmartDashboard */
