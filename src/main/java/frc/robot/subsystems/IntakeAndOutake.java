@@ -69,6 +69,9 @@ public class IntakeAndOutake extends SubsystemBase {
   private boolean disabler = false;
   private boolean reversing = false;
 
+  // for shooter override mode, shoots at a set rpm
+  private boolean override = false;
+
   /** Constructor for the class */
   public IntakeAndOutake() {
     configureShooter();
@@ -267,7 +270,11 @@ public class IntakeAndOutake extends SubsystemBase {
   private void setShooterVelocity() {
     if (SmartDashboard.getBoolean("Testing Velocity?", false) == false) {
       leaderController.setReference(targetVelocity, ControlType.kVelocity);
-      System.out.println("Limelight Velocity Mode");
+      if (!override) {
+        System.out.println("Limelight Velocity Mode");
+      } else {
+        System.out.println("Manual Shooter Mode");
+      }
     } else {
       leaderController.setReference(setPoint, ControlType.kVelocity);
       System.out.println("Testing Velocity Mode");
@@ -357,7 +364,15 @@ public class IntakeAndOutake extends SubsystemBase {
     SmartDashboard.putNumber("Target Velocity", targetVelocity);
 
     pidTuner();
-    targetVelocity = ((lime.getDistance() * 6.7636) + 3463.6);
+
+    if (!override) {
+      targetVelocity = ((lime.getDistance() * 6.7636) + 3463.6);
+    } else {
+      targetVelocity = 3900;
+    }
+
+    // whether the robot is shooting at a set rpm or a distance from limelight
+    SmartDashboard.putBoolean("Manual shooting mode", override);
   }
 
   /** Displays intake and outake sensors on the SmartDashboard */
@@ -378,6 +393,11 @@ public class IntakeAndOutake extends SubsystemBase {
     load1.set(ControlMode.PercentOutput, 0.0);
     load2.set(ControlMode.PercentOutput, 0.0);
     shooterLeader.set(0.0); // shooterFollower.set(0.0);
+  }
+
+  /** Reverses the value of the boolean "override" */
+  public void toggleOverride() {
+    override = !override;
   }
 
 }
