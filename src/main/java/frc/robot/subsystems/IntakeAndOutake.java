@@ -210,7 +210,7 @@ public class IntakeAndOutake extends SubsystemBase {
     //Giraffe Bruh
     if (!sensor3.get()) {
       // occurs when hopper is full
-      load2.set(ControlMode.PercentOutput, speed);
+      //load2.set(ControlMode.PercentOutput, speed);
       // load2.set(ControlMode.PercentOutput, 0.0);
     } else {
       // load2.set(ControlMode.PercentOutput, speed);
