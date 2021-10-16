@@ -21,9 +21,6 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.wpilibj.trajectory.constraint.EllipticalRegionConstraint;
-import edu.wpi.first.wpilibj.trajectory.constraint.RectangularRegionConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
@@ -39,8 +36,7 @@ import frc.robot.commands.LaunchWithButton;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.ActivateWinches;
-import frc.robot.commands.TurnAroundShootC;
-import frc.robot.commands.TurnAroundShootCC;
+import frc.robot.commands.TurnShootAuto;
 import frc.robot.commands.ChangeColor;
 import frc.robot.commands.DriveOffLineAuto;
 import frc.robot.subsystems.ClimbSubsystem;
@@ -198,8 +194,8 @@ public class RobotContainer {
 
     // Autonomous chooser and autonomous options
     chooser = new SendableChooser<>();
-    turnShootC = new TurnAroundShootC();
-    turnShootCC = new TurnAroundShootCC();
+    turnShootC = new TurnShootAuto(135.0);
+    turnShootCC = new TurnShootAuto(-135.0);
     driveOffLine = new DriveOffLineAuto();
 
     // Add options to choose from
