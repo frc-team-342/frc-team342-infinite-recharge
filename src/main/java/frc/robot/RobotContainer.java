@@ -42,8 +42,7 @@ import frc.robot.commands.LaunchWithButton;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.ActivateWinches;
-import frc.robot.commands.TurnAroundShootC;
-import frc.robot.commands.TurnAroundShootCC;
+import frc.robot.commands.TurnShootAuto;
 import frc.robot.commands.ChangeColor;
 import frc.robot.commands.DriveOffLineAuto;
 import frc.robot.subsystems.ClimbSubsystem;
@@ -123,11 +122,6 @@ public class RobotContainer {
   private Command target;
 
   // Autonomous
-  private Command auto;
-  private Trajectory startTrajectory;
-  private Trajectory endTrajectory;
-  private TrajectoryConfig config;
-
   private SendableChooser<Command> chooser;
   private Command turnShootC, turnShootCC, driveOffLine;
   
@@ -198,8 +192,8 @@ public class RobotContainer {
 
     // Autonomous
     chooser = new SendableChooser<>();
-    turnShootC = new TurnAroundShootC();
-    turnShootCC = new TurnAroundShootCC();
+    turnShootC = new TurnShootAuto(135.0);
+    turnShootCC = new TurnShootAuto(-135.0);
     driveOffLine = new DriveOffLineAuto();
 
     // Add options for autonomous that driver can choose from
@@ -278,44 +272,7 @@ public class RobotContainer {
    * @param navpoint
    */
   public double getNavPointHorizontal(double navpoint){
-    if(navpoint != 0.0){
-      return -navpoint;
-    }
-    else
-      return 0.0;
-  }
-
-  /*public Trajectory.State getSample(){
-    return trajectory.sample(trajectory.getTotalTimeSeconds());
-  }*/
-
-  public void scrapFirstPath(){
-    startTrajectory = TrajectoryGenerator.generateTrajectory(
-      // The starting end point of the trajectory path
-      new Pose2d(0.0, 0.0, new Rotation2d(0)), 
-      List.of(
-        // Here is where you add interior waypoints
-        // First point in the translation is the vertical position and second is the horizontal position
-      ), 
-      // The final end point of the trajectory path
-      new Pose2d(4.05, 0.0, new Rotation2d(0)), 
-      config
-    ); 
-  }
-
-  /* This path is designed to pick up the powercells in the trench run */
-  public void scrapSecondPath() {
-    endTrajectory = TrajectoryGenerator.generateTrajectory(
-      //The starting end point of the trajectory path
-      new Pose2d(4.05, 0.0, new Rotation2d(0)),
-      List.of(
-        // Here is where you add interior waypoints
-        // First point in the translation is the vertical position and second is the horizontal position       
-      ),
-      //The final end point of the trajectory path
-      new Pose2d(0.0, 0.0, new Rotation2d(0)),
-      config
-    );
+    return -navpoint;
   }
 
   /**
@@ -324,28 +281,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Sets a voltage constraint so the trajectory never commands the robot to go faster than it is capable with its given voltage supply
-    DifferentialDriveVoltageConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
-      new SimpleMotorFeedforward(
-        Constants.ksVolts, 
-        Constants.kvVoltsSecondsPerMeter, 
-        Constants.kaVoltsSecondsSquaredPerMeter
-      ), 
-      Constants.kDifferentialKinematics, 
-      10 // magic numbers babey
-    );
-
-    // Wraps together all of the path constraints
-    config = new TrajectoryConfig(
-      Constants.kMaxSpeedMetersPerSecond, 
-      Constants.kMaxAccelerationMetersPerSecondSquared
-    ).setKinematics(Constants.kDifferentialKinematics)
-    .addConstraint(voltageConstraint);
-    
-    //driveSystem.resetOdometry(startTrajectory.getInitialPose());
-    //return ramsete.andThen(() -> driveSystem.differentialDriveVolts(0, 0));
-
-    //return new TrajectoryAuto(config, trajectory);;
+    // Checks the SendableChooser on SmartDashboard and returns the selected command
     return chooser.getSelected();
   }
 }
