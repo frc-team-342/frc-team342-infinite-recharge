@@ -18,6 +18,9 @@ import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -40,8 +43,9 @@ import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.ActivateWinches;
 import frc.robot.commands.TurnAroundShootC;
+import frc.robot.commands.TurnAroundShootCC;
 import frc.robot.commands.ChangeColor;
-
+import frc.robot.commands.DriveOffLineAuto;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ControlPanelSubsystem;
 
@@ -123,6 +127,9 @@ public class RobotContainer {
   private Trajectory startTrajectory;
   private Trajectory endTrajectory;
   private TrajectoryConfig config;
+
+  private SendableChooser<Command> chooser;
+  private Command turnShootC, turnShootCC, driveOffLine;
   
 
   /**
@@ -190,7 +197,20 @@ public class RobotContainer {
     op_manualShooter = new InstantCommand(intakeOuttake::toggleOverride, intakeOuttake);
 
     // Autonomous
-    auto = new TurnAroundShootC();
+    chooser = new SendableChooser<>();
+    turnShootC = new TurnAroundShootC();
+    turnShootCC = new TurnAroundShootCC();
+    driveOffLine = new DriveOffLineAuto();
+
+    // Add options for autonomous that driver can choose from
+    chooser.setDefaultOption("Turn and shoot clockwise", turnShootC);
+    chooser.addOption("Turn and shoot counterclockwise", turnShootCC);
+    chooser.addOption("Drive off initiation line", driveOffLine);
+
+    // Send chooser to smartdashboard tab of shufflboard
+    SendableRegistry.setName(chooser, "Autonomous");
+    SmartDashboard.putData(chooser);
+
 
     configureButtonBindings();
   }
@@ -298,21 +318,6 @@ public class RobotContainer {
     );
   }
 
-  /* This path is designed to drive up so we can shoot from closer */
-  //This was scraped on July 17th 2021
-  /*public void scrapThirdPath() {
-    endTrajectory = TrajectoryGenerator.generateTrajectory(
-      //The starting end point of the trajectory path
-      new Pose2d(4.05, 0.0, new Rotation2d(0)),
-      List.of(
-        // Here is where you add interior waypoints
-        // First point in the translation is the vertical position and second is the horizontal position       
-      ),
-      //The final end point of the trajectory path
-      new Pose2d(0.0, 0.0, new Rotation2d(0)),
-      config
-    );
-  }*/  
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -336,14 +341,11 @@ public class RobotContainer {
       Constants.kMaxAccelerationMetersPerSecondSquared
     ).setKinematics(Constants.kDifferentialKinematics)
     .addConstraint(voltageConstraint);
-
-    scrapFirstPath();
-    scrapSecondPath();
     
-    driveSystem.resetOdometry(startTrajectory.getInitialPose());
+    //driveSystem.resetOdometry(startTrajectory.getInitialPose());
     //return ramsete.andThen(() -> driveSystem.differentialDriveVolts(0, 0));
 
     //return new TrajectoryAuto(config, trajectory);;
-    return new TurnAroundShootC();
+    return chooser.getSelected();
   }
 }
