@@ -40,8 +40,9 @@ import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.commands.ActivateWinches;
 import frc.robot.commands.TurnAroundShootC;
+import frc.robot.commands.TurnAroundShootCC;
 import frc.robot.commands.ChangeColor;
-
+import frc.robot.commands.DriveOffLineAuto;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ControlPanelSubsystem;
 
@@ -54,7 +55,9 @@ import frc.robot.commands.MoveArm;
 import frc.robot.commands.ReverseIntake;
 import frc.robot.subsystems.IntakeAndOutake;
 
-
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SendableRegistry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -123,6 +126,10 @@ public class RobotContainer {
   private Trajectory startTrajectory;
   private Trajectory endTrajectory;
   private TrajectoryConfig config;
+
+  // Autonomous chooser
+  private SendableChooser<Command> chooser;
+  private Command turnShootC, turnShootCC, driveOffLine;
   
 
   /**
@@ -189,8 +196,20 @@ public class RobotContainer {
     op_reverse_tele = new InstantCommand(climb::setReverse, climb);
     op_manualShooter = new InstantCommand(intakeOuttake::toggleOverride, intakeOuttake);
 
-    // Autonomous
-    auto = new TurnAroundShootC();
+    // Autonomous chooser and autonomous options
+    chooser = new SendableChooser<>();
+    turnShootC = new TurnAroundShootC();
+    turnShootCC = new TurnAroundShootCC();
+    driveOffLine = new DriveOffLineAuto();
+
+    // Add options to choose from
+    chooser.setDefaultOption("Turn clockwise and shoot", turnShootC);
+    chooser.addOption("Turn counterclockwise and shoot", turnShootCC);
+    chooser.addOption("Drive off initiation line", driveOffLine);
+
+    // Set chooser name and send to dashboard
+    SendableRegistry.setName(chooser, "Autonomous");
+    SmartDashboard.putData(chooser);
 
     configureButtonBindings();
   }
@@ -298,52 +317,13 @@ public class RobotContainer {
     );
   }
 
-  /* This path is designed to drive up so we can shoot from closer */
-  //This was scraped on July 17th 2021
-  /*public void scrapThirdPath() {
-    endTrajectory = TrajectoryGenerator.generateTrajectory(
-      //The starting end point of the trajectory path
-      new Pose2d(4.05, 0.0, new Rotation2d(0)),
-      List.of(
-        // Here is where you add interior waypoints
-        // First point in the translation is the vertical position and second is the horizontal position       
-      ),
-      //The final end point of the trajectory path
-      new Pose2d(0.0, 0.0, new Rotation2d(0)),
-      config
-    );
-  }*/  
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Sets a voltage constraint so the trajectory never commands the robot to go faster than it is capable with its given voltage supply
-    DifferentialDriveVoltageConstraint voltageConstraint = new DifferentialDriveVoltageConstraint(
-      new SimpleMotorFeedforward(
-        Constants.ksVolts, 
-        Constants.kvVoltsSecondsPerMeter, 
-        Constants.kaVoltsSecondsSquaredPerMeter
-      ), 
-      Constants.kDifferentialKinematics, 
-      10 // magic numbers babey
-    );
-
-    // Wraps together all of the path constraints
-    config = new TrajectoryConfig(
-      Constants.kMaxSpeedMetersPerSecond, 
-      Constants.kMaxAccelerationMetersPerSecondSquared
-    ).setKinematics(Constants.kDifferentialKinematics)
-    .addConstraint(voltageConstraint);
-
-    scrapFirstPath();
-    scrapSecondPath();
-    
-    driveSystem.resetOdometry(startTrajectory.getInitialPose());
-    //return ramsete.andThen(() -> driveSystem.differentialDriveVolts(0, 0));
-
-    //return new TrajectoryAuto(config, trajectory);;
-    return new TurnAroundShootC();
+    // Run the autonomous selected from the dashboard
+    return chooser.getSelected();
   }
 }
