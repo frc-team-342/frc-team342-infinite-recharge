@@ -123,7 +123,7 @@ public class RobotContainer {
 
   // Autonomous
   private SendableChooser<Command> chooser;
-  private Command turnShootC, turnShootCC, driveOffLine;
+  private Command turnShootC, turnShootCC, turnShoot180, driveOffLine;
   
 
   /**
@@ -194,17 +194,18 @@ public class RobotContainer {
     chooser = new SendableChooser<>();
     turnShootC = new TurnShootAuto(135.0);
     turnShootCC = new TurnShootAuto(-135.0);
+    turnShoot180 = new TurnShootAuto(180.0);
     driveOffLine = new DriveOffLineAuto();
 
     // Add options for autonomous that driver can choose from
     chooser.setDefaultOption("Turn and shoot clockwise", turnShootC);
     chooser.addOption("Turn and shoot counterclockwise", turnShootCC);
+    chooser.addOption("Turn 180 degrees and shoot", turnShoot180);
     chooser.addOption("Drive off initiation line", driveOffLine);
 
     // Send chooser to smartdashboard tab of shufflboard
     SendableRegistry.setName(chooser, "Autonomous");
     SmartDashboard.putData(chooser);
-
 
     configureButtonBindings();
   }
