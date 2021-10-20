@@ -377,7 +377,8 @@ public class IntakeAndOutake extends SubsystemBase {
     /** If statement: when the boolean "override" is false then it shoots with the limelight 
     but, when it is true it shoots manually at the value given */
     if (!override) {
-      targetVelocity = ((lime.getDistance() * 5.7636) + 3433.6) + (((lime.getDistance() * 5.7636) + 3433.6) * plusOrMinusShooter());
+      targetVelocity = ((lime.getDistance() * 6) + 2800);
+      targetVelocity += targetVelocity * plusOrMinusShooter();
     }
     else if (override) {
       targetVelocity = 3800 + (3800 * plusOrMinusShooter());
