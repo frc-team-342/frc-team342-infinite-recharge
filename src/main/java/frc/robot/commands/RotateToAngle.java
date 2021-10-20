@@ -32,15 +32,16 @@ public class RotateToAngle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    gyro = driveSystem.getGyro();
+    if (gyro > angle)
+      turnSpeed *= -1.0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     gyro = driveSystem.getGyro();
-    if (gyro > angle)
-      turnSpeed *= -1.0;
+
     if (gyro >= (angle - error) && gyro <= (angle + error)) {
       driveSystem.Drive(0.0, 0.0, 0.0);
       isDone = true;
