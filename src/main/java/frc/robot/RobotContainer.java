@@ -125,7 +125,7 @@ public class RobotContainer {
 
   // Autonomous chooser
   private SendableChooser<Command> chooser;
-  private Command turnShootC, turnShootCC, driveOffLine;
+  private Command turnShootC, turnShootCC, driveOffLine, turnShoot180;
   
 
   /**
@@ -196,11 +196,13 @@ public class RobotContainer {
     chooser = new SendableChooser<>();
     turnShootC = new TurnShootAuto(135.0);
     turnShootCC = new TurnShootAuto(-135.0);
+    turnShoot180 = new TurnShootAuto(180.0);
     driveOffLine = new DriveOffLineAuto();
 
     // Add options to choose from
     chooser.setDefaultOption("Turn clockwise and shoot", turnShootC);
     chooser.addOption("Turn counterclockwise and shoot", turnShootCC);
+    chooser.addOption("Turn 180 degrees and shoot", turnShoot180);
     chooser.addOption("Drive off initiation line", driveOffLine);
 
     // Set chooser name and send to dashboard

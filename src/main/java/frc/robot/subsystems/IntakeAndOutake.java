@@ -366,7 +366,7 @@ public class IntakeAndOutake extends SubsystemBase {
     pidTuner();
 
     if (!override) {
-      targetVelocity = ((lime.getDistance() * 6.7636) + 3463.6);
+      targetVelocity = ((lime.getDistance() * 7.0) + 3200);
     } else {
       targetVelocity = 3900;
     }
