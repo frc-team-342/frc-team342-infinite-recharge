@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import java.time.Instant;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -22,6 +23,7 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -177,7 +179,19 @@ public class RobotContainer {
     op_manualShooterBtn = new JoystickButton(operator, Constants.OP_MANUALSHOOTER);
   
     op_launch = new LaunchWithButton();
-    op_slow = new InstantCommand(driveSystem::setSlow, driveSystem);
+    op_slow = new ConditionalCommand(
+      new InstantCommand(
+        () -> {
+          driveSystem.setScalar(0.0);
+        }, driveSystem
+      ), 
+      new InstantCommand(
+        () -> {
+          driveSystem.setScalar(0.2);
+        }, driveSystem
+      ), 
+      () -> { return driveSystem.getScalar() == 0.2; }
+    );
 
     op_lockWinchBtn = new JoystickButton(operator, Constants.OP_LOCK_WINCH);
     op_runWinchBtn = new JoystickButton(operator, Constants.OP_RUN_WINCH);
@@ -229,8 +243,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Driver button bindings
     driver_autoAlignBtn.whenPressed(driver_autoAlign);
-    driver_fieldOrientBtn.whenPressed(driver_fieldOrient);
-    driver_turboBtn.whenPressed(driver_turbo);
+    //driver_fieldOrientBtn.whenPressed(driver_fieldOrient);
+    //driver_turboBtn.whenPressed(driver_turbo);
     driver_slowBtn.whenPressed(driver_slow);
     driver_zeroBtn.whenPressed(driver_zero);
     driver_reverseBtn.whileHeld(driver_reverse);
@@ -239,80 +253,12 @@ public class RobotContainer {
     op_launchBtn.toggleWhenPressed(op_launch);
     op_slowBtn.whenPressed(op_slow);
     op_intakeBtn.toggleWhenPressed(op_intake);
-    op_lockWinchBtn.whenPressed(op_lockWinch);
-    op_runWinchBtn.whileHeld(op_runWinch);
-    op_telescopesBtn.whileHeld(op_telescopes);
+    //op_lockWinchBtn.whenPressed(op_lockWinch);
+    //op_runWinchBtn.whileHeld(op_runWinch);
+    //op_telescopesBtn.whileHeld(op_telescopes);
     op_reverseBtn.whileHeld(op_reverse);
-    op_reverse_teleBtn.whenPressed(op_reverse_tele);
+    //op_reverse_teleBtn.whenPressed(op_reverse_tele);
     op_manualShooterBtn.whenPressed(op_manualShooter);
-  }
-
-  /**
-   * Performs know calculation on given nav point to convert it from meters to field points in meters and corrects distances. 
-   * Calculation was found by finding the inverse of equation derived from distance tests.
-   * Due to the calculation containing square root mathematics, signum logic is applied to make sure negative nav points can still be calculated.
-   * @param navpoint
-   */
-  public double getNavPointVertical(double navpoint){
-    if(navpoint == 0.0){
-      return 0;
-    }
-    else if(Math.signum(navpoint) == -1.0){
-      //return -navpoint * Constants.fieldUnitsToMeters;
-      return -navpoint;
-    }
-    else{
-      //return navpoint * Constants.fieldUnitsToMeters;
-      return navpoint;
-      
-    }
-  }
-
-  /**
-   * Performs know calculation on given nav point to convert it from meters to field points in meters and corrects distances. 
-   * Calculation was found by finding the inverse of equation derived from distance tests.
-   * Returns the calculated nav point negated due to the trajectory point for the horizontal being naturally inverted by the generator.
-   * @param navpoint
-   */
-  public double getNavPointHorizontal(double navpoint){
-    if(navpoint != 0.0){
-      return -navpoint;
-    }
-    else
-      return 0.0;
-  }
-
-  /*public Trajectory.State getSample(){
-    return trajectory.sample(trajectory.getTotalTimeSeconds());
-  }*/
-
-  public void scrapFirstPath(){
-    startTrajectory = TrajectoryGenerator.generateTrajectory(
-      // The starting end point of the trajectory path
-      new Pose2d(0.0, 0.0, new Rotation2d(0)), 
-      List.of(
-        // Here is where you add interior waypoints
-        // First point in the translation is the vertical position and second is the horizontal position
-      ), 
-      // The final end point of the trajectory path
-      new Pose2d(4.05, 0.0, new Rotation2d(0)), 
-      config
-    ); 
-  }
-
-  /* This path is designed to pick up the powercells in the trench run */
-  public void scrapSecondPath() {
-    endTrajectory = TrajectoryGenerator.generateTrajectory(
-      //The starting end point of the trajectory path
-      new Pose2d(4.05, 0.0, new Rotation2d(0)),
-      List.of(
-        // Here is where you add interior waypoints
-        // First point in the translation is the vertical position and second is the horizontal position       
-      ),
-      //The final end point of the trajectory path
-      new Pose2d(0.0, 0.0, new Rotation2d(0)),
-      config
-    );
   }
 
   /**

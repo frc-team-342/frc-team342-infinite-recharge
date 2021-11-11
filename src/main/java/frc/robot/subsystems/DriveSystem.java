@@ -64,6 +64,9 @@ public class DriveSystem extends SubsystemBase {
   private final MecanumDriveOdometry m_odometry;
   private final DifferentialDriveOdometry d_odometry;
 
+  // used for slow mode or lock
+  private double scalar;
+
   /**
    * Creates a new DriveSystem.
    */
@@ -128,40 +131,33 @@ public class DriveSystem extends SubsystemBase {
     resetEncoders();
     m_odometry = new MecanumDriveOdometry(kDriveKinematics, NavX.getRotation2d());
     d_odometry = new DifferentialDriveOdometry(NavX.getRotation2d(), new Pose2d(0.0, 0.0, new Rotation2d()));
+
+    scalar = 0.2;
   }
 
   public void Drive(double xSpeed, double ySpeed, double zRotation) {
-    mecanumDrive.feed();
-    if (isFieldOriented == true) {
-      if (isSlowMode == true)
-        mecanumDrive.driveCartesian((xSpeed * 0.8) / 2, (ySpeed * 0.8) / 2, (zRotation * 0.8) / 4, -NavX.getAngle());
-      else if (isTurbo == true)
-        mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation, -NavX.getAngle());
-      else
-        mecanumDrive.driveCartesian(xSpeed, ySpeed, (zRotation) / 2, -NavX.getAngle());
-
-    } else if (isPID == true) {
-      double target = 70.0;
-      double current = NavX.getAngle();
-      double kP = 2.0;
-
-      mecanumDrive.driveCartesian(0.0, 0.0, ((target - current) * kP) / 300);
-
-    } else if(isSlowMode){ 
-        mecanumDrive.driveCartesian((xSpeed * 0.8) / 2, (ySpeed * 0.8) / 2, (zRotation * 0.8) / 4/*, -NavX.getAngle()*/);
-        isFieldOriented = false;
-        isTurbo = false;
-    } else if (isTurbo){
-        mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation/*, -NavX.getAngle()*/);
-        isFieldOriented = false;
-        isSlowMode = false;
-  }   else {
-        mecanumDrive.driveCartesian(xSpeed * 0.8, ySpeed * 0.8, (zRotation * 0.8) / 2);
-        isFieldOriented = false;
-        isSlowMode = false;
-        isTurbo = false;
-    }
+    // haha permanent slow mode
+    mecanumDrive.driveCartesian(xSpeed * scalar, ySpeed * scalar, zRotation * scalar);
   }
+
+  /**
+   * sets a speed scalar for drive. used for slow mode and locking drive
+   * 
+   * @param scalar a double between 0.0 and 1.0
+   */
+  public void setScalar(double scalar) {
+    this.scalar = scalar;
+  }
+
+  /**
+   * returns the scalar for drive speeds
+   * 
+   * @return a double between 0.0 and 1.0
+   */
+  public double getScalar() {
+    return scalar;
+  }
+
 
   /** Returns the speed of the drive wheels in a DifferentialDriveWheelSpeeds data type to be used later in RAMSETE command for trajectory.
    *  Multiplies encoder RPM by circumference of wheel and then divides by gear ratio to get wheel speed per minute and divides by 60 to get wheel speed per second.
